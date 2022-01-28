@@ -1,0 +1,23 @@
+FROM node:alpine3.10
+
+ENV PATH_TO_APP=/usr/src/app \
+    PORT=3000 \
+    HOST=0.0.0.0
+
+WORKDIR ${PATH_TO_APP}
+
+RUN apk add --update python2 python3 build-base
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
+
+COPY . ./
+
+RUN yarn build
+
+ENV NODE_ENV=production
+
+EXPOSE ${PORT}
+
+CMD yarn start

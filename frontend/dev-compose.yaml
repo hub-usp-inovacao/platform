@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  solus:
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
+    ports:
+      - 3000:3000
