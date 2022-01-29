@@ -48,9 +48,25 @@ class CompanyData
     errors.add(:corporate_name) unless not_empty?(corporate_name)
   end
 
+  def self.csv_headers
+    row_offset + [
+      'CNPJ',
+      'Nome Fantasia',
+      'Razão Social',
+      'Ano de fundação',
+      'CNAE',
+      'Telefones',
+      'Emails',
+      'Endereço',
+      'Bairro',
+      'Cidade',
+      'Estado',
+      'CEP'
+    ]
+  end
+
   def prepare_to_csv
-    [
-      nil,
+    CompanyData.row_offset + [
       cnpj,
       public_name,
       corporate_name,
@@ -67,6 +83,10 @@ class CompanyData
   end
 
   private
+
+  def self.row_offset
+    [nil]
+  end
 
   def phones_to_csv
     phones.join ';'

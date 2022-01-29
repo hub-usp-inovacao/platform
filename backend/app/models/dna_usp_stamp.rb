@@ -35,8 +35,19 @@ class DnaUspStamp
     errors.add(:permissions) unless all_known
   end
 
+  def self.csv_headers
+    row_offset + [
+      'Sua empresa gostaria de receber o selo DNA USP?',
+      'Por qual email podemos entrar em contato para tratar do uso da marca DNA USP?',
+      'Qual o nome do responsável por este email?',
+      nil,
+      'Declaro que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos',
+      'Selecione as opções com as quais a empresa está de acordo'
+    ]
+  end
+
   def prepare_to_csv
-    [nil] * 23 + [
+    DnaUspStamp.row_offset + [
       wants,
       email_csv_value,
       name_csv_value,
@@ -47,6 +58,10 @@ class DnaUspStamp
   end
 
   private
+
+  def self.row_offset
+    [nil] * 23
+  end
 
   def permissions_csv_value
     permissions.join ';'
