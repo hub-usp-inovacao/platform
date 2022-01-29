@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CompanyData, type: :model do
+RSpec.describe CompanyDatum, type: :model do
   let(:attrs) do
     {
       cnpj: '42.420.420/0001-21',

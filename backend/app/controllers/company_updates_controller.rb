@@ -3,8 +3,12 @@
 class CompanyUpdatesController < ApplicationController
   def create
     ActionController::Parameters.permit_all_parameters = true
-    data = create_params
-    @comp_update = CompanyUpdate.new(data)
+    params = create_params
+    p params
+    @comp_update = CompanyUpdateRequest.new
+    @comp_update.dna_usp_stamp = DnaUspStamp.new(params[:dna_usp_stamp])
+    @comp_update.company_data = CompanyDatum.new(params[:data])
+
     if @comp_update.valid?
       @comp_update.save
       render json: { company_update: @comp_update }

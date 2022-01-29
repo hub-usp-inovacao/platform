@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CompanyData
+class CompanyDatum
   include Mongoid::Document
 
   field :cnpj, type: String
@@ -66,7 +66,7 @@ class CompanyData
   end
 
   def prepare_to_csv
-    CompanyData.row_offset + [
+    CompanyDatum.row_offset + [
       cnpj,
       public_name,
       corporate_name,
