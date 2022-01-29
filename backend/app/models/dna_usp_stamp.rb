@@ -28,7 +28,7 @@ class DnaUspStamp
       # rubocop:enable Layout/LineLength
     ]
 
-    all_known = permissions.all? do |perm|
+    all_known = !permissions.nil? && permissions.all? do |perm|
       known.include? perm
     end
 

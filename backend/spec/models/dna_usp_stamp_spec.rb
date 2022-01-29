@@ -36,6 +36,11 @@ RSpec.describe DnaUspStamp, type: :model do
   end
 
   context 'with validation problems' do
+    it 'on nil permissions' do
+      attrs.delete :permissions
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on unexpected permissions' do
       attrs[:permissions] = [4]
       expect(described_class.new(attrs)).to be_invalid
