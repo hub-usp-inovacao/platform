@@ -183,7 +183,7 @@ export const actions = {
   setPermission: ({ commit }, value) =>
     commit("setFormField", { key: "permission", value }),
 
-  getCompanyData: async function ({ commit, getters }) {
+  getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
     const { status, message } = await this.$getCompanyData(cnpj);
 
@@ -217,7 +217,7 @@ export const actions = {
     }
   },
 
-  updateCompanyForm: async function ({ commit, getters }) {
+  updateCompanyForm: async function({ commit, getters }) {
     if (!getters.cnpj || !getters.name || getters.partners.length === 0) {
       commit("setErrors", [
         "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
@@ -262,57 +262,27 @@ const snakeToCamelCase = (key) => {
 
 const prepareCompanyObject = (obj) => ({
   company: {
-    cnpj: obj.cnpj,
-    name: obj.name,
-    partners_values: obj.partners,
-    company_values: {
-      "Razão social da empresa": obj.corporateName,
-      "Ano de fundação": obj.year,
+    data: {
+      cnpj: obj.cnpj,
+      public_name: obj.name,
+      corporate_name: obj.corporateName,
+      year: obj.year,
       cnae: obj.cnae,
-      "Telefone comercial": obj.phones,
-      Emails: obj.emails,
-      Endereço: obj.address.venue,
-      Bairro: obj.neighborhood,
-      "Cidade sede": obj.city,
-      Estado: obj.state,
-      CEP: obj.cep,
-      "Breve descrição": obj.description.long,
-      "Produtos e serviços": obj.services.join("; "),
-      Tecnologias: obj.technologies.join("; "),
-      Site: obj.url,
-      "A empresa está ou esteve em alguma incubadora ou Parque tecnológico":
-        obj.incubated,
-      "Em qual incubadora?": obj.ecosystems,
-      "Redes sociais": obj.socialMedias.join("; "),
-      "Número de funcionários contratados como CLT": obj.numberOfCTLEmployees,
-      "Número de colaboradores contratados como Pessoa Jurídica (PJ)":
-        obj.numberOfPJColaborators,
-      "Número de estagiários/bolsistas contratados": obj.numberOfInterns,
-      "A empresa recebeu investimento?": obj.receivedInvestments
-        ? "Sim"
-        : "Não",
-      Investimentos: obj.investments.join("; "),
-      "Valor do investimento próprio (R$)": obj.investmentsValues.own,
-      "Valor do investimento-anjo (R$)": obj.investmentsValues.angel,
-      "Valor do Venture Capital (R$)": obj.investmentsValues.ventureCapital,
-      "Valor do Private Equity (R$)": obj.investmentsValues.privateEquity,
-      "Valor do PIPE-FAPESP (R$)": obj.investmentsValues.pipeFapesp,
-      "Valor de outros investimentos (R$)": obj.investmentsValues.other,
-      Faturamento: obj.financeValue,
-      "Objetivos de Desenvolvimento Sustentável": obj.ods.join("; "),
-      "Data da última atualização de Colaboradores": updateCollaboratorsDate(
-        obj
-      ),
-      "Data da última atualização de Faturamento": updateRevenuesDate(obj),
-      "Data da última atualização de Investimento": updateInvestmentsDate(obj),
+      phones: obj.phones,
+      emails: obj.emails,
+      street: obj.address.venue,
+      neighborhood: obj.neighborhood,
+      city: obj.city[0],
+      state: obj.state,
+      zipcode: obj.cep,
     },
-    dna_values: {
+    dna_usp_stamp: {
       wants_dna: obj.wantsDna,
       name: obj.wantsDna ? obj.dnaContactName : "",
       email: obj.wantsDna ? obj.dnaContactEmail : "",
+      truthful_informations: obj.truthfulInformations,
+      permission: obj.permission,
     },
-    truthful_informations: obj.truthfulInformations,
-    permission: obj.permission,
   },
 });
 
