@@ -38,7 +38,7 @@ const actions = {
 
 const prepareSection = (obj) => ({
   dna_usp_stamp: {
-    wants_dna: obj.wantsDna,
+    wants: obj.wantsDna,
     name: obj.wantsDna ? obj.dnaContactName : "",
     email: obj.wantsDna ? obj.dnaContactEmail : "",
     truthful_informations: obj.truthfulInformations,
