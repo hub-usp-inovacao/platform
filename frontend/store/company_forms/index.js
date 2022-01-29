@@ -1,3 +1,5 @@
+import dnaUspStamp from './dna_usp_stamp'
+
 export const state = () => ({
   partners: [],
   name: "",
@@ -42,12 +44,9 @@ export const state = () => ({
     other: "R$ 0,00",
   },
   financeValue: "R$ 0,00",
-  wantsDna: false,
-  dnaContactName: "",
-  dnaContactEmail: "",
-  truthfulInformations: false,
-  permission: [],
   errors: [],
+
+  ...dnaUspStamp.state()
 });
 
 export const getters = {
@@ -85,20 +84,20 @@ export const getters = {
   investments: (s) => s.investments,
   investmentsValues: (s) => s.investmentsValues,
   financeValue: (s) => s.financeValue,
-  wantsDna: (s) => s.wantsDna,
-  dnaContactName: (s) => s.dnaContactName,
-  dnaContactEmail: (s) => s.dnaContactEmail,
-  truthfulInformations: (s) => s.truthfulInformations,
-  permission: (s) => s.permission,
   errors: (s) => s.errors,
+
+  ...dnaUspStamp.getters
 };
 
 export const mutations = {
   setFormField: (s, { key, value }) => (s[key] = value),
   setErrors: (s, errors) => (s.errors = errors),
+
+  ...dnaUspStamp.mutations,
 };
 
 export const actions = {
+  ...dnaUspStamp.actions,
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
   setName: ({ commit }, value) =>
@@ -172,16 +171,6 @@ export const actions = {
     commit("setFormField", { key: "investmentsValues", value }),
   setFinanceValue: ({ commit }, value) =>
     commit("setFormField", { key: "financeValue", value }),
-  setWantsDna: ({ commit }, value) =>
-    commit("setFormField", { key: "wantsDna", value }),
-  setDnaContactName: ({ commit }, value) =>
-    commit("setFormField", { key: "dnaContactName", value }),
-  setDnaContactEmail: ({ commit }, value) =>
-    commit("setFormField", { key: "dnaContactEmail", value }),
-  setTruthfulInformations: ({ commit }, value) =>
-    commit("setFormField", { key: "truthfulInformations", value }),
-  setPermission: ({ commit }, value) =>
-    commit("setFormField", { key: "permission", value }),
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -243,6 +232,7 @@ export const actions = {
     commit("setErrors", []);
     return true;
   },
+
 };
 
 const snakeToCamelCase = (key) => {
@@ -276,13 +266,7 @@ const prepareCompanyObject = (obj) => ({
       state: obj.state,
       zipcode: obj.cep,
     },
-    dna_usp_stamp: {
-      wants_dna: obj.wantsDna,
-      name: obj.wantsDna ? obj.dnaContactName : "",
-      email: obj.wantsDna ? obj.dnaContactEmail : "",
-      truthful_informations: obj.truthfulInformations,
-      permission: obj.permission,
-    },
+    ...dnaUspStamp.prepareSection(obj),
   },
 });
 

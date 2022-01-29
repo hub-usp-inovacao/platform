@@ -105,7 +105,7 @@ export default {
       dnaContactName: "company_forms/dnaContactName",
       dnaContactEmail: "company_forms/dnaContactEmail",
       truthfulInformations: "company_forms/truthfulInformations",
-      permission: "company_forms/permission",
+      permission: "company_forms/permissions",
     }),
   },
   methods: {
@@ -114,7 +114,7 @@ export default {
       setDnaContactName: "company_forms/setDnaContactName",
       setDnaContactEmail: "company_forms/setDnaContactEmail",
       setTruthfulInformations: "company_forms/setTruthfulInformations",
-      setPermission: "company_forms/setPermission",
+      setPermission: "company_forms/setPermissions",
     }),
     onCheckboxClicked(item, index) {
       if (!item) {
