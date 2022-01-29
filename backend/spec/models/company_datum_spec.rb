@@ -35,6 +35,11 @@ RSpec.describe CompanyDatum, type: :model do
       expect(described_class.new(attrs)).to be_invalid
     end
 
+    it 'on missing cnpj' do
+      attrs.delete :cnpj
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     ['', 'N/D', nil].each do |attr|
       %i[public_name corporate_name].each do |field|
         it "on #{field} being \"#{attr}\"" do

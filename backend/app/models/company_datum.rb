@@ -16,7 +16,7 @@ class CompanyDatum
   field :state, type: String
   field :zipcode, type: String
 
-  validates :cnpj, cnpj: true
+  validates :cnpj, cnpj: true, presence: true
   validates :cnae, cnae: true
   validates :phones, phones: true
   validates :emails, emails: true
