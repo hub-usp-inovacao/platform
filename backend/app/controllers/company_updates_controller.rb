@@ -4,7 +4,6 @@ class CompanyUpdatesController < ApplicationController
   def create
     ActionController::Parameters.permit_all_parameters = true
     params = create_params
-    p params
     @comp_update = CompanyUpdateRequest.new
     @comp_update.dna_usp_stamp = DnaUspStamp.new(params[:dna_usp_stamp])
     @comp_update.company_data = CompanyDatum.new(params[:data])
