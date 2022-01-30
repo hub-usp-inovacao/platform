@@ -7,6 +7,7 @@ class CompanyUpdatesController < ApplicationController
     @comp_update = CompanyUpdateRequest.new
     @comp_update.dna_usp_stamp = DnaUspStamp.new(params[:dna_usp_stamp])
     @comp_update.company_data = CompanyDatum.new(params[:data])
+    @comp_update.about_company = AboutCompany.new(params[:about])
 
     if @comp_update.valid?
       @comp_update.save
