@@ -12,6 +12,7 @@ class Company
   field :corporate_name, type: String
   field :cnae, type: String
   field :incubated, type: String
+  field :description, type: String
 
   field :allowed, type: Boolean
   field :active, type: Boolean
@@ -24,7 +25,6 @@ class Company
   field :partners, type: Array
   field :services, type: Array
 
-  field :description, type: Hash
   field :classification, type: Hash
   field :address, type: Hash
 
@@ -92,7 +92,7 @@ class Company
         name: row[2],
         year: row[4],
         emails: row[7]&.split(';'),
-        description: { long: row[13] },
+        description: row[13],
         incubated: incubated?(row[18]),
         ecosystems: row[19]&.split(';'),
         services: row[14]&.split(';'),

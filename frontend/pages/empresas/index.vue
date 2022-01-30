@@ -82,7 +82,7 @@
 
         <p>
           <span class="font-weight-bold">Descrição:</span>
-          {{ item.description.long }}
+          {{ item.description }}
         </p>
 
         <BulletList
