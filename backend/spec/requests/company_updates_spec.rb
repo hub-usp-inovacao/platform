@@ -5,54 +5,51 @@ require 'rails_helper'
 RSpec.describe 'CompanyUpdates', type: :request do
   let(:valid_data) do
     {
-      name: 'fulano',
-      cnpj: '12.123.123/0001-21',
-      partners_values: [
-        {
-          name: 'Paulo',
-          phone: '11 999999999',
-          email: 'Foo@bar.com',
-          bond: 'Aluno ou ex-aluno (graduação)',
-          nusp: '11111111',
-          unity: 'Escola de Artes, Ciências e Humanidades - EACH',
-          role: 'CEO'
-        },
-        {
-          name: 'Paulo Outro',
-          phone: '11 999999999',
-          email: 'Foo@bar.com',
-          bond: '',
-          nusp: '',
-          unity: '',
-          role: ''
-        }
-      ],
-      company_values: {
-        CEP: '05331-020'
+      data: {
+        cnpj: '42.420.420/0001-21',
+        public_name: 'test inc.',
+        corporate_name: 'benefit of testing rails and other apps',
+        year: 2019,
+        cnae: '99.21-3-54',
+        phones: [
+          '(11) 99999-4433'
+        ],
+        emails: [
+          'test@testinc.com'
+        ],
+        street: 'rua das couves, 37 - apt 51',
+        neighborhood: 'vila vegetal',
+        city: ['fito'],
+        state: 'plantae',
+        zipcode: '04331-000'
       },
-      dna_values: {
-        wants_dna: true,
-        name: 'Paulo',
-        email: 'paulo@example.com'
-      },
-      truthful_informations: true,
-      permission: [
-        "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades \
-relevantes à empresa"
-      ]
+      dna_usp_stamp: {
+        wants: true,
+        truthful_informations: true,
+        permissions: [
+          # rubocop:disable Layout/LineLength
+          'Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa',
+          'Permito a divulgação das informações públicas na plataforma Hub USPInovação',
+          'Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP'
+          # rubocop:enable Layout/LineLength
+        ],
+        email: 'fulano@mail.com',
+        name: 'fulano de tal'
+      }
     }
   end
 
   describe 'PATCH /companies' do
     before do
-      CompanyUpdate.delete_all
+      CompanyUpdateRequest.delete_all
     end
 
-    it 'blocks requests that fails validation' do
-      params = valid_data.clone
-      %i[partners_values company_values dna_values].each { |k| params.delete k }
-      patch '/companies', params: { company: params }
-      expect(response).to have_http_status(:bad_request)
+    %i[data dna_usp_stamp].each do |k|
+      it "blocks requests that fails validation (missing #{k})" do
+        valid_data.delete k
+        patch '/companies', params: { company: valid_data }
+        expect(response).to have_http_status(:bad_request)
+      end
     end
 
     it 'returns the just-created object' do
