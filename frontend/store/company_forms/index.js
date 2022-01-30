@@ -1,17 +1,9 @@
 import dnaUspStamp from './dna_usp_stamp'
 import companyData from './company_data'
+import about from './about'
 
 export const state = () => ({
   partners: [],
-  description: {
-    long: "",
-  },
-  technologies: [],
-  services: [],
-  ods: [],
-  socialMedias: [],
-  url: "",
-  logo: undefined,
   collaboratorsLastUpdatedAt: new Date(),
   investmentsLastUpdatedAt: new Date(),
   revenuesLastUpdatedAt: new Date(),
@@ -35,18 +27,11 @@ export const state = () => ({
 
   ...dnaUspStamp.state(),
   ...companyData.state(),
+  ...about.state(),
 });
 
 export const getters = {
   partners: (s) => s.partners,
-  description: (s) => s.description,
-  descriptionLong: (s) => s.description.long,
-  technologies: (s) => s.technologies,
-  services: (s) => s.services,
-  ods: (s) => s.ods,
-  socialMedias: (s) => s.socialMedias,
-  url: (s) => s.url,
-  logo: (s) => s.logo,
   collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
   investmentsLastUpdatedAt: (s) => s.investmentsLastUpdatedAt,
   revenuesLastUpdatedAt: (s) => s.revenuesLastUpdatedAt,
@@ -63,6 +48,7 @@ export const getters = {
 
   ...dnaUspStamp.getters,
   ...companyData.getters,
+  ...about.getters,
 };
 
 export const mutations = {
@@ -71,26 +57,16 @@ export const mutations = {
 
   ...dnaUspStamp.mutations,
   ...companyData.mutations,
+  ...about.mutations,
 };
 
 export const actions = {
   ...dnaUspStamp.actions,
   ...companyData.actions,
+  ...about.actions,
 
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
-  setDescriptionLong: ({ commit }, value) =>
-    commit("setFormField", { key: "description", value: { long: value } }),
-  setTechnologies: ({ commit }, value) =>
-    commit("setFormField", { key: "technologies", value }),
-  setServices: ({ commit }, value) =>
-    commit("setFormField", { key: "services", value }),
-  setOds: ({ commit }, value) => commit("setFormField", { key: "ods", value }),
-  setSocialMedias: ({ commit }, value) =>
-    commit("setFormField", { key: "socialMedias", value }),
-  setUrl: ({ commit }, value) => commit("setFormField", { key: "url", value }),
-  setLogo: ({ commit }, value) =>
-    commit("setFormField", { key: "logo", value }),
   setNumberOfCTLEmployees: ({ commit }, value) =>
     commit("setFormField", { key: "numberOfCTLEmployees", value }),
   setNumberOfPJColaborators: ({ commit }, value) =>
@@ -192,6 +168,7 @@ const prepareCompanyObject = (obj) => ({
   company: {
     ...companyData.prepareSection(obj),
     ...dnaUspStamp.prepareSection(obj),
+    ...about.prepareSection(obj)
   },
 });
 

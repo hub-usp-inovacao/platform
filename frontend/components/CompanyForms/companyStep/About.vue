@@ -77,7 +77,6 @@
           <URLInput
             :value="url"
             label="Site"
-            hint="Se não possuir, responda N/D."
             @input="setUrl"
           />
         </v-container>
@@ -139,9 +138,9 @@ export default {
       descriptionLong: "company_forms/descriptionLong",
       technologies: "company_forms/technologies",
       services: "company_forms/services",
-      ods: "company_forms/ods",
+      ods: "company_forms/odss",
       socialMedias: "company_forms/socialMedias",
-      url: "company_forms/url",
+      url: "company_forms/site",
     }),
   },
   methods: {
@@ -151,7 +150,7 @@ export default {
       setServices: "company_forms/setServices",
       setOds: "company_forms/setOds",
       setSocialMedias: "company_forms/setSocialMedias",
-      setUrl: "company_forms/setUrl",
+      setUrl: "company_forms/setSite",
     }),
   },
 };
