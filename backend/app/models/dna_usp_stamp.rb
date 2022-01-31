@@ -37,12 +37,14 @@ class DnaUspStamp
 
   def self.csv_headers
     row_offset + [
+      # rubocop:disable Layout/LineLength
       'Sua empresa gostaria de receber o selo DNA USP?',
       'Por qual email podemos entrar em contato para tratar do uso da marca DNA USP?',
       'Qual o nome do responsável por este email?',
       nil,
       'Declaro que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos',
       'Selecione as opções com as quais a empresa está de acordo'
+      # rubocop:enable Layout/LineLength
     ]
   end
 
@@ -59,9 +61,11 @@ class DnaUspStamp
 
   private
 
+  # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil] * 23
   end
+  # rubocop:enable Lint/IneffectiveAccessModifier
 
   def permissions_csv_value
     permissions.join ';'

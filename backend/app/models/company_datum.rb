@@ -88,9 +88,11 @@ class CompanyDatum
 
   private
 
+  # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil]
   end
+  # rubocop:enable Lint/IneffectiveAccessModifier
 
   def phones_to_csv
     phones.join ';'

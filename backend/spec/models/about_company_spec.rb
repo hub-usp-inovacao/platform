@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AboutCompany, type: :model do
@@ -8,12 +10,12 @@ RSpec.describe AboutCompany, type: :model do
       technologies: %w[baz bla foo],
       site: 'https://www.google.com',
       odss: [
-        "4 - Educação de Qualidade",
-        "5 - Igualdade de Gênero",
-        "8 - Trabalho Decente e Crescimento Econômico",
-        "10 - Redução das Desigualdades",
-        "15 - Vida Terrestre",
-        "17 - Parcerias e Meios de Implementação",
+        '4 - Educação de Qualidade',
+        '5 - Igualdade de Gênero',
+        '8 - Trabalho Decente e Crescimento Econômico',
+        '10 - Redução das Desigualdades',
+        '15 - Vida Terrestre',
+        '17 - Parcerias e Meios de Implementação'
       ],
       social_medias: ['https://instagram.com/foo-bar']
     }
@@ -47,7 +49,7 @@ RSpec.describe AboutCompany, type: :model do
     end
 
     it 'prepares CSV correctly' do
-      about = AboutCompany.new(attrs)
+      about = described_class.new(attrs)
       expect(about.prepare_to_csv).to match_array(handmade)
     end
   end

@@ -66,9 +66,11 @@ class Investment
 
   private
 
+  # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil] * 64
   end
+  # rubocop:enable Lint/IneffectiveAccessModifier
 
   def received_to_csv
     received ? 'Sim' : 'Não'

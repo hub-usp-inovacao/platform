@@ -42,12 +42,12 @@ RSpec.describe 'CompanyUpdates', type: :request do
         technologies: %w[baz bla foo],
         site: 'https://www.google.com',
         odss: [
-          "4 - Educação de Qualidade",
-          "5 - Igualdade de Gênero",
-          "8 - Trabalho Decente e Crescimento Econômico",
-          "10 - Redução das Desigualdades",
-          "15 - Vida Terrestre",
-          "17 - Parcerias e Meios de Implementação"
+          '4 - Educação de Qualidade',
+          '5 - Igualdade de Gênero',
+          '8 - Trabalho Decente e Crescimento Econômico',
+          '10 - Redução das Desigualdades',
+          '15 - Vida Terrestre',
+          '17 - Parcerias e Meios de Implementação'
         ],
         social_medias: ['https://instagram.com/foo-bar']
       },

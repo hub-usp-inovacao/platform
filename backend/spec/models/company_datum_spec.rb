@@ -27,7 +27,7 @@ RSpec.describe CompanyDatum, type: :model do
   context 'with validation errors' do
     it 'on string city' do
       attrs[:city] = 'foo'
-      expect{described_class.new(attrs)}.to raise_error(Mongoid::Errors::InvalidValue)
+      expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
     end
 
     it 'on malformed zipcode' do
