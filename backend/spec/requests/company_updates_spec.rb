@@ -47,9 +47,12 @@ RSpec.describe 'CompanyUpdates', type: :request do
           "8 - Trabalho Decente e Crescimento Econômico",
           "10 - Redução das Desigualdades",
           "15 - Vida Terrestre",
-          "17 - Parcerias e Meios de Implementação",
+          "17 - Parcerias e Meios de Implementação"
         ],
         social_medias: ['https://instagram.com/foo-bar']
+      },
+      investment: {
+        received: false
       }
     }
   end

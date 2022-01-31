@@ -2,12 +2,12 @@
 
 class CompanyUpdatesController < ApplicationController
   def create
-    ActionController::Parameters.permit_all_parameters = true
-    params = create_params
+    prms = create_params
     @comp_update = CompanyUpdateRequest.new
-    @comp_update.dna_usp_stamp = DnaUspStamp.new(params[:dna_usp_stamp])
-    @comp_update.company_data = CompanyDatum.new(params[:data])
-    @comp_update.about_company = AboutCompany.new(params[:about])
+    @comp_update.dna_usp_stamp = DnaUspStamp.new(prms[:dna_usp_stamp])
+    @comp_update.company_data = CompanyDatum.new(prms[:data])
+    @comp_update.about_company = AboutCompany.new(prms[:about])
+    @comp_update.investment = Investment.new(prms[:investment])
 
     if @comp_update.valid?
       @comp_update.save
@@ -20,6 +20,6 @@ class CompanyUpdatesController < ApplicationController
   private
 
   def create_params
-    params.require(:company)
+    params.require(:company).permit(dna_usp_stamp: {}, data: {}, about: {}, investment: {})
   end
 end
