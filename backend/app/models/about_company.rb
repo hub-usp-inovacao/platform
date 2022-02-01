@@ -110,7 +110,7 @@ class AboutCompany
   end
 
   def self.middle_range
-    [nil] * 65
+    [nil] * 61
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 end

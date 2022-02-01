@@ -81,11 +81,11 @@ class Investment
 
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
-    [nil] * 64
+    [nil] * 61
   end
 
   def self.middle_offset
-    [nil] * 19
+    [nil] * 18
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 

@@ -45,7 +45,7 @@ RSpec.describe Investment, type: :model do
 
   context 'with CSV parsing' do
     let :handmade do
-      [nil] * 64 + [
+      [nil] * 61 + [
         'Sim',
         nil,
         attrs[:own],
@@ -54,7 +54,7 @@ RSpec.describe Investment, type: :model do
         attrs[:equity],
         attrs[:pipe],
         attrs[:others]
-      ] + [nil] * 19 + [
+      ] + [nil] * 18 + [
         attrs[:last_update]
       ]
     end

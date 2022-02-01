@@ -54,7 +54,7 @@ RSpec.describe AboutCompany, type: :model do
         attrs[:site]
       ] + [nil] * 4 + [
         attrs[:social_medias].join(';')
-      ] + [nil] * 65 + [
+      ] + [nil] * 61 + [
         attrs[:odss].join(';')
       ]
     end

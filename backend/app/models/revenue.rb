@@ -35,10 +35,10 @@ class Revenue
   end
 
   def self.row_offset
-    [nil] * 72
+    [nil] * 69
   end
 
   def self.middle_offset
-    [nil] * 17
+    [nil] * 16
   end
 end
