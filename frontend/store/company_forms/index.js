@@ -2,41 +2,40 @@ import dnaUspStamp from './dna_usp_stamp'
 import companyData from './company_data'
 import about from './about'
 import investment from './investment'
+import revenue from './revenue'
 
 export const state = () => ({
   partners: [],
   collaboratorsLastUpdatedAt: new Date(),
-  revenuesLastUpdatedAt: new Date(),
   numberOfCTLEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
   incubated: "",
   ecosystems: [],
-  financeValue: "R$ 0,00",
   errors: [],
 
   ...dnaUspStamp.state(),
   ...companyData.state(),
   ...about.state(),
   ...investment.state(),
+  ...revenue.state(),
 });
 
 export const getters = {
   partners: (s) => s.partners,
   collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
-  revenuesLastUpdatedAt: (s) => s.revenuesLastUpdatedAt,
   numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
   numberOfPJColaborators: (s) => s.numberOfPJColaborators,
   numberOfInterns: (s) => s.numberOfInterns,
   incubated: (s) => s.incubated,
   ecosystems: (s) => s.ecosystems,
-  financeValue: (s) => s.financeValue,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
   ...companyData.getters,
   ...about.getters,
   ...investment.getters,
+  ...revenue.getters,
 };
 
 export const mutations = {
@@ -47,6 +46,7 @@ export const mutations = {
   ...companyData.mutations,
   ...about.mutations,
   ...investment.mutations,
+  ...revenue.mutations,
 };
 
 export const actions = {
@@ -54,6 +54,7 @@ export const actions = {
   ...companyData.actions,
   ...about.actions,
   ...investment.actions,
+  ...revenue.actions,
 
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
@@ -67,8 +68,6 @@ export const actions = {
     commit("setFormField", { key: "incubated", value }),
   setEcosystems: ({ commit }, value) =>
     commit("setFormField", { key: "ecosystems", value }),
-  setFinanceValue: ({ commit }, value) =>
-    commit("setFormField", { key: "financeValue", value }),
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -154,6 +153,7 @@ const prepareCompanyObject = (obj) => ({
     ...dnaUspStamp.prepareSection(obj),
     ...about.prepareSection(obj),
     ...investment.prepareSection(obj),
+    ...revenue.prepareSection(obj)
   },
 });
 
@@ -166,9 +166,4 @@ const updateCollaboratorsDate = (obj) => {
   const wasUpdated = keys.some((key) => obj[key]);
 
   return wasUpdated ? new Date() : obj.collaboratorsLastUpdatedAt;
-};
-
-const updateRevenuesDate = (obj) => {
-  const wasUpdated = obj.financeValue !== "R$ 0,00";
-  return wasUpdated ? new Date() : obj.revenuesLastUpdatedAt;
 };
