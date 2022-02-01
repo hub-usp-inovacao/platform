@@ -21,6 +21,17 @@ RSpec.describe AboutCompany, type: :model do
     }
   end
 
+  context 'without validation errors' do
+    it 'the default attrs are valid' do
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'is valid with empty url' do
+      attrs[:site] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
+  end
+
   context 'with validation errors' do
     it 'on unknown ODS' do
       attrs[:odss] = ['foo']

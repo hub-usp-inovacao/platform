@@ -52,7 +52,8 @@ RSpec.describe 'CompanyUpdates', type: :request do
         social_medias: ['https://instagram.com/foo-bar']
       },
       investment: {
-        received: false
+        received: false,
+        last_update: 10.seconds.ago
       }
     }
   end

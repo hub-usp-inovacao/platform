@@ -6,16 +6,22 @@ RSpec.describe Investment, type: :model do
   let :attrs do
     {
       received: true,
-      own: 'R$12.000',
-      angel: 'R$42',
-      venture: 'R$4.000.000',
-      equity: 'R$500.000',
-      pipe: 'R$200.000',
-      others: 'R$360.000'
+      own: 'R$ 12.000',
+      angel: 'R$ 42',
+      venture: 'R$ 4.000.000',
+      equity: 'R$ 500.000',
+      pipe: 'R$ 200.000',
+      others: 'R$ 360.000',
+      last_update: 10.seconds.ago
     }
   end
 
   context 'with validation errors' do
+    it 'on future last_update' do
+      attrs[:last_update] = 10.seconds.from_now
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     %i[own angel venture equity pipe others].each do |type|
       it 'on no digits for values' do
         attrs[type] = 'twelve'
@@ -31,6 +37,12 @@ RSpec.describe Investment, type: :model do
     end
   end
 
+  context 'without validation errors' do
+    it 'is valid' do
+      expect(described_class.new(attrs)).to be_valid
+    end
+  end
+
   context 'with CSV parsing' do
     let :handmade do
       [nil] * 64 + [
@@ -42,6 +54,8 @@ RSpec.describe Investment, type: :model do
         attrs[:equity],
         attrs[:pipe],
         attrs[:others]
+      ] + [nil] * 19 + [
+        attrs[:last_update]
       ]
     end
 
