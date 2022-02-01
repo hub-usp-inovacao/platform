@@ -91,7 +91,7 @@ const prepareSection = (obj) => ({
     emails: obj.emails,
     street: obj.address.venue,
     neighborhood: obj.neighborhood,
-    city: obj.city[0],
+    city: obj.city,
     state: obj.state,
     zipcode: obj.cep,
   },

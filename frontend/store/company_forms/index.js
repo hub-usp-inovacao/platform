@@ -1,54 +1,42 @@
 import dnaUspStamp from './dna_usp_stamp'
 import companyData from './company_data'
 import about from './about'
+import investment from './investment'
 
 export const state = () => ({
   partners: [],
   collaboratorsLastUpdatedAt: new Date(),
-  investmentsLastUpdatedAt: new Date(),
   revenuesLastUpdatedAt: new Date(),
   numberOfCTLEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
   incubated: "",
   ecosystems: [],
-  receivedInvestments: false,
-  investments: [],
-  investmentsValues: {
-    own: "R$ 0,00",
-    angel: "R$ 0,00",
-    ventureCapital: "R$ 0,00",
-    privateEquity: "R$ 0,00",
-    pipeFapesp: "R$ 0,00",
-    other: "R$ 0,00",
-  },
   financeValue: "R$ 0,00",
   errors: [],
 
   ...dnaUspStamp.state(),
   ...companyData.state(),
   ...about.state(),
+  ...investment.state(),
 });
 
 export const getters = {
   partners: (s) => s.partners,
   collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
-  investmentsLastUpdatedAt: (s) => s.investmentsLastUpdatedAt,
   revenuesLastUpdatedAt: (s) => s.revenuesLastUpdatedAt,
   numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
   numberOfPJColaborators: (s) => s.numberOfPJColaborators,
   numberOfInterns: (s) => s.numberOfInterns,
   incubated: (s) => s.incubated,
   ecosystems: (s) => s.ecosystems,
-  receivedInvestments: (s) => s.receivedInvestments,
-  investments: (s) => s.investments,
-  investmentsValues: (s) => s.investmentsValues,
   financeValue: (s) => s.financeValue,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
   ...companyData.getters,
   ...about.getters,
+  ...investment.getters,
 };
 
 export const mutations = {
@@ -58,12 +46,14 @@ export const mutations = {
   ...dnaUspStamp.mutations,
   ...companyData.mutations,
   ...about.mutations,
+  ...investment.mutations,
 };
 
 export const actions = {
   ...dnaUspStamp.actions,
   ...companyData.actions,
   ...about.actions,
+  ...investment.actions,
 
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
@@ -77,12 +67,6 @@ export const actions = {
     commit("setFormField", { key: "incubated", value }),
   setEcosystems: ({ commit }, value) =>
     commit("setFormField", { key: "ecosystems", value }),
-  setReceivedInvestments: ({ commit }, value) =>
-    commit("setFormField", { key: "receivedInvestments", value }),
-  setInvestments: ({ commit }, value) =>
-    commit("setFormField", { key: "investments", value }),
-  setInvestmentsValues: ({ commit }, value) =>
-    commit("setFormField", { key: "investmentsValues", value }),
   setFinanceValue: ({ commit }, value) =>
     commit("setFormField", { key: "financeValue", value }),
 
@@ -168,7 +152,8 @@ const prepareCompanyObject = (obj) => ({
   company: {
     ...companyData.prepareSection(obj),
     ...dnaUspStamp.prepareSection(obj),
-    ...about.prepareSection(obj)
+    ...about.prepareSection(obj),
+    ...investment.prepareSection(obj),
   },
 });
 
@@ -186,9 +171,4 @@ const updateCollaboratorsDate = (obj) => {
 const updateRevenuesDate = (obj) => {
   const wasUpdated = obj.financeValue !== "R$ 0,00";
   return wasUpdated ? new Date() : obj.revenuesLastUpdatedAt;
-};
-
-const updateInvestmentsDate = (obj) => {
-  const wasUpdated = obj.receivedInvestments;
-  return wasUpdated ? new Date() : obj.investmentsLastUpdatedAt;
 };
