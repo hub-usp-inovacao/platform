@@ -30,7 +30,7 @@ RSpec.describe Revenue, type: :model do
 
   context 'with CSV parsing' do
     let :handmade do
-      [nil] * 71 + [
+      [nil] * 72 + [
         attrs[:last_year]
       ] + [nil] * 17 + [
         attrs[:last_update]
