@@ -14,11 +14,12 @@ class Investment
 
   embedded_in :company_update_request, inverse_of: :investment
 
-  validate :types_only_money?, :data_consistent?, :last_update_in_the_past?
+  validates :last_update, past_date: true
+  validate :types_only_money?, :data_consistent?
 
   def last_update_in_the_past?
     is_valid = last_update.nil? ||
-               last_update < Time.now
+               last_update < Time.zone.now
 
     errors.add(:last_update) unless is_valid
   end

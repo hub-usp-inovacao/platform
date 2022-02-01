@@ -54,6 +54,10 @@ RSpec.describe 'CompanyUpdates', type: :request do
       investment: {
         received: false,
         last_update: 10.seconds.ago
+      },
+      revenue: {
+        last_year: 'R$ 1.200.000',
+        last_update: 10.seconds.ago
       }
     }
   end

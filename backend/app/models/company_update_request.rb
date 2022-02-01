@@ -7,4 +7,5 @@ class CompanyUpdateRequest
   embeds_one :company_data
   embeds_one :about_company
   embeds_one :investment
+  embeds_one :revenue
 end

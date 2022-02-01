@@ -8,6 +8,7 @@ class CompanyUpdatesController < ApplicationController
     @comp_update.company_data = CompanyDatum.new(prms[:data])
     @comp_update.about_company = AboutCompany.new(prms[:about])
     @comp_update.investment = Investment.new(prms[:investment])
+    @comp_update.revenue = Revenue.new(prms[:revenue])
 
     if @comp_update.valid?
       @comp_update.save
@@ -20,6 +21,12 @@ class CompanyUpdatesController < ApplicationController
   private
 
   def create_params
-    params.require(:company).permit(dna_usp_stamp: {}, data: {}, about: {}, investment: {})
+    params.require(:company).permit(
+      dna_usp_stamp: {},
+      data: {},
+      about: {},
+      investment: {},
+      revenue: {}
+    )
   end
 end
