@@ -209,7 +209,17 @@
             chips
             label="Caso necessário, coloque as fotos relacionadas a sua demanda"
             @change="uploadImage"
+            prepend-icon="mdi-camera"
           ></v-file-input>
+
+          <v-file-input
+            multiple
+            chips
+            label="Caso necessário, coloque PDFs relacionados a sua demanda"
+            @change="uploadFiles"
+          >
+          </v-file-input>
+
           <div>
             <v-radio-group
               v-model="conexao.demand.expectation"
@@ -364,6 +374,7 @@ export default {
       },
     },
     images: null,
+    files: null,
     radioButtonData: [
       ["Empresa", "Organização sem fins lucatrivos", "Governo", "Consultoria"],
       ["Pequena", "Média", "Grande"],
@@ -433,6 +444,10 @@ export default {
     uploadImage(e) {
       this.images = e;
     },
+    uploadFiles(e) {
+      this.files = e;
+      console.log(e);
+    },
     enableOtherOption(model, value) {
       if (this.conexao[model][value] == "Outro") {
         this.conexao[model][`${value}Other`] = "";
@@ -479,6 +494,20 @@ export default {
       }
     },
 
+    sendFiles() {
+      let files = this.files
+      if (files){
+        files.forEach((file) =>{
+          let formData = new FormData()
+  
+          formData.append("requestId", this.conexao.requestId);
+          formData.append("file", file)
+          this.$axios.$post("/conexao/file", formData)
+        });
+      }
+    },
+    
+
     async submit() {
       this.loading = true;
       const valid = this.$refs.form.validate();
@@ -488,6 +517,7 @@ export default {
         try {
           await this.$axios.$post("/conexao", { conexao: this.conexao });
           this.sendImages();
+          this.sendFiles();
           alert(
             "Formulário enviado com sucesso! Em breve a equipe da AUSPIN entrará em contato com você."
           );
