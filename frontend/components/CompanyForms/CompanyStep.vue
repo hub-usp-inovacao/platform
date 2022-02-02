@@ -10,19 +10,6 @@
         <component :is="item.content"></component>
       </v-tab-item>
     </v-tabs-items>
-    <div class="ma-4 d-flex justify-space-between">
-      <v-btn
-        class="mr-4"
-        color="primary"
-        :disabled="disableBackButton"
-        @click="previousTab"
-      >
-        {{ backButtonName }}
-      </v-btn>
-      <v-btn color="primary" :disabled="disableNextButton" @click="nextTab">
-        {{ nextButtonName }}
-      </v-btn>
-    </div>
   </v-container>
 </template>
 
