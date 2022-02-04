@@ -21,7 +21,8 @@ class CompanyUpdateRequest
       CompanyDatum,
       AboutCompany,
       Investment,
-      Revenue
+      Revenue,
+      Incubation,
     ]
 
     merge(['Carimbo de Data/Hora'] + subsection_classes.map { |cls| cls.send :csv_headers })
@@ -37,7 +38,8 @@ class CompanyUpdateRequest
           cur.company_data.prepare_to_csv,
           cur.about_company.prepare_to_csv,
           cur.investment.prepare_to_csv,
-          cur.revenue.prepare_to_csv
+          cur.revenue.prepare_to_csv,
+          cur.incubation.prepare_to_csv
         ])
       end
     end

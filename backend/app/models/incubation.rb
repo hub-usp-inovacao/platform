@@ -42,6 +42,13 @@ class Incubation
     ]
   end
 
+  def self.csv_headers
+    row_offset + [
+      'A empresa está incubada?',
+      'Em qual incubadora ou parque tecnológico?'
+    ]
+  end
+
   def prepare_to_csv
     Incubation.row_offset + [
       was_incubated,
