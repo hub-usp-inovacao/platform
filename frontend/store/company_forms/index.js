@@ -3,6 +3,7 @@ import companyData from './company_data'
 import about from './about'
 import investment from './investment'
 import revenue from './revenue'
+import incubation from './incubation'
 
 export const state = () => ({
   partners: [],
@@ -10,8 +11,6 @@ export const state = () => ({
   numberOfCTLEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
-  incubated: "",
-  ecosystems: [],
   errors: [],
 
   ...dnaUspStamp.state(),
@@ -19,6 +18,7 @@ export const state = () => ({
   ...about.state(),
   ...investment.state(),
   ...revenue.state(),
+  ...incubation.state(),
 });
 
 export const getters = {
@@ -27,8 +27,6 @@ export const getters = {
   numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
   numberOfPJColaborators: (s) => s.numberOfPJColaborators,
   numberOfInterns: (s) => s.numberOfInterns,
-  incubated: (s) => s.incubated,
-  ecosystems: (s) => s.ecosystems,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
@@ -36,6 +34,7 @@ export const getters = {
   ...about.getters,
   ...investment.getters,
   ...revenue.getters,
+  ...incubation.getters,
 };
 
 export const mutations = {
@@ -47,6 +46,7 @@ export const mutations = {
   ...about.mutations,
   ...investment.mutations,
   ...revenue.mutations,
+  ...incubation.mutations,
 };
 
 export const actions = {
@@ -55,6 +55,7 @@ export const actions = {
   ...about.actions,
   ...investment.actions,
   ...revenue.actions,
+  ...incubation.actions,
 
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
@@ -64,10 +65,6 @@ export const actions = {
     commit("setFormField", { key: "numberOfPJColaborators", value }),
   setNumberOfInterns: ({ commit }, value) =>
     commit("setFormField", { key: "numberOfInterns", value }),
-  setIncubated: ({ commit }, value) =>
-    commit("setFormField", { key: "incubated", value }),
-  setEcosystems: ({ commit }, value) =>
-    commit("setFormField", { key: "ecosystems", value }),
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -153,7 +150,8 @@ const prepareCompanyObject = (obj) => ({
     ...dnaUspStamp.prepareSection(obj),
     ...about.prepareSection(obj),
     ...investment.prepareSection(obj),
-    ...revenue.prepareSection(obj)
+    ...revenue.prepareSection(obj),
+    ...incubation.prepareSection(obj),
   },
 });
 
