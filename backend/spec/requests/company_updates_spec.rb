@@ -58,6 +58,10 @@ RSpec.describe 'CompanyUpdates', type: :request do
       revenue: {
         last_year: 'R$ 1.200.000',
         last_update: 10.seconds.ago
+      },
+      incubation: {
+        was_incubated: 'Não',
+        ecosystem: 'Direto para o Mercado'
       }
     }
   end
@@ -67,7 +71,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
       CompanyUpdateRequest.delete_all
     end
 
-    %i[data dna_usp_stamp about].each do |k|
+    %i[data dna_usp_stamp about incubation].each do |k|
       it "blocks requests that fails validation (missing #{k})" do
         valid_data.delete k
         patch '/companies', params: { company: valid_data }

@@ -13,6 +13,7 @@ class CompanyUpdateRequest
   embeds_one :about_company
   embeds_one :investment
   embeds_one :revenue
+  embeds_one :incubation
 
   def self.csv_headers
     subsection_classes = [

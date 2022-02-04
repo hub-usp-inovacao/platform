@@ -1,0 +1,53 @@
+require 'rails_helper'
+
+RSpec.describe Incubation, type: :model do
+  let :attrs do
+    {
+      was_incubated: 'Sim. A empresa já está graduada',
+      ecosystem: 'Porto Digital'
+    }
+  end
+
+  context 'with validation problems' do
+    it 'on absense of was_incubated' do
+      attrs.delete :was_incubated
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on absense of ecosystem' do
+      attrs.delete :ecosystem
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on unexpected answer' do
+      attrs[:was_incubated] = 'qualquer coisa'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on inconsistent ecosystem based on being incubated' do
+      attrs[:was_incubated] = 'Sim. A empresa está incubada'
+      attrs[:ecosystem] = 'Direto para o Mercado'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on inconsistent incubated based on ecosystem' do
+      attrs[:was_incubated] = 'Não'
+      attrs[:ecosystem] = 'Porto Digital'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+  end
+
+  context 'with CSV preparation' do
+    let :handmade do
+      [nil] * 18 + [
+        attrs[:was_incubated],
+        attrs[:ecosystem]
+      ]
+    end
+
+    it 'prepares to CSV correctly' do
+      incub = described_class.new(attrs)
+      expect(incub.prepare_to_csv).to match_array(handmade)
+    end
+  end
+end
