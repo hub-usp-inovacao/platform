@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Incubation
   include Mongoid::Document
 
@@ -30,7 +32,7 @@ class Incubation
     expected = expected_incubated_answers
 
     is_valid = expected.include?(was_incubated)
-    
+
     errors.add(:was_incubated) unless is_valid
   end
 

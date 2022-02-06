@@ -62,7 +62,41 @@ RSpec.describe 'CompanyUpdates', type: :request do
       incubation: {
         was_incubated: 'Não',
         ecosystem: 'Direto para o Mercado'
-      }
+      },
+      partners: [
+        {
+          name: 'Pedro de Tal',
+          nusp: '7571332',
+          bond: 'Aluno ou ex-aluno (graduação)',
+          unity: 'Instituto de Matemática e Estatística - IME',
+          email: 'pedro@mail.com',
+          phone: '(11) 99999-7665'
+        },
+        {
+          name: 'Pedro de Tal',
+          nusp: '7571332',
+          bond: 'Aluno ou ex-aluno (graduação)',
+          unity: 'Instituto de Matemática e Estatística - IME'
+        },
+        {
+          name: 'Pedro de Tal',
+          nusp: '7571332',
+          bond: 'Aluno ou ex-aluno (graduação)',
+          unity: 'Instituto de Matemática e Estatística - IME'
+        },
+        {
+          name: 'Pedro de Tal',
+          nusp: '7571332',
+          bond: 'Aluno ou ex-aluno (graduação)',
+          unity: 'Instituto de Matemática e Estatística - IME'
+        },
+        {
+          name: 'Pedro de Tal',
+          nusp: '7571332',
+          bond: 'Aluno ou ex-aluno (graduação)',
+          unity: 'Instituto de Matemática e Estatística - IME'
+        }
+      ]
     }
   end
 
