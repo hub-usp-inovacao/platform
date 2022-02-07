@@ -4,6 +4,7 @@ import about from './about'
 import investment from './investment'
 import revenue from './revenue'
 import incubation from './incubation'
+import staff from './staff'
 
 export const state = () => ({
   partners: [],
@@ -19,14 +20,11 @@ export const state = () => ({
   ...investment.state(),
   ...revenue.state(),
   ...incubation.state(),
+  ...staff.state()
 });
 
 export const getters = {
   partners: (s) => s.partners,
-  collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
-  numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
-  numberOfPJColaborators: (s) => s.numberOfPJColaborators,
-  numberOfInterns: (s) => s.numberOfInterns,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
@@ -35,6 +33,7 @@ export const getters = {
   ...investment.getters,
   ...revenue.getters,
   ...incubation.getters,
+  ...staff.getters,
 };
 
 export const mutations = {
@@ -47,6 +46,7 @@ export const mutations = {
   ...investment.mutations,
   ...revenue.mutations,
   ...incubation.mutations,
+  ...staff.mutations,
 };
 
 export const actions = {
@@ -56,15 +56,10 @@ export const actions = {
   ...investment.actions,
   ...revenue.actions,
   ...incubation.actions,
+  ...staff.actions,
 
   setPartners: ({ commit }, value) =>
     commit("setFormField", { key: "partners", value }),
-  setNumberOfCTLEmployees: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfCTLEmployees", value }),
-  setNumberOfPJColaborators: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfPJColaborators", value }),
-  setNumberOfInterns: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfInterns", value }),
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -152,6 +147,7 @@ const prepareCompanyObject = (obj) => ({
     ...investment.prepareSection(obj),
     ...revenue.prepareSection(obj),
     ...incubation.prepareSection(obj),
+    ...staff.prepareSection(obj),
   },
 });
 

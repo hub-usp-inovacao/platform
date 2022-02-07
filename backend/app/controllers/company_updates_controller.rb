@@ -11,6 +11,7 @@ class CompanyUpdatesController < ApplicationController
     @comp_update.investment = Investment.new(prms[:investment])
     @comp_update.revenue = Revenue.new(prms[:revenue])
     @comp_update.incubation = Incubation.new(prms[:incubation])
+    @comp_update.collaborator = Collaborator.new(prms[:collaborator])
 
     if @comp_update.valid?
       @comp_update.save
@@ -29,7 +30,8 @@ class CompanyUpdatesController < ApplicationController
       about: {},
       investment: {},
       revenue: {},
-      incubation: {}
+      incubation: {},
+      collaborator: {}
     )
   end
 end
