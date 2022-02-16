@@ -1,18 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe Collaborator, type: :model do
+RSpec.describe Staff, type: :model do
   let :attrs do 
     {
-      numberOfCTLEmployees: '4',
-      numberOfPJColaborators: '5',
-      numberOfInterns: '6',
+      number_of_CTL_employees: '4',
+      number_of_PJ_colaborators: '5',
+      number_of_interns: '6',
       last_update: 10.seconds.ago
     }
 end
 
   context 'with validation problems' do
     it 'field not a number' do
-      %i[numberOfCTLEmployees numberOfPJColaborators numberOfInterns].each do |k|
+      %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
         attrs[k] = 'ten'
       expect(described_class.new(attrs)).to be_invalid
       end
@@ -27,7 +27,7 @@ end
   context 'with CSV preparation' do
     let :handmade do
       [nil] * 58 + [
-        attrs[:numberOfCTLEmployees], attrs[:numberOfPJColaborators], attrs[:numberOfInterns]
+        attrs[:number_of_CTL_employees], attrs[:number_of_PJ_colaborators], attrs[:number_of_interns]
         ] + [nil] * 24 + [attrs[:last_update]]
     end
 
