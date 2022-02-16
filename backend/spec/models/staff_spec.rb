@@ -27,7 +27,9 @@ end
   context 'with CSV preparation' do
     let :handmade do
       [nil] * 58 + [
-        attrs[:number_of_CTL_employees], attrs[:number_of_PJ_colaborators], attrs[:number_of_interns]
+        attrs[:number_of_CTL_employees],
+        attrs[:number_of_PJ_colaborators],
+        attrs[:number_of_interns]
         ] + [nil] * 24 + [attrs[:last_update]]
     end
 
