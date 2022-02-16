@@ -11,8 +11,8 @@ RSpec.describe Staff, type: :model do
 end
 
   context 'with validation problems' do
-    it 'field not a number' do
-      %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
+    %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
+      it 'field not a number' do
         attrs[k] = 'ten'
       expect(described_class.new(attrs)).to be_invalid
       end
