@@ -1,4 +1,4 @@
-localhost
+hubuspinovacao.if.usp.br
 
 handle_path /api/* {
   uri strip_prefix /api
