@@ -18,6 +18,13 @@ end
       end
     end
 
+    %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
+      it 'field its empty' do
+        attrs[k] = ''
+      expect(described_class.new(attrs)).to be_invalid
+      end
+    end
+
     it 'on future last_update' do
       attrs[:last_update] = 10.seconds.from_now
       expect(described_class.new(attrs)).to be_invalid
