@@ -4,9 +4,9 @@ import about from './about'
 import investment from './investment'
 import revenue from './revenue'
 import incubation from './incubation'
+import partners from './partners'
 
 export const state = () => ({
-  partners: [],
   collaboratorsLastUpdatedAt: new Date(),
   numberOfCTLEmployees: "",
   numberOfPJColaborators: "",
@@ -19,10 +19,10 @@ export const state = () => ({
   ...investment.state(),
   ...revenue.state(),
   ...incubation.state(),
+  ...partners.state(),
 });
 
 export const getters = {
-  partners: (s) => s.partners,
   collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
   numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
   numberOfPJColaborators: (s) => s.numberOfPJColaborators,
@@ -35,6 +35,7 @@ export const getters = {
   ...investment.getters,
   ...revenue.getters,
   ...incubation.getters,
+  ...partners.getters,
 };
 
 export const mutations = {
@@ -47,6 +48,7 @@ export const mutations = {
   ...investment.mutations,
   ...revenue.mutations,
   ...incubation.mutations,
+  ...partners.mutations,
 };
 
 export const actions = {
@@ -56,9 +58,8 @@ export const actions = {
   ...investment.actions,
   ...revenue.actions,
   ...incubation.actions,
+  ...partners.actions,
 
-  setPartners: ({ commit }, value) =>
-    commit("setFormField", { key: "partners", value }),
   setNumberOfCTLEmployees: ({ commit }, value) =>
     commit("setFormField", { key: "numberOfCTLEmployees", value }),
   setNumberOfPJColaborators: ({ commit }, value) =>
@@ -152,6 +153,7 @@ const prepareCompanyObject = (obj) => ({
     ...investment.prepareSection(obj),
     ...revenue.prepareSection(obj),
     ...incubation.prepareSection(obj),
+    ...partners.prepareSection(obj),
   },
 });
 
