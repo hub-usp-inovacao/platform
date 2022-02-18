@@ -41,7 +41,7 @@ class CompanyUpdateRequest
           cur.about_company.prepare_to_csv,
           cur.investment.prepare_to_csv,
           cur.revenue.prepare_to_csv,
-          cur.incubation.prepare_to_csv
+          cur.incubation.prepare_to_csv,
           cur.staff.prepare_to_csv
         ])
       end

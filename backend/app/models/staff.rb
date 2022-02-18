@@ -1,9 +1,9 @@
 class Staff
   include Mongoid::Document
 
-  field :number_of_CTL_employees, type: String
-  field :number_of_PJ_colaborators, type: String
-  field :number_of_interns, type: String
+  field :number_of_CTL_employees, type: Integer
+  field :number_of_PJ_colaborators, type: Integer
+  field :number_of_interns, type: Integer
   field :last_update, type: Time
 
   embedded_in :company_update_request, inverse_of: :staff
@@ -13,7 +13,7 @@ class Staff
   validate :number_of_PJ_colaborators_not_a_number?
   validate :number_of_interns_not_a_number?
 
-  def is_number? string
+  def is_number? integer
     true if Float(string) rescue false
   end
 

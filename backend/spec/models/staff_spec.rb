@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe Staff, type: :model do
   let :attrs do 
     {
-      number_of_CTL_employees: '4',
-      number_of_PJ_colaborators: '5',
-      number_of_interns: '6',
+      number_of_CTL_employees: 4,
+      number_of_PJ_colaborators: 5,
+      number_of_interns: 6,
       last_update: 10.seconds.ago
     }
 end
