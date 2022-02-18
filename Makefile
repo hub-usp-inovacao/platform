@@ -63,3 +63,6 @@ deploy:
 	make build_prod
 	make stop_prod
 	make prod
+
+setup_proxy:
+	caddy run --config ./Caddyfile &
