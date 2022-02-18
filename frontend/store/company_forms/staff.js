@@ -28,13 +28,11 @@ export const actions = {
 };
 
 const prepareSection = (obj) => ({
-  company: {
     staff: {
       numberOfCTLEmployees: obj.numberOfCTLEmployees,
       numberOfPJColaborators: obj.numberOfPJColaborators,
       numberOfInterns: obj.numberOfInterns,
     }
-  },
 });
 
 export default {
