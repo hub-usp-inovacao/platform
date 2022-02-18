@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Staff
   include Mongoid::Document
 
@@ -9,28 +11,30 @@ class Staff
   embedded_in :company_update_request, inverse_of: :staff
 
   validates :last_update, past_date: true
-  validate :numberOfCTL_employees_not_a_number?
-  validate :number_of_PJ_colaborators_not_a_number?
+  validate :number_of_clt_employees_not_a_number?
+  validate :number_of_pj_colaborators_not_a_number?
   validate :number_of_interns_not_a_number?
 
-  def is_number? integer
-    true if Float(string) rescue false
+  def number?(integer)
+    true if Float(integer)
+  rescue StandardError
+    false
   end
 
-  def numberOfCTL_employees_not_a_number?
-    is_valid = number_of_CTL_employees.nil? or is_number?(number_of_CTL_employees) 
+  def number_of_clt_employees_not_a_number?
+    is_valid = number_of_CTL_employees.nil? or number?(number_of_CTL_employees)
 
     errors.add(:number_of_CTL_employees) unless is_valid
   end
 
-  def number_of_PJ_colaborators_not_a_number?
-    is_valid = number_of_PJ_colaborators.nil? or is_number?(number_of_PJ_colaborators)
+  def number_of_pj_colaborators_not_a_number?
+    is_valid = number_of_PJ_colaborators.nil? or number?(number_of_PJ_colaborators)
 
     errors.add(:number_of_PJ_colaborators) unless is_valid
   end
 
   def number_of_interns_not_a_number?
-    is_valid = number_of_interns.nil? or is_number?(number_of_interns) 
+    is_valid = number_of_interns.nil? or number?(number_of_interns)
 
     errors.add(:number_of_interns) unless is_valid
   end
@@ -68,4 +72,3 @@ class Staff
     [nil] * 24
   end
 end
-

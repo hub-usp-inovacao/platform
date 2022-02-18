@@ -4,7 +4,7 @@ class CompanyUpdatesController < ApplicationController
   def create
     prms = create_params
     @comp_update = CompanyUpdateRequest.new
-    @comp_update.timestamp = Time.now
+    @comp_update.timestamp = Time.zone.now
     @comp_update.dna_usp_stamp = DnaUspStamp.new(prms[:dna_usp_stamp])
     @comp_update.company_data = CompanyDatum.new(prms[:data])
     @comp_update.about_company = AboutCompany.new(prms[:about])

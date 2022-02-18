@@ -1,27 +1,27 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Staff, type: :model do
-  let :attrs do 
+  let :attrs do
     {
       number_of_CTL_employees: 4,
       number_of_PJ_colaborators: 5,
       number_of_interns: 6,
       last_update: 10.seconds.ago
     }
-end
+  end
 
   context 'with validation problems' do
     %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
       it 'field not a number' do
         attrs[k] = 'ten'
-      expect(described_class.new(attrs)).to be_invalid
+        expect(described_class.new(attrs)).to be_invalid
       end
-    end
 
-    %i[number_of_CTL_employees number_of_PJ_colaborators number_of_interns].each do |k|
       it 'field its empty' do
         attrs[k] = ''
-      expect(described_class.new(attrs)).to be_invalid
+        expect(described_class.new(attrs)).to be_invalid
       end
     end
 
@@ -37,7 +37,7 @@ end
         attrs[:number_of_CTL_employees],
         attrs[:number_of_PJ_colaborators],
         attrs[:number_of_interns]
-        ] + [nil] * 24 + [attrs[:last_update]]
+      ] + [nil] * 24 + [attrs[:last_update]]
     end
 
     it 'prepares to CSV correctly' do

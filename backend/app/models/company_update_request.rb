@@ -35,24 +35,22 @@ class CompanyUpdateRequest
       csv << csv_headers
       all.each do |cur|
         csv << merge([
-          [cur.timestamp],
-          cur.dna_usp_stamp.prepare_to_csv,
-          cur.company_data.prepare_to_csv,
-          cur.about_company.prepare_to_csv,
-          cur.investment.prepare_to_csv,
-          cur.revenue.prepare_to_csv,
-          cur.incubation.prepare_to_csv,
-          cur.staff.prepare_to_csv
-        ])
+                       [cur.timestamp],
+                       cur.dna_usp_stamp.prepare_to_csv,
+                       cur.company_data.prepare_to_csv,
+                       cur.about_company.prepare_to_csv,
+                       cur.investment.prepare_to_csv,
+                       cur.revenue.prepare_to_csv,
+                       cur.incubation.prepare_to_csv,
+                       cur.staff.prepare_to_csv
+                     ])
       end
     end
   end
 
-  private
-
   def self.merge(sections)
     base = [nil] * 91
-    base.each_with_index do |b, i|
+    base.each_with_index do |_b, i|
       sections.each do |sec|
         base[i] = base[i] || sec[i]
       end
