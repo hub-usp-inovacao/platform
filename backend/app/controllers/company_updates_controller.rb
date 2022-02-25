@@ -13,6 +13,14 @@ class CompanyUpdatesController < ApplicationController
     @comp_update.incubation = Incubation.new(prms[:incubation])
     @comp_update.staff = Staff.new(prms[:staff])
 
+    partners = []
+    prms[:partners].each_with_index do |raw_partner, index|
+      partner = Partner.new(raw_partner.merge(index: index + 1))
+      partners << partner
+    end
+
+    @comp_update.partners = partners
+
     if @comp_update.valid?
       @comp_update.save
       render json: { company_update: @comp_update }
@@ -25,6 +33,14 @@ class CompanyUpdatesController < ApplicationController
 
   def create_params
     params.require(:company).permit(
+      partners: %i[
+        name
+        email
+        phone
+        nusp
+        bond
+        unity
+      ],
       dna_usp_stamp: {},
       data: {},
       about: {},
