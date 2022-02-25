@@ -3,7 +3,7 @@
 class Staff
   include Mongoid::Document
 
-  field :number_of_CTL_employees, type: Integer
+  field :number_of_CLT_employees, type: Integer
   field :number_of_PJ_colaborators, type: Integer
   field :number_of_interns, type: Integer
   field :last_update, type: Time
@@ -22,9 +22,9 @@ class Staff
   end
 
   def number_of_clt_employees_not_a_number?
-    is_valid = number_of_CTL_employees.nil? or number?(number_of_CTL_employees)
+    is_valid = number_of_CLT_employees.nil? or number?(number_of_CLT_employees)
 
-    errors.add(:number_of_CTL_employees) unless is_valid
+    errors.add(:number_of_CLT_employees) unless is_valid
   end
 
   def number_of_pj_colaborators_not_a_number?
@@ -58,7 +58,7 @@ class Staff
 
   def prepare_to_csv
     Staff.row_offset + [
-      number_of_CTL_employees,
+      number_of_CLT_employees,
       number_of_PJ_colaborators,
       number_of_interns
     ] + Staff.middle_offset + [
