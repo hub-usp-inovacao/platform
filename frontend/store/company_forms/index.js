@@ -152,13 +152,4 @@ const prepareCompanyObject = (obj) => ({
   },
 });
 
-const updateCollaboratorsDate = (obj) => {
-  const keys = [
-    "numberOfCLTEmployees",
-    "numberOfPJColaborators",
-    "numberOfInterns",
-  ];
-  const wasUpdated = keys.some((key) => obj[key]);
 
-  return wasUpdated ? new Date() : obj.collaboratorsLastUpdatedAt;
-};

@@ -22,19 +22,19 @@ class Staff
   end
 
   def number_of_clt_employees_not_a_number?
-    is_valid = number_of_CLT_employees.nil? or number?(number_of_CLT_employees)
+    is_valid = number_of_CLT_employees.nil? || number?(number_of_CLT_employees)
 
     errors.add(:number_of_CLT_employees) unless is_valid
   end
 
   def number_of_pj_colaborators_not_a_number?
-    is_valid = number_of_PJ_colaborators.nil? or number?(number_of_PJ_colaborators)
+    is_valid = number_of_PJ_colaborators.nil? || number?(number_of_PJ_colaborators)
 
     errors.add(:number_of_PJ_colaborators) unless is_valid
   end
 
   def number_of_interns_not_a_number?
-    is_valid = number_of_interns.nil? or number?(number_of_interns)
+    is_valid = number_of_interns.nil? || number?(number_of_interns)
 
     errors.add(:number_of_interns) unless is_valid
   end

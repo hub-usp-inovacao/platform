@@ -29,11 +29,23 @@ export const actions = {
 
 const prepareSection = (obj) => ({
     staff: {
-      number_Of_CLT_employees: obj.numberOfCLTEmployees,
+      number_of_CLT_employees: obj.numberOfCLTEmployees,
       number_of_PJ_colaborators: obj.numberOfPJColaborators,
       number_of_interns: obj.numberOfInterns,
+      last_update: updateCollaboratorsDate(obj)
     }
 });
+
+const updateCollaboratorsDate = (obj) => {
+  const keys = [
+    "numberOfCLTEmployees",
+    "numberOfPJColaborators",
+    "numberOfInterns",
+  ];
+  const wasUpdated = keys.some((key) => obj[key]);
+
+  return wasUpdated ? new Date() : obj.collaboratorsLastUpdatedAt;
+};
 
 export default {
   state,

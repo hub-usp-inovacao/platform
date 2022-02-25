@@ -46,7 +46,7 @@ class CompanyUpdateRequest
                        cur.investment.prepare_to_csv,
                        cur.revenue.prepare_to_csv,
                        cur.incubation.prepare_to_csv,
-                       cur.staff.prepare_to_csv
+                       cur.staff.prepare_to_csv,
                        cur.partners.map(&:prepare_to_csv)
                      ])
       end
