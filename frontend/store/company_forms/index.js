@@ -9,7 +9,7 @@ import staff from './staff'
 export const state = () => ({
   partners: [],
   collaboratorsLastUpdatedAt: new Date(),
-  numberOfCTLEmployees: "",
+  numberOfCLTEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
   errors: [],
@@ -153,7 +153,7 @@ const prepareCompanyObject = (obj) => ({
 
 const updateCollaboratorsDate = (obj) => {
   const keys = [
-    "numberOfCTLEmployees",
+    "numberOfCLTEmployees",
     "numberOfPJColaborators",
     "numberOfInterns",
   ];

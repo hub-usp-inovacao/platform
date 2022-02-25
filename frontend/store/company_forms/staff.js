@@ -1,14 +1,14 @@
 const state = () => ({
   partners: [],
   collaboratorsLastUpdatedAt: new Date(),
-  numberOfCTLEmployees: "",
+  numberOfCLTEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
 });
 
 const getters = {
   collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
-  numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
+  numberOfCLTEmployees: (s) => s.numberOfCLTEmployees,
   numberOfPJColaborators: (s) => s.numberOfPJColaborators,
   numberOfInterns: (s) => s.numberOfInterns,
 };
@@ -19,8 +19,8 @@ export const mutations = {
 };
 
 export const actions = {
-  setNumberOfCTLEmployees: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfCTLEmployees", value }),
+  setNumberOfCLTEmployees: ({ commit }, value) =>
+    commit("setFormField", { key: "numberOfCLTEmployees", value }),
   setNumberOfPJColaborators: ({ commit }, value) =>
     commit("setFormField", { key: "numberOfPJColaborators", value }),
   setNumberOfInterns: ({ commit }, value) =>
@@ -29,9 +29,9 @@ export const actions = {
 
 const prepareSection = (obj) => ({
     staff: {
-      numberOfCTLEmployees: obj.numberOfCTLEmployees,
-      numberOfPJColaborators: obj.numberOfPJColaborators,
-      numberOfInterns: obj.numberOfInterns,
+      number_Of_CLT_employees: obj.numberOfCLTEmployees,
+      number_of_PJ_colaborators: obj.numberOfPJColaborators,
+      number_of_interns: obj.numberOfInterns,
     }
 });
 

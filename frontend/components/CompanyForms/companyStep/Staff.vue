@@ -5,9 +5,9 @@
     </p>
     <v-form>
       <NumberInput
-        :value="numberOfCTLEmployees"
+        :value="numberOfCLTEmployees"
         label="Qual o número de funcionários contratados como CLT?"
-        @input="setNumberOfCTLEmployees"
+        @input="setNumberOfCLTEmployees"
       />
       <NumberInput
         :value="numberOfPJColaborators"
@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapGetters({
       collaboratorsLastUpdatedAt: "company_forms/collaboratorsLastUpdatedAt",
-      numberOfCTLEmployees: "company_forms/numberOfCTLEmployees",
+      numberOfCLTEmployees: "company_forms/numberOfCLTEmployees",
       numberOfPJColaborators: "company_forms/numberOfPJColaborators",
       numberOfInterns: "company_forms/numberOfInterns",
     }),
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setNumberOfCTLEmployees: "company_forms/setNumberOfCTLEmployees",
+      setNumberOfCLTEmployees: "company_forms/setNumberOfCLTEmployees",
       setNumberOfPJColaborators: "company_forms/setNumberOfPJColaborators",
       setNumberOfInterns: "company_forms/setNumberOfInterns",
     }),
