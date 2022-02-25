@@ -51,6 +51,8 @@ class Staff
       'Qual o número de funcionários contratados como CLT?',
       'Qual o número de colaboradores contratados como pessoa jurídica (PJ)?',
       'Qual o número de estagiários/bolsistas contratados?'
+    ] + middle_offset + [
+      'Última atualização de Faturamento'
     ]
   end
 
