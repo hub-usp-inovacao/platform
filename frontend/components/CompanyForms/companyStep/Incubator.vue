@@ -17,7 +17,6 @@
       <Dropdown
         :value="defaultIncubators"
         :options="incubadoras"
-        multiple-option
         :disabled="disabledIncubatorsSelect"
         label=""
         @input="setDefaultIncubators"
@@ -26,8 +25,8 @@
         Outros
         <v-divider />
         <v-container>
-          <MultipleInputs
-            :value="otherIncubators"
+          <ShortTextInput
+            :value="otherIncubator"
             input-label="Incubadora/Parque Tecnológico"
             @input="setOtherIncubators"
           />
@@ -40,12 +39,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
+import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 
 export default {
   components: {
     Dropdown,
-    MultipleInputs,
+    ShortTextInput,
   },
   data: () => ({
     options: [
@@ -70,14 +69,10 @@ export default {
       return this.incubated === "Não";
     },
     defaultIncubators() {
-      return this.ecosystems.filter((inc) =>
-        this.incubadoras.find((i) => i == inc)
-      );
+      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : ''
     },
-    otherIncubators() {
-      return this.ecosystems.filter(
-        (inc) => !this.incubadoras.find((i) => i == inc)
-      );
+    otherIncubator() {
+      return this.incubadoras.includes(this.ecosystems) ? '' : this.ecosystems
     },
   },
   methods: {
@@ -85,11 +80,11 @@ export default {
       setIncubated: "company_forms/setIncubated",
       setEcosystems: "company_forms/setEcosystems",
     }),
-    setDefaultIncubators(incubators) {
-      this.setEcosystems(incubators.concat(this.otherIncubators));
+    setDefaultIncubators(incubator) {
+      this.setEcosystems(incubator);
     },
     setOtherIncubators(other) {
-      this.setEcosystems(this.defaultIncubators.concat(other));
+      this.setEcosystems(other);
     },
   },
 };

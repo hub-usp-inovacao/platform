@@ -7,7 +7,12 @@ pt-br:
       patent: Patente
       skill: Competência
       iniciative: Iniciativa
+      dna_usp_stamp: Selo DNA-USP
     attributes:
+      company_data:
+        public_name: Nome Fantasia
+        corporate_name: Razão Social
+        zipcode: Código Postal (CEP)
       discipline:
         name: Nome
         unity: Unidade

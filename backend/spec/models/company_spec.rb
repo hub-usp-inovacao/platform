@@ -17,9 +17,7 @@ RSpec.describe Company, type: :model do
       ecosystems: [
         'ESALQTec'
       ],
-      description: {
-        long: 'foo bar baz'
-      },
+      description: 'foo bar baz',
       allowed: true,
       address: {
         cep: '13414-157',

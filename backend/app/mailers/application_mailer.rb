@@ -18,7 +18,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def update_companies
     attachments["updated-companies-#{Time.zone.today}.csv"] =
-      { mime_type: 'text/csv', content: CompanyUpdate.to_csv }
+      { mime_type: 'text/csv', content: CompanyUpdateRequest.to_csv }
     mail(subject: subject('Novas empresas solicitaram atualização dos dados'))
   end
 
