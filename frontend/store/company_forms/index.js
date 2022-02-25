@@ -4,11 +4,12 @@ import about from './about'
 import investment from './investment'
 import revenue from './revenue'
 import incubation from './incubation'
+import staff from './staff'
 import partners from './partners'
 
 export const state = () => ({
   collaboratorsLastUpdatedAt: new Date(),
-  numberOfCTLEmployees: "",
+  numberOfCLTEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
   errors: [],
@@ -19,14 +20,11 @@ export const state = () => ({
   ...investment.state(),
   ...revenue.state(),
   ...incubation.state(),
+  ...staff.state(),
   ...partners.state(),
 });
 
 export const getters = {
-  collaboratorsLastUpdatedAt: (s) => s.collaboratorsLastUpdatedAt,
-  numberOfCTLEmployees: (s) => s.numberOfCTLEmployees,
-  numberOfPJColaborators: (s) => s.numberOfPJColaborators,
-  numberOfInterns: (s) => s.numberOfInterns,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
@@ -35,6 +33,7 @@ export const getters = {
   ...investment.getters,
   ...revenue.getters,
   ...incubation.getters,
+  ...staff.getters,
   ...partners.getters,
 };
 
@@ -48,6 +47,7 @@ export const mutations = {
   ...investment.mutations,
   ...revenue.mutations,
   ...incubation.mutations,
+  ...staff.mutations,
   ...partners.mutations,
 };
 
@@ -58,14 +58,8 @@ export const actions = {
   ...investment.actions,
   ...revenue.actions,
   ...incubation.actions,
+  ...staff.actions,
   ...partners.actions,
-
-  setNumberOfCTLEmployees: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfCTLEmployees", value }),
-  setNumberOfPJColaborators: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfPJColaborators", value }),
-  setNumberOfInterns: ({ commit }, value) =>
-    commit("setFormField", { key: "numberOfInterns", value }),
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -153,17 +147,9 @@ const prepareCompanyObject = (obj) => ({
     ...investment.prepareSection(obj),
     ...revenue.prepareSection(obj),
     ...incubation.prepareSection(obj),
+    ...staff.prepareSection(obj),
     ...partners.prepareSection(obj),
   },
 });
 
-const updateCollaboratorsDate = (obj) => {
-  const keys = [
-    "numberOfCTLEmployees",
-    "numberOfPJColaborators",
-    "numberOfInterns",
-  ];
-  const wasUpdated = keys.some((key) => obj[key]);
 
-  return wasUpdated ? new Date() : obj.collaboratorsLastUpdatedAt;
-};

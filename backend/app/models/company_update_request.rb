@@ -14,6 +14,7 @@ class CompanyUpdateRequest
   embeds_one :investment
   embeds_one :revenue
   embeds_one :incubation
+  embeds_one :staff
   embeds_many :partners
 
   def self.csv_headers
@@ -24,6 +25,7 @@ class CompanyUpdateRequest
       Investment,
       Revenue,
       Incubation,
+      Staff,
       Partner
     ]
 
@@ -44,6 +46,7 @@ class CompanyUpdateRequest
                        cur.investment.prepare_to_csv,
                        cur.revenue.prepare_to_csv,
                        cur.incubation.prepare_to_csv,
+                       cur.staff.prepare_to_csv,
                        cur.partners.map(&:prepare_to_csv)
                      ])
       end

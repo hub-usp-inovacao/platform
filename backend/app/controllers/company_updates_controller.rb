@@ -11,6 +11,7 @@ class CompanyUpdatesController < ApplicationController
     @comp_update.investment = Investment.new(prms[:investment])
     @comp_update.revenue = Revenue.new(prms[:revenue])
     @comp_update.incubation = Incubation.new(prms[:incubation])
+    @comp_update.staff = Staff.new(prms[:staff])
 
     partners = []
     prms[:partners].each_with_index do |raw_partner, index|
@@ -45,7 +46,8 @@ class CompanyUpdatesController < ApplicationController
       about: {},
       investment: {},
       revenue: {},
-      incubation: {}
+      incubation: {},
+      staff: {}
     )
   end
 end
