@@ -5,9 +5,9 @@ import investment from './investment'
 import revenue from './revenue'
 import incubation from './incubation'
 import staff from './staff'
+import partners from './partners'
 
 export const state = () => ({
-  partners: [],
   collaboratorsLastUpdatedAt: new Date(),
   numberOfCTLEmployees: "",
   numberOfPJColaborators: "",
@@ -20,11 +20,11 @@ export const state = () => ({
   ...investment.state(),
   ...revenue.state(),
   ...incubation.state(),
-  ...staff.state()
+  ...staff.state(),
+  ...partners.state(),
 });
 
 export const getters = {
-  partners: (s) => s.partners,
   errors: (s) => s.errors,
 
   ...dnaUspStamp.getters,
@@ -34,6 +34,7 @@ export const getters = {
   ...revenue.getters,
   ...incubation.getters,
   ...staff.getters,
+  ...partners.getters,
 };
 
 export const mutations = {
@@ -47,6 +48,7 @@ export const mutations = {
   ...revenue.mutations,
   ...incubation.mutations,
   ...staff.mutations,
+  ...partners.mutations,
 };
 
 export const actions = {
@@ -57,9 +59,7 @@ export const actions = {
   ...revenue.actions,
   ...incubation.actions,
   ...staff.actions,
-
-  setPartners: ({ commit }, value) =>
-    commit("setFormField", { key: "partners", value }),
+  ...partners.actions,
 
   getCompanyData: async function({ commit, getters }) {
     const cnpj = getters.cnpj;
@@ -148,6 +148,7 @@ const prepareCompanyObject = (obj) => ({
     ...revenue.prepareSection(obj),
     ...incubation.prepareSection(obj),
     ...staff.prepareSection(obj),
+    ...partners.prepareSection(obj),
   },
 });
 

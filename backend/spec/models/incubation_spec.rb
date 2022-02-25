@@ -10,14 +10,30 @@ RSpec.describe Incubation, type: :model do
     }
   end
 
+  context 'without validation problems' do
+    it 'works when was not incubated' do
+      attrs[:was_incubated] = 'Não'
+      attrs[:ecosystem] = 'Direto para o Mercado'
+
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'works when no ecosystem is provided' do
+      attrs[:was_incubated] = 'Não'
+      attrs.delete :ecosystem
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'works when empty ecosystem is provided' do
+      attrs[:was_incubated] = 'Não'
+      attrs[:ecosystem] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
+  end
+
   context 'with validation problems' do
     it 'on absense of was_incubated' do
       attrs.delete :was_incubated
-      expect(described_class.new(attrs)).to be_invalid
-    end
-
-    it 'on absense of ecosystem' do
-      attrs.delete :ecosystem
       expect(described_class.new(attrs)).to be_invalid
     end
 

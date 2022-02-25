@@ -9,16 +9,15 @@ class Incubation
   embedded_in :company_update_request, inverse_of: :incubation
 
   validates :was_incubated, presence: true
-  validates :ecosystem, presence: true
 
   validate :expected_was_incubated?, :consistent_pair?
 
   def both_negative?
-    was_incubated.eql?('Não') && ecosystem.eql?('Direto para o Mercado')
+    was_incubated.eql?('Não') && (ecosystem.nil? || ecosystem.eql?('') || ecosystem.eql?('Direto para o Mercado'))
   end
 
   def both_positive?
-    !was_incubated.eql?('Não') && !ecosystem.eql?('Direto para o Mercado')
+    !was_incubated.eql?('Não') && !ecosystem.nil? && !ecosystem.eql?('') && !ecosystem.eql?('Direto para o Mercado')
   end
 
   def consistent_pair?

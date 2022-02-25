@@ -10,13 +10,18 @@ class PhonesValidator < ActiveModel::EachValidator
   end
 
   def list_of_phones?(value)
-    value.is_a?(Array) &&
+    if value.is_a?(Array)
       value.all? do |val|
         phone_valid? val
       end
+    else
+      phone_valid? value
+    end
   end
 
   def phone_valid?(phone)
+    return true if phone.blank?
+
     raw = phone.gsub(/\D/, '')
     raw.match?(/^\d{8,13}$/)
   end
