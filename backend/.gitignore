@@ -28,3 +28,4 @@ public/system
 
 .env
 .env.prod
+.env.dev

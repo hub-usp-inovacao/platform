@@ -6,7 +6,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.prod
     env_file:
-      - ./frontend/.env.prod
+      - ./frontend/.env
     ports:
       - 3000:3000
 
@@ -22,14 +22,14 @@ services:
       - ./backend/log:/usr/src/app/log
       - ./backend/public/system:/usr/src/app/public/system
     env_file:
-      - ./backend/.env.prod
+      - ./backend/.env
     depends_on:
       - mongo
 
   mongo:
     image: mongo:4.4.1-bionic
     env_file:
-      - ./backend/.env.prod
+      - ./backend/.env
     volumes:
       - data:/data/db
 

@@ -17,18 +17,28 @@ DCPROD = docker-compose -f prod-compose.yaml
 ## DEVELOPMENT TARGETS
 
 build_dev:
+	cp frontend/.env.dev frontend/.env
+	cp backend/.env.dev backend/.env
 	$(DC) -f $(DEVFILE) $(BUILD_SUBCMD)
 
 rebuild_dev:
+	cp frontend/.env.dev frontend/.env
+	cp backend/.env.dev backend/.env
 	$(DC) -f $(DEVFILE) $(BUILD_NO_CACHE_SUBCMD)
 
 dev:
+	cp frontend/.env.dev frontend/.env
+	cp backend/.env.dev backend/.env
 	$(DC) -f $(DEVFILE) $(RUN_SUBCMD)
 
 attach_front:
+	cp frontend/.env.dev frontend/.env
+	cp backend/.env.dev backend/.env
 	$(DC) -f $(DEVFILE) run --rm frontend sh
 
 attach_back:
+	cp frontend/.env.dev frontend/.env
+	cp backend/.env.dev backend/.env
 	$(DC) -f $(DEVFILE) run --rm backend sh
 
 stop_dev:
@@ -38,24 +48,36 @@ stop_dev:
 ## PRODUCTION TARGETS
 
 build_prod:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	$(DC) -f $(PRODFILE) $(BUILD_SUBCMD)
 
 rebuild_prod:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	$(DC) -f $(PRODFILE) $(BUILD_NO_CACHE_SUBCMD)
 
 prod:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	$(DC) -f $(PRODFILE) $(RUN_SUBCMD) $(BG_FLAG)
 
 stop_prod:
 	$(DC) -f $(PRODFILE) $(STOP_SUBCMD)
 
 attach_prod_front:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	$(DC) -f $(PRODFILE) run --rm frontend sh
 
 attach_prod_back:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	$(DC) -f $(PRODFILE) run --rm backend sh
 
 fetch_prod:
+	cp frontend/.env.prod frontend/.env
+	cp backend/.env.prod backend/.env
 	docker-compose -f prod-compose.yaml run --rm backend rake fetch:no_report
 
 deploy:
