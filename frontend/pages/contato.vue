@@ -116,15 +116,15 @@ export default {
         people: [
           {
             src:
-              "https://drive.google.com/uc?export=view&id=1_eafRK7wfb7lss_sVVruYDT7Zcwz3SMk",
-            name: "Prof. Dr. Vahan Agopyan",
+              "https://drive.google.com/uc?export=view&id=12wWnBwB562gm8Znk2d_RJ9RKoT0d27V9",
+            name: "Prof. Dr. Carlos Carlotti",
             role: "Reitor",
           },
           {
             src:
-              "https://drive.google.com/uc?export=view&id=1oUcQ0pXSi0zF3_6DS0hv_-QEVJo0_ujF",
-            name: "Prof. Dr. Antonio Carlos Hernandes",
-            role: "Vice-reitor",
+              "https://drive.google.com/uc?export=view&id=1DaYwoRPo062xu_dauhQOvHSMNI4UWI46",
+            name: "Prof.ª Dr.ª Maria Arminda",
+            role: "Vice-reitora",
           },
         ],
       },
