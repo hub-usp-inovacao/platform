@@ -119,4 +119,56 @@ RSpec.describe 'CompanyUpdates', type: :request do
       expect(body['company_update']['_id']).not_to be_nil
     end
   end
+
+  context 'when requesting update' do
+    let :mock do
+      mock = Object.new
+      def mock.email
+        'mock_company@mail.com'
+      end
+
+      def mock.cnpj
+        '12.123.123/0001-21'
+      end
+
+      def mock.token
+        'foo.baz.bar'
+      end
+
+      mock
+    end
+
+    it 'returns bad request when given an unknown cnpj' do
+      params = { update_request: { cnpj: '12.123.123/0001-21' } }
+      allow(Company).to receive(:where).and_return([])
+      post '/companies/update_request', params: params
+
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'generates a token for requests to an existing company' do
+      params = { update_request: { cnpj: mock.cnpj } }
+      allow(Company).to receive(:where).and_return([mock])
+      allow(TokenManager).to receive(:create_token)
+
+      post '/companies/update_request', params: params
+
+      expect(TokenManager)
+        .to have_received(:create_token)
+        .with({ cnpj: mock.cnpj }, mock.email)
+    end
+
+    it 'sends an email informing the token' do
+      params = { update_request: { cnpj: mock.cnpj } }
+      allow(Company).to receive(:where).and_return([mock])
+      allow(TokenManager).to receive(:create_token).and_return(mock.token)
+      allow(ApplicationMailer).to receive(:company_update_token)
+
+      post '/companies/update_request', params: params
+
+      expect(ApplicationMailer)
+        .to have_received(:company_update_token)
+        .with(mock.email, mock.token)
+    end
+  end
 end

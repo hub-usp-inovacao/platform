@@ -40,4 +40,11 @@ class ApplicationMailer < ActionMailer::Base
     mail(to: ENV['email_conexao_username'],
          subject: subject('Novas demandas foram solicitadas no Conexão USP'))
   end
+
+  def company_update_token(company_email, token)
+    @token = token
+
+    mail(to: company_email,
+         subject: subject('Token de segurança para atualização - Hub USPInovação'))
+  end
 end

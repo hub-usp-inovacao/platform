@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
 class CompanyUpdatesController < ApplicationController
+  def request_update
+    params = request_update_params
+
+    cnpj = params[:cnpj]
+    @company = Company.where({ cnpj: cnpj }).first
+    if @company.nil?
+      render json: { error: 'company not found' }, status: :bad_request
+      return
+    end
+
+    token = TokenManager.create_token({ cnpj: cnpj }, @company.email)
+    ApplicationMailer.company_update_token(@company.email, token)
+    render json: { message: 'ok' }, status: :ok
+  end
+
   def create
     prms = create_params
     @comp_update = CompanyUpdateRequest.new
@@ -30,6 +45,10 @@ class CompanyUpdatesController < ApplicationController
   end
 
   private
+
+  def request_update_params
+    params.require(:update_request).permit(:cnpj)
+  end
 
   def create_params
     params.require(:company).permit(
