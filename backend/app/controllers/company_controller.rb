@@ -9,7 +9,24 @@ class CompanyController < ApplicationController
     end
   end
 
+  def protected_read_one
+    token = token_params[:token]
+    payload = TokenManager.decode_token(token)
+
+    if payload.nil?
+      render json: { error: 'invalid token' }, status: :bad_request
+      return
+    end
+
+    @company = Company.where({ cnpj: payload[:cnpj] }).first
+    render json: @company, status: :ok
+  end
+
   private
+
+  def token_params
+    params.require(:security).permit(:token)
+  end
 
   def all
     @companies = Company.all

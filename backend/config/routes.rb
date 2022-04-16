@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   post '/companies/update_request', to: 'company_updates#request_update'
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
+
+  get '/company', to: 'company#protected_read_one'
 end
