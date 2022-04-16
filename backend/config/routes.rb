@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
 
-  get '/company', to: 'company#protected_read_one'
+  post '/company', to: 'company#protected_read_one'
 end

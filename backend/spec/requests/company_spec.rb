@@ -134,13 +134,13 @@ RSpec.describe 'Companies', type: :request do
 
   describe 'GET /company' do
     it 'returns bad_request when no token is given' do
-      get '/company'
+      post '/company'
       expect(response).to have_http_status(:bad_request)
     end
 
     it 'returns bad_request when token is invalid' do
       allow(TokenManager).to receive(:decode_token).and_return(nil)
-      get '/company', params: { security: { token: 'foo' } }
+      post '/company', params: { security: { token: 'foo' } }
 
       expect(response).to have_http_status(:bad_request)
     end
@@ -150,7 +150,7 @@ RSpec.describe 'Companies', type: :request do
       allow(TokenManager).to receive(:decode_token).and_return(mock_payload)
       allow(Company).to receive(:where).and_return([mock_payload])
 
-      get '/company', params: { security: { token: 'foo' } }
+      post '/company', params: { security: { token: 'foo' } }
 
       body = JSON.parse(response.body)
 
