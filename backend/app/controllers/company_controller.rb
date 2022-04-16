@@ -18,7 +18,7 @@ class CompanyController < ApplicationController
       return
     end
 
-    @company = Company.where({ cnpj: payload[:cnpj] }).first
+    @company = Company.where({ cnpj: payload["cnpj"] }).first
     render json: @company, status: :ok
   end
 
