@@ -18,13 +18,15 @@ class TokenManager
     end
 
     def decode_token(token)
-      JWT.decode token, @@secret, true, {
+      decoded = JWT.decode token, @@secret, true, {
         algorithm: @@algorithm,
         verify_expiration: true,
         verify_iss: true,
         verify_aud: true,
         iss: @@issuer
       }
+
+      decoded[0]
     rescue JWT::ExpiredSignature
       nil
     rescue JWT::InvalidIssuerError
