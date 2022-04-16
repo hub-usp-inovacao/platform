@@ -35,6 +35,15 @@
           <v-btn color="primary" @click="request">Solicitar</v-btn>
         </v-col>
       </v-row>
+
+      <v-row>
+        <v-col cols="12" offset-md="3" md="6" align="center">
+          <p>
+            Já solicitou sua atualização?
+            <nuxt-link to="/empresas/atualizar">Cole seu token aqui</nuxt-link>
+          </p>
+        </v-col>
+      </v-row>
     </v-container>
   </main>
 </template>

@@ -45,6 +45,17 @@
             </v-btn>
           </v-col>
         </v-row>
+
+        <v-row>
+          <v-col cols="12" offset-md="3" md="6" align="center">
+            <p>
+              Ainda não solicitou uma atualização?
+              <nuxt-link to="/empresas/atualizar/solicitar">
+                Solicite aqui
+              </nuxt-link>
+            </p>
+          </v-col>
+        </v-row>
       </v-container>
     </v-form>
   </section>
@@ -133,7 +144,7 @@ export default {
         if (this.errors.length === 0) {
           this.ok = true;
         } else {
-          alert(this.errors)
+          alert(this.errors);
         }
       }
     },
