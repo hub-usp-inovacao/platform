@@ -123,34 +123,9 @@ RSpec.describe 'Companies', type: :request do
   end
 
   describe 'GET /companies?cnpj=' do
-    describe 'when a company is found' do
-      before do
-        get '/companies', params: { cnpj: cnpj }
-      end
-
-      it 'returns :ok' do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns the company' do
-        body = JSON.parse(response.body)
-        expect(body['cnpj']).to eql(cnpj)
-      end
-    end
-
-    describe 'when a company is not found' do
-      before do
-        get '/companies', params: { cnpj: '12.123.000/0001-21' }
-      end
-
-      it 'returns :not_found' do
-        expect(response).to have_http_status(:not_found)
-      end
-
-      it 'returns an error' do
-        body = JSON.parse(response.body)
-        expect(body).to eql({ 'error' => 'not_found' })
-      end
+    it 'does not work anymore' do
+      get '/companies', params: { cnpj: cnpj }
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end
