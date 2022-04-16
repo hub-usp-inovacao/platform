@@ -12,8 +12,8 @@ class CompanyUpdatesController < ApplicationController
     end
 
     email = @company.emails.first
-    token = TokenManager.create_token({ cnpj: cnpj }, email)
-    ApplicationMailer.company_update_token(email, token)#.deliver_now
+    token = TokenManager.create_token({ cnpj: cnpj })
+    ApplicationMailer.company_update_token(email, token).deliver_now
     render json: { message: 'ok' }, status: :ok
   end
 

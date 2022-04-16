@@ -155,7 +155,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
       expect(TokenManager)
         .to have_received(:create_token)
-        .with({ cnpj: mock.cnpj }, mock.emails.first)
+        .with({ cnpj: mock.cnpj })
     end
 
     it 'sends an email informing the token' do
