@@ -123,8 +123,8 @@ RSpec.describe 'CompanyUpdates', type: :request do
   context 'when requesting update' do
     let :mock do
       mock = Object.new
-      def mock.email
-        'mock_company@mail.com'
+      def mock.emails
+        ['mock_company@mail.com']
       end
 
       def mock.cnpj
@@ -155,7 +155,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
       expect(TokenManager)
         .to have_received(:create_token)
-        .with({ cnpj: mock.cnpj }, mock.email)
+        .with({ cnpj: mock.cnpj }, mock.emails.first)
     end
 
     it 'sends an email informing the token' do
@@ -168,7 +168,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
       expect(ApplicationMailer)
         .to have_received(:company_update_token)
-        .with(mock.email, mock.token)
+        .with(mock.emails.first, mock.token)
     end
   end
 end
