@@ -538,7 +538,7 @@ export default {
       } else {
         console.log(errors);
         alert(
-          "Há erros no formulário, por favor corrijia-os e tente novamente"
+          "Há erros no formulário, por favor corrijia-os e submeta novamente"
         );
       }
       this.loading = false;
