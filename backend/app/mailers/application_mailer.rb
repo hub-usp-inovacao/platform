@@ -43,7 +43,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def company_update_token(company_email, token)
     @token = token
-    @base_url = ENV[JWT_ISSUER]
+    @base_url = ENV['JWT_AUDIENCE']
 
     mail(to: company_email,
          subject: subject('Token de segurança para atualização - Hub USPInovação'))
