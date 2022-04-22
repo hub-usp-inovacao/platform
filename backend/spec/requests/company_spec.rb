@@ -100,57 +100,61 @@ RSpec.describe 'Companies', type: :request do
        investments_last_updated_at collaborators_last_updated_at]
   end
 
-  before do
-    Company.create!(companies)
-    get '/companies'
-  end
-
-  after do
-    Company.delete_all
-  end
-
-  describe 'GET /companies' do
-    it 'returns a response with success http status' do
-      expect(response).to have_http_status(:success)
+  describe 'get all' do
+    before do
+      Company.delete_all
+      Company.create!(companies)
+      get '/companies'
     end
 
-    it 'returns a list of all companies with expected format' do
-      resp = JSON.parse(response.body)
-      resp.each do |discipline|
-        expect(discipline.keys.difference(company_keys)).to eq([])
+    after do
+      Company.delete_all
+    end
+
+    describe 'GET /companies' do
+      it 'returns a response with success http status' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns a list of all companies with expected format' do
+        resp = JSON.parse(response.body)
+        resp.each do |discipline|
+          expect(discipline.keys.difference(company_keys)).to eq([])
+        end
       end
     end
   end
 
   describe 'GET /companies?cnpj=' do
-    describe 'when a company is found' do
-      before do
-        get '/companies', params: { cnpj: cnpj }
-      end
+    it 'does not work anymore' do
+      get '/companies', params: { cnpj: cnpj }
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 
-      it 'returns :ok' do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns the company' do
-        body = JSON.parse(response.body)
-        expect(body['cnpj']).to eql(cnpj)
-      end
+  describe 'GET /company' do
+    it 'returns bad_request when no token is given' do
+      post '/company'
+      expect(response).to have_http_status(:bad_request)
     end
 
-    describe 'when a company is not found' do
-      before do
-        get '/companies', params: { cnpj: '12.123.000/0001-21' }
-      end
+    it 'returns bad_request when token is invalid' do
+      allow(TokenManager).to receive(:decode_token).and_return(nil)
+      post '/company', params: { security: { token: 'foo' } }
 
-      it 'returns :not_found' do
-        expect(response).to have_http_status(:not_found)
-      end
+      expect(response).to have_http_status(:bad_request)
+    end
 
-      it 'returns an error' do
-        body = JSON.parse(response.body)
-        expect(body).to eql({ 'error' => 'not_found' })
-      end
+    it 'returns a company when token is valid' do
+      mock_payload = { cnpj: '12.123.123/0001-21' }
+      allow(TokenManager).to receive(:decode_token).and_return(mock_payload)
+      allow(Company).to receive(:where).and_return([mock_payload])
+
+      post '/company', params: { security: { token: 'foo' } }
+
+      body = JSON.parse(response.body)
+
+      expect(body['cnpj']).to eql(mock_payload[:cnpj])
     end
   end
 end

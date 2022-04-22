@@ -30,12 +30,7 @@
         </v-row>
         <v-row v-else>
           <v-col cols="10">
-            <MaskInput
-              :value="cnpj"
-              label="CNPJ"
-              mask="##.###.###/####-##"
-              @input="setCnpj"
-            />
+            <v-text-field v-model="token" label="token" />
           </v-col>
           <v-col cols="2" align="bottom">
             <v-btn
@@ -50,6 +45,17 @@
             </v-btn>
           </v-col>
         </v-row>
+
+        <v-row>
+          <v-col cols="12" offset-md="3" md="6" align="center">
+            <p>
+              Ainda não solicitou uma atualização?
+              <nuxt-link to="/empresas/atualizar/solicitar">
+                Solicite aqui
+              </nuxt-link>
+            </p>
+          </v-col>
+        </v-row>
       </v-container>
     </v-form>
   </section>
@@ -58,13 +64,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Panel from "@/components/first_level/Panel.vue";
-import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import Stepper from "@/components/CompanyForms/Stepper.vue";
 
 export default {
   components: {
     Panel,
-    MaskInput,
     Stepper,
   },
   data: () => ({
@@ -78,17 +82,26 @@ export default {
       title: "",
       message: "",
     },
+
+    token: "",
   }),
 
   computed: {
     ...mapGetters({
-      cnpj: "company_forms/cnpj",
       errors: "company_forms/errors",
     }),
 
     isValid() {
-      return this.cnpj.length === 18;
+      return this.token.length > 0;
     },
+  },
+
+  mounted() {
+    const token = this.$route.query.token;
+
+    if (token !== undefined) {
+      this.token = token;
+    }
   },
 
   methods: {
@@ -100,21 +113,38 @@ export default {
 
     description() {
       if (this.ok == false) {
-        return "Representantes das Empresas podem solicitar, nesta página, a atualização dos dados cadastrados.\n Para prosseguir, insira o CNPJ da empresa abaixo."
+        return "Representantes das Empresas podem solicitar, nesta página, a atualização dos dados cadastrados. Insira a palavra-passe (token) ou acesse diretamente pelo link enviado por email.";
+      } else {
+        return "";
       }
-      else {
-        return ""
-      }
+    },
+
+    parseJWT(token) {
+      var base64Url = token.split(".")[1];
+      var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      var jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+
+      return JSON.parse(jsonPayload);
     },
 
     async submit() {
       if (this.isValid) {
+        this.setCnpj(this.token);
         this.loading = true;
         await this.getCompanyData();
         this.loading = false;
 
         if (this.errors.length === 0) {
           this.ok = true;
+        } else {
+          alert(this.errors);
         }
       }
     },

@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   get '/skills', to: 'skill#index'
   get '/iniciatives', to: 'iniciative#index'
   patch '/companies', to: 'company_updates#create'
+  post '/companies/update_request', to: 'company_updates#request_update'
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
+
+  post '/company', to: 'company#protected_read_one'
 end
