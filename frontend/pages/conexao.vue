@@ -479,10 +479,50 @@ export default {
       }
     },
 
+    validate() {
+      const personal = Object.keys(this.conexao.personal);
+      const org = Object.keys(this.conexao.org);
+      const demand = Object.keys(this.conexao.demand);
+      const cnae = Object.keys(this.conexao.demand.cnae);
+      let isvalid = false;
+      let errors = [];
+
+      personal.forEach((e, index) => {
+        if (this.conexao.personal[e] == "") {
+          errors.push(Object.keys(this.conexao.personal)[index]);
+        }
+      });
+
+      org.forEach((e, index) => {
+        if (this.conexao.org[e] == "") {
+          errors.push(Object.keys(this.conexao.org)[index]);
+        }
+      });
+
+      demand.forEach((e, index) => {
+        if (e != "cnae") {
+          if (this.conexao.demand[e] == "") {
+            errors.push(Object.keys(this.conexao.demand)[index]);
+          }
+        }
+      });
+
+      cnae.forEach((e, index) => {
+        if (this.conexao.demand.cnae[e] == "") {
+          errors.push(Object.keys(this.conexao.demand.cnae)[index]);
+        }
+      });
+
+      if (errors.length == 0) {
+        isvalid = true;
+      }
+      return { isvalid, errors };
+    },
     async submit() {
+      const { isvalid, errors } = this.validate();
       this.loading = true;
-      const valid = this.$refs.form.validate();
-      if (valid) {
+      this.$refs.form.validate();
+      if (isvalid) {
         this.conexao.requestId = self.crypto.randomUUID();
         this.dataChecking();
         try {
@@ -495,6 +535,11 @@ export default {
         } catch (error) {
           console.log(error);
         }
+      } else {
+        console.log(errors);
+        alert(
+          "Há erros no formulário, por favor corrijia-os e tente novamente"
+        );
       }
       this.loading = false;
     },
