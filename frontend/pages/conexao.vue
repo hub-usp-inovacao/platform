@@ -489,27 +489,27 @@ export default {
 
       personal.forEach((e, index) => {
         if (this.conexao.personal[e] == "") {
-          errors.push(Object.keys(this.conexao.personal)[index]);
+          errors.push("personal_"+Object.keys(this.conexao.personal)[index]);
         }
       });
 
       org.forEach((e, index) => {
         if (this.conexao.org[e] == "") {
-          errors.push(Object.keys(this.conexao.org)[index]);
+          errors.push("organization_"+Object.keys(this.conexao.org)[index]);
         }
       });
 
       demand.forEach((e, index) => {
         if (e != "cnae") {
           if (this.conexao.demand[e] == "") {
-            errors.push(Object.keys(this.conexao.demand)[index]);
+            errors.push("demand_"+Object.keys(this.conexao.demand)[index]);
           }
         }
       });
 
       cnae.forEach((e, index) => {
         if (this.conexao.demand.cnae[e] == "") {
-          errors.push(Object.keys(this.conexao.demand.cnae)[index]);
+          errors.push("cnae_"+Object.keys(this.conexao.demand.cnae)[index]);
         }
       });
 
