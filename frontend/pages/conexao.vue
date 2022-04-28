@@ -1,14 +1,5 @@
 <template>
   <div class="background">
-    <div>
-      <Panel
-        title="Conexão USP"
-        description="Este Programa da Agência USP de Inovação tem por objetivo oferecer a intermediação e o contato entre parceiros (empresas, entidades sem fins lucrativos e governo) e os pesquisadores da Universidade de São Paulo.
-                    Neste programa, os parceiros apresentam suas demandas para que identifiquemos pesquisadores na Universidade que tenham a soluções ou propostas de projetos de pesquisa que atendam estas necessidades."
-        no-search
-      />
-    </div>
-
     <v-row style="background: white">
       <v-col>
         <v-img
@@ -20,6 +11,15 @@
         />
       </v-col>
     </v-row>
+    <div>
+      <Panel
+        title="Conexão USP"
+        description="Este Programa da Agência USP de Inovação tem por objetivo oferecer a intermediação e o contato entre parceiros (empresas, entidades sem fins lucrativos e governo) e os pesquisadores da Universidade de São Paulo.
+                    Neste programa, os parceiros apresentam suas demandas para que identifiquemos pesquisadores na Universidade que tenham a soluções ou propostas de projetos de pesquisa que atendam estas necessidades."
+        no-search
+      />
+    </div>
+
 
     <v-container class="pa-10">
       <v-form ref="form">
@@ -479,10 +479,58 @@ export default {
       }
     },
 
+    validate() {
+      const personal = Object.keys(this.conexao.personal);
+      const org = Object.keys(this.conexao.org);
+      const demand = Object.keys(this.conexao.demand);
+      const cnae = Object.keys(this.conexao.demand.cnae);
+      const text = this.conexao.demand.description
+      let isvalid = false;
+      let errors = [];
+
+      personal.forEach((e, index) => {
+        if (this.conexao.personal[e] == "") {
+          errors.push("personal_" + Object.keys(this.conexao.personal)[index]);
+        }
+      });
+
+      org.forEach((e, index) => {
+        if (this.conexao.org[e] == "") {
+          errors.push("organization_" + Object.keys(this.conexao.org)[index]);
+        }
+      });
+
+      demand.forEach((e, index) => {
+        if (e != "cnae") {
+          if (this.conexao.demand[e] == "") {
+            errors.push("demand_" + Object.keys(this.conexao.demand)[index]);
+          }
+        }
+      });
+
+      cnae.forEach((e, index) => {
+        if (this.conexao.demand.cnae[e] == "") {
+          errors.push("cnae_" + Object.keys(this.conexao.demand.cnae)[index]);
+        }
+      });
+
+      if(text.length == ""){
+        errors.push("Campo de texto vazio")
+      }
+      if(text.split(" ").length > 500){
+        errors.push("Limite de 500 caracteres")
+      }
+
+      if (errors.length == 0) {
+        isvalid = true;
+      }
+      return { isvalid, errors };
+    },
     async submit() {
+      const { isvalid, errors } = this.validate();
       this.loading = true;
-      const valid = this.$refs.form.validate();
-      if (valid) {
+      this.$refs.form.validate();
+      if (isvalid) {
         this.conexao.requestId = self.crypto.randomUUID();
         this.dataChecking();
         try {
@@ -495,6 +543,10 @@ export default {
         } catch (error) {
           console.log(error);
         }
+      } else {
+        alert(
+          "Há erros no formulário, por favor corrijia-os e submeta novamente"
+        );
       }
       this.loading = false;
     },
