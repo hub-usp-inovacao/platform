@@ -115,6 +115,11 @@
                   <th>Outros</th>
                 </tr>
                 <tr>
+                  <td>Microempresas</td>
+                  <td>&le; 19 pessoas</td>
+                  <td>&le; 9 pessoas</td>
+                </tr>
+                <tr>
                   <td>Pequena Empresa</td>
                   <td>de 20 a 99 pessoas</td>
                   <td>de 10 a 49 pessoas</td>
@@ -366,7 +371,7 @@ export default {
     images: null,
     radioButtonData: [
       ["Empresa", "Organização sem fins lucatrivos", "Governo", "Consultoria"],
-      ["Pequena", "Média", "Grande"],
+      ["Microempresa","Pequena", "Média", "Grande"],
       [
         "Melhoria de Produto",
         "Melhoria em Processo",
