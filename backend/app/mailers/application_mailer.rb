@@ -22,6 +22,12 @@ class ApplicationMailer < ActionMailer::Base
     mail(subject: subject('Novas empresas solicitaram atualização dos dados'))
   end
 
+  def update_skills
+    attachments["updated-skills-#{Time.zone.today}.csv"] =
+      { mime_type: 'text/csv', content: SkillUpdateRequest.to_csv }
+    mail(subject: subject('Novas competências solicitaram atualização dos dados'))
+  end
+
   def conexao
     @entities = params[:entities]
 
