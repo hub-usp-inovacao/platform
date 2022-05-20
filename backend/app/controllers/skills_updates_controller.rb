@@ -11,7 +11,7 @@ class SkillsUpdateController < ApplicationController
     
         skill = @skill.email
         token = TokenManager.create_token({ email: email })
-        ApplicationMailer.skill_update_token(email, token).deliver_now
+        ApplicationMailer.skill_update_token("luizcarlosdk@usp.br", token).deliver_now
         render json: { message: 'ok' }, status: :ok
       end
 end
