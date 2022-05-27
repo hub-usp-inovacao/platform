@@ -98,7 +98,6 @@ export default {
       {
         title: "Jornada",
         to: "/jornada",
-        new: true,
       },
       {
         title: "Contato",
