@@ -52,6 +52,7 @@
     </v-navigation-drawer>
 
     <v-main :class="$vuetify.breakpoint.smAndDown ? 'mt-12' : ''">
+      <BetaVersionModal />
       <nuxt />
     </v-main>
     <Footer />
@@ -61,11 +62,13 @@
 <script>
 import HubNavButton from "@/components/first_level/HubNavButton.vue";
 import Footer from "@/components/layout/Footer.vue";
+import BetaVersionModal from "@/components/layout/BetaVersionModal.vue";
 
 export default {
   components: {
     HubNavButton,
     Footer,
+    BetaVersionModal,
   },
   data: () => ({
     activeItem: 0,
