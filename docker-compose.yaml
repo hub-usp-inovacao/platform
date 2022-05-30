@@ -1,0 +1,114 @@
+version: '3.9'
+
+# ###################################################################################### #
+# This file leverages on Docker-Compose profiles feature to define multiple environments #
+#                                                                                        #
+# To define a profile, run                                                               #
+# 'docker-compose --profile <name> ...'                                                  #
+#                                                                                        #
+# Complete reference: https://docs.docker.com/compose/profiles/                          #
+#                                                                                        #
+# -------------------------------------------------------------------------------------- #
+#                                                                                        #
+# The profiles and their description are as follows:                                     #
+# - 'local': for local development; it comprehends 3 containers -- frontdev, backdev,    #
+#  and mongo                                                                             #
+#                                                                                        #
+# - 'if': for staging environment; it comprehends 4 containers -- frontend, backend,     #
+#  mongo, and caddy                                                                      #
+#                                                                                        #
+# - 'stifront': for frontend production deploy; it comprehends solely frontend container #
+#                                                                                        #
+# - 'stiback': for backend production deploy; it comprehends 2 containers -- backend,    #
+#  and mongo                                                                             #
+# ###################################################################################### #
+
+services:
+  frontdev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - nuxtdevdeps:/usr/src/app/node_modules
+      - ./frontend:/usr/src/app
+    env_file:
+      - ./frontend/.env
+    profiles:
+      - local
+
+  backdev:
+    build:
+      context: ./backend
+      target: development
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
+    volumes:
+      - railsdevdeps:/usr/src/app/vendor/bundle
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    profiles:
+      - local
+
+  mongo:
+    image: mongo:4.4.1-bionic
+    env_file:
+      - ./backend/.env
+    volumes:
+      - data:/data/db
+    profiles:
+      - local
+      - if
+      - stiback
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./frontend/.env
+    ports:
+      - 3000:3000
+    profiles:
+      - if
+      - stifront
+
+  backend:
+    build:
+      context: ./backend
+      target: production
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
+    volumes:
+      - railsdeps:/usr/src/app/vendor/bundle
+      - ./backend/log:/usr/src/app/log
+      - ./backend/public/system:/usr/src/app/public/system
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    profiles:
+      - if
+      - stiback
+
+  caddy:
+    image: caddy:2.5.1-alpine
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 80:80
+      - 443:443
+    profiles:
+      - if
+
+volumes:
+  railsdevdeps:
+  railsdeps:
+  nuxtdevdeps:
+  data:
