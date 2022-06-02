@@ -13,13 +13,13 @@ RSpec.describe Conexao, type: :model do
       },
       org: {
         name: 'Desempedidos',
-        email: 'dsp@gmail.com',
         cnpj: '14.952.400/0002-31',
         sensitiveData: 'Não',
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
         city: 'São Paulo'
+        site: 'www.joga10.com.br'
       },
       demand: {
         cnae: {
@@ -42,13 +42,13 @@ RSpec.describe Conexao, type: :model do
       \tRepresenta uma: #{valid_attr[:personal][:represent]}
       Dados da organização:
       \tNome: #{valid_attr[:org][:name]}
-      \tEmail: #{valid_attr[:org][:email]}
       \tCNPJ: #{valid_attr[:org][:cnpj]}
       \tOs dados são sigilosos?: #{valid_attr[:org][:sensitiveData]}
       \tTamanho da empresa: #{valid_attr[:org][:size]}
       \tTelefone: #{valid_attr[:org][:phone]}
       \tEndereço: #{valid_attr[:org][:address]}
       \tCidade: #{valid_attr[:org][:city]}
+      \tSite: #{valid_attr[:org][:site]}
       Demanda:
       \tÁrea Primária: #{valid_attr[:demand][:cnae][:major]}
       \tÁrea Secundária: #{valid_attr[:demand][:cnae][:minor]}
