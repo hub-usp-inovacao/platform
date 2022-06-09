@@ -18,7 +18,7 @@ RSpec.describe Conexao, type: :model do
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
-        city: 'São Paulo'
+        city: 'São Paulo',
         site: 'www.joga10.com.br'
       },
       demand: {
