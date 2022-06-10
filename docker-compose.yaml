@@ -57,6 +57,8 @@ services:
 
   mongo:
     image: mongo:4.4.1-bionic
+    ports:
+      - 27017:27017
     env_file:
       - ./backend/.env
     volumes:
@@ -96,6 +98,20 @@ services:
     profiles:
       - if
       - stiback
+
+  catalog:
+    build:
+      context: ./server
+      target: runner
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    profiles:
+      - local
+      - if
+      - catalog
 
   caddy:
     image: caddy:2.5.1-alpine
