@@ -1,13 +1,3 @@
-FROM openjdk:12-jdk-alpine AS development
-
-RUN apk add --no-cache bash
-
-WORKDIR /server
-
-CMD ./gradlew run
-
-
-
 FROM gradle:7-jdk11 AS builder
 
 COPY --chown=gradle:gradle . /home/gradle/source

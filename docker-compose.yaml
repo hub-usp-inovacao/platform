@@ -14,9 +14,6 @@ version: '3.9'
 # - 'local': for local development; it comprehends 3 containers -- frontdev, backdev,    #
 #  and mongo                                                                             #
 #                                                                                        #
-# - 'catdev': for development of the catalog backend: it comprehends 2 containers --     #
-#  catalogdev and mongo                                                                  #
-#                                                                                        #
 # - 'if': for staging environment; it comprehends 4 containers -- frontend, backend,     #
 #  mongo, and caddy                                                                      #
 #                                                                                        #
@@ -58,22 +55,6 @@ services:
     profiles:
       - local
 
-  catalogdev:
-    build:
-      context: ./server
-      target: development
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    profiles:
-      - catdev
-    depends_on:
-      - mongo
-    volumes:
-      - ./server:/server
-    env_file:
-      - ./server/.env
-
   mongo:
     image: mongo:4.4.1-bionic
     ports:
@@ -87,7 +68,6 @@ services:
       - if
       - stiback
       - catalog
-      - catdev
 
   frontend:
     build:
