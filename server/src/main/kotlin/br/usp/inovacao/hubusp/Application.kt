@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp
 
+import br.usp.inovacao.hubusp.plugins.configureDatabase
 import br.usp.inovacao.hubusp.plugins.configureHTTP
 import br.usp.inovacao.hubusp.plugins.configureRouting
 import br.usp.inovacao.hubusp.plugins.configureSerialization
@@ -10,6 +11,9 @@ fun main(args: Array<String>): Unit =
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
+
+    configureDatabase()
+
     configureHTTP()
     configureSerialization()
     configureRouting()
