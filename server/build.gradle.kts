@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version "1.6.21"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("org.jmailen.kotlinter") version "3.10.0"
 }
 
 group = "br.usp.inovacao.hubusp"
@@ -24,6 +25,9 @@ tasks {
         manifest {
             attributes(Pair("Main-Class", "br.usp.inovacao.hubusp"))
         }
+    }
+    check {
+        dependsOn("installKotlinterPrePushHook")
     }
 }
 
