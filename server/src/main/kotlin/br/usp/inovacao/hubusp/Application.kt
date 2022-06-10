@@ -4,7 +4,7 @@ import br.usp.inovacao.hubusp.plugins.configureDatabase
 import br.usp.inovacao.hubusp.plugins.configureHTTP
 import br.usp.inovacao.hubusp.plugins.configureRouting
 import br.usp.inovacao.hubusp.plugins.configureSerialization
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
