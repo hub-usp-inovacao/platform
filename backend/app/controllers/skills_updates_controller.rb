@@ -1,4 +1,4 @@
-class SkillsUpdateController < ApplicationController
+class SkillsUpdatesController < ApplicationController
     def request_update
         params = request_update_params
     
@@ -14,4 +14,11 @@ class SkillsUpdateController < ApplicationController
         ApplicationMailer.skill_update_token("luizcarlosdk@usp.br", token).deliver_now
         render json: { message: 'ok' }, status: :ok
       end
+
+    private
+
+    def request_update_params
+      # { skill: { email: "...", foo: "..." } }
+      params.require(:skill).permit(:email)
+    end
 end
