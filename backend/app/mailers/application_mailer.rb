@@ -26,8 +26,8 @@ class ApplicationMailer < ActionMailer::Base
     @entities = params[:entities]
 
     @personal_labels = ['Nome', 'Email', 'Representa uma']
-    @org_labels = ['Nome', 'Email', 'CNPJ', 'Os dados são sigilosos?', 'Tamanho da empresa',
-                   'Telefone', 'Endereço', 'Cidade']
+    @org_labels = ['Nome', 'CNPJ', 'Os dados são sigilosos?', 'Tamanho da empresa',
+                   'Telefone', 'Endereço', 'Cidade','Site']
     @demand_labels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
                       'Qual é a sua necessidade em relação a esses pesquisadores?']
 
