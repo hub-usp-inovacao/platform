@@ -98,6 +98,7 @@ export default {
     { src: "~/plugins/matching/iniciative.js" },
     { src: "~/plugins/v-mask.js", mode: "client" },
     { src: "~/plugins/services/update_skills.js" },
+    { src: "~/plugins/Catalog/DisciplineAdapter.js", mode: "client" },
   ],
 
   serverMiddleware: [{ path: "/", handler: "~/api/index.js" }],

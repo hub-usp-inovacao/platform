@@ -37,6 +37,7 @@ services:
       - ./frontend/.env
     profiles:
       - local
+      - catalog
 
   backdev:
     build:
