@@ -26,7 +26,7 @@
           </li>
           <li>
             <strong>Dados da organização</strong>
-            <% %i[name cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
+            <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
               <p><%= "#{@org_labels[i]}: #{entity.org[attr]}" %></p>
             <% end %>
           </li>

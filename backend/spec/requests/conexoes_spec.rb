@@ -13,13 +13,13 @@ RSpec.describe 'Conexoes', type: :request do
       },
       org: {
         name: 'Desempedidos',
+        email: 'dsp@gmail.com',
         cnpj: '14.952.400/0002-31',
         sensitiveData: 'Não',
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
-        city: 'São Paulo',
-        site: 'www.joga10.com.br'
+        city: 'São Paulo'
       },
       demand: {
         cnae: {

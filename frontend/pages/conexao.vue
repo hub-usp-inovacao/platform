@@ -14,11 +14,12 @@
     <div>
       <Panel
         title="Conexão USP"
-        description="O programa Conexão USP é uma iniciativa da Agência USP de Inovação, que tem por objetivo intermediar o contato de empresas, entidades sem fins lucrativos e órgãos governamentais com os pesquisadores da Universidade de São Paulo, visando estabelecer parcerias nas áreas de pesquisa e inovação.
-Para participar, cadastre sua demanda no formulário abaixo, e com base nas informações fornecidas nossa equipe irá buscar na Universidade as competências técnico-científicas que melhor atendam suas necessidades."
+        description="Este Programa da Agência USP de Inovação tem por objetivo oferecer a intermediação e o contato entre parceiros (empresas, entidades sem fins lucrativos e governo) e os pesquisadores da Universidade de São Paulo.
+                    Neste programa, os parceiros apresentam suas demandas para que identifiquemos pesquisadores na Universidade que tenham a soluções ou propostas de projetos de pesquisa que atendam estas necessidades."
         no-search
       />
     </div>
+
 
     <v-container class="pa-10">
       <v-form ref="form">
@@ -73,7 +74,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
         <v-container>
           <v-text-field
             v-model="conexao.org.name"
-            label="Razão social"
+            label="Nome"
             :rules="rules.value"
           />
           <MaskInput
@@ -136,6 +137,13 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
               </table>
             </v-col>
           </v-row>
+
+          <v-text-field
+            v-model="conexao.org.email"
+            label="E-mail"
+            placeholder="E-mail da organização"
+            :rules="rules.value"
+          />
           <v-text-field
             v-model="conexao.org.phone"
             label="Telefone de Contato"
@@ -148,12 +156,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           />
           <v-text-field
             v-model="conexao.org.city"
-            label="Cidade/UF"
-            :rules="rules.value"
-          />
-          <v-text-field
-            v-model="conexao.org.site"
-            label="Site da organização"
+            label="Cidade"
             :rules="rules.value"
           />
         </v-container>
@@ -209,13 +212,13 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <v-file-input
             multiple
             chips
-            label="Caso necessário, coloque arquivos relacionadas a sua demanda"
+            label="Caso necessário, coloque as fotos relacionadas a sua demanda"
             @change="uploadImage"
           ></v-file-input>
           <div>
             <v-radio-group
               v-model="conexao.demand.expectation"
-              label="Indique sua principal expectativa em relação à solução da
+              label="Indique sua principal expectativa em relação a solução da
                 demanda:"
               :rules="rules.value"
               @change="enableOtherOption('demand', 'expectation')"
@@ -243,8 +246,8 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             <v-col>
               <legend class="legendColor">
                 Qual o perfil do pesquisador o(a) senhor(a) acredita poder sanar
-                suas necessidades? Ou seja, qual deveria ser sua especialização
-                ou área de pesquisa, em sua opinião?
+                suas necessidades? Ou seja, qual deveria ser sua especialização,
+                em sua opinião?
               </legend>
               <v-select
                 v-model="conexao.demand.wantedProfile"
@@ -269,6 +272,27 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
                 :value="option"
                 :label="option"
               />
+              <v-radio
+                value="Identificação de especialista para assessoria técnica"
+              >
+                <template v-slot:label>
+                  <p class="my-auto">
+                    Identificação de especialista para assessoria técnica na
+                    área de
+                  </p>
+                  <div class="mb-n3 ml-2">
+                    <v-select
+                      v-model="selectedArea"
+                      :disabled="!isRadioSelectLabelOn"
+                      :items="cnpqAreas"
+                      label="Escolha uma área"
+                      :rules="isRadioSelectLabelOn ? rules.value : []"
+                      clearable
+                      dense
+                    />
+                  </div>
+                </template>
+              </v-radio>
               <v-radio label="Outro, qual?" value="Outro" />
             </v-radio-group>
             <v-row v-if="isOtherDemandEnable">
@@ -285,7 +309,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
         </v-container>
         <v-checkbox
           v-model="confirmation"
-          label="Concordo com todas as normas e funcionamento do Programa Conexão USP."
+          label="Concordo com todas as normas e funcionamento do Programa Conexão USP"
           :rules="rules.confirmation"
         />
 
@@ -324,6 +348,7 @@ export default {
         represent: "",
       },
       org: {
+        email: "",
         name: "",
         cnpj: "",
         sensitiveData: "",
@@ -331,7 +356,6 @@ export default {
         phone: "",
         address: "",
         city: "",
-        site: "",
       },
       demand: {
         cnae: {
@@ -346,13 +370,8 @@ export default {
     },
     images: null,
     radioButtonData: [
-      [
-        "Empresa",
-        "Organização sem fins lucatrivos",
-        "Órgão governamental",
-        "Instituição de Pesquisa",
-      ],
-      ["Microempresa", "Pequena", "Média", "Grande"],
+      ["Empresa", "Organização sem fins lucatrivos", "Governo", "Consultoria"],
+      ["Microempresa","Pequena", "Média", "Grande"],
       [
         "Melhoria de Produto",
         "Melhoria em Processo",
@@ -365,13 +384,12 @@ export default {
         "Prestação de serviço e/ou consultoria especializada",
       ],
       [
-        "Licenciamento de tecnologias",
+        "Licenciamento de patentes",
         "Identificação de novas tecnologias",
         "Auxílio técnico para validação de equipamentos e produtos",
-        "Utilização de laboratórios/equipamentos para ensaios e testes",
+        "Utilização de laboratórios para ensaios e testes",
         "Desenvolvimento de P&D em parceria",
         "Identificação de startup para investimento ou contratação de serviços",
-        "Identificação de especialista para assessoria técnica",
       ],
     ],
     rules: {
@@ -471,7 +489,7 @@ export default {
       const org = Object.keys(this.conexao.org);
       const demand = Object.keys(this.conexao.demand);
       const cnae = Object.keys(this.conexao.demand.cnae);
-      const text = this.conexao.demand.description;
+      const text = this.conexao.demand.description
       let isvalid = false;
       let errors = [];
 
@@ -501,11 +519,11 @@ export default {
         }
       });
 
-      if (text.length == "") {
-        errors.push("Campo de texto vazio");
+      if(text.length == ""){
+        errors.push("Campo de texto vazio")
       }
-      if (text.split(" ").length > 500) {
-        errors.push("Limite de 500 caracteres");
+      if(text.split(" ").length > 500){
+        errors.push("Limite de 500 caracteres")
       }
 
       if (errors.length == 0) {
