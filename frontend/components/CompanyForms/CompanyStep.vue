@@ -33,6 +33,7 @@ import Staff from "@/components/CompanyForms/companyStep/Staff.vue";
 import Incubator from "@/components/CompanyForms/companyStep/Incubator.vue";
 import Finance from "@/components/CompanyForms/companyStep/Finance.vue";
 import Investments from "@/components/CompanyForms/companyStep/Investments.vue";
+import Patents from "@/components/CompanyForms/companyStep/Patents.vue";
 
 export default {
   components: {
@@ -47,6 +48,7 @@ export default {
     items: [
       { tab: "Dados da empresa", content: Base },
       { tab: "Sobre a empresa", content: About },
+      { tab: "Patentes", content: Patents },
       { tab: "Incubação", content: Incubator },
       { tab: "Colaboradores", content: Staff },
       { tab: "Faturamento", content: Finance },
