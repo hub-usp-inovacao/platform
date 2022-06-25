@@ -98,7 +98,6 @@ export default {
     { src: "~/plugins/matching/iniciative.js" },
     { src: "~/plugins/v-mask.js", mode: "client" },
     { src: "~/plugins/services/update_skills.js" },
-    { src: "~/plugins/Catalog/DisciplineAdapter.js", mode: "client" },
   ],
 
   serverMiddleware: [{ path: "/", handler: "~/api/index.js" }],
@@ -110,7 +109,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "~/modules/Catalog/index.js"],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -146,7 +145,7 @@ export default {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line no-unused-vars
-    extend(config, ctx) { },
+    extend(config, ctx) {},
   },
   googleAnalytics: {
     id: process.env.GOOGLE_ANALYTICS_ID,

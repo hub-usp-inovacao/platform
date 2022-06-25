@@ -49,12 +49,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
-import Background from "@/components/first_level/Background.vue";
-import Panel from "@/components/first_level/Panel.vue";
-import MultipleFilters from "@/components/first_level/MultipleFilters.vue";
-import DisplayData from "@/components/first_level/DisplayData.vue";
+import Background from "../components/Background.vue";
+import Panel from "../components/Panel.vue";
+import MultipleFilters from "../components/MultipleFilters.vue";
+import DisplayData from "../components/DisplayData.vue";
 
 export default {
   components: {
@@ -102,11 +100,6 @@ export default {
     disciplines: [],
   }),
   computed: {
-    ...mapGetters({
-      dataStatus: "educacao/dataStatus",
-      storeDisciplines: "educacao/disciplines",
-      searchKeys: "educacao/searchKeys",
-    }),
     groups() {
       return [
         {
@@ -147,11 +140,19 @@ export default {
         nature: this.filters.terciary[3],
       };
 
-      this.disciplines = await this.$DisciplineAdapter.filterData(params);
+      try {
+        this.disciplines = await this.$DisciplineAdapter.filterData(params);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   async beforeMount() {
-    this.disciplines = await this.$DisciplineAdapter.requestData();
+    try {
+      this.disciplines = await this.$DisciplineAdapter.requestData();
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 </script>

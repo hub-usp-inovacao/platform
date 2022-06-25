@@ -7,7 +7,7 @@ function DisciplineAdapter(axios) {
 
       const { disciplines } = await axios.$get(url)
 
-      return disciplines
+      return []
     },
 
     filterData: async (params) => {
@@ -24,7 +24,7 @@ function DisciplineAdapter(axios) {
 
       const { disciplines } = await axios.$get(`${url}?${stringParams}`)
 
-      return disciplines
+      return []
     }
   }
 }
