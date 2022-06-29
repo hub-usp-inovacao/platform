@@ -54,6 +54,8 @@ import Panel from "../components/Panel.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import DisplayData from "../components/DisplayData.vue";
 
+import { debounce } from "debounce";
+
 export default {
   components: {
     Panel,
@@ -131,7 +133,7 @@ export default {
     },
   },
   watch: {
-    async filters() {
+    filters: debounce(async function () {
       const params = {
         categories: this.filters.primary,
         campus: this.filters.terciary[0],
@@ -145,7 +147,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
+    }, 1000),
   },
   async beforeMount() {
     try {
