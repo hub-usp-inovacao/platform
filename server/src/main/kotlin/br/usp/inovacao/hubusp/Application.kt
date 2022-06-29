@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp
 
-import br.usp.inovacao.hubusp.catalog.configureCatalogRouting
+import br.usp.inovacao.hubusp.catalog.configureCatalogModule
 import br.usp.inovacao.hubusp.plugins.configureDatabase
 import br.usp.inovacao.hubusp.plugins.configureHTTP
 import br.usp.inovacao.hubusp.plugins.configureSerialization
@@ -16,5 +16,6 @@ fun Application.module() {
 
     configureHTTP()
     configureSerialization()
-    configureCatalogRouting(db)
+
+    configureCatalogModule(db)
 }
