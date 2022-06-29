@@ -1,31 +1,37 @@
 function DisciplineAdapter(axios) {
   const baseURL = "http://localhost:8080"
 
-  return {
-    requestData: async () => {
-      const url = baseURL + "/disciplines"
+  async function requestData() {
+    const url = baseURL + "/disciplines"
 
+    try {
       const { disciplines } = await axios.$get(url)
-
-      return []
-    },
-
-    filterData: async (params) => {
-      const url = baseURL + "/disciplines"
-
-      const stringParams = Object
-        .keys(params)
-        .filter((key) => params[key])
-        .map((key) => {
-          const value = params[key]
-          return `${key}=${value}`
-        })
-        .join("&")
-
-      const { disciplines } = await axios.$get(`${url}?${stringParams}`)
-
+      return disciplines
+    } catch (error) {
       return []
     }
+  }
+
+  async function filterData(prms) {
+    const url = baseURL + "/disciplines"
+
+    const params = Object.assign({}, prms)
+
+    if (params.categories?.length > 0) {
+      params.categories = params.categories.join(',')
+    }
+
+    try {
+      const { disciplines } = await axios.$get(url, { params })
+      return disciplines
+    } catch (error) {
+      return []
+    }
+  }
+
+  return {
+    requestData,
+    filterData
   }
 }
 
