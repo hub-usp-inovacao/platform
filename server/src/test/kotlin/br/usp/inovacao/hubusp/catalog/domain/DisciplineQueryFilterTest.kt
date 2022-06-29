@@ -21,7 +21,7 @@ internal class DisciplineQueryFilterTest {
     @Test
     fun `it handles correctly with params with multiple categories`() {
         // given
-        val params = mapOf("categories" to listOf("multiple", "categories"))
+        val params = mapOf("categories" to listOf("multiple,categories"))
 
         // when
         val dqfJson = DisciplineQueryFilter.from(params).toJson()
@@ -50,7 +50,7 @@ internal class DisciplineQueryFilterTest {
     fun `it works correctly with complex params`() {
         // given
         val params = mapOf(
-            "categories" to listOf("two", "things"),
+            "categories" to listOf("two,things"),
             "unity" to listOf("somewhere")
         )
 
