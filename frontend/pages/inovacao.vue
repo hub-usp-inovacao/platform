@@ -113,10 +113,6 @@ export default {
         description:
           "Fomentados pela FAPESP, combinam o modelo do Programa Especial CEPID ao PITE, no qual há uma empresa parceira co-financiadora da pesquisa fortemente motivada para participar da definição dos temas focais a serem investigados, participar ativamente dos projetos de pesquisa, assim como para utilizar os resultados obtidos.",
       },
-      {
-        name: "Centrais Multiusuário",
-        description: "",
-      },
     ],
     unities: undefined,
     filters: undefined,

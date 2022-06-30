@@ -1,7 +1,6 @@
 import { PDI } from "@/lib/classes/pdi";
 import { findErrors } from "@/lib/errors/pdi";
 import { columnValue } from "@/lib/sheets";
-import { fetchCentrals } from "./fetch_centrais";
 
 async function fetchData() {
   try {
@@ -89,12 +88,6 @@ export default ({ isDev, $campi }, inject) => {
 
     const errors = findErrors(Object.assign([], pdis));
 
-    const centrais = await fetchCentrals(isDev);
-
-    const all = pdis
-      .concat(centrais)
-      .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-
-    return { pdis: all, errors };
+    return { pdis, errors };
   });
 };
