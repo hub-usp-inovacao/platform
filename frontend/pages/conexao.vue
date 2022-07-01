@@ -293,6 +293,17 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           </template>
         </v-checkbox>
 
+         <div>
+            <legend class="legendColor">
+              Como ficou sabendo do programa Conexão USP?
+            </legend>
+            <v-text-field
+              v-model="conexao.knownform"
+              clearable
+            ></v-text-field>
+          </div>
+          {{conexao.knownform}}
+
         <v-row>
           <v-col class="text-center">
             <v-btn
@@ -348,6 +359,7 @@ export default {
         wantedProfile: "",
         necessity: "",
       },
+      knownform: "",
     },
     images: null,
     radioButtonData: [

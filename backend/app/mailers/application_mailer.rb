@@ -42,6 +42,7 @@ class ApplicationMailer < ActionMailer::Base
                    'Telefone', 'Endereço', 'Cidade','Site']
     @demand_labels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
                       'Qual é a sua necessidade em relação a esses pesquisadores?']
+    @knownform_labels = 'Como ficou sabendo do programa Conexão USP?'
 
     @entities.each do |entity|
       entity.images.each_with_index do |image, index|
