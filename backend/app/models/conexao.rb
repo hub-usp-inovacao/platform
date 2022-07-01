@@ -6,7 +6,6 @@ class Conexao
   field :personal, type: Hash
   field :org, type: Hash
   field :demand, type: Hash
-  field :knownform, type: String
   field :delivered, type: Boolean, default: false
 
   embeds_many :images

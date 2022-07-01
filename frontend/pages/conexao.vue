@@ -278,7 +278,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <template v-slot:label>
             <div>
               Concordo com todas as
-
               <a
                 target="_blank"
                 href="http://www.inovacao.usp.br/conexaousp/"
@@ -286,22 +285,10 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
               >
                 normas
               </a>
-
               e funcionamento do Programa Conexão USP.
             </div>
           </template>
         </v-checkbox>
-
-         <div>
-            <legend class="legendColor">
-              Como ficou sabendo do programa Conexão USP?
-            </legend>
-            <v-text-field
-              v-model="conexao.knownform"
-              clearable
-            ></v-text-field>
-          </div>
-
         <v-row>
           <v-col class="text-center">
             <v-btn
@@ -357,7 +344,6 @@ export default {
         wantedProfile: "",
         necessity: "",
       },
-      knownform: "",
     },
     images: null,
     radioButtonData: [

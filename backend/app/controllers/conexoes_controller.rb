@@ -27,7 +27,7 @@ class ConexoesController < ApplicationController
   private
 
   def create_params
-    params.require(:conexao).permit(:requestId, personal: {}, org: {}, demand: {}, :knownform)
+    params.require(:conexao).permit(:requestId, personal: {}, org: {}, demand: {})
   end
 
   def images_params
