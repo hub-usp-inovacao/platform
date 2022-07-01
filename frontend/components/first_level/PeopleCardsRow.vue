@@ -12,12 +12,12 @@
         :key="src"
         cols="8"
         md="3"
-        lg="1"
-        class="d-flex justify-center mx-8"
+        :lg="smaller ? 2 : 3"
+        class="d-flex justify-center mx-2"
       >
         <v-card
           class="d-flex flex-column align-center justify-start"
-          width="100%"
+          width="60%"
           elevation="0"
         >
           <v-img
@@ -55,6 +55,10 @@ export default {
     people: {
       type: Array,
       required: true,
+    },
+    smaller: {
+      type: Boolean,
+      default: () => false,
     },
     notes: {
       type: Array,
