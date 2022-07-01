@@ -257,37 +257,41 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             </v-col>
           </v-row>
           <div>
-            <v-radio-group
+            <legend class="legendColor">
+              Qual a sua necessidade em relação a esses pesquisadores?
+            </legend>
+            <v-combobox
               v-model="conexao.demand.necessity"
-              label="Qual a sua necessidade em relação a esses pesquisadores?"
+              :items="radioButtonData[3]"
+              label="Escolha as necessidades, ou digite outras caso necessário"
+              multiple
               :rules="rules.value"
-              @change="enableOtherOption('demand', 'necessity')"
-            >
-              <v-radio
-                v-for="(option, i) of radioButtonData[3]"
-                :key="i"
-                :value="option"
-                :label="option"
-              />
-              <v-radio label="Outro, qual?" value="Outro" />
-            </v-radio-group>
-            <v-row v-if="isOtherDemandEnable">
-              <v-col class="mt-n5 pt-0" cols="6">
-                <v-text-field
-                  v-model="conexao.demand.necessityOther"
-                  :rules="rules.value"
-                  placeholder="Outro, qual?"
-                  autofocus
-                />
-              </v-col>
-            </v-row>
+              chips
+            ></v-combobox>
           </div>
         </v-container>
         <v-checkbox
           v-model="confirmation"
           label="Concordo com todas as normas e funcionamento do Programa Conexão USP."
           :rules="rules.confirmation"
-        />
+        >
+          <template v-slot:label>
+            <div>
+              Concordo com todas as
+
+              <a
+                target="_blank"
+                href="http://www.inovacao.usp.br/conexaousp/"
+                @click.stop
+                v-on="on"
+              >
+                normas
+              </a>
+
+              e funcionamento do Programa Conexão USP.
+            </div>
+          </template>
+        </v-checkbox>
 
         <v-row>
           <v-col class="text-center">
@@ -317,6 +321,7 @@ export default {
     MaskInput,
   },
   data: () => ({
+    enabled: false,
     conexao: {
       personal: {
         email: "",
