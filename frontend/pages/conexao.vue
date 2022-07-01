@@ -301,7 +301,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
               clearable
             ></v-text-field>
           </div>
-          {{conexao.knownform}}
 
         <v-row>
           <v-col class="text-center">
