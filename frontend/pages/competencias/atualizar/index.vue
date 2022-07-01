@@ -7,7 +7,7 @@
     <v-form>
       <v-container>
         <v-row v-if="ok">
-          <!-- aqui vem o formulário em si -->
+          <Stepper @finish="submitUpdate()" />
         </v-row>
         <v-row v-else>
           <v-col cols="10">
@@ -19,7 +19,7 @@
               width="100"
               text
               :disabled="!isValid"
-              @click="submit"
+              @click="submitToken"
             >
               Enviar
             </v-btn>
@@ -31,11 +31,14 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import Panel from "@/components/first_level/Panel.vue";
+import Stepper from "@/components/SkillForms/Stepper.vue";
 
 export default {
   components: {
     Panel,
+    Stepper,
   },
   data: () => ({
     title: "Atualização de Competências",
@@ -54,14 +57,21 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      submitUpdateData: "skill_form/submitUpdateData",
+    }),
+
     description() {
       return "Nesta página os pesquisadores da USP cadastrados no HUBUSP INOVAÇÃO, podem pedir alteração de seus dados.";
     },
-    async submit() {
+    async submitToken() {
       const body = { skill: { token: this.token } };
       const backendUrl = process.env.BACKEND_URL;
       const skill = await this.$axios.$post(backendUrl + "/skills", body);
       console.log(skill);
+    },
+    async submitUpdate() {
+      this.submitUpdateData();
     },
   },
 };
