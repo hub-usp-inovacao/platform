@@ -283,7 +283,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
                 target="_blank"
                 href="http://www.inovacao.usp.br/conexaousp/"
                 @click.stop
-                v-on="on"
               >
                 normas
               </a>
