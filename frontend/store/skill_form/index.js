@@ -7,30 +7,34 @@ export const state = () => ({
   // ...personal.state(),
   // ...bond.state(),
   ...resources.state(),
-  // ...confirmation.state(),
+  ...confirmation.state(),
 })
 
 export const getters = {
   // ...personal.getters,
   // ...bond.getters,
   ...resources.getters,
-  // ...confirmation.getters,
+  ...confirmation.getters,
 }
 
 export const mutations = {
   // ...personal.mutations,
   // ...bond.mutations,
   ...resources.mutations,
-  // ...confirmation.mutations,
+  ...confirmation.mutations,
 }
 
 export const actions = {
   // ...personal.actions,
   // ...bond.actions,
   ...resources.actions,
-  // ...confirmation.actions,
+  ...confirmation.actions,
 
-  submitUpdateData: async ({ getters }) => {
+  submitUpdateData: ({ getters }) => {
+    if (!getters.truthful) {
+      throw new Error("truthful information must be confirmed")
+    }
+
     const body = prepareObject(getters)
 
     console.log(body)
@@ -42,6 +46,6 @@ const prepareObject = (obj) => ({
     // ...personal.prepareSection(obj),
     // ...bond.prepareSection(obj),
     ...resources.prepareSection(obj),
-    // ...confirmation.prepareSection(obj),
+    ...confirmation.prepareSection(obj),
   }
 })

@@ -8,6 +8,22 @@
       <v-container>
         <v-row v-if="ok">
           <Stepper @finish="submitUpdate()" />
+          <v-dialog v-model="dialog.show" persistent max-width="500">
+            <v-card>
+              <v-card-title class="text-h5">
+                {{ dialog.title }}
+              </v-card-title>
+              <v-card-text>
+                {{ dialog.message }}
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="handleOkClick">
+                  Ok!
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-row>
         <v-row v-else>
           <v-col cols="10">
@@ -46,8 +62,14 @@ export default {
     skill: {
       nome: "",
     },
-    ok: false,
+    ok: true,
     token: "",
+    dialog: {
+      show: false,
+      title: "",
+      status: "",
+      message: "",
+    },
   }),
 
   computed: {
@@ -70,8 +92,32 @@ export default {
       const skill = await this.$axios.$post(backendUrl + "/skills", body);
       console.log(skill);
     },
-    async submitUpdate() {
-      this.submitUpdateData();
+    submitUpdate() {
+      try {
+        this.submitUpdateData();
+      } catch (error) {
+        this.dialog.status = "error";
+        this.dialog.title = "Erro no formulário";
+        this.dialog.message =
+          "Veracidade das informações deve ter sido confirmada";
+        this.dialog.show = true;
+      }
+    },
+    clearDialog() {
+      this.dialog = {
+        show: false,
+        status: "",
+        title: "",
+        message: "",
+      };
+    },
+    handleOkClick() {
+      const { status } = this.dialog;
+      this.clearDialog();
+
+      if (status === "success") {
+        this.$router.push("/");
+      }
     },
   },
 };
