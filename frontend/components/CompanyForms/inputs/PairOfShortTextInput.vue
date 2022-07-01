@@ -24,11 +24,28 @@ export default {
   props: {
     labelOne: {
       type: String,
-      required: true,
+      default: () => "label one",
     },
     labelTwo: {
       type: String,
-      required: true,
+      default: () => "label two",
+    },
+  },
+  computed: {
+    inputEvent() {
+      const event = {};
+      event[this.labelOne] = this.one;
+      event[this.labelTwo] = this.two;
+
+      return event;
+    },
+  },
+  watch: {
+    one() {
+      this.$emit("input", this.inputEvent);
+    },
+    two() {
+      this.$emit("input", this.inputEvent);
     },
   },
 };

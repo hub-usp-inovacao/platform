@@ -1,8 +1,8 @@
 <template>
   <div>
     <MultipleInputs
-      v-model="values"
-      component="PairOfShortTextInput"
+      v-model="patents"
+      component="PatentNameAndCode"
       inputLabel="patente"
     />
   </div>
@@ -18,7 +18,7 @@ export default {
     MultipleInputs,
   },
   data: () => ({
-    values: [],
+    patents: [],
   }),
 };
 </script>

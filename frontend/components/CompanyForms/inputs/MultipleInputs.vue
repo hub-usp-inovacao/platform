@@ -29,6 +29,7 @@ import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue"
 import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import URLInput from "@/components/CompanyForms/inputs/URLInput.vue";
 import PairOfShortTextInput from "@/components/CompanyForms/inputs/PairOfShortTextInput.vue";
+import PatentNameAndCode from "@/components/CompanyForms/inputs/PatentNameAndCode.vue";
 
 export default {
   components: {
@@ -36,6 +37,7 @@ export default {
     MaskInput,
     URLInput,
     PairOfShortTextInput,
+    PatentNameAndCode,
   },
   props: {
     inputLabel: {
