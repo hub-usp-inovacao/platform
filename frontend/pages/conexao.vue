@@ -82,15 +82,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             mask="##.###.###/####-##"
             :rule="/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/"
           />
-          <v-radio-group
-            v-model="conexao.org.sensitiveData"
-            label="Você deseja manter sigilo em relação ao nome da organização?"
-            :rules="rules.value"
-          >
-            <v-radio value="Sim" label="Sim" />
-            <v-radio value="Não" label="Não" />
-          </v-radio-group>
-
           <v-row>
             <v-col sm="12" md="6">
               <v-radio-group
@@ -327,7 +318,6 @@ export default {
       org: {
         name: "",
         cnpj: "",
-        sensitiveData: "",
         size: "",
         phone: "",
         address: "",
