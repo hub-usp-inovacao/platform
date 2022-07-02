@@ -62,7 +62,7 @@ export default {
     skill: {
       nome: "",
     },
-    ok: true,
+    ok: false,
     token: "",
     dialog: {
       show: false,
@@ -81,6 +81,7 @@ export default {
   methods: {
     ...mapActions({
       submitUpdateData: "skill_form/submitUpdateData",
+      load: "skill_form/loadInitialData",
     }),
 
     description() {
@@ -90,16 +91,22 @@ export default {
       const body = { skill: { token: this.token } };
       const backendUrl = process.env.BACKEND_URL;
       const skill = await this.$axios.$post(backendUrl + "/skills", body);
-      console.log(skill);
+      this.load(skill);
+      this.ok = true;
     },
-    submitUpdate() {
-      try {
-        this.submitUpdateData();
-      } catch (error) {
+    async submitUpdate() {
+      const { success, error } = await this.submitUpdateData();
+
+      if (success) {
+        this.dialog.status = "success";
+        this.dialog.title = "Atualização enviada com sucesso";
+        this.dialog.message =
+          "Em breve, seus dados serão revisados pela equipe da AUSPIN e estarão no site";
+        this.dialog.show = true;
+      } else {
         this.dialog.status = "error";
         this.dialog.title = "Erro no formulário";
-        this.dialog.message =
-          "Veracidade das informações deve ter sido confirmada";
+        this.dialog.message = error;
         this.dialog.show = true;
       }
     },

@@ -30,14 +30,24 @@ export const actions = {
   ...resources.actions,
   ...confirmation.actions,
 
-  submitUpdateData: ({ getters }) => {
+  submitUpdateData: async function ({ getters }) {
     if (!getters.truthful) {
-      throw new Error("truthful information must be confirmed")
+      const error = "Veracidade das informações deve ser confirmada";
+      return { success: false, error }
     }
 
     const body = prepareObject(getters)
 
-    console.log(body)
+    try {
+      return await this.$updateSkills(body)
+    } catch (error) {
+      console.log(error)
+      return { success: false, error: error.message }
+    }
+  },
+
+  loadInitialData: ({ dispatch }, skill) => {
+    dispatch("loadInitialResources", skill)
   }
 }
 

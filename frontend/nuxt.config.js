@@ -97,6 +97,7 @@ export default {
     { src: "~/plugins/matching/skill.js" },
     { src: "~/plugins/matching/iniciative.js" },
     { src: "~/plugins/v-mask.js", mode: "client" },
+    { src: "~/plugins/services/update_skills.js" },
   ],
 
   serverMiddleware: [{ path: "/", handler: "~/api/index.js" }],
@@ -144,7 +145,7 @@ export default {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line no-unused-vars
-    extend(config, ctx) {},
+    extend(config, ctx) { },
   },
   googleAnalytics: {
     id: process.env.GOOGLE_ANALYTICS_ID,

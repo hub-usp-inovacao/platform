@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   post '/skills/update_request', to: 'skills_updates#request_update'
   post '/company', to: 'company#protected_read_one'
   post '/skills', to: 'skill#protected_read_one'
+  patch '/skills', to: 'skills_updates#update'
 end

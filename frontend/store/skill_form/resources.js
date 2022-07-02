@@ -25,6 +25,12 @@ const actions = {
 
   setServices: ({ commit }, newList) =>
     commit("setServices", newList),
+
+  loadInitialResources: ({ commit }, { skills, equipments, services }) => {
+    commit("setSkills", skills)
+    commit("setEquipments", equipments)
+    commit("setServices", services)
+  }
 }
 
 const prepareSection = (obj) => ({
