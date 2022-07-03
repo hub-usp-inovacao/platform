@@ -24,16 +24,25 @@
     </v-row>
 
     <h2>Grupos</h2>
+    <MultipleInputs
+      component="GroupInput"
+      inputLabel="grupo de pesquisa"
+      :value="groups"
+      @input="setGroups"
+      :limit="3"
+    />
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Dropdown from "../CompanyForms/inputs/Dropdown.vue";
+import MultipleInputs from "../CompanyForms/inputs/MultipleInputs.vue";
 
 export default {
   components: {
     Dropdown,
+    MultipleInputs,
   },
   data: () => ({
     allUnities: [],
@@ -44,6 +53,7 @@ export default {
     ...mapGetters({
       unities: "skill_form/unities",
       campus: "skill_form/campus",
+      groups: "skill_form/groups",
     }),
   },
 
@@ -51,6 +61,7 @@ export default {
     ...mapActions({
       setUnities: "skill_form/setUnities",
       setCampus: "skill_form/setCampus",
+      setGroups: "skill_form/setGroups",
     }),
     async loadUnities() {
       try {

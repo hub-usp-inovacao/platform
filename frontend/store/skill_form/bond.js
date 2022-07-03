@@ -19,7 +19,7 @@ const mutations = {
 const actions = {
   setUnities: ({ commit }, newList) => commit("setUnities", newList),
   setCampus: ({ commit }, newValue) => commit("setCampus", newValue),
-  newGroups: ({ commit }, newList) => commit("newGroups", newList),
+  setGroups: ({ commit }, newList) => commit("setGroups", newList),
 
   loadInitialBond: ({ commit }, { unities, campus }) => {
     commit("setUnities", unities)
@@ -31,6 +31,7 @@ const prepareSection = (obj) => ({
   bond: {
     unities: obj.unities,
     campus: obj.campus,
+    groups: obj.groups
   }
 })
 

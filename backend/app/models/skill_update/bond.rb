@@ -5,6 +5,7 @@ class SkillUpdate::Bond
 
   field :unities, type: Array
   field :campus, type: String
+  field :groups, type: Array
 
   embedded_in :skill_update_request,
     inverse_of: :bond
