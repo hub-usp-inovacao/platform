@@ -16,14 +16,7 @@ class SkillsUpdatesController < ApplicationController
   end
 
   def update
-    conf = SkillUpdate::Confirmation.new(update_params[:confirmation])
-    res = SkillUpdate::Resource.new(update_params[:resources])
-    bond = SkillUpdate::Bond.new(update_params[:bond])
-
-    request = SkillUpdate::Request.new()
-    request.confirmation = conf
-    request.resource = res
-    request.bond = bond
+    request = SkillUpdate::Request.new(update_params)
 
     request.save
 
@@ -37,6 +30,6 @@ class SkillsUpdatesController < ApplicationController
   end
 
   def update_params
-    params.require(:skill).permit(confirmation: {}, resources: {}, bond: {})
+    params.require(:skill).permit(confirmation: {}, resource: {}, bond: {})
   end
 end

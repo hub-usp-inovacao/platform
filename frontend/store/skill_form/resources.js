@@ -34,7 +34,7 @@ const actions = {
 }
 
 const prepareSection = (obj) => ({
-  resources: {
+  resource: {
     skills: obj.skills,
     services: obj.services,
     equipments: obj.equipments
