@@ -16,4 +16,5 @@ Rails.application.routes.draw do
   patch '/skills', to: 'skills_updates#update'
   get '/unities', to: 'unities#unities'
   get '/campi', to: 'unities#campi'
+  get '/areas', to: 'areas#index'
 end
