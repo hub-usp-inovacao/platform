@@ -41,6 +41,17 @@
             </v-btn>
           </v-col>
         </v-row>
+
+        <v-row>
+          <v-col cols="12" offset-md="3" md="6" align="center">
+            <p>
+              Ainda não solicitou uma atualização?
+              <nuxt-link to="/competencias/atualizar/solicitar">
+                Solicite aqui
+              </nuxt-link>
+            </p>
+          </v-col>
+        </v-row>
       </v-container>
     </v-form>
   </section>
@@ -76,6 +87,14 @@ export default {
     isValid() {
       return this.token.length > 0;
     },
+  },
+
+  mounted() {
+    const token = this.$route.query.token;
+
+    if (token != undefined) {
+      this.token = token;
+    }
   },
 
   methods: {
