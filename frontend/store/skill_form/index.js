@@ -4,28 +4,28 @@ import resources from './resources'
 import confirmation from './confirmation'
 
 export const state = () => ({
-  // ...personal.state(),
+  ...personal.state(),
   ...bond.state(),
   ...resources.state(),
   ...confirmation.state(),
 })
 
 export const getters = {
-  // ...personal.getters,
+  ...personal.getters,
   ...bond.getters,
   ...resources.getters,
   ...confirmation.getters,
 }
 
 export const mutations = {
-  // ...personal.mutations,
+  ...personal.mutations,
   ...bond.mutations,
   ...resources.mutations,
   ...confirmation.mutations,
 }
 
 export const actions = {
-  // ...personal.actions,
+  ...personal.actions,
   ...bond.actions,
   ...resources.actions,
   ...confirmation.actions,
@@ -33,6 +33,11 @@ export const actions = {
   submitUpdateData: async function ({ getters }) {
     if (!getters.truthful) {
       const error = "Veracidade das informações deve ser confirmada";
+      return { success: false, error }
+    }
+
+    if (!getters.nusp) {
+      const error = "Nº USP deve ser informado";
       return { success: false, error }
     }
 
@@ -49,12 +54,13 @@ export const actions = {
   loadInitialData: ({ dispatch }, skill) => {
     dispatch("loadInitialResources", skill)
     dispatch("loadInitialBond", skill)
+    dispatch("loadInitialPersonal", skill)
   }
 }
 
 const prepareObject = (obj) => ({
   skill: {
-    // ...personal.prepareSection(obj),
+    ...personal.prepareSection(obj),
     ...bond.prepareSection(obj),
     ...resources.prepareSection(obj),
     ...confirmation.prepareSection(obj),

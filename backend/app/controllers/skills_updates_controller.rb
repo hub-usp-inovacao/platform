@@ -30,6 +30,6 @@ class SkillsUpdatesController < ApplicationController
   end
 
   def update_params
-    params.require(:skill).permit(confirmation: {}, resource: {}, bond: {})
+    params.require(:skill).permit(confirmation: {}, resource: {}, bond: {}, personal: {})
   end
 end
