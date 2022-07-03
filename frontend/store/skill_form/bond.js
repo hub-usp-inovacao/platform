@@ -1,26 +1,36 @@
 const state = () => ({
-  unities: []
+  unities: [],
+  campus: '',
+  groups: [],
 })
 
 const getters = {
-  unities: (s) => s.unities
+  unities: (s) => s.unities,
+  campus: (s) => s.campus,
+  groups: (s) => s.groups,
 }
 
 const mutations = {
   setUnities: (s, newList) => s.unities = newList,
+  setCampus: (s, newValue) => s.campus = newValue,
+  setGroups: (s, newList) => s.groups = newList,
 }
 
 const actions = {
   setUnities: ({ commit }, newList) => commit("setUnities", newList),
+  setCampus: ({ commit }, newValue) => commit("setCampus", newValue),
+  newGroups: ({ commit }, newList) => commit("newGroups", newList),
 
-  loadInitialBond: ({ commit }, { unities }) => {
+  loadInitialBond: ({ commit }, { unities, campus }) => {
     commit("setUnities", unities)
+    commit("setCampus", campus)
   }
 }
 
 const prepareSection = (obj) => ({
   bond: {
-    unities: obj.unities
+    unities: obj.unities,
+    campus: obj.campus,
   }
 })
 

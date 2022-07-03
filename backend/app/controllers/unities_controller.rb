@@ -6,4 +6,8 @@ class UnitiesController < ApplicationController
     render json: { unities: all_unities }
   end
 
+  def campi
+    render json: { campi: campi_names }
+  end
+
 end
