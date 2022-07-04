@@ -14,4 +14,6 @@ class SkillUpdate::Personal
 
   embedded_in :skill_update_request,
     inverse_of: :personal
+
+  validates :nusp, presence: true
 end
