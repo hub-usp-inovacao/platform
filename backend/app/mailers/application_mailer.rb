@@ -9,6 +9,12 @@ class ApplicationMailer < ActionMailer::Base
     "Hub USP Inovação - #{text}"
   end
 
+  def skill_update_data(sheet)
+    attachments["updated-skills-#{Time.zone.today}.csv"] = { mime_type: 'text/csv', content: sheet }
+
+    mail(subject: subject("Atualização de Competências"))
+  end
+
   def warnings
     @warnings = params[:warnings]
     @entity = params[:entity]
