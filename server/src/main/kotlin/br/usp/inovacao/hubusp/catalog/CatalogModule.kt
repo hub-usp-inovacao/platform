@@ -8,7 +8,7 @@ import io.ktor.server.application.Application
 import org.litote.kmongo.getCollection
 
 fun Application.configureCatalogModule(db: MongoDatabase) {
-    val disciplineCollection = db.getCollection<Discipline>()
+    val disciplineCollection = db.getCollection<Discipline>("disciplines")
 
     val disciplineService = DisciplineService(disciplineCollection)
     configureCatalogRouting(disciplineService)
