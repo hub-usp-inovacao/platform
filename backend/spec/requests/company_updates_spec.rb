@@ -96,6 +96,9 @@ RSpec.describe 'CompanyUpdates', type: :request do
           bond: 'Aluno ou ex-aluno (graduação)',
           unity: 'Instituto de Matemática e Estatística - IME'
         }
+      ],
+      patents: [
+        { code: 'foo', name: 'bar'}
       ]
     }
   end

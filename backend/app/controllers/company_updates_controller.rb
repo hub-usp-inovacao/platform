@@ -28,6 +28,11 @@ class CompanyUpdatesController < ApplicationController
     @comp_update.revenue = Revenue.new(prms[:revenue])
     @comp_update.incubation = Incubation.new(prms[:incubation])
     @comp_update.staff = Staff.new(prms[:staff])
+    
+    prms[:patents].each do |patent_params|
+      comp_pat = CompanyPatent.new(patent_params)
+      @comp_update.company_patents << comp_pat
+    end
 
     partners = []
     prms[:partners].each_with_index do |raw_partner, index|
@@ -67,7 +72,8 @@ class CompanyUpdatesController < ApplicationController
       investment: {},
       revenue: {},
       incubation: {},
-      staff: {}
+      staff: {},
+      patents: %i[name code]
     )
   end
 end
