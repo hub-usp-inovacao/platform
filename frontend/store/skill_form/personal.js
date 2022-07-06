@@ -9,7 +9,8 @@ const state = () => ({
     major: '',
     minors: [],
   },
-  keywords: []
+  keywords: [],
+  lattes: '',
 })
 
 const getters = {
@@ -22,6 +23,7 @@ const getters = {
   areaMajor: (s) => s.area.major,
   areaMinors: (s) => s.area.minors,
   keywords: (s) => s.keywords,
+  lattes: (s) => s.lattes,
 }
 
 const mutations = {
@@ -34,6 +36,7 @@ const mutations = {
   setAreaMajor: (s, newValue) => s.area.major = newValue,
   setAreaMinors: (s, newList) => s.area.minors = newList,
   setKeywords: (s, newValue) => s.keywords = newValue,
+  setLattes: (s, newValue) => s.lattes = newValue,
 }
 
 const actions = {
@@ -46,8 +49,9 @@ const actions = {
   setAreaMajor: ({ commit }, newValue) => commit("setAreaMajor", newValue),
   setAreaMinors: ({ commit }, newList) => commit("setAreaMinors", newList),
   setKeywords: ({ commit }, newValue) => commit("setKeywords", newValue),
+  setLattes: ({ commit }, newValue) => commit("setLattes", newValue),
 
-  loadInitialPersonal: ({ commit }, { bond, limit_date, name, nusp, phones, area, keywords }) => {
+  loadInitialPersonal: ({ commit }, { bond, limit_date, name, nusp, phones, area, keywords, lattes }) => {
     commit("setName", name)
     commit("setNusp", nusp || "")
     commit("setBond", bond)
@@ -56,6 +60,7 @@ const actions = {
     commit("setAreaMajor", area.major[0])
     commit("setAreaMinors", area.minors)
     commit("setKeywords", keywords)
+    commit("setLattes", lattes)
   }
 }
 
@@ -71,7 +76,8 @@ const prepareSection = (obj) => ({
       major: obj.areaMajor,
       minors: obj.areaMinors,
     },
-    keywords: obj.keywords
+    keywords: obj.keywords,
+    lattes: obj.lattes,
   }
 })
 

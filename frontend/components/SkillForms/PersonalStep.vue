@@ -42,6 +42,15 @@
         />
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <URLInput
+          :value="lattes"
+          @input="setLattes"
+          label="Link do curriculo lattes"
+        />
+      </v-col>
+    </v-row>
 
     <h2>Atuação</h2>
     <v-row>
@@ -82,12 +91,14 @@ import { mapGetters, mapActions } from "vuex";
 import ShortTextInput from "../CompanyForms/inputs/ShortTextInput.vue";
 import Dropdown from "../CompanyForms/inputs/Dropdown.vue";
 import MultipleInputs from "../CompanyForms/inputs/MultipleInputs.vue";
+import URLInput from "../CompanyForms/inputs/URLInput.vue";
 
 export default {
   components: {
     ShortTextInput,
     Dropdown,
     MultipleInputs,
+    URLInput,
   },
 
   data: () => ({
@@ -115,6 +126,7 @@ export default {
       major: "skill_form/areaMajor",
       minors: "skill_form/areaMinors",
       keywords: "skill_form/keywords",
+      lattes: "skill_form/lattes",
     }),
     isTemp() {
       return [
@@ -144,6 +156,7 @@ export default {
       setMajor: "skill_form/setAreaMajor",
       setMinors: "skill_form/setAreaMinors",
       setKeywords: "skill_form/setKeywords",
+      setLattes: "skill_form/setLattes",
     }),
   },
 

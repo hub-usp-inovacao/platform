@@ -44,6 +44,7 @@ class SkillUpdate::CsvParser
     @current_row[26] = personal.area[:major]
     @current_row[27] = personal.area[:minors].join(';')
     @current_row[28] = personal.keywords.join(';')
+    @current_row[29] = personal.lattes
     @current_row[31] = personal.phone
     @current_row[36] = personal.limitDate
     @current_row[37] = personal.nusp

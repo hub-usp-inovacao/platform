@@ -11,6 +11,7 @@ class SkillUpdate::Personal
   field :personalPhone, type: String
   field :area, type: Hash
   field :keywords, type: Array
+  field :lattes, type: String
 
   embedded_in :skill_update_request,
     inverse_of: :personal
