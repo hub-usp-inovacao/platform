@@ -18,7 +18,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-btn color="primary" rounded @click="newItem"
+    <v-btn color="primary" rounded @click="newItem" :disabled="!canAdd"
       >Adicionar {{ inputLabel }}</v-btn
     >
   </div>
@@ -31,6 +31,8 @@ import URLInput from "@/components/CompanyForms/inputs/URLInput.vue";
 import PairOfShortTextInput from "@/components/CompanyForms/inputs/PairOfShortTextInput.vue";
 import PatentNameAndCode from "@/components/CompanyForms/inputs/PatentNameAndCode.vue";
 
+import GroupInput from "../../SkillForms/BondStep/GroupInput.vue";
+
 export default {
   components: {
     ShortTextInput,
@@ -38,6 +40,7 @@ export default {
     URLInput,
     PairOfShortTextInput,
     PatentNameAndCode,
+    GroupInput,
   },
   props: {
     inputLabel: {
@@ -62,10 +65,17 @@ export default {
       type: String,
       default: "",
     },
+    limit: {
+      type: Number,
+      default: () => 0,
+    },
   },
   computed: {
     counter() {
       return this.value.length;
+    },
+    canAdd() {
+      return this.limit == 0 || this.limit > this.counter;
     },
   },
   methods: {

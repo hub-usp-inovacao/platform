@@ -9,6 +9,12 @@ class ApplicationMailer < ActionMailer::Base
     "Hub USP Inovação - #{text}"
   end
 
+  def skill_update_data(sheet)
+    attachments["updated-skills-#{Time.zone.today}.csv"] = { mime_type: 'text/csv', content: sheet }
+
+    mail(subject: subject("Atualização de Competências"))
+  end
+
   def warnings
     @warnings = params[:warnings]
     @entity = params[:entity]
@@ -20,6 +26,12 @@ class ApplicationMailer < ActionMailer::Base
     attachments["updated-companies-#{Time.zone.today}.csv"] =
       { mime_type: 'text/csv', content: CompanyUpdateRequest.to_csv }
     mail(subject: subject('Novas empresas solicitaram atualização dos dados'))
+  end
+
+  def update_skills
+    attachments["updated-skills-#{Time.zone.today}.csv"] =
+      { mime_type: 'text/csv', content: SkillUpdateRequest.to_csv }
+    mail(subject: subject('Novas competências solicitaram atualização dos dados'))
   end
 
   def conexao
@@ -47,5 +59,13 @@ class ApplicationMailer < ActionMailer::Base
 
     mail(to: company_email,
          subject: subject('Token de segurança para atualização - Hub USPInovação'))
+  end
+  def skill_update_token(skill_email, token)
+    @token = token
+    @base_url = ENV['JWT_AUDIENCE']
+
+    mail(to: skill_email,
+          subject: subject('Token de segurança para atualização - Hub USPInovação'))
+
   end
 end

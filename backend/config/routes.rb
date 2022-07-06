@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   post '/companies/update_request', to: 'company_updates#request_update'
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
-
+  post '/skills/update_request', to: 'skills_updates#request_update'
   post '/company', to: 'company#protected_read_one'
+  post '/skills', to: 'skill#protected_read_one'
+  patch '/skills', to: 'skills_updates#update'
+  get '/unities', to: 'unities#unities'
+  get '/campi', to: 'unities#campi'
+  get '/areas', to: 'areas#index'
 end

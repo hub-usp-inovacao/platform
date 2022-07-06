@@ -4,6 +4,24 @@ def log(task_name, message)
   p "[#{task_name}|#{Time.zone.now}] #{message}"
 end
 
+desc 'Sends mails with all the skills updates'
+task skill_update_report: :environment do
+  log(:skill_update_report, "started")
+
+  reqs = SkillUpdate::Request.where({ delivered: false })
+  csv = SkillUpdate::CsvParser.new
+
+  sheet = csv.parse_records(reqs)
+
+  ApplicationMailer.skill_update_data(sheet).deliver_now
+
+  reqs.each do |req|
+    req.delivered = true
+    req.save
+  end
+  log(:skill_update_report, "ended")
+end
+
 desc 'Sends mails with all the errors not yet reported'
 task mail_reports: :environment do
   log('mail_reports', 'mailing reports!')
