@@ -161,7 +161,7 @@ export default {
             role: "Hub USP Inovação",
           },
           {
-            src: "",
+            src: "https://drive.google.com/uc?export=view&id=1cm_a1B4FuDah5Ov1tsf2jMJK1eZbtUVk",
             name: "Neylor Fabiano",
             role: "Hub USP Inovação",
           },
