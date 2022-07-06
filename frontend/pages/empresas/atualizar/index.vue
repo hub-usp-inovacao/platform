@@ -75,7 +75,7 @@ export default {
     title: "Atualização de Empresas DNAUSP",
 
     loading: false,
-    ok: true,
+    ok: false,
     dialog: {
       show: false,
       status: "",

@@ -1,16 +1,13 @@
-const state = () => {
-    return {patents: []}
-}
+const state = () => ({
+    patents: []
+})
 
 const getters = {
-    patents: (s) => {
-        console.log("dentro do getter de patents")
-        return s.patents
-    }
+    patents: (s) => s.patents
 }
 
 const mutations = {
-    setPatents: (s, newList) => {s.patents = newList}
+    setPatents: (s, newList) => { s.patents = newList }
 }
 
 const actions = {
@@ -19,8 +16,11 @@ const actions = {
     }
 }
 
-function prepareSection (obj) {
-    return {patents: obj.patents}
+function prepareSection(obj) {
+    return {
+        patents: obj.patents
+            .map((patent) => ({ name: patent.Nome, code: patent["Código"] }))
+    }
 }
 
 export default {
