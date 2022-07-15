@@ -1,19 +1,43 @@
-FROM gradle:7-jdk11 AS builder
+FROM gradle:7.4.2-jdk17 AS builder
 
-COPY --chown=gradle:gradle . /home/gradle/source
+WORKDIR /home/gradle/hub
 
-WORKDIR /home/gradle/source
+RUN chown gradle:gradle . -R
 
-RUN gradle shadowJar --no-daemon
+USER gradle
+
+COPY --chown=gradle:gradle . .
+
+RUN gradle :hub-app:shadowJar :hub-cli:shadowJar
 
 
 
-FROM openjdk:11 AS runner
 
-EXPOSE 8080
 
-RUN mkdir /app
+FROM eclipse-temurin:17-jdk AS rbase
 
-COPY --from=builder /home/gradle/source/build/libs/*.jar /app/hubusp.jar
+WORKDIR /hub
 
-ENTRYPOINT ["java","-jar","/app/hubusp.jar"]
+
+
+
+
+FROM rbase AS app
+
+ENV HUB_HTTP_PORT=8080
+
+EXPOSE ${HUB_HTTP_PORT}
+
+COPY --from=builder /home/gradle/hub/hub-app/build/libs/hub*-all.jar ./hub-app.jar
+
+ENTRYPOINT ["java", "-jar", "/hub/hub-app.jar"]
+
+
+
+
+
+FROM rbase AS cli
+
+COPY --from=builder /home/gradle/hub/hub-cli/build/libs/hub*-all.jar ./hub-cli.jar
+
+ENTRYPOINT ["java", "-jar", "/hub/hub-cli.jar"]
