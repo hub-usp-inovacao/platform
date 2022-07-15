@@ -1,8 +1,8 @@
 hubuspinovacao.if.usp.br
 
-handle /api/disciplines {
-  uri strip_prefix /api
-  reverse_proxy catalog:8080
+handle /api/catalog/* {
+  uri strip_prefix /api/catalog
+  reverse_proxy catalogapp:8080
 }
 
 handle_path /api/* {
