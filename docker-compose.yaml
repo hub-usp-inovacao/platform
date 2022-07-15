@@ -101,11 +101,10 @@ services:
       - if
       - stiback
 
-  catalog:
+  catalogapp:
     build:
       context: ./server
-      target: runner
-      dockerfile: Dockerfile
+      target: app
     ports:
       - 8080:8080
     depends_on:
@@ -113,9 +112,19 @@ services:
     env_file:
       - ./server/.env
     profiles:
-      - local
-      - if
       - catalog
+
+  catalogcli:
+    build:
+      context: ./server
+      target: cli
+    depends_on:
+      - mongo
+    env_file:
+      - ./server/.env
+    profiles:
+      - cli
+
 
   caddy:
     image: caddy:2.5.1-alpine
