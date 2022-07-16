@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server
+package br.usp.inovacao.hubusp.server.app
 
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
