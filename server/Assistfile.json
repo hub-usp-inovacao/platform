@@ -6,10 +6,6 @@
     ],
     "envSample": [
         {
-            "name": "HUB_SHEETS_API_KEY",
-            "description": "The Key to access Google Spreadsheets API"
-        },
-        {
             "name": "HUB_DATASOURCE_PROTOCOL",
             "description": "The protocol for db connection",
             "default": "mongodb"
@@ -48,6 +44,17 @@
         {
             "name": "HUB_JWT_REALM",
             "description": "The realm under which JWT lays"
+        },
+        {
+            "name": "HUB_HTTP_PORT",
+            "description": "The port used by hub-app Ktor server",
+            "default": "8080"
+
+        },
+        {
+            "name": "HUB_CORS_ALLOWED_HOSTS",
+            "description": "The comma-separated hostnames allowed by CORS, e.g., www.example.com;localhost:3000 -- allow all with an '*'",
+            "default": "*"
         }
     ]
 }
