@@ -87,7 +87,7 @@ internal class ReseacherExtensionKtTest {
         val result = params.toCollectionFilter()
 
         // then
-        val expected = "{\"unity\":\"$unity\"}"
+        val expected = "{\"unities\":\"$unity\"}"
         assertEquals(expected, result)
     }
 
@@ -129,7 +129,7 @@ internal class ReseacherExtensionKtTest {
             "\"\$or\":[{\"area.major\":\"Engenharias\"}]",
             "\"\$or\":[{\"area.minors\":\"Engenharia de Minas\"}]",
             "\"campus\":\"Butantã\"",
-            "\"unity\":\"IME\"",
+            "\"unities\":\"IME\"",
             "\"bond\":\"Pesquisador\""
         ).joinToString(",") +
         "}"
