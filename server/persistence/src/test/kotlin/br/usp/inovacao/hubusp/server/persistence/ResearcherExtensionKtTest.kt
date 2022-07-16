@@ -4,7 +4,7 @@ import br.usp.inovacao.hubusp.server.catalog.ResearcherSearchParams
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class ReseacherExtensionKtTest {
+internal class ResearcherExtensionKtTest {
     @Test
     fun `it parses a single major area`() {
         // given
