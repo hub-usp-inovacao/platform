@@ -12,6 +12,7 @@ fun Application.module() {
     configureSecurity()
     configureSerialization()
     configureRouting()
+    configureCallLogging()
 
     catalog()
 }
