@@ -55,6 +55,26 @@
             "name": "HUB_CORS_ALLOWED_HOSTS",
             "description": "The comma-separated hostnames allowed by CORS, e.g., www.example.com;localhost:3000 -- allow all with an '*'",
             "default": "*"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_PROTOCOL",
+            "description": "(TEST environment) The protocol for db connection",
+            "default": "mongodb"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_HOST",
+            "description": "(TEST environment) The hostname on which the db is running",
+            "default": "mongo"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_PORT",
+            "description": "(TEST environment) The port on which the host is running the db",
+            "default": "27017"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_DBNAME",
+            "description": "(TEST environment) The name of the virtual database",
+            "default": "backend_test"
         }
     ]
 }
