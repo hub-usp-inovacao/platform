@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Category
 import br.usp.inovacao.hubusp.server.catalog.Discipline
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
@@ -79,36 +78,6 @@ class CatalogDisciplineRepositoryImpl(
 
     init {
         collection = db.getCollection<Discipline>("disciplines")
-        collection.insertMany(
-            listOf(
-                Discipline(
-                    name = "MAC0218",
-                    unity = "IME",
-                    campus = "Butantã",
-                    level = "Quero aprender!",
-                    nature = "Graduação",
-                    category = Category(
-                        innovation = true,
-                        business = false,
-                        intellectual_property = false,
-                        entrepreneurship = false
-                    )
-                ),
-                Discipline(
-                    name = "MAC0219",
-                    unity = "IME",
-                    campus = "Butantã",
-                    level = "Quero aprender!",
-                    nature = "Graduação",
-                    category = Category(
-                        innovation = true,
-                        business = false,
-                        intellectual_property = false,
-                        entrepreneurship = false
-                    )
-                )
-            )
-        )
     }
 
     override fun filter(params: Map<String, List<String>>): Set<Discipline> {
