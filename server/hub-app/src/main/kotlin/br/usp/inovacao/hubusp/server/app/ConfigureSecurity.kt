@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server
+package br.usp.inovacao.hubusp.server.app
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

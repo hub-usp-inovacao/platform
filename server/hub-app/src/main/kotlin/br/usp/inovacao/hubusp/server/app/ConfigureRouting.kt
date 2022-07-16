@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server
+package br.usp.inovacao.hubusp.server.app
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
