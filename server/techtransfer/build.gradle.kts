@@ -6,6 +6,7 @@ val mockk_version: String by project
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
+    id("org.jetbrains.dokka")
     `java-library`
 }
 
