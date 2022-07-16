@@ -22,7 +22,7 @@ fun ResearcherSearchParams.toCollectionFilter(): String {
     }
 
     if (unity != null) {
-        inner.add("\"unity\":\"$unity\"")
+        inner.add("\"unities\":\"$unity\"")
     }
 
     if (bond != null) {
