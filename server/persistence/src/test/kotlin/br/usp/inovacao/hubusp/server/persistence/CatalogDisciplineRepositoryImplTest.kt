@@ -103,13 +103,6 @@ internal class CatalogDisciplineRepositoryImplTest {
         assertTrue { result.all { it.category.business || it.category.entrepreneurship } }
     }
 
-    private fun connectToTestDb() = configureDB(
-        protocol = System.getenv("HUB_TEST_DATASOURCE_PROTOCOL") ?: "mongodb",
-        host = System.getenv("HUB_TEST_DATASOURCE_HOST") ?: "localhost",
-        port = System.getenv("HUB_TEST_DATASOURCE_PORT") ?: "27017",
-        dbName = System.getenv("HUB_TEST_DATASOURCE_DBNAME") ?: "test_database"
-    )
-
     private fun seedTestDb() {
         val disciplineCollection = testDb.getCollection<Discipline>("disciplines")
         disciplineCollection.insertMany(testSeeds())
