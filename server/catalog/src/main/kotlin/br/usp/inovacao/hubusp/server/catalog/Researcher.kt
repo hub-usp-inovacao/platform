@@ -15,7 +15,8 @@ data class Researcher(
     val lattes: String,
     val photo: String,
     val phone: String,
-    val bond: String
+    val bond: String,
+    val limit_date: String? = null
 )
 
 @kotlinx.serialization.Serializable
