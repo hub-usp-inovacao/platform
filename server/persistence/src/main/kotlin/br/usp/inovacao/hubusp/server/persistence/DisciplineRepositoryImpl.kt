@@ -117,11 +117,3 @@ class CatalogDisciplineRepositoryImpl(
         return collection.find(filter).toSet()
     }
 }
-
-class CuratorshipDisciplineRepositoryImpl : br.usp.inovacao.hubusp.server.curatorship.DisciplineRepository {
-    private var disciplines = mutableListOf<br.usp.inovacao.hubusp.server.curatorship.Discipline>()
-
-    override fun batchRefresh(disciplines: Iterable<br.usp.inovacao.hubusp.server.curatorship.Discipline>) {
-        this.disciplines = disciplines.toMutableList()
-    }
-}
