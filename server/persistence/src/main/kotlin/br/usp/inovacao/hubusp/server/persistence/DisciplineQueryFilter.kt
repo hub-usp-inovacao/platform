@@ -1,12 +1,7 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Discipline
-import com.mongodb.client.MongoCollection
-import com.mongodb.client.MongoDatabase
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.litote.kmongo.find
-import org.litote.kmongo.getCollection
 
 class DisciplineQueryFilter private constructor(
     val category: Map<String, List<Map<String, Boolean>>>? = null,
@@ -56,33 +51,16 @@ class DisciplineQueryFilter private constructor(
     fun toJson(): String {
         val rawJson: MutableList<String> = mutableListOf()
 
-        if (unity != null) rawJson.add("unity:\"$unity\"")
-        if (campus != null) rawJson.add("campus:\"$campus\"")
-        if (level != null) rawJson.add("level:\"$level\"")
-        if (nature != null) rawJson.add("nature:\"$nature\"")
+        if (unity != null) rawJson.add("\"unity\":\"$unity\"")
+        if (campus != null) rawJson.add("\"campus\":\"$campus\"")
+        if (level != null) rawJson.add("\"level\":\"$level\"")
+        if (nature != null) rawJson.add("\"nature\":\"$nature\"")
 
         if (category != null) {
             val conditionsJson = Json.encodeToString(category["\$or"])
-            rawJson.add("\$or:$conditionsJson")
+            rawJson.add("\"\$or\":$conditionsJson")
         }
 
         return "{" + rawJson.joinToString(",") + "}"
-    }
-}
-
-class CatalogDisciplineRepositoryImpl(
-    db: MongoDatabase
-) : br.usp.inovacao.hubusp.server.catalog.DisciplineRepository {
-
-    private val collection: MongoCollection<Discipline>
-
-    init {
-        collection = db.getCollection<Discipline>("disciplines")
-    }
-
-    override fun filter(params: Map<String, List<String>>): Set<Discipline> {
-        val filter = DisciplineQueryFilter.from(params).toJson()
-
-        return collection.find(filter).toSet()
     }
 }
