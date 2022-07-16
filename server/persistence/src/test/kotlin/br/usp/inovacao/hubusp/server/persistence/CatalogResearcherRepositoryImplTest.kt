@@ -12,14 +12,14 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-internal class CatalogReseacherRepositoryImplTest {
+internal class CatalogResearcherRepositoryImplTest {
     private lateinit var testDb: MongoDatabase
-    private lateinit var underTest: CatalogReseacherRepositoryImpl
+    private lateinit var underTest: CatalogResearcherRepositoryImpl
 
     @BeforeTest
     fun setup() {
         testDb = connectToTestDb()
-        underTest = CatalogReseacherRepositoryImpl(testDb)
+        underTest = CatalogResearcherRepositoryImpl(testDb)
         seedTestDb()
     }
 

@@ -8,23 +8,23 @@ import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.find
 import org.litote.kmongo.getCollection
 
-class CatalogReseacherRepositoryImpl(
+class CatalogResearcherRepositoryImpl(
     db: MongoDatabase
 ) : ResearcherRepository {
     companion object {
         const val collectionName = "skills"
     }
 
-    private val reseacherCollection: MongoCollection<Researcher>
+    private val researcherCollection: MongoCollection<Researcher>
 
     init {
-        reseacherCollection = db.getCollection<Researcher>(collectionName)
+        researcherCollection = db.getCollection<Researcher>(collectionName)
     }
 
     override fun filter(params: ResearcherSearchParams): Set<Researcher> {
         val filter = params.toCollectionFilter()
 
-        return reseacherCollection
+        return researcherCollection
             .find(filter)
             .toSet()
     }
