@@ -69,6 +69,7 @@ services:
       - if
       - stiback
       - catalog
+      - cli
 
   frontend:
     build:
