@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
+import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.Discipline
 import br.usp.inovacao.hubusp.server.catalog.Researcher
 import io.ktor.client.request.get
@@ -15,7 +16,7 @@ import kotlin.test.assertEquals
 
 class CatalogTest {
     @Test
-    fun testGetDisciplines() = testCatalogApplication {
+    fun `test GET disciplines`() = testCatalogApplication {
         // given ... when
         val response = client.get("/disciplines")
         val body = response.bodyAsText().let {
@@ -23,12 +24,12 @@ class CatalogTest {
         }
 
         // then
-        assertContentEquals(listOf("disciplines"), body.keys.toList())
         assertEquals(HttpStatusCode.OK, response.status)
+        assertContentEquals(listOf("disciplines"), body.keys.toList())
     }
 
     @Test
-    fun testGetResearchers() = testCatalogApplication {
+    fun `test GET skills`() = testCatalogApplication {
         // given ... when
         val response = client.get("/skills")
         val body = response.bodyAsText().let {
@@ -36,8 +37,21 @@ class CatalogTest {
         }
 
         // then
-        assertContentEquals(listOf("skills"), body.keys.toList())
         assertEquals(HttpStatusCode.OK, response.status)
+        assertContentEquals(listOf("skills"), body.keys.toList())
+    }
+
+    @Test
+    fun `test GET companies`() = testCatalogApplication {
+        // given ... when
+        val response = client.get("/companies")
+        val body = response.bodyAsText().let {
+            Json.decodeFromString<Map<String, List<Company>>>(it)
+        }
+
+        // then
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertContentEquals(listOf("companies"), body.keys.toList())
     }
 
     private fun testCatalogApplication(
