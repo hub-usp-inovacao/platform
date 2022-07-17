@@ -1,7 +1,9 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.DisciplineService
+import br.usp.inovacao.hubusp.server.catalog.SearchResearchers
 import br.usp.inovacao.hubusp.server.persistence.CatalogDisciplineRepositoryImpl
+import br.usp.inovacao.hubusp.server.persistence.CatalogResearcherRepositoryImpl
 import br.usp.inovacao.hubusp.server.persistence.configureDB
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -22,6 +24,9 @@ fun Application.catalog() {
     val searchDisciplines = CatalogDisciplineRepositoryImpl(db)
         .let { DisciplineService(it) }
 
+    val searchResearchers = CatalogResearcherRepositoryImpl(db)
+        .let { SearchResearchers(it) }
+
     routing {
         get("/disciplines") {
             val params = call.request.queryParameters.toMap()
@@ -30,6 +35,17 @@ fun Application.catalog() {
             call.respond(
                 HttpStatusCode.OK,
                 mapOf("disciplines" to disciplines)
+            )
+        }
+
+        get("/skills") {
+            val params = call.request.queryParameters
+
+            val researchers = searchResearchers.search(params.toResearcherSearchParams())
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("skills" to researchers)
             )
         }
     }
