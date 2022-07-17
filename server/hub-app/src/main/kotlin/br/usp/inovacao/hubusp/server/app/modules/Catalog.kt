@@ -1,7 +1,9 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.DisciplineService
+import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.server.catalog.SearchResearchers
+import br.usp.inovacao.hubusp.server.persistence.CatalogCompanyRepositoryImpl
 import br.usp.inovacao.hubusp.server.persistence.CatalogDisciplineRepositoryImpl
 import br.usp.inovacao.hubusp.server.persistence.CatalogResearcherRepositoryImpl
 import br.usp.inovacao.hubusp.server.persistence.configureDB
@@ -27,6 +29,9 @@ fun Application.catalog() {
     val searchResearchers = CatalogResearcherRepositoryImpl(db)
         .let { SearchResearchers(it) }
 
+    val searchCompanies = CatalogCompanyRepositoryImpl(db)
+        .let { SearchCompanies(it) }
+
     routing {
         get("/disciplines") {
             val params = call.request.queryParameters.toMap()
@@ -46,6 +51,17 @@ fun Application.catalog() {
             call.respond(
                 HttpStatusCode.OK,
                 mapOf("skills" to researchers)
+            )
+        }
+
+        get("/companies") {
+            val params = call.request.queryParameters
+
+            val companies = searchCompanies.search(params.toCompanySearchParams())
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("companies" to companies)
             )
         }
     }
