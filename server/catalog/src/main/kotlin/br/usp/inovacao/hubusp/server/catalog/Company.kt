@@ -15,7 +15,7 @@ data class Company(
     val phones: Set<String>,
     val services: Set<String>,
     val technologies: Set<String>,
-    val url: String
+    val url: String? = null
 )
 
 @kotlinx.serialization.Serializable
