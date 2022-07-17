@@ -1,9 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
-import br.usp.inovacao.hubusp.server.catalog.DisciplineService
-import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
-import br.usp.inovacao.hubusp.server.catalog.SearchPatents
-import br.usp.inovacao.hubusp.server.catalog.SearchResearchers
+import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -32,6 +29,9 @@ fun Application.catalog() {
 
     val searchPatents = CatalogPatentRepositoryImpl(db)
         .let { SearchPatents(it) }
+
+    val searchInitiatives = CatalogInitiativeRepositoryImpl(db)
+        .let { SearchInitiatives(it) }
 
     routing {
         get("/disciplines") {
@@ -74,6 +74,17 @@ fun Application.catalog() {
             call.respond(
                 HttpStatusCode.OK,
                 mapOf("patents" to patents)
+            )
+        }
+
+        get("/initiatives") {
+            val params = call.request.queryParameters
+
+            val initiatives = searchInitiatives.search(params.toInitiativeSearchParams())
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("initiatives" to initiatives)
             )
         }
     }

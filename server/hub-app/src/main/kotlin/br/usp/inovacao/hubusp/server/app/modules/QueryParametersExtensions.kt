@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
 import br.usp.inovacao.hubusp.server.catalog.PatentSearchParams
 import br.usp.inovacao.hubusp.server.catalog.ResearcherSearchParams
 import io.ktor.http.Parameters
@@ -25,4 +26,9 @@ fun Parameters.toPatentSearchParams() = PatentSearchParams(
     majorAreas = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
     minorAreas = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
     status = this["status"]
+)
+
+fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(
+    classifications = this["classifications"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"]
 )
