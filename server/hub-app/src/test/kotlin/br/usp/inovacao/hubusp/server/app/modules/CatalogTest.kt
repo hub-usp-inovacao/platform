@@ -1,9 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
-import br.usp.inovacao.hubusp.server.catalog.Company
-import br.usp.inovacao.hubusp.server.catalog.Discipline
-import br.usp.inovacao.hubusp.server.catalog.Patent
-import br.usp.inovacao.hubusp.server.catalog.Researcher
+import br.usp.inovacao.hubusp.server.catalog.*
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
@@ -66,6 +63,19 @@ class CatalogTest {
         // then
         assertEquals(HttpStatusCode.OK, response.status)
         assertContentEquals(listOf("patents"), body.keys.toList())
+    }
+
+    @Test
+    fun `test GET initiatives`() = testCatalogApplication {
+        // given ... when
+        val response = client.get("/initiatives")
+        val body = response.bodyAsText().let {
+            Json.decodeFromString<Map<String, List<Initiative>>>(it)
+        }
+
+        // then
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertContentEquals(listOf("initiatives"), body.keys.toList())
     }
 
     private fun testCatalogApplication(
