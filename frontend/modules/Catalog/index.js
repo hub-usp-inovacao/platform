@@ -17,6 +17,11 @@ export default function CatalogModule() {
         name: "competencias",
         path: "/competencias",
         component: path.resolve(__dirname, "pages/competencias.vue"),
+      },
+      {
+        name: "patentes",
+        path: "/patentes",
+        component: path.resolve(__dirname, "pages/patentes.vue"),
       }
     );
   });
@@ -32,6 +37,10 @@ export default function CatalogModule() {
     },
     {
       src: "~/modules/Catalog/plugins/ResearcherAdapter.js",
+      mode: "client",
+    },
+    {
+      src: "~/modules/Catalog/plugins/PatentAdapter.js",
       mode: "client",
     }
   );
