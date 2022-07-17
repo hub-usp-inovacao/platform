@@ -6,7 +6,6 @@
         description="Nesta seção, você pode consultar quais as competências dos pesquisadores da USP, quem são e como contatá-los. A Plataforma Hub USPInovação utiliza como parâmetro de divisão de competências a Tabela das Áreas do Conhecimento apresentada pelo CNPq, e divide-as em dois níveis principais correspondentes, respectivamente, à área do conhecimento (ex.: Ciências Exatas e da Terra) e sua subárea (ex.: Matemática)."
         url="https://docs.google.com/forms/d/e/1FAIpQLSc-OmhsvBSUDBvx6uR6cvI6zq01M-_7JqdX4ktcB9mLE3oWzw/viewform"
         forms-call="Cadastre suas competências"
-        :value="preSearch"
         @search="search.term = $event"
         @clear="search.skills = undefined"
       />
@@ -15,18 +14,13 @@
     <Background class="absolute" />
 
     <MultipleFilters
-      :pre-selected-tabs="preSelectedTabs"
       :tabs="tabs"
       :colors="{ active: '#9b4c68', base: '#6b1c28' }"
       :groups="groups"
       @select="filters = $event"
     />
 
-    <DisplayData
-      :items="displayItems"
-      group-name="Pesquisador"
-      :selected="preSelected"
-    >
+    <DisplayData :items="researchers" group-name="Pesquisador">
       <template #title="{ item }">{{ item.name }}</template>
       <template #detailsText="{ item }">
         <v-container>
@@ -72,10 +66,10 @@
       </template>
       <template #detailsImg="{ item }">
         <v-img
-          v-if="item.picture"
-          :key="item.picture"
+          v-if="item.photo"
+          :key="item.photo"
           :lazy-src="require('@/static/base_skill_picture.png')"
-          :src="item.picture"
+          :src="item.photo"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -133,13 +127,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { removeAccent } from "@/lib/format";
+import { debounce } from "debounce";
 
-import Background from "@/components/first_level/Background.vue";
-import Panel from "@/components/first_level/Panel.vue";
-import MultipleFilters from "@/components/first_level/MultipleFilters.vue";
-import DisplayData from "@/components/first_level/DisplayData.vue";
+import Background from "../components/Background.vue";
+import DisplayData from "../components/DisplayData.vue";
+import MultipleFilters from "../components/MultipleFilters.vue";
+import Panel from "../components/Panel.vue";
 
 export default {
   components: {
@@ -159,22 +152,18 @@ export default {
       { key: "services", title: "Serviços Tecnológicos" },
       { key: "equipments", title: "Equipamentos" },
     ],
-
     filters: undefined,
-    filtered: undefined,
-    queryParam: undefined,
-    routeParam: undefined,
-
     unities: undefined,
+    researchers: [],
   }),
   computed: {
-    ...mapGetters({
-      dataStatus: "competencia/dataStatus",
-      isEmpty: "competencia/isEmpty",
-      skills: "competencia/skills",
-      searchKeys: "competencia/searchKeys",
-      bonds: "competencia/bonds",
-    }),
+    bonds() {
+      return this.researchers.reduce((acc, researcher) => {
+        return acc.includes(researcher.bond)
+          ? acc
+          : acc.concat(researcher.bond);
+      }, []);
+    },
     tabs() {
       return this.$knowledgeAreas.map((area) => ({ ...area, description: "" }));
     },
@@ -188,128 +177,43 @@ export default {
         {
           label: "Unidade",
           items:
-            this.unities == undefined
+            this.unities === undefined
               ? this.$campi
                   .reduce((acc, value) => {
                     return acc.concat(value.unities);
                   }, [])
                   .sort()
               : this.unities,
-          preSelected: this.queryParam ? this.queryParam.unidade : undefined,
         },
         {
           label: "Vínculo do Pesquisador",
           items: this.bonds,
-          preSelected: this.queryParam ? this.queryParam.vinculo : undefined,
         },
       ];
-    },
-    baseItems() {
-      return this.filtered !== undefined ? this.filtered : this.skills;
-    },
-    displayItems() {
-      return this.search.skills !== undefined
-        ? this.search.skills
-        : this.baseItems;
     },
     searchTerm() {
       return this.search.term;
     },
-    preSelected() {
-      if (this.queryParam && this.queryParam.nome) {
-        return this.displayItems.find(
-          (item) => item.name == this.queryParam.nome
-        );
-      }
-
-      return this.routeParam;
-    },
-    preSearch() {
-      return this.queryParam ? this.queryParam.buscar : undefined;
-    },
-    preSelectedTabs() {
-      if (this.queryParam && this.queryParam.areas) {
-        return this.queryParam.areas
-          .split(";")
-          .map((area) => area.trim())
-          .filter((area) => area.trim().length > 0);
-      }
-
-      return undefined;
-    },
   },
   watch: {
-    isEmpty() {
-      if (!this.isEmpty) {
-        if (this.filters != undefined || this.searchTerm != "") {
-          this.pipeline();
-        }
+    filters: debounce(async function () {
+      const params = {
+        areaMajors: this.filters.primary,
+        areaMinors: this.filters.secondary,
+        campus: this.filters.terciary[0],
+        unity: this.filters.terciary[1],
+        bond: this.filters.terciary[2],
+      };
+
+      try {
+        this.researchers = await this.$ResearcherAdapter.filterData(params);
+      } catch (error) {
+        console.log(error);
       }
-    },
-    searchTerm() {
-      this.pipeline();
-    },
-    filters() {
-      this.pipeline();
-    },
+    }, 1000),
   },
-  beforeMount() {
-    const env = { sheetsAPIKey: process.env.sheetsAPIKey };
-    const route = this.$route;
-
-    if (this.dataStatus == "ok" && this.skills.length == 0)
-      this.fetchSpreadsheets({ ...env, areas: this.$knowledgeAreas });
-
-    if (route.params.id) {
-      this.routeParam = this.skills.find(
-        (skill) => skill.id == route.params.id
-      );
-    } else if (route.query && Object.keys(route.query).length > 0) {
-      this.queryParam = route.query;
-    }
-
-    if (this.queryParam && this.queryParam.buscar) {
-      this.search.term = this.queryParam.buscar;
-    }
-  },
-  methods: {
-    ...mapActions({
-      fetchSpreadsheets: "competencia/fetchSpreadsheets",
-      setStrictResults: "global/setStrictResults",
-      setFlexibleResults: "global/setFlexibleResults",
-    }),
-    fuzzySearch() {
-      const searchResult = this.$fuzzySearch(
-        removeAccent(this.search.term.trim()),
-        this.baseItems,
-        this.searchKeys
-      );
-
-      this.search.skills = searchResult;
-    },
-    filterData(context) {
-      const campi = context.terciary[0];
-      this.unities =
-        campi != undefined
-          ? this.$campi.find((c) => c.name == campi).unities
-          : undefined;
-
-      this.filtered = this.skills.filter((skill) =>
-        this.$skillMatchesFilter(skill, context)
-      );
-    },
-    async pipeline() {
-      if (this.filters) this.filterData(this.filters);
-
-      if (this.search.term && this.search.term.trim()) {
-        this.$ga.event({
-          eventCategory: "Competências",
-          eventAction: "Search",
-          eventLabel: this.search.term,
-        });
-        this.fuzzySearch();
-      }
-    },
+  async beforeMount() {
+    this.researchers = await this.$ResearcherAdapter.requestData();
   },
 };
 </script>

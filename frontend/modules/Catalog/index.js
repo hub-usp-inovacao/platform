@@ -12,6 +12,11 @@ export default function CatalogModule() {
         name: "empresas",
         path: "/empresas",
         component: path.resolve(__dirname, "pages/empresas.vue"),
+      },
+      {
+        name: "competencias",
+        path: "/competencias",
+        component: path.resolve(__dirname, "pages/competencias.vue"),
       }
     );
   });
@@ -23,6 +28,10 @@ export default function CatalogModule() {
     },
     {
       src: "~/modules/Catalog/plugins/CompanyAdapter.js",
+      mode: "client",
+    },
+    {
+      src: "~/modules/Catalog/plugins/ResearcherAdapter.js",
       mode: "client",
     }
   );
