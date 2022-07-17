@@ -10,7 +10,6 @@
         second-call="Atualize seu cadastro aqui"
         third-url="/DNA_manual.pdf"
         third-call="Manual de uso da marca DNA USP"
-        :value="preSearch"
         @search="search.term = $event"
         @clear="search.companies = undefined"
       />
@@ -20,25 +19,20 @@
     <Background class="absolute" />
 
     <MultipleFilters
-      :pre-selected-tabs="preSelectedTabs"
       :tabs="tabs"
       :groups="groups"
       :colors="{ base: '#074744', active: '#0A8680' }"
       @select="filters = $event"
     />
 
-    <DisplayData
-      :items="displayItems"
-      group-name="Empresas"
-      :selected="preSelected"
-    >
+    <DisplayData :items="companies" group-name="Empresas">
       <template #title="{ item }">{{ item.name }}</template>
       <template #detailsText="{ item }">
         <v-container>
           <p v-for="phone in item.phones" :key="phone">{{ phone }}</p>
           <p v-for="email in item.emails" :key="email">{{ email }}</p>
           <p>{{ item.address.venue }}</p>
-          <p>{{ item.address.neightborhood }}</p>
+          <p>{{ item.address.neighborhood }}</p>
           <p>{{ item.address.city.join(",") }} - {{ item.address.state }}</p>
           <p>{{ item.address.cep }}</p>
         </v-container>
@@ -110,57 +104,81 @@
         >
       </template>
     </DisplayData>
-    <p
-      align="center"
-      justify="center"
-      class="grey--text font-weight-medium my-5"
-    >
+    <p class="grey--text font-weight-medium my-5">
       As informações nesta seção são de responsabilidade de cada empresa.
     </p>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { removeAccent } from "@/lib/format";
+import { debounce } from "debounce";
 
-import Background from "@/components/first_level/Background.vue";
-import USPDNA from "@/components/first_level/USPDNA.vue";
-import Panel from "@/components/first_level/Panel.vue";
-import MultipleFilters from "@/components/first_level/MultipleFilters.vue";
-import DisplayData from "@/components/first_level/DisplayData.vue";
-import BulletList from "@/components/first_level/BulletList.vue";
+import Background from "../components/Background";
+import BulletList from "../components/BulletList.vue";
+import DisplayData from "../components/DisplayData.vue";
+import MultipleFilters from "../components/MultipleFilters.vue";
+import Panel from "../components/Panel.vue";
+import USPDNA from "../components/USPDNA.vue";
 
 export default {
   components: {
-    Panel,
-    MultipleFilters,
     Background,
-    DisplayData,
-    USPDNA,
     BulletList,
+    DisplayData,
+    MultipleFilters,
+    Panel,
+    USPDNA,
   },
   data: () => ({
     filters: undefined,
-    filtered: undefined,
     search: {
       term: "",
       companies: undefined,
     },
-    queryParam: undefined,
-    routeParam: undefined,
+    companies: [],
   }),
   computed: {
-    ...mapGetters({
-      dataStatus: "empresas/dataStatus",
-      companies: "empresas/companies",
-      searchKeys: "empresas/searchKeys",
-      incubators: "empresas/incubators",
-      cities: "empresas/cities",
-      isEmpty: "empresas/isEmpty",
-    }),
-    searchTerm() {
-      return this.search.term;
+    incubators() {
+      return this.companies
+        .reduce((incubators, company) => {
+          const newIncubators = company.ecosystems.filter(
+            (incub) => !incubators.includes(incub)
+          );
+
+          return incubators.concat(newIncubators);
+        }, [])
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    },
+    cities() {
+      const cities = this.companies.reduce((all, company) => {
+        return all.concat(
+          company.address.city.filter((city) => {
+            return city !== "N/D" && city !== "n/d";
+          })
+        );
+      }, []);
+
+      const citiesSet = cities
+        .map((city) => city.trim())
+        .filter((city) => city.length > 0)
+        .reduce((set, city) => {
+          if (!set[city]) {
+            set[city] = city;
+          }
+
+          return set;
+        }, {});
+
+      return Object.keys(citiesSet).sort((a, b) => a.localeCompare(b));
+    },
+    companySizes() {
+      return this.companies.reduce((sizes, comp) => {
+        comp.companySize.forEach((sz) => {
+          sizes.includes(sz) || sizes.push(sz);
+        });
+
+        return sizes;
+      }, []);
     },
     tabs() {
       return Object.keys(this.$cnae).reduce((acc, code) => {
@@ -182,122 +200,46 @@ export default {
         return acc;
       }, []);
     },
-    baseItems() {
-      return this.filtered !== undefined ? this.filtered : this.companies;
-    },
-    displayItems() {
-      return this.search.companies !== undefined
-        ? this.search.companies
-        : this.baseItems;
-    },
     groups() {
       return [
         {
           label: "Cidade",
           items: this.cities,
-          preSelected: this.queryParam ? this.queryParam.cidade : undefined,
         },
         {
           label: "Habitat de Inovação",
           items: this.incubators,
-          preSelected: this.queryParam ? this.queryParam.incubadora : undefined,
         },
         {
           label: "Porte",
-          items: this.$Company.sizes,
-          preSelected: this.queryParam ? this.queryParam.porte : undefined,
+          items: this.companySizes,
         },
       ];
     },
-    preSelected() {
-      if (this.queryParam && this.queryParam.nome) {
-        return this.displayItems.find(
-          (item) => item.name == this.queryParam.nome
-        );
-      }
-
-      return this.routeParam;
-    },
-    preSearch() {
-      return this.queryParam ? this.queryParam.buscar : undefined;
-    },
-    preSelectedTabs() {
-      if (this.queryParam && this.queryParam.areas) {
-        return this.queryParam.areas
-          .split(";")
-          .map((area) => area.trim())
-          .filter((area) => area.trim().length > 0);
-      }
-
-      return undefined;
-    },
   },
   watch: {
-    isEmpty() {
-      if (!this.empty) {
-        if (this.filters != undefined || this.searchTerm != "") {
-          this.pipeline();
-        }
+    filters: debounce(async function () {
+      const params = {
+        areaMajors: this.filters.primary,
+        areaMinors: this.filters.secondary,
+        city: this.filters.terciary[0],
+        ecosystem: this.filters.terciary[1],
+        size: this.filters.terciary[2],
+      };
+
+      try {
+        this.companies = await this.$CompanyAdapter.filterData(params);
+      } catch (error) {
+        console.log(error);
       }
-    },
-    searchTerm() {
-      this.pipeline();
-    },
-    filters() {
-      this.pipeline();
-    },
+    }, 1000),
   },
-  beforeMount() {
-    const route = this.$route;
-
-    if (this.dataStatus == "ok" && this.companies.length == 0) {
-      this.fetchSpreadsheets({});
+  async beforeMount() {
+    try {
+      this.companies = await this.$CompanyAdapter.requestData();
+    } catch (error) {
+      console.log(error);
     }
-
-    if (route.params.id) {
-      this.routeParam = this.companies.find(
-        (company) => company._id.$oid == route.params.id
-      );
-    } else if (route.query && Object.keys(route.query).length > 0) {
-      this.queryParam = route.query;
-    }
-
-    if (this.queryParam && this.queryParam.buscar) {
-      this.search.term = this.queryParam.buscar;
-    }
-  },
-  methods: {
-    ...mapActions({
-      fetchSpreadsheets: "empresas/fetchSpreadsheets",
-      setStrictResults: "global/setStrictResults",
-      setFlexibleResults: "global/setFlexibleResults",
-    }),
-    fuzzySearch() {
-      const searchResult = this.$fuzzySearch(
-        removeAccent(this.search.term.trim()),
-        this.baseItems,
-        this.searchKeys
-      );
-
-      this.search.companies = searchResult;
-    },
-    filterData(context) {
-      this.filtered = this.companies.filter((company) =>
-        this.$companyMatchesFilter(company, context)
-      );
-    },
-    async pipeline() {
-      if (this.filters) this.filterData(this.filters);
-
-      if (this.search.term && this.search.term.trim()) {
-        this.$ga.event({
-          eventCategory: "Empresas",
-          eventAction: "Search",
-          eventLabel: this.search.term,
-        });
-        this.fuzzySearch();
-      }
-    },
   },
 };
 </script>
