@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Group
 import br.usp.inovacao.hubusp.server.catalog.KnowledgeAreas
 import br.usp.inovacao.hubusp.server.catalog.Researcher
 import br.usp.inovacao.hubusp.server.catalog.ResearcherSearchParams
@@ -114,15 +113,6 @@ internal class CatalogResearcherRepositoryImplTest {
             email = "fulano@usp.br",
             unities = setOf("IME"),
             campus = "Butantã",
-            groups = setOf(
-                Group(
-                    name = "Laboratório de Testes",
-                    initials = "LabT",
-                    category = "Laboratório",
-                    bond = "Coordenador",
-                    site = "https://labt.ime.usp.br"
-                )
-            ),
             skills = setOf("testes automatizados"),
             equipments = emptySet(),
             services = emptySet(),
@@ -141,15 +131,6 @@ internal class CatalogResearcherRepositoryImplTest {
             email = "fulano@usp.br",
             unities = setOf("ABC"),
             campus = "USP Leste",
-            groups = setOf(
-                Group(
-                    name = "Laboratório de Testes",
-                    initials = "LabT",
-                    category = "Laboratório",
-                    bond = "Coordenador",
-                    site = "https://labt.ime.usp.br"
-                )
-            ),
             skills = setOf("testes automatizados"),
             equipments = emptySet(),
             services = emptySet(),
