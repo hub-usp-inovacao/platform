@@ -22,6 +22,11 @@ export default function CatalogModule() {
         name: "patentes",
         path: "/patentes",
         component: path.resolve(__dirname, "pages/patentes.vue"),
+      },
+      {
+        name: "iniciativas",
+        path: "/iniciativas",
+        component: path.resolve(__dirname, "pages/iniciativas.vue"),
       }
     );
   });
@@ -41,6 +46,10 @@ export default function CatalogModule() {
     },
     {
       src: "~/modules/Catalog/plugins/PatentAdapter.js",
+      mode: "client",
+    },
+    {
+      src: "~/modules/Catalog/plugins/InitiativeAdapter.js",
       mode: "client",
     }
   );
