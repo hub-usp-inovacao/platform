@@ -1,41 +1,41 @@
 function DisciplineAdapter(axios) {
-  const baseURL = "http://localhost:8080"
+  const baseURL = "http://localhost:8080";
 
   async function requestData() {
-    const url = baseURL + "/disciplines"
+    const url = baseURL + "/disciplines";
 
     try {
-      const { disciplines } = await axios.$get(url)
-      return disciplines
+      const { disciplines } = await axios.$get(url);
+      return disciplines;
     } catch (error) {
-      return []
+      return [];
     }
   }
 
   async function filterData(prms) {
-    const url = baseURL + "/disciplines"
+    const url = baseURL + "/disciplines";
 
-    const params = Object.assign({}, prms)
+    const params = Object.assign({}, prms);
 
     if (params.categories?.length > 0) {
-      params.categories = params.categories.join(',')
+      params.categories = params.categories.join(",");
     }
 
     try {
-      const { disciplines } = await axios.$get(url, { params })
-      return disciplines
+      const { disciplines } = await axios.$get(url, { params });
+      return disciplines;
     } catch (error) {
-      return []
+      return [];
     }
   }
 
   return {
     requestData,
-    filterData
-  }
+    filterData,
+  };
 }
 
 export default (context, inject) => {
-  const adapter = DisciplineAdapter(context.$axios)
-  inject("DisciplineAdapter", adapter)
-}
+  const adapter = DisciplineAdapter(context.$axios);
+  inject("DisciplineAdapter", adapter);
+};
