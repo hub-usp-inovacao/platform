@@ -1,10 +1,13 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
-import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
-import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
-import br.usp.inovacao.hubusp.server.catalog.PatentSearchParams
-import br.usp.inovacao.hubusp.server.catalog.ResearcherSearchParams
+import br.usp.inovacao.hubusp.server.catalog.*
 import io.ktor.http.Parameters
+
+
+fun Parameters.toPDISearchParams() = PDISearchParams(
+    categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+)
 
 fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
     majorArea = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
