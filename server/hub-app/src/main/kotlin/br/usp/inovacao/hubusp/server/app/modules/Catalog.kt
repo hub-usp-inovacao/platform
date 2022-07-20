@@ -33,7 +33,21 @@ fun Application.catalog() {
     val searchInitiatives = CatalogInitiativeRepositoryImpl(db)
         .let { SearchInitiatives(it) }
 
+    val repo = CatalogPDIRepositoryImpl()
+    val searchPDIs = SearchPDIs(repo)
+
     routing {
+        get("/pdis") {
+            val params = call.request.queryParameters
+
+            val pdis = searchPDIs.search(params.toPDISearchParams())
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("pdis" to pdis)
+            )
+        }
+
         get("/disciplines") {
             val params = call.request.queryParameters.toMap()
             val disciplines = searchDisciplines.search(params)

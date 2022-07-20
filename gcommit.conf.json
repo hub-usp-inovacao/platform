@@ -1,0 +1,24 @@
+{
+  "team": [
+    {
+      "name": "Briza Mel",
+      "email": "brizamel.dias@gmail.com",
+      "tag": "BM"
+    },
+    {
+      "name": "João Daniel",
+      "email": "jotaf.daniel@gmail.com",
+      "tag": "JD"
+    },
+    {
+      "name": "Luiz Carlos",
+      "email": "luizcarlosdk@hotmail.com",
+      "tag": "LC"
+    },
+    {
+      "name": "Marilia Dicezare",
+      "email": "mariliatd@gmail.com",
+      "tag": "MD"
+    }
+  ]
+}
