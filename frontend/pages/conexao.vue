@@ -258,6 +258,19 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
               chips
             ></v-combobox>
           </div>
+
+              <div>
+            <legend class="legendColor">
+              Como ficou sabendo do Hub USP Inovação ? (opcional)
+            </legend>
+            <v-combobox
+              v-model="conexao.demand.knownForm"
+              :items="radioButtonData[4]"
+              label="Escolha entre as opções disponíveis, ou digite outras caso necessário"
+              multiple
+              chips
+            ></v-combobox>
+          </div>
         </v-container>
         <v-checkbox
           v-model="confirmation"
@@ -331,6 +344,7 @@ export default {
         expectation: "",
         wantedProfile: "",
         necessity: "",
+        knownForm: "",
       },
     },
     images: null,
@@ -361,6 +375,17 @@ export default {
         "Desenvolvimento de P&D em parceria",
         "Identificação de startup para investimento ou contratação de serviços",
         "Identificação de especialista para assessoria técnica",
+      ],
+      [
+      "Indicação pessoal",
+      "Notícia na imprensa",
+      "Evento (palestra, webinar, etc.)",
+      "E-mail/newsletter",
+      "Linkedin",
+      "Facebook",
+      "Twitter",
+      "Instagram",
+      "Material impresso (cartaz, folder, etc.)",
       ],
     ],
     rules: {
