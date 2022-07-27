@@ -16,8 +16,7 @@ task skill_update_report: :environment do
   ApplicationMailer.skill_update_data(sheet).deliver_now
 
   reqs.each do |req|
-    req.delivered = true
-    req.save
+    req.update_attributes(delivered:true)
   end
   log(:skill_update_report, "ended")
 end
@@ -28,8 +27,8 @@ task mail_reports: :environment do
   Report.where(delivered: false).each do |report|
     ApplicationMailer.with(warnings: report.warnings, sheet_id: report.sheet_id,
                            entity: report.entity).warnings.deliver_now
-    report.delivered = true
-    report.save
+  report.update_attributes(delivered:true)
+
   end
   log('mail_reports', 'reports mailed!')
 end
@@ -43,8 +42,8 @@ task mail_updates: :environment do
     ApplicationMailer.update_companies.deliver_now
 
     new_updates.each do |company|
-      company.delivered = true
-      company.save
+      company.update_attributes(delivered:true)
+
     end
   end
   log('mail_updates', 'updated companies mailed!')
@@ -59,8 +58,7 @@ task mail_conexao: :environment do
     ApplicationMailer.with(entities: new_entries).conexao.deliver_now
 
     new_entries.each do |entry|
-      entry.delivered = true
-      entry.save
+      entry.update_attributes(delivered:true)
     end
   end
   log('mail_conexao', 'new Conexão USP entries mailed!')
