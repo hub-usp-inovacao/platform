@@ -27,7 +27,7 @@ class Conexao
   end
 
   def validate_demand
-    attr = %i[cnae description expectation wantedProfile necessity]
+    attr = %i[cnae description expectation wantedProfile necessity knownform]
     return unless validate_fields(demand, attr)
 
     major = demand[:cnae][:major]
