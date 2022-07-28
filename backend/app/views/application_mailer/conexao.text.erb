@@ -13,7 +13,7 @@ Hub USP Inovação: Aviso sobre novas demandas cadastradas no Conexão USP
       - <%= "#{@personal_labels[i]}: #{entity.personal[attr]}" %>
     <% end %>
     * Dados da organização:
-    <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
+    <% %i[name email cnpj size phone address city].each_with_index do |attr, i| %>
       - <%= "#{@org_labels[i]}: #{entity.org[attr]}" %>
     <% end %>
     * Demanda:

@@ -15,7 +15,7 @@
       <Panel
         title="Conexão USP"
         description="O programa Conexão USP é uma iniciativa da Agência USP de Inovação, que tem por objetivo intermediar o contato de empresas, entidades sem fins lucrativos e órgãos governamentais com os pesquisadores da Universidade de São Paulo, visando estabelecer parcerias nas áreas de pesquisa e inovação.
-Para participar, cadastre sua demanda no formulário abaixo, e com base nas informações fornecidas nossa equipe irá buscar na Universidade as competências técnico-científicas que melhor atendam suas necessidades."
+Para participar, cadastre sua demanda no formulário abaixo, e com base nas informações fornecidas nossa equipe irá buscar na Universidade as competências técnico-científicas que melhor atendam suas necessidades. Todas as informações inseridas neste formulário serão utilizadas única e exclusivamente para uso interno da AUSPIN, e não serão divulgadas em nenhum meio público."
         no-search
       />
     </div>
@@ -82,15 +82,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             mask="##.###.###/####-##"
             :rule="/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/"
           />
-          <v-radio-group
-            v-model="conexao.org.sensitiveData"
-            label="Você deseja manter sigilo em relação ao nome da organização?"
-            :rules="rules.value"
-          >
-            <v-radio value="Sim" label="Sim" />
-            <v-radio value="Não" label="Não" />
-          </v-radio-group>
-
           <v-row>
             <v-col sm="12" md="6">
               <v-radio-group
@@ -193,7 +184,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             <legend class="legendColor">
               Faça um breve resumo de sua demanda (Descreva o seu desafio e/ou
               problema para o qual busca uma solução) e cite qual o objetivo de
-              sua demanda.
+              sua demanda. Informe o objetivo para o qual pretende utilizar os resultados. Solicitamos que nenhuma informação de natureza sigilosa seja compartilhada neste campo
             </legend>
             <v-textarea
               v-model="conexao.demand.description"
@@ -242,9 +233,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <v-row>
             <v-col>
               <legend class="legendColor">
-                Qual o perfil do pesquisador o(a) senhor(a) acredita poder sanar
-                suas necessidades? Ou seja, qual deveria ser sua especialização
-                ou área de pesquisa, em sua opinião?
+                Informe a área de conhecimento / especialidade do pesquisador que melhor atenda às suas necessidade
               </legend>
               <v-select
                 v-model="conexao.demand.wantedProfile"
@@ -257,38 +246,51 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             </v-col>
           </v-row>
           <div>
-            <v-radio-group
+            <legend class="legendColor">
+              Qual a sua necessidade em relação a esses pesquisadores?
+            </legend>
+            <v-combobox
               v-model="conexao.demand.necessity"
-              label="Qual a sua necessidade em relação a esses pesquisadores?"
+              :items="radioButtonData[3]"
+              label="Escolha as necessidades, ou digite outras caso necessário"
+              multiple
               :rules="rules.value"
-              @change="enableOtherOption('demand', 'necessity')"
-            >
-              <v-radio
-                v-for="(option, i) of radioButtonData[3]"
-                :key="i"
-                :value="option"
-                :label="option"
-              />
-              <v-radio label="Outro, qual?" value="Outro" />
-            </v-radio-group>
-            <v-row v-if="isOtherDemandEnable">
-              <v-col class="mt-n5 pt-0" cols="6">
-                <v-text-field
-                  v-model="conexao.demand.necessityOther"
-                  :rules="rules.value"
-                  placeholder="Outro, qual?"
-                  autofocus
-                />
-              </v-col>
-            </v-row>
+              chips
+            ></v-combobox>
+          </div>
+
+              <div>
+            <legend class="legendColor">
+              Como ficou sabendo do Hub USP Inovação ? (opcional)
+            </legend>
+            <v-combobox
+              v-model="conexao.demand.knownForm"
+              :items="radioButtonData[4]"
+              label="Escolha entre as opções disponíveis, ou digite outras caso necessário"
+              multiple
+              chips
+            ></v-combobox>
           </div>
         </v-container>
         <v-checkbox
           v-model="confirmation"
-          label="Concordo com todas as normas e funcionamento do Programa Conexão USP."
+          label="Concordo com as diretrizes de uso e funcionamento do Programa Conexão USP."
           :rules="rules.confirmation"
-        />
-
+        >
+          <template v-slot:label>
+            <div>
+              Concordo com as
+              <a
+                target="_blank"
+                href="http://www.inovacao.usp.br/conexaousp/"
+                @click.stop
+              >
+                diretrizes
+              </a>
+              de uso e funcionamento do Programa Conexão USP..
+            </div>
+          </template>
+        </v-checkbox>
         <v-row>
           <v-col class="text-center">
             <v-btn
@@ -317,6 +319,7 @@ export default {
     MaskInput,
   },
   data: () => ({
+    enabled: false,
     conexao: {
       personal: {
         email: "",
@@ -326,7 +329,6 @@ export default {
       org: {
         name: "",
         cnpj: "",
-        sensitiveData: "",
         size: "",
         phone: "",
         address: "",
@@ -342,6 +344,7 @@ export default {
         expectation: "",
         wantedProfile: "",
         necessity: "",
+        knownForm: "",
       },
     },
     images: null,
@@ -372,6 +375,17 @@ export default {
         "Desenvolvimento de P&D em parceria",
         "Identificação de startup para investimento ou contratação de serviços",
         "Identificação de especialista para assessoria técnica",
+      ],
+      [
+      "Indicação pessoal",
+      "Notícia na imprensa",
+      "Evento (palestra, webinar, etc.)",
+      "E-mail/newsletter",
+      "Linkedin",
+      "Facebook",
+      "Twitter",
+      "Instagram",
+      "Material impresso (cartaz, folder, etc.)",
       ],
     ],
     rules: {

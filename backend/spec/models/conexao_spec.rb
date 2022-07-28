@@ -29,7 +29,8 @@ RSpec.describe Conexao, type: :model do
         description: 'Quero elaborar um novo produto para jogadores de futebol',
         expectation: 'Novo produto',
         wantedProfile: 'Saúde',
-        necessity: 'Desenvolvimento de P&D em parceria'
+        necessity: 'Desenvolvimento de P&D em parceria',
+        knownform: 'Facebook, Linkedin'
       }
     }
   end
@@ -56,6 +57,7 @@ RSpec.describe Conexao, type: :model do
       \tExpectativa: #{valid_attr[:demand][:expectation]}
       \tPerfil de pesquisador desejado: #{valid_attr[:demand][:wantedProfile]}
       \tQual é a sua necessidade em relação a esses pesquisadores?: #{valid_attr[:demand][:necessity]}
+      \tComo ficou sabendo do Hub USP Inovação?:  #{valid_attr[:demand][:knownform]}
 
     MULTILINE
   end

@@ -19,16 +19,15 @@ class Conexao
   end
 
   def validate_org
-    attr = %i[name cnpj sensitiveData size phone address city site]
+    attr = %i[name cnpj size phone address city site]
     return unless validate_fields(org, attr)
 
     errors.add(:org, :invalid) unless %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z}.match?(org[:cnpj])
-    errors.add(:org, :invalid) unless %w[Sim Não].include?(org[:sensitiveData])
     errors.add(:org, :invalid) unless %w[Pequena Média Grande].include?(org[:size])
   end
 
   def validate_demand
-    attr = %i[cnae description expectation wantedProfile necessity]
+    attr = %i[cnae description expectation wantedProfile necessity knownform]
     return unless validate_fields(demand, attr)
 
     major = demand[:cnae][:major]
