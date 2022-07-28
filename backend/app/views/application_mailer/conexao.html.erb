@@ -34,7 +34,7 @@
             <strong>Demanda</strong>
             <p><%= "Área Primária: #{entity.demand[:cnae][:major]}" %></p>
             <p><%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %></p>
-            <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
+            <% %i[description expectation wantedProfile necessity knownform].each_with_index do |attr, i| %>
               <p><%= "#{@demand_labels[i]}: #{entity.demand[attr]}" %></p>
             <% end %>
           </li>
