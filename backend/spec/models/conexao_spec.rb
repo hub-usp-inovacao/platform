@@ -14,7 +14,6 @@ RSpec.describe Conexao, type: :model do
       org: {
         name: 'Desempedidos',
         cnpj: '14.952.400/0002-31',
-        sensitiveData: 'Não',
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
@@ -44,7 +43,6 @@ RSpec.describe Conexao, type: :model do
       Dados da organização:
       \tNome: #{valid_attr[:org][:name]}
       \tCNPJ: #{valid_attr[:org][:cnpj]}
-      \tOs dados são sigilosos?: #{valid_attr[:org][:sensitiveData]}
       \tTamanho da empresa: #{valid_attr[:org][:size]}
       \tTelefone: #{valid_attr[:org][:phone]}
       \tEndereço: #{valid_attr[:org][:address]}
@@ -68,7 +66,7 @@ RSpec.describe Conexao, type: :model do
   end
 
   describe 'Org Hash' do
-    %i[cnpj sensitiveData size].each do |attr_name|
+    %i[cnpj size].each do |attr_name|
       it "is invalid with invalid #{attr_name}" do
         attr = valid_attr
         attr[:org][attr_name] = '1127829784'
