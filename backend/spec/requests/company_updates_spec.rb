@@ -124,6 +124,10 @@ RSpec.describe 'CompanyUpdates', type: :request do
   end
 
   context 'when requesting update' do
+    before do
+      allow(ApplicationMailer).to receive(:company_update_token)
+    end
+
     let :mock do
       mock = Object.new
       def mock.emails
