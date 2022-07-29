@@ -13,13 +13,13 @@ Hub USP Inovação: Aviso sobre novas demandas cadastradas no Conexão USP
       - <%= "#{@personal_labels[i]}: #{entity.personal[attr]}" %>
     <% end %>
     * Dados da organização:
-    <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
+    <% %i[name email cnpj size phone address city].each_with_index do |attr, i| %>
       - <%= "#{@org_labels[i]}: #{entity.org[attr]}" %>
     <% end %>
     * Demanda:
       - <%= "Área Primária: #{entity.demand[:cnae][:major]}" %>
       - <%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %>
-    <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
+    <% %i[description expectation wantedProfile necessity knownform].each_with_index do |attr, i| %>
       - <%= "#{@demand_labels[i]}: #{entity.demand[attr]}" %>
     <% end %>
 <% end %>

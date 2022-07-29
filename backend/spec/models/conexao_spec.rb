@@ -14,7 +14,6 @@ RSpec.describe Conexao, type: :model do
       org: {
         name: 'Desempedidos',
         cnpj: '14.952.400/0002-31',
-        sensitiveData: 'Não',
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
@@ -29,7 +28,8 @@ RSpec.describe Conexao, type: :model do
         description: 'Quero elaborar um novo produto para jogadores de futebol',
         expectation: 'Novo produto',
         wantedProfile: 'Saúde',
-        necessity: 'Desenvolvimento de P&D em parceria'
+        necessity: 'Desenvolvimento de P&D em parceria',
+        knownform: 'Facebook, Linkedin'
       }
     }
   end
@@ -43,7 +43,6 @@ RSpec.describe Conexao, type: :model do
       Dados da organização:
       \tNome: #{valid_attr[:org][:name]}
       \tCNPJ: #{valid_attr[:org][:cnpj]}
-      \tOs dados são sigilosos?: #{valid_attr[:org][:sensitiveData]}
       \tTamanho da empresa: #{valid_attr[:org][:size]}
       \tTelefone: #{valid_attr[:org][:phone]}
       \tEndereço: #{valid_attr[:org][:address]}
@@ -56,6 +55,7 @@ RSpec.describe Conexao, type: :model do
       \tExpectativa: #{valid_attr[:demand][:expectation]}
       \tPerfil de pesquisador desejado: #{valid_attr[:demand][:wantedProfile]}
       \tQual é a sua necessidade em relação a esses pesquisadores?: #{valid_attr[:demand][:necessity]}
+      \tComo ficou sabendo do Hub USP Inovação?:  #{valid_attr[:demand][:knownform]}
 
     MULTILINE
   end
@@ -66,7 +66,7 @@ RSpec.describe Conexao, type: :model do
   end
 
   describe 'Org Hash' do
-    %i[cnpj sensitiveData size].each do |attr_name|
+    %i[cnpj size].each do |attr_name|
       it "is invalid with invalid #{attr_name}" do
         attr = valid_attr
         attr[:org][attr_name] = '1127829784'
