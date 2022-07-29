@@ -71,7 +71,7 @@
                       append-outer-icon="search"
                       :dense="$breakpoint.smAndDown"
                       :style="setSearchBarWidth"
-                      @keydown.enter="submitSearch"
+                      @keydown.enter="maintenance"
                     >
                       <template v-slot:label>
                         <p class="white--text font-weight-medium">Buscar</p>
@@ -143,6 +143,12 @@ export default {
     ],
   }),
   computed: {
+    maintenance() {
+      alert(
+        "Este recurso está atualmente em manutenção. Em breve uma atualização será disponibilizada."
+      );
+      location.reload();
+    },
     setSearchBarWidth() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
