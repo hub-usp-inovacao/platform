@@ -19,7 +19,7 @@ Hub USP Inovação: Aviso sobre novas demandas cadastradas no Conexão USP
     * Demanda:
       - <%= "Área Primária: #{entity.demand[:cnae][:major]}" %>
       - <%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %>
-    <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
+    <% %i[description expectation wantedProfile necessity knownform].each_with_index do |attr, i| %>
       - <%= "#{@demand_labels[i]}: #{entity.demand[attr]}" %>
     <% end %>
 <% end %>

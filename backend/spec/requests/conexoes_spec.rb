@@ -29,7 +29,8 @@ RSpec.describe 'Conexoes', type: :request do
         description: 'Quero elaborar um novo produto para jogadores de futebol',
         expectation: 'Novo produto',
         wantedProfile: 'Saúde',
-        necessity: 'Desenvolvimento de P&D em parceria'
+        necessity: 'Desenvolvimento de P&D em parceria',
+        knownform: 'Facebook, Linkedin'
       }
     }
   end
