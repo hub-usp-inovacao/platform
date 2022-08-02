@@ -4,6 +4,11 @@ export default function CatalogModule() {
   this.extendRoutes((routes) => {
     routes.push(
       {
+        name: "inovacao",
+        path: "/inovacao",
+        component: path.resolve(__dirname, "pages/inovacao.vue"),
+      },
+      {
         name: "educacao",
         path: "/educacao",
         component: path.resolve(__dirname, "pages/educacao.vue"),
@@ -32,6 +37,10 @@ export default function CatalogModule() {
   });
 
   this.nuxt.options.plugins.push(
+    {
+      src: "~/modules/Catalog/plugins/PDIAdapter.js",
+      mode: "client",
+    },
     {
       src: "~/modules/Catalog/plugins/DisciplineAdapter.js",
       mode: "client",
