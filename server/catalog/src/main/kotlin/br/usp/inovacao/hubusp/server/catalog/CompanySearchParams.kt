@@ -7,3 +7,4 @@ data class CompanySearchParams(
     val ecosystem: String? = null,
     val size: String? = null
 )
+
