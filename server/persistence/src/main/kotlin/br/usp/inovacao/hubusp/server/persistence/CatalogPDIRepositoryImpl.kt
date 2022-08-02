@@ -3,54 +3,25 @@ package br.usp.inovacao.hubusp.server.persistence
 import br.usp.inovacao.hubusp.server.catalog.PDI
 import br.usp.inovacao.hubusp.server.catalog.PDIRepository
 import br.usp.inovacao.hubusp.server.catalog.PDISearchParams
+import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
+import org.litote.kmongo.find
+import org.litote.kmongo.getCollection
 
-class CatalogPDIRepositoryImpl : PDIRepository {
+class CatalogPDIRepositoryImpl(
+    db: MongoDatabase
+) : PDIRepository {
+
+    private val pdiCollection: MongoCollection<PDI>
+
+    init {
+        pdiCollection = db.getCollection<PDI>("pdis")
+    }
+
     override fun filter(params: PDISearchParams): Set<PDI> {
-        val data = setOf(
-            PDI(
-                category = "Empresa Jr",
-                name = "IME Jr",
-                campus = "Butantã",
-                unity = "IME",
-                coordinator = "Prof. Alfredo Goldman",
-                site = "https://www.ime.usp.br/~imejr",
-                email = "imejr@ime.usp.br",
-                phone = "(11) 3081-6775",
-                description = "IME Jr bla bla bal",
-                tags = setOf("foo", "bar", "baz")
-            ),
-            PDI(
-                category = "Entidade Estudantil",
-                name = "IME Jr",
-                campus = "São Carlos",
-                unity = "IME",
-                coordinator = "Prof. Alfredo Goldman",
-                site = "https://www.ime.usp.br/~imejr",
-                email = "imejr@ime.usp.br",
-                phone = "(11) 3081-6775",
-                description = "IME Jr bla bla bal",
-                tags = setOf("foo", "bar", "baz")
-            )
-        )
+        val filter: String = params.toCollectionFilter()
 
-        val filtered = mutableSetOf<PDI>()
+        return pdiCollection.find(filter).toSet()
 
-        if (params.categories.isNotEmpty()) {
-            data.forEach { pdi ->
-                if (pdi.category in params.categories) {
-                    filtered.add(pdi)
-                }
-            }
-        } else {
-            data.forEach { filtered.add(it) }
-        }
-
-        if (params.campus != null) {
-            filtered.removeIf { pdi ->
-                pdi.campus != params.campus
-            }
-        }
-
-        return filtered
     }
 }
