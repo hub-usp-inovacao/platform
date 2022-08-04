@@ -151,7 +151,6 @@ export default {
     links: {
       auspin: "http://www.inovacao.usp.br/",
       usp: "https://www5.usp.br/",
-      codelab: "https://www.instagram.com/uspcodelab/",
     },
   }),
   computed: {
