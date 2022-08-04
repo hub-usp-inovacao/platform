@@ -1,13 +1,13 @@
-name: CI
+name: rails-CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, if, sti]
 
 jobs:
 
   linters:
-    name: Linters
+    name: Ruby Linters
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,20 +18,23 @@ jobs:
       - name: Ruby gem cache
         uses: actions/cache@v1
         with:
-          path: vendor/bundle
+          path: backend/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Install gems
         run: |
+          cd backend
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Run linters
-        run: bundle exec rubocop --parallel
+        run: |
+          cd backend
+          bundle exec rubocop --parallel
 
   tests:
-    name: Tests
+    name: Ruby Tests
     runs-on: ubuntu-latest
 
     services:
@@ -50,18 +53,21 @@ jobs:
       - name: Ruby gem cache
         uses: actions/cache@v1
         with:
-          path: vendor/bundle
+          path: backend/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
 
       - name: Install gems
         run: |
+          cd backend
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Define Mongoid config
-        run: mv config/mongoid.ci.yml config/mongoid.yml
+        run: mv backend/config/mongoid.ci.yml backend/config/mongoid.yml
 
       - name: Run tests
-        run: bundle exec rspec
+        run: |
+          cd backend
+          bundle exec rspec
