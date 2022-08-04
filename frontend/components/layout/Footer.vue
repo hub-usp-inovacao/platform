@@ -31,7 +31,9 @@
 
           <v-row justify="center">
             <v-col cols="4" md="1" lg="2" offset-lg="0">
-              <v-img :src="require('@/vectors/codelab-ccsl.svg')"></v-img>
+              <a href="https://www.instagram.com/uspcodelab/" target="_blank">
+                <v-img :src="require('@/vectors/codelab-ccsl.svg')"></v-img>
+              </a>
             </v-col>
             <v-col cols="4" md="1" offset-md="1" lg="2" offset-lg="1">
               <a href="http://www.inovacao.usp.br/" target="_blank">
