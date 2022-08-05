@@ -33,7 +33,7 @@ fun Application.catalog() {
     val searchInitiatives = CatalogInitiativeRepositoryImpl(db)
         .let { SearchInitiatives(it) }
 
-    val repo = CatalogPDIRepositoryImpl()
+    val repo = CatalogPDIRepositoryImpl(db)
     val searchPDIs = SearchPDIs(repo)
 
     routing {
