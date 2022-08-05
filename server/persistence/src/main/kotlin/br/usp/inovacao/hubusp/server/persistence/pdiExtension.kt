@@ -15,5 +15,7 @@ fun PDISearchParams.toCollectionFilter(): String {
 
     if (campus != null) inner.add("\"campus\":\"$campus\"")
 
+    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+
     return "{" + inner.joinToString(",") + "}"
 }

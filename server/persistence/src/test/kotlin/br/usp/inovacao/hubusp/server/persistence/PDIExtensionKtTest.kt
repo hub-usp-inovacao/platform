@@ -49,18 +49,37 @@ class PDIExtensionKtTest {
     }
 
     @Test
-    fun `it parses all fields`() {
+    fun `it parses text term`() {
         // given
-        val category1 = "NAP"
-        val category2 = "Centro de Pesquisa em Engenharia"
-        val campus = "Butantã"
-        val params = PDISearchParams(categories = setOf(category1, category2), campus = campus)
+        val term = "dispositivos"
+        val params = PDISearchParams(term = term)
 
         // when
         val result = params.toCollectionFilter()
 
         // then
-        val handmade = "{\"\$or\":[{\"category\":\"$category1\"},{\"category\":\"$category2\"}],\"campus\":\"$campus\"}"
+        val expected = "{\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `it parses all fields`() {
+        // given
+        val category1 = "NAP"
+        val category2 = "Centro de Pesquisa em Engenharia"
+        val campus = "Butantã"
+        val term = "dispositivos"
+        val params = PDISearchParams(
+            categories = setOf(category1, category2),
+            campus = campus,
+            term = term,
+        )
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val handmade = "{\"\$or\":[{\"category\":\"$category1\"},{\"category\":\"$category2\"}],\"campus\":\"$campus\",\"\$text\":{\"\$search\":\"$term\"}}"
         assertEquals(result, handmade)
     }
 }
