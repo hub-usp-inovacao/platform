@@ -86,10 +86,17 @@
               <v-col cols="11" sm="10" offset="1">
                 <v-row>
                   <v-col cols="4" offset="1" md="2">
-                    <v-img :src="require('@/vectors/logo_auspin.svg')"></v-img>
+                    <a :href="links.auspin" target="_blank">
+                      <v-img
+                        :src="require('@/vectors/logo_auspin.svg')"
+                        href
+                      ></v-img>
+                    </a>
                   </v-col>
                   <v-col cols="4" offset="1" md="2">
-                    <v-img :src="require('@/vectors/logo_usp.svg')"></v-img>
+                    <a :href="links.usp" target="_blank">
+                      <v-img :src="require('@/vectors/logo_usp.svg')"></v-img>
+                    </a>
                   </v-col>
                 </v-row>
               </v-col>
@@ -141,6 +148,10 @@ export default {
       require("@/assets/images/img35.jpg"),
       require("@/assets/images/img36.jpg"),
     ],
+    links: {
+      auspin: "http://www.inovacao.usp.br/",
+      usp: "https://www5.usp.br/",
+    },
   }),
   computed: {
     maintenance() {
