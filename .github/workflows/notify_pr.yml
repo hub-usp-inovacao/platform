@@ -2,8 +2,8 @@ name: notify
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ review_requested ]
+    branches: [ main, if, sti ]
+    types: [ ready_for_review ]
 
 jobs:
   notify:
@@ -16,5 +16,5 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           args: |
-            O PR \#${{ github.event.number }} foi solicitado revisão
-            Veja https://github.com/portal-solus/backend/pull/${{ github.event.number }}
+            Pull Request \#${{ github.event.number }} is ready for review
+            https://github.com/hub-usp-inovacao/platform/pull/${{ github.event.number }}
