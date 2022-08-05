@@ -7,6 +7,7 @@ import io.ktor.http.Parameters
 fun Parameters.toPDISearchParams() = PDISearchParams(
     categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
     campus = this["campus"],
+    term = this["term"],
 )
 
 fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
