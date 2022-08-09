@@ -18,5 +18,8 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     db.getCollection<Patent>("patents")
         .createIndex("""{"name":"text","summary":"text","owners":"text","inventors":"text"}""")
 
+    db.getCollection("iniciatives")
+        .createIndex("""{"description":"text","name":"text","tags":"text"}""")
+
     return db
 }
