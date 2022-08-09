@@ -1,7 +1,6 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
-import br.usp.inovacao.hubusp.server.catalog.PDISearchParams
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
