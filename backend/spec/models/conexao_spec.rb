@@ -29,7 +29,7 @@ RSpec.describe Conexao, type: :model do
         expectation: 'Novo produto',
         wantedProfile: 'Saúde',
         necessity: 'Desenvolvimento de P&D em parceria',
-        knownform: 'Facebook, Linkedin'
+        knownForm: 'Facebook, Linkedin'
       }
     }
   end
@@ -73,6 +73,13 @@ RSpec.describe Conexao, type: :model do
         conexao = described_class.new(attr)
         expect(conexao).to be_invalid
       end
+    end
+
+    it "is valid with Microempresa as size" do
+      attr = valid_attr
+      attr[:org][:size] = "Microempresa"
+      conexao = described_class.new(attr)
+      expect(conexao).to be_valid
     end
   end
 
