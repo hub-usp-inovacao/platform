@@ -75,9 +75,9 @@ RSpec.describe Conexao, type: :model do
       end
     end
 
-    it "is valid with Microempresa as size" do
+    it 'is valid with Microempresa as size' do
       attr = valid_attr
-      attr[:org][:size] = "Microempresa"
+      attr[:org][:size] = 'Microempresa'
       conexao = described_class.new(attr)
       expect(conexao).to be_valid
     end

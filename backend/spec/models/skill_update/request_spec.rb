@@ -13,8 +13,8 @@ RSpec.describe SkillUpdate::Request, type: :model do
 
   let :res do
     {
-      skills: ['Cooking', 'Cleaning'],
-      services: ['Programming', 'Teaching'],
+      skills: %w[Cooking Cleaning],
+      services: %w[Programming Teaching],
       equipments: []
     }
   end
@@ -63,5 +63,4 @@ RSpec.describe SkillUpdate::Request, type: :model do
     inst = described_class.new params
     expect(inst).to be_valid
   end
-
 end

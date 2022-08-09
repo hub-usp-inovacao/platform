@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SkillsUpdatesController < ApplicationController
   def request_update
     params = request_update_params
@@ -9,7 +11,6 @@ class SkillsUpdatesController < ApplicationController
       return
     end
 
-    skill = @skill.email
     token = TokenManager.create_token({ email: email })
     ApplicationMailer.skill_update_token(email, token).deliver_now
     render json: { message: 'ok' }, status: :ok

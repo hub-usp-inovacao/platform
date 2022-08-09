@@ -13,9 +13,9 @@ RSpec.describe SkillUpdate::Personal, type: :model do
       personalPhone: '(11) 99655-4228',
       area: {
         major: 'Ciências Exatas e da Natureza',
-        minors: ['Ciência da Computação'],
+        minors: ['Ciência da Computação']
       },
-      keywords: %w{webdev programação}
+      keywords: %w[webdev programação]
     }
   end
 
