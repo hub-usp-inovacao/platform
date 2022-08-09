@@ -5,5 +5,6 @@ data class ResearcherSearchParams(
     val minorArea: Set<String> = emptySet(),
     val campus: String? = null,
     val unity: String? = null,
-    val bond: String? = null
+    val bond: String? = null,
+    val term: String? = null,
 )

@@ -14,5 +14,8 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     db.getCollection<PDI>("pdis")
         .createIndex("""{"name":"text","description":"text","coordinator":"text","tags":"text"}""")
 
+    db.getCollection("skills")
+        .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")
+
     return db
 }
