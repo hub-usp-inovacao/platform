@@ -99,10 +99,6 @@ export default {
         title: "Jornada",
         to: "/jornada",
       },
-      { title: "Conexão",
-        to: "/conexao",
-        new: true
-      },
       {
         title: "Contato",
         to: "/contato",
