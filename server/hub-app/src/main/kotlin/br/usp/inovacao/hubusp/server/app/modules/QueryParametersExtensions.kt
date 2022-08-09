@@ -29,7 +29,8 @@ fun Parameters.toCompanySearchParams() = CompanySearchParams(
 fun Parameters.toPatentSearchParams() = PatentSearchParams(
     majorAreas = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
     minorAreas = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
-    status = this["status"]
+    status = this["status"],
+    term = this["term"],
 )
 
 fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(

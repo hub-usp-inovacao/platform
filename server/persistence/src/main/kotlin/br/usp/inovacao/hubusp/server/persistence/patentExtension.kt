@@ -21,5 +21,7 @@ fun PatentSearchParams.toCollectionFilter(): String {
 
     if (status != null) inner.add("\"status\":\"$status\"")
 
+    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+
     return "{" + inner.joinToString(",") + "}"
 }

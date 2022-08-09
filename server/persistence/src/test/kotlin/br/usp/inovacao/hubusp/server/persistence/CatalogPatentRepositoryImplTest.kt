@@ -74,6 +74,49 @@ internal class CatalogPatentRepositoryImplTest {
         assertTrue { result.all { it.status == status } }
     }
 
+    @Test
+    fun `it filters by single-token text`() {
+        // given
+        val term = "cepa"
+        val params = PatentSearchParams(term = term)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all{
+            it.name.contains(term) || it.summary.contains(term) || it.owners.any { owner -> owner.contains(term) } || it.inventors.any { inventor -> inventor.contains(term) }
+        } }
+    }
+
+    @Test
+    fun `it filters by all fields`() {
+        // given
+        val major = "A - Necessidades Humanas"
+        val minor = "A61 - Ciência médica ou veterinária; higiene"
+        val status = "Concedida"
+        val term = "cepa"
+        val params = PatentSearchParams(
+            majorAreas = setOf(major),
+            minorAreas = setOf(minor),
+            status = status,
+            term = term
+        )
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all {
+            (it.classification.primary.cip == major || it.classification.secondary?.cip == major) &&
+                    (it.classification.primary.subarea == minor || it.classification.secondary?.subarea == minor) &&
+                    it.status == status &&
+                    (it.name.contains(term) || it.summary.contains(term) || it.owners.any { owner -> owner.contains(term) } || it.inventors.any { inventor -> inventor.contains(term) })
+        } }
+    }
+
     private fun cleanTestDb() {
         val patentCollection = testDb.getCollection<Patent>("patents")
         patentCollection.deleteMany("{}")
