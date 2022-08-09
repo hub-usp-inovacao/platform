@@ -76,4 +76,44 @@ internal class PatentExtensionKtTest {
         val expected = "{\"status\":\"$status\"}"
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `it parses text term`() {
+        // given
+        val term = "partículas"
+        val params = PatentSearchParams(term = term)
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val expected = "{\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `it parses all fields`() {
+        // given
+        val major1 = "A - Necessidades Humanas"
+        val major2 = "G - Física"
+        val minor1 = "A61 - Ciência médica ou veterinária; higiene"
+        val minor2 = "G01 - Medição; teste"
+        val status = "Concedida"
+        val term = "partículas"
+        val params = PatentSearchParams(
+            majorAreas = setOf(major1, major2),
+            minorAreas = setOf(minor1, minor2),
+            status = status,
+            term = term,
+        )
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val expected = "{\"\$or\":[{\"classification.primary.cip\":\"$major1\"},{\"classification.secondary.cip\":\"$major1\"},{\"classification.primary.cip\":\"$major2\"},{\"classification.secondary.cip\":\"$major2\"}]," +
+                "\"\$or\":[{\"classification.primary.subarea\":\"$minor1\"},{\"classification.secondary.subarea\":\"$minor1\"},{\"classification.primary.subarea\":\"$minor2\"},{\"classification.secondary.subarea\":\"$minor2\"}]," +
+                "\"status\":\"$status\",\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(expected, result)
+    }
 }

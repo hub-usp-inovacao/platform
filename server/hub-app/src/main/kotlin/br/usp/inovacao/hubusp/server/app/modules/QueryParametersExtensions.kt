@@ -15,7 +15,8 @@ fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
     minorArea = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
     campus = this["campus"],
     unity = this["unity"],
-    bond = this["bond"]
+    bond = this["bond"],
+    term = this["term"]
 )
 
 fun Parameters.toCompanySearchParams() = CompanySearchParams(
@@ -30,10 +31,12 @@ fun Parameters.toCompanySearchParams() = CompanySearchParams(
 fun Parameters.toPatentSearchParams() = PatentSearchParams(
     majorAreas = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
     minorAreas = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
-    status = this["status"]
+    status = this["status"],
+    term = this["term"],
 )
 
 fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(
     classifications = this["classifications"]?.split(",")?.toSet() ?: emptySet(),
-    campus = this["campus"]
+    campus = this["campus"],
+    term = this["term"]
 )

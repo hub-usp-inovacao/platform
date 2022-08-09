@@ -3,6 +3,7 @@ package br.usp.inovacao.hubusp.server.persistence
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.PDI
 import com.mongodb.MongoCommandException
+import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.createIndex
@@ -24,6 +25,16 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         collectionName = "companies",
         indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
     )
+
+
+    db.getCollection("skills")
+        .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")
+
+    db.getCollection<Patent>("patents")
+        .createIndex("""{"name":"text","summary":"text","owners":"text","inventors":"text"}""")
+
+    db.getCollection("iniciatives")
+        .createIndex("""{"description":"text","name":"text","tags":"text"}""")
 
     return db
 }

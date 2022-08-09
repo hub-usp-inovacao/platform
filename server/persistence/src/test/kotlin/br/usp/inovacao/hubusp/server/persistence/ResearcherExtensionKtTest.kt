@@ -106,6 +106,20 @@ internal class ResearcherExtensionKtTest {
     }
 
     @Test
+    fun `it parses text term`() {
+        // given
+        val term = "Ágil"
+        val params = ResearcherSearchParams(term = term)
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val expected = "{\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `it parses a complex set of filters`() {
         // given
         val params = ResearcherSearchParams(
@@ -113,7 +127,8 @@ internal class ResearcherExtensionKtTest {
             bond = "Pesquisador",
             unity = "IME",
             majorArea = setOf("Engenharias"),
-            minorArea = setOf("Engenharia de Minas")
+            minorArea = setOf("Engenharia de Minas"),
+            term = "Ágil"
         )
 
         // when
@@ -130,7 +145,8 @@ internal class ResearcherExtensionKtTest {
             "\"\$or\":[{\"area.minors\":\"Engenharia de Minas\"}]",
             "\"campus\":\"Butantã\"",
             "\"unities\":\"IME\"",
-            "\"bond\":\"Pesquisador\""
+            "\"bond\":\"Pesquisador\"",
+            "\"\$text\":{\"\$search\":\"Ágil\"}"
         ).joinToString(",") +
         "}"
 }
