@@ -29,5 +29,7 @@ fun ResearcherSearchParams.toCollectionFilter(): String {
         inner.add("\"bond\":\"$bond\"")
     }
 
+    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+
     return "{" + inner.joinToString(",") + "}"
 }

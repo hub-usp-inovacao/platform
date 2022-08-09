@@ -25,6 +25,9 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
     )
 
+    db.getCollection("skills")
+        .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")
+
     return db
 }
 

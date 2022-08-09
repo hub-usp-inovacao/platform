@@ -97,6 +97,26 @@ internal class CatalogResearcherRepositoryImplTest {
         assertTrue { result.all { it.bond == bond } }
     }
 
+    @Test
+    fun `it filters by text search`() {
+        // given
+        val term = "Ágil"
+        val params = ResearcherSearchParams(term = term)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all {
+            it.name.contains(term) ||
+                    it.skills.any { skill -> skill.contains(term) } ||
+                    it.equipments.any { equip -> equip.contains(term) } ||
+                    it.services.any { service -> service.contains(term) } ||
+                    it.keywords.any { word -> word.contains(term) }
+        } }
+    }
+
     private fun seedTestDb() {
         val researcherCollection = testDb.getCollection<Researcher>("skills")
         researcherCollection.insertMany(testSeeds())
@@ -113,7 +133,7 @@ internal class CatalogResearcherRepositoryImplTest {
             email = "fulano@usp.br",
             unities = setOf("IME"),
             campus = "Butantã",
-            skills = setOf("testes automatizados"),
+            skills = setOf("testes automatizados", "Desenvolvimento Ágil"),
             equipments = emptySet(),
             services = emptySet(),
             area = KnowledgeAreas(
