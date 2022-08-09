@@ -184,7 +184,9 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             <legend class="legendColor">
               Faça um breve resumo de sua demanda (Descreva o seu desafio e/ou
               problema para o qual busca uma solução) e cite qual o objetivo de
-              sua demanda. Informe o objetivo para o qual pretende utilizar os resultados. Solicitamos que nenhuma informação de natureza sigilosa seja compartilhada neste campo
+              sua demanda. Informe o objetivo para o qual pretende utilizar os
+              resultados. Solicitamos que nenhuma informação de natureza
+              sigilosa seja compartilhada neste campo
             </legend>
             <v-textarea
               v-model="conexao.demand.description"
@@ -197,12 +199,14 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
               :rules="rules.textarea"
             ></v-textarea>
           </div>
+          <!--
           <v-file-input
             multiple
             chips
             label="Caso necessário, coloque arquivos relacionadas a sua demanda"
             @change="uploadImage"
           ></v-file-input>
+          -->
           <div>
             <v-radio-group
               v-model="conexao.demand.expectation"
@@ -233,7 +237,8 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <v-row>
             <v-col>
               <legend class="legendColor">
-                Informe a área de conhecimento / especialidade do pesquisador que melhor atenda às suas necessidade
+                Informe a área de conhecimento / especialidade do pesquisador
+                que melhor atenda às suas necessidade
               </legend>
               <v-select
                 v-model="conexao.demand.wantedProfile"
@@ -259,7 +264,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
             ></v-combobox>
           </div>
 
-              <div>
+          <div>
             <legend class="legendColor">
               Como ficou sabendo do Hub USP Inovação ? (opcional)
             </legend>
@@ -377,15 +382,15 @@ export default {
         "Identificação de especialista para assessoria técnica",
       ],
       [
-      "Indicação pessoal",
-      "Notícia na imprensa",
-      "Evento (palestra, webinar, etc.)",
-      "E-mail/newsletter",
-      "Linkedin",
-      "Facebook",
-      "Twitter",
-      "Instagram",
-      "Material impresso (cartaz, folder, etc.)",
+        "Indicação pessoal",
+        "Notícia na imprensa",
+        "Evento (palestra, webinar, etc.)",
+        "E-mail/newsletter",
+        "Linkedin",
+        "Facebook",
+        "Twitter",
+        "Instagram",
+        "Material impresso (cartaz, folder, etc.)",
       ],
     ],
     rules: {
@@ -431,9 +436,11 @@ export default {
     },
   },
   methods: {
+    /*
     uploadImage(e) {
       this.images = e;
     },
+    */
     enableOtherOption(model, value) {
       if (this.conexao[model][value] == "Outro") {
         this.conexao[model][`${value}Other`] = "";
@@ -467,18 +474,20 @@ export default {
       )
         this.conexao.demand.necessity += " na área de " + this.selectedArea;
     },
-    sendImages() {
+    /*
+    async sendImages() {
       let images = this.images;
       if (images) {
-        images.forEach((image) => {
+        for (const image in images) {
           let formData = new FormData();
 
           formData.append("requestId", this.conexao.requestId);
           formData.append("image", image);
-          this.$axios.$post("/conexao/image", formData);
-        });
+          await this.$axios.$post("/conexao/image", formData);
+        }
       }
     },
+    */
 
     validate() {
       const personal = Object.keys(this.conexao.personal);
@@ -536,13 +545,15 @@ export default {
         this.dataChecking();
         try {
           await this.$axios.$post("/conexao", { conexao: this.conexao });
-          this.sendImages();
+          // await this.sendImages();
           alert(
             "Formulário enviado com sucesso! Em breve a equipe da AUSPIN entrará em contato com você."
           );
           location.reload();
         } catch (error) {
-          console.log(error);
+          alert(
+            "Ocorreu um erro na submissão. Tente novamente mais tarde ou entre em contato."
+          );
         }
       } else {
         alert(
