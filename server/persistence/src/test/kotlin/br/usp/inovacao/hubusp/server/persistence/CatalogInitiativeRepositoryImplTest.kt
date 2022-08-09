@@ -70,6 +70,45 @@ internal class CatalogInitiativeRepositoryImplTest {
         assertTrue { result.all { it.localization == campus } }
     }
 
+    @Test
+    fun `it filters by a single-token text`() {
+        // given
+        val term = "superintendencia"
+        val params = InitiativeSearchParams(term = term)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all {
+            it.description.contains(term) || it.name.contains(term) || it.tags.any { tag -> tag.contains(term)}
+        } }
+    }
+
+    @Test
+    fun `it filters by all fields`() {
+        // given
+        val classification = "Agente Institucional"
+        val campus = "Toda a USP"
+        val term = "superintendencia"
+        val params = InitiativeSearchParams(
+            classifications = setOf(classification),
+            campus = campus,
+            term = term
+        )
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all {
+            it.classification == classification && it.localization == campus && (
+                    it.description.contains(term) || it.name.contains(term) || it.tags.any { tag -> tag.contains(term) })
+        } }
+    }
+
     private fun seedTestDb() {
         val initiativeCollection = testDb.getCollection<Initiative>("iniciatives")
         initiativeCollection.insertMany(testSeeds())
@@ -83,7 +122,7 @@ internal class CatalogInitiativeRepositoryImplTest {
             unity = "N/D",
             tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
             url = "http://www.inovacao.usp.br/",
-            description = "A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
+            description = "superintendencia A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
             email = "auspin@usp.br",
             contact = Contact(
                 person = "",
