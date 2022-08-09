@@ -16,7 +16,16 @@ data class Company(
     val services: Set<String>,
     val technologies: Set<String>,
     val url: String? = null
-)
+) {
+    companion object {
+        val INDEXABLE_PROPERTIES = listOf("description", "name", "services", "technologies")
+    }
+
+    fun matches(term: String): Boolean = description.contains(term) ||
+            name.contains(term) ||
+            services.any { it.contains(term) } ||
+            technologies.any { it.contains(term)}
+}
 
 @kotlinx.serialization.Serializable
 data class Classification(

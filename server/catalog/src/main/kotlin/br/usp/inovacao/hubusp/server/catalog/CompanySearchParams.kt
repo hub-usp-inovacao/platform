@@ -5,6 +5,7 @@ data class CompanySearchParams(
     val areaMinors: Set<String> = emptySet(),
     val city: String? = null,
     val ecosystem: String? = null,
-    val size: String? = null
+    val size: String? = null,
+    val term: String? = null,
 )
 

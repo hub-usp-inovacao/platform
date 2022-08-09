@@ -1,6 +1,8 @@
 package br.usp.inovacao.hubusp.server.persistence
 
+import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.PDI
+import com.mongodb.MongoCommandException
 import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.KMongo
@@ -12,8 +14,17 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
 
     val db =  client.getDatabase(dbName)
 
-    db.getCollection<PDI>("pdis")
-        .createIndex("""{"name":"text","description":"text","coordinator":"text","tags":"text"}""")
+    createIndexOrNothing(
+        database = db,
+        collectionName = "pdis",
+        indexQuery = """{"name":"text","description":"text","coordinator":"text","tags":"text"}"""
+    )
+
+    createIndexOrNothing(
+        database =db,
+        collectionName = "companies",
+        indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
+    )
 
 
     db.getCollection("skills")
@@ -27,3 +38,9 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
 
     return db
 }
+
+private fun createIndexOrNothing(database: MongoDatabase, collectionName: String, indexQuery: String) = try {
+    database
+        .getCollection(collectionName)
+        .createIndex(indexQuery)
+} catch (_: MongoCommandException) {}
