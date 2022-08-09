@@ -40,3 +40,12 @@ fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(
     campus = this["campus"],
     term = this["term"]
 )
+
+fun Parameters.toDisciplineSearchParams() = DisciplineSearchParams(
+    categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+    unity = this["unity"],
+    level = this["level"],
+    nature = this["nature"],
+    term = this["term"],
+)

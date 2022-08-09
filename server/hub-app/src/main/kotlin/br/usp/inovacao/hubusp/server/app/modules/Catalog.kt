@@ -49,7 +49,7 @@ fun Application.catalog() {
         }
 
         get("/disciplines") {
-            val params = call.request.queryParameters.toMap()
+            val params = call.request.queryParameters.toDisciplineSearchParams()
             val disciplines = searchDisciplines.search(params)
 
             call.respond(
