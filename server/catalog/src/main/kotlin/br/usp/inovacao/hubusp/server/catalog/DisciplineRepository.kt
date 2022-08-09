@@ -10,4 +10,6 @@ interface DisciplineRepository {
      * @return Set<Discipline> - the representing set of Disciplines that matches provided filter
      */
     fun filter(params: Map<String, List<String>>): Set<Discipline>
+
+    fun filter(params: DisciplineSearchParams): Set<Discipline>
 }
