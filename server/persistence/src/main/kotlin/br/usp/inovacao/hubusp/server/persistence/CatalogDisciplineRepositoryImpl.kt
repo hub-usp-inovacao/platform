@@ -17,12 +17,6 @@ class CatalogDisciplineRepositoryImpl(
         collection = db.getCollection<Discipline>("disciplines")
     }
 
-    override fun filter(params: Map<String, List<String>>): Set<Discipline> {
-        val filter = DisciplineQueryFilter.from(params).toJson()
-
-        return collection.find(filter).toSet()
-    }
-
     override fun filter(params: DisciplineSearchParams): Set<Discipline> {
         return collection.find(params.toCollectionFilter()).toSet()
     }
