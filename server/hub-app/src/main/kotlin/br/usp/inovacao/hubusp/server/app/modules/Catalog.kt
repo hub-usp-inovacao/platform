@@ -19,7 +19,7 @@ fun Application.catalog() {
     )
 
     val searchDisciplines = CatalogDisciplineRepositoryImpl(db)
-        .let { DisciplineService(it) }
+        .let { SearchDisciplines(it) }
 
     val searchResearchers = CatalogResearcherRepositoryImpl(db)
         .let { SearchResearchers(it) }

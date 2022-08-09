@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Category
 import br.usp.inovacao.hubusp.server.catalog.Discipline
+import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -30,7 +31,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     @Test
     fun `it works when filter is empty`() {
         // given
-        val params = emptyMap<String, List<String>>()
+        val params = DisciplineSearchParams()
 
         // when
         val result = underTest.filter(params)
@@ -43,7 +44,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     fun `it filters by campus`() {
         // given
         val givenCampus = "São Carlos"
-        val params = mapOf("campus" to listOf(givenCampus))
+        val params = DisciplineSearchParams(campus = givenCampus)
 
         // when
         val result = underTest.filter(params)
@@ -56,7 +57,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     fun `it filters by unity`() {
         // given
         val givenUnity = "BCD"
-        val params = mapOf("unity" to listOf(givenUnity))
+        val params = DisciplineSearchParams(unity = givenUnity)
 
         // when
         val result = underTest.filter(params)
@@ -69,7 +70,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     fun `it filters by level`() {
         // given
         val givenLevel = "Tenho uma ideia, e agora?"
-        val params = mapOf("level" to listOf(givenLevel))
+        val params = DisciplineSearchParams(level = givenLevel)
 
         // when
         val result = underTest.filter(params)
@@ -82,7 +83,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     fun `it filters by nature`() {
         // given
         val givenNature = "Graduação"
-        val params = mapOf("nature" to listOf(givenNature))
+        val params = DisciplineSearchParams(nature = givenNature)
 
         // when
         val result = underTest.filter(params)
@@ -94,7 +95,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     @Test
     fun `it filters by category`() {
         // given
-        val params = mapOf("categories" to listOf("Negócios,Empreendedorismo"))
+        val params = DisciplineSearchParams(categories = setOf("Negócios","Empreendedorismo"))
 
         // when
         val result = underTest.filter(params)
