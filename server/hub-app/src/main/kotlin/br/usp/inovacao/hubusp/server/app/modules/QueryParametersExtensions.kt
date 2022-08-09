@@ -37,5 +37,6 @@ fun Parameters.toPatentSearchParams() = PatentSearchParams(
 
 fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(
     classifications = this["classifications"]?.split(",")?.toSet() ?: emptySet(),
-    campus = this["campus"]
+    campus = this["campus"],
+    term = this["term"]
 )
