@@ -99,6 +99,20 @@ class CatalogCompanyRepositoryImplTest() {
         assertTrue { result.all { size in it.companySize } }
     }
 
+    @Test
+    fun `it filters by single-token text`() {
+        // given
+        val term = "pluralidade"
+        val params = CompanySearchParams(term = term)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { it.matches(term = term) } }
+    }
+
     private fun cleanTestDb() {
         val companyCollection = testDb.getCollection<Company>("companies")
         companyCollection.deleteMany("{}")
@@ -124,7 +138,7 @@ class CatalogCompanyRepositoryImplTest() {
             ),
             cnae = "042.0230-02",
             companySize = setOf("Microempresa"),
-            description = "foo bar baz",
+            description = "pluralidade foo bar baz",
             ecosystems = setOf("InovaLab@POLI"),
             emails = setOf("foo@example.com"),
             incubated = "Sim. A empresa já está graduada",
