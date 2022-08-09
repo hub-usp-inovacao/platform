@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.PDI
+import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.createIndex
@@ -14,8 +15,15 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     db.getCollection<PDI>("pdis")
         .createIndex("""{"name":"text","description":"text","coordinator":"text","tags":"text"}""")
 
+
     db.getCollection("skills")
         .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")
+
+    db.getCollection<Patent>("patents")
+        .createIndex("""{"name":"text","summary":"text","owners":"text","inventors":"text"}""")
+
+    db.getCollection("iniciatives")
+        .createIndex("""{"description":"text","name":"text","tags":"text"}""")
 
     return db
 }
