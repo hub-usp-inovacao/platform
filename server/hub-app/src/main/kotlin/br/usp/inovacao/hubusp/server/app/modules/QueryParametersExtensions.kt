@@ -15,7 +15,8 @@ fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
     minorArea = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
     campus = this["campus"],
     unity = this["unity"],
-    bond = this["bond"]
+    bond = this["bond"],
+    term = this["term"]
 )
 
 fun Parameters.toCompanySearchParams() = CompanySearchParams(
