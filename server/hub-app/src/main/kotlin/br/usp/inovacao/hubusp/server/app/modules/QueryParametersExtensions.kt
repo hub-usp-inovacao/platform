@@ -23,7 +23,8 @@ fun Parameters.toCompanySearchParams() = CompanySearchParams(
     areaMinors = this["areaMinors"]?.split(',')?.toSet() ?: emptySet(),
     city = this["city"],
     ecosystem = this["ecosystem"],
-    size = this["size"]
+    size = this["size"],
+    term = this["term"]
 )
 
 fun Parameters.toPatentSearchParams() = PatentSearchParams(
