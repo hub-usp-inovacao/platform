@@ -104,4 +104,18 @@ class CompanyExtensionKtTest {
         val handmade = "{\"companySize\":\"$size\"}"
         assertEquals(handmade, result)
     }
+
+    @Test
+    fun `it parses text term`() {
+        // given
+        val term = "pluralidade"
+        val params = CompanySearchParams(term = term)
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val handmade = "{\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(handmade, result)
+    }
 }

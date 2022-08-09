@@ -25,5 +25,7 @@ fun CompanySearchParams.toCollectionFilter(): String {
 
     if (size != null) inner.add("\"companySize\":\"$size\"")
 
+    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+
     return "{" + inner.joinToString(",") + "}"
 }
