@@ -13,16 +13,6 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
 
     val db =  client.getDatabase(dbName)
 
-//    try {
-//        db.getCollection<PDI>("pdis")
-//            .createIndex("""{"name":"text","description":"text","coordinator":"text","tags":"text"}""")
-//    } catch (_: MongoCommandException) {}
-
-//    try {
-//        db.getCollection<Company>("companies")
-//            .createIndex("{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}")
-//    } catch (_: MongoCommandException) {}
-
     createIndexOrNothing(
         database = db,
         collectionName = "pdis",
