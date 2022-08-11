@@ -12,7 +12,7 @@ class ApplicationMailer < ActionMailer::Base
   def skill_update_data(sheet)
     attachments["updated-skills-#{Time.zone.today}.csv"] = { mime_type: 'text/csv', content: sheet }
 
-    mail(subject: subject("Atualização de Competências"))
+    mail(subject: subject('Atualização de Competências'))
   end
 
   def warnings
@@ -39,7 +39,7 @@ class ApplicationMailer < ActionMailer::Base
 
     @personal_labels = ['Nome', 'Email', 'Representa uma']
     @org_labels = ['Nome', 'CNPJ', 'Tamanho da empresa',
-                   'Telefone', 'Endereço', 'Cidade','Site']
+                   'Telefone', 'Endereço', 'Cidade', 'Site']
     @demand_labels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
                       'Qual é a sua necessidade em relação a esses pesquisadores?']
 
@@ -60,12 +60,12 @@ class ApplicationMailer < ActionMailer::Base
     mail(to: company_email,
          subject: subject('Token de segurança para atualização - Hub USPInovação'))
   end
+
   def skill_update_token(skill_email, token)
     @token = token
     @base_url = ENV['JWT_AUDIENCE']
 
     mail(to: skill_email,
-          subject: subject('Token de segurança para atualização - Hub USPInovação'))
-
+         subject: subject('Token de segurança para atualização - Hub USPInovação'))
   end
 end

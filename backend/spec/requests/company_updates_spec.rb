@@ -98,7 +98,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
         }
       ],
       patents: [
-        { code: 'foo', name: 'bar'}
+        { code: 'foo', name: 'bar' }
       ]
     }
   end

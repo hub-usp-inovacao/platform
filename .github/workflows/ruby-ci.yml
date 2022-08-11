@@ -39,6 +39,9 @@ jobs:
   tests:
     name: Ruby Tests
     runs-on: ubuntu-latest
+    env:
+      JWT_SECRET: "supersecretforci"
+      JWT_ISSUER: "https://github.com/hub-usp-inovacao/platform"
 
     services:
       mongo:

@@ -31,7 +31,7 @@ class CompanyUpdateRequest
     ]
 
     headers = merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers })
-    p headers
+    Rails.logger.debug headers
     headers
   end
 

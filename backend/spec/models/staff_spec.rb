@@ -13,7 +13,6 @@ RSpec.describe Staff, type: :model do
   end
 
   context 'with validation problems' do
-
     it 'on future last_update' do
       attrs[:last_update] = 10.seconds.from_now
       expect(described_class.new(attrs)).to be_invalid

@@ -18,7 +18,7 @@ class SkillController < ApplicationController
     end
 
     ## caso contrário, token inalterado
-    email = payload["email"]
+    email = payload['email']
     @skill = Skill.find_by({ email: email })
     render json: @skill
   end
@@ -31,4 +31,3 @@ class SkillController < ApplicationController
     params.require(:skill).permit(:token)
   end
 end
-

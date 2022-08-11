@@ -29,7 +29,7 @@ RSpec.describe 'Conexoes', type: :request do
         expectation: 'Novo produto',
         wantedProfile: 'Saúde',
         necessity: 'Desenvolvimento de P&D em parceria',
-        knownform: 'Facebook, Linkedin'
+        knownForm: 'Facebook, Linkedin'
       }
     }
   end

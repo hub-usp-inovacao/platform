@@ -21,6 +21,6 @@ RSpec.describe TokenManager, type: :model do
     given = { cnpj: '123' }
     token = described_class.create_token(given)
     payload = described_class.decode_token(token)
-    expect(payload["cnpj"]).to eql(given[:cnpj])
+    expect(payload['cnpj']).to eql(given[:cnpj])
   end
 end

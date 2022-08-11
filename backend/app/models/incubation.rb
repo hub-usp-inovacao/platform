@@ -13,11 +13,13 @@ class Incubation
   validate :expected_was_incubated?, :consistent_pair?
 
   def both_negative?
-    was_incubated.eql?('Não') && (ecosystem.nil? || ecosystem.eql?('') || ecosystem.eql?('Direto para o Mercado'))
+    was_incubated.eql?('Não') &&
+      (ecosystem.nil? || ecosystem.eql?('') || ecosystem.eql?('Direto para o Mercado'))
   end
 
   def both_positive?
-    !was_incubated.eql?('Não') && !ecosystem.nil? && !ecosystem.eql?('') && !ecosystem.eql?('Direto para o Mercado')
+    !was_incubated.eql?('Não') && !ecosystem.nil? && !ecosystem.eql?('') &&
+      !ecosystem.eql?('Direto para o Mercado')
   end
 
   def consistent_pair?

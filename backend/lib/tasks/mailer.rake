@@ -6,7 +6,7 @@ end
 
 desc 'Sends mails with all the skills updates'
 task skill_update_report: :environment do
-  log(:skill_update_report, "started")
+  log(:skill_update_report, 'started')
 
   reqs = SkillUpdate::Request.where({ delivered: false })
   csv = SkillUpdate::CsvParser.new
@@ -16,9 +16,9 @@ task skill_update_report: :environment do
   ApplicationMailer.skill_update_data(sheet).deliver_now
 
   reqs.each do |req|
-    req.update_attributes(delivered:true)
+    req.update(delivered: true)
   end
-  log(:skill_update_report, "ended")
+  log(:skill_update_report, 'ended')
 end
 
 desc 'Sends mails with all the errors not yet reported'
@@ -27,8 +27,7 @@ task mail_reports: :environment do
   Report.where(delivered: false).each do |report|
     ApplicationMailer.with(warnings: report.warnings, sheet_id: report.sheet_id,
                            entity: report.entity).warnings.deliver_now
-  report.update_attributes(delivered:true)
-
+    report.update(delivered: true)
   end
   log('mail_reports', 'reports mailed!')
 end
@@ -42,8 +41,7 @@ task mail_updates: :environment do
     ApplicationMailer.update_companies.deliver_now
 
     new_updates.each do |company|
-      company.update_attributes(delivered:true)
-
+      company.update(delivered: true)
     end
   end
   log('mail_updates', 'updated companies mailed!')
@@ -58,7 +56,7 @@ task mail_conexao: :environment do
     ApplicationMailer.with(entities: new_entries).conexao.deliver_now
 
     new_entries.each do |entry|
-      entry.update_attributes(delivered:true)
+      entry.update(delivered: true)
     end
   end
   log('mail_conexao', 'new Conexão USP entries mailed!')
