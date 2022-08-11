@@ -12,6 +12,8 @@ fun DisciplineSearchParams.toCollectionFilter(): String {
     if (level != null) inner.add("\"level\":\"$level\"")
     if (nature != null) inner.add("\"nature\":\"$nature\"")
 
+    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+
     return "{" + inner.joinToString(",") + "}"
 }
 
@@ -26,6 +28,5 @@ private fun handleCategories(categories: Set<String>): String {
 
     if (categories.contains("Inovação")) conditions.add("{\"category.innovation\":true}")
 
-    val operands = conditions.joinToString(",")
     return "\"\$or\":[${conditions.joinToString(",")}]"
 }
