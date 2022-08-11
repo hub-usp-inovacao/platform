@@ -2,7 +2,6 @@ package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
 import org.junit.Test
-import kotlin.test.Ignore
 import kotlin.test.assertEquals
 
 internal class DisciplineExtensionKtTest {
@@ -31,6 +30,20 @@ internal class DisciplineExtensionKtTest {
         // then
         val handmadeJson = "{\"\$or\":[{\"category.business\":true},{\"category.innovation\":true}]}"
         assertEquals(handmadeJson, dqfJson)
+    }
+
+    @Test
+    fun `it handles text term`() {
+        // given
+        val term = "utilidade"
+        val params = DisciplineSearchParams(term = term)
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val expected = "{\"\$text\":{\"\$search\":\"$term\"}}"
+        assertEquals(expected, result)
     }
 
     @Test

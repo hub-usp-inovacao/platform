@@ -1,7 +1,6 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Company
-import br.usp.inovacao.hubusp.server.catalog.PDI
 import com.mongodb.MongoCommandException
 import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.client.MongoDatabase
@@ -26,6 +25,8 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
     )
 
+    db.getCollection("disciplines")
+        .createIndex("""{"name":"text"}""")
 
     db.getCollection("skills")
         .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")

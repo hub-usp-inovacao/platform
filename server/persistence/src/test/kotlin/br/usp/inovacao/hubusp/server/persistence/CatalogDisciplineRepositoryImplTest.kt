@@ -104,6 +104,20 @@ internal class CatalogDisciplineRepositoryImplTest {
         assertTrue { result.all { it.category.business || it.category.entrepreneurship } }
     }
 
+    @Test
+    fun `it filters by single-token text term`() {
+        // given
+        val term = "utilidade"
+        val params = DisciplineSearchParams(term = term)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { it.name.contains(term) } }
+    }
+
     private fun seedTestDb() {
         val disciplineCollection = testDb.getCollection<Discipline>("disciplines")
         disciplineCollection.insertMany(testSeeds())
@@ -155,7 +169,7 @@ internal class CatalogDisciplineRepositoryImplTest {
             )
         ),
         Discipline(
-            name = "ABC0003",
+            name = "ABC0003 utilidade",
             unity = "BCD",
             campus = "São Carlos",
             level = "Tenho uma ideia, e agora?",
