@@ -5,7 +5,7 @@
         v-model="search.term"
         title="Educação"
         description="A USP oferece aos seus estudantes diversas disciplinas em nível de graduação e pós-graduação que se relacionam aos temas de Empreendedorismo e Inovação. Ao fazer uma busca, você encontrará as unidades, as condições de oferecimento, códigos e links para acesso às ementas nos sistemas institucionais, o Júpiter e o Janus."
-        @clear="search.disciplines = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
@@ -64,10 +64,7 @@ export default {
     DisplayData,
   },
   data: () => ({
-    search: {
-      term: "",
-      disciplines: undefined,
-    },
+    search: { term: "" },
 
     levels: ["Graduação", "Pós-Graduação"],
     tabs: [
@@ -131,22 +128,23 @@ export default {
         },
       ];
     },
+    searchTerm() {
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        categories: this.filters?.primary,
+        campus: this.filters?.terciary[0],
+        unity: this.filters?.terciary[1],
+        level: this.filters?.terciary[2],
+        nature: this.filters?.terciary[3],
+        term: this.searchTerm,
+      };
+    },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        categories: this.filters.primary,
-        campus: this.filters.terciary[0],
-        unity: this.filters.terciary[1],
-        level: this.filters.terciary[2],
-        nature: this.filters.terciary[3],
-      };
-
-      try {
-        this.disciplines = await this.$DisciplineAdapter.filterData(params);
-      } catch (error) {
-        console.log(error);
-      }
+    queryParams: debounce(function () {
+      this.runSearch();
     }, 1000),
   },
   async beforeMount() {
@@ -155,6 +153,17 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  methods: {
+    async runSearch() {
+      try {
+        this.disciplines = await this.$DisciplineAdapter.filterData(
+          this.queryParams
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

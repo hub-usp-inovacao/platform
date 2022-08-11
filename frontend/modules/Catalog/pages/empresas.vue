@@ -2,6 +2,7 @@
   <div>
     <div class="background">
       <Panel
+        v-model="search.term"
         title="Empresas"
         description="As Empresas DNA USP estão organizadas nesta plataforma por: CNAEs (Classificação Nacional de Atividades Econômicas), cidade, habitats de inovação e porte."
         url="https://docs.google.com/forms/d/1q354be1_cPpeSIWVQkU2CXUpjUiyYuC0IU5W1_4W_zA/edit?usp=sharing"
@@ -11,7 +12,7 @@
         third-url="/DNA_manual.pdf"
         third-call="Manual de uso da marca DNA USP"
         @search="search.term = $event"
-        @clear="search.companies = undefined"
+        @clear="search.term = ''"
       />
       <USPDNA />
     </div>
@@ -70,7 +71,7 @@
         </p>
 
         <div v-for="size of item.companySize" :key="size">
-          <p v-if="size != 'Unicórnio'">
+          <p v-if="size !== 'Unicórnio'">
             <span class="font-weight-bold">Porte:</span>
             {{ size }}
           </p>
@@ -131,10 +132,7 @@ export default {
   },
   data: () => ({
     filters: undefined,
-    search: {
-      term: "",
-      companies: undefined,
-    },
+    search: { term: "" },
     companies: [],
   }),
   computed: {
@@ -216,22 +214,23 @@ export default {
         },
       ];
     },
+    searchTerm() {
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        areaMajors: this.filters?.primary,
+        areaMinors: this.filters?.secondary,
+        city: this.filters?.terciary[0],
+        ecosystem: this.filters?.terciary[1],
+        size: this.filters?.terciary[2],
+        term: this.searchTerm,
+      };
+    },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        areaMajors: this.filters.primary,
-        areaMinors: this.filters.secondary,
-        city: this.filters.terciary[0],
-        ecosystem: this.filters.terciary[1],
-        size: this.filters.terciary[2],
-      };
-
-      try {
-        this.companies = await this.$CompanyAdapter.filterData(params);
-      } catch (error) {
-        console.log(error);
-      }
+    queryParams: debounce(function () {
+      this.runSearch();
     }, 1000),
   },
   async beforeMount() {
@@ -240,6 +239,17 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  methods: {
+    async runSearch() {
+      try {
+        this.companies = await this.$CompanyAdapter.filterData(
+          this.queryParams
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

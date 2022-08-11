@@ -2,10 +2,11 @@
   <div>
     <div class="background">
       <Panel
+        v-model="search.term"
         title="P&amp;D&amp;I"
         description="Na seção de Pesquisa &amp; Desenvolvimento &amp; Inovação, você encontra laboratórios, organizações e programas que atuam com desenvolvimento e inovação no âmbito da USP. Aqui, você pode consultar informações e contatos de CEPIDs, EMBRAPIIs, INCTs e NAPs, de acordo com as áreas de competência e serviços realizados."
         @search="search.term = $event"
-        @clear="search.pdis = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
@@ -62,10 +63,7 @@ export default {
     DisplayData,
   },
   data: () => ({
-    search: {
-      term: "",
-      pdis: undefined,
-    },
+    search: { term: "" },
 
     tabs: [
       {
@@ -110,15 +108,24 @@ export default {
         },
       ];
     },
+    searchTerm() {
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        categories: this.filters?.primary,
+        campus: this.filters?.terciary[0],
+        term: this.searchTerm,
+      };
+    },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        categories: this.filters.primary,
-        campus: this.filters.terciary[0],
-      };
-
-      this.pdis = await this.$PDIAdapter.filterData(params);
+    queryParams: debounce(async function () {
+      try {
+        this.pdis = await this.$PDIAdapter.filterData(this.queryParams);
+      } catch (e) {
+        console.log(e);
+      }
     }, 1000),
   },
   async beforeMount() {

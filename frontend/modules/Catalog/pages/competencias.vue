@@ -7,7 +7,7 @@
         url="https://docs.google.com/forms/d/e/1FAIpQLSc-OmhsvBSUDBvx6uR6cvI6zq01M-_7JqdX4ktcB9mLE3oWzw/viewform"
         forms-call="Cadastre suas competências"
         @search="search.term = $event"
-        @clear="search.skills = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
@@ -142,10 +142,7 @@ export default {
     DisplayData,
   },
   data: () => ({
-    search: {
-      term: "",
-      skills: undefined,
-    },
+    search: { term: "" },
 
     itemDescriptions: [
       { key: "skills", title: "Competências" },
@@ -192,28 +189,37 @@ export default {
       ];
     },
     searchTerm() {
-      return this.search.term;
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        areaMajors: this.filters?.primary,
+        areaMinors: this.filters?.secondary,
+        campus: this.filters?.terciary[0],
+        unity: this.filters?.terciary[1],
+        bond: this.filters?.terciary[2],
+        term: this.searchTerm,
+      };
     },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        areaMajors: this.filters.primary,
-        areaMinors: this.filters.secondary,
-        campus: this.filters.terciary[0],
-        unity: this.filters.terciary[1],
-        bond: this.filters.terciary[2],
-      };
-
-      try {
-        this.researchers = await this.$ResearcherAdapter.filterData(params);
-      } catch (error) {
-        console.log(error);
-      }
+    queryParams: debounce(function () {
+      this.runSearch();
     }, 1000),
   },
   async beforeMount() {
     this.researchers = await this.$ResearcherAdapter.requestData();
+  },
+  methods: {
+    async runSearch() {
+      try {
+        this.researchers = await this.$ResearcherAdapter.filterData(
+          this.queryParams
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

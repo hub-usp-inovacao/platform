@@ -2,6 +2,7 @@
   <div>
     <div class="background">
       <Panel
+        v-model="search.term"
         title="Iniciativas"
         description="A USP mantém diversas iniciativas e programas para facilitar e estimular a inovação e o empreendedorismo, fazendo a ponte entre o ambiente acadêmico, as organizações e a sociedade. Clique nos ícones para conhecer os tipos de iniciativas e acessar as formas de contatar cada uma delas."
         url="http://www.inovacao.usp.br/editais/"
@@ -9,7 +10,7 @@
         second-url="http://www.inovacao.usp.br/programas/"
         second-call="confira os Programas"
         @search="search.term = $event"
-        @clear="search.iniciatives = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
@@ -115,10 +116,7 @@ export default {
       },
     ],
 
-    search: {
-      term: "",
-      iniciatives: undefined,
-    },
+    search: { term: "" },
 
     filters: undefined,
     initiatives: [],
@@ -135,19 +133,35 @@ export default {
         },
       ];
     },
+    searchTerm() {
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        classifications: this.filters?.primary,
+        campus: this.filters?.terciary[0],
+        term: this.searchTerm,
+      };
+    },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        classifications: this.filters.primary,
-        campus: this.filters.terciary[0],
-      };
-
-      this.initiatives = await this.$InitiativeAdapter.filterData(params);
+    queryParams: debounce(function () {
+      this.runSearch();
     }, 1000),
   },
   async beforeMount() {
     this.initiatives = await this.$InitiativeAdapter.requestData();
+  },
+  methods: {
+    async runSearch() {
+      try {
+        this.initiatives = await this.$InitiativeAdapter.filterData(
+          this.queryParams
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>

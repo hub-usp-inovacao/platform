@@ -2,10 +2,11 @@
   <div>
     <div class="background">
       <Panel
+        v-model="search.term"
         title="Patentes"
         description="Os pesquisadores e estudantes da USP desenvolvem invenções que são protegidas por propriedade industrial - PI (patentes e registros de software). Estas PI estão disponíveis para organizações públicas e privadas que tenham interesse em licenciamento para aplicação e comercialização. Nesta plataforma, as PI estão organizadas por áreas tecnológicas e status (concedida, em análise e domínio público)."
         @search="search.term = $event"
-        @clear="search.patents = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
@@ -87,10 +88,7 @@ export default {
     Panel,
   },
   data: () => ({
-    search: {
-      term: "",
-      patents: undefined,
-    },
+    search: { term: "" },
 
     patents: [],
     selected_subareas: [],
@@ -110,7 +108,15 @@ export default {
   }),
   computed: {
     searchTerm() {
-      return this.search.term;
+      return this.search.term === "" ? undefined : this.search.term;
+    },
+    queryParams() {
+      return {
+        areaMajors: this.filters?.primary,
+        areaMinors: this.filters?.secondary,
+        status: this.filters?.terciary[0],
+        term: this.searchTerm,
+      };
     },
     tabs() {
       return this.rawTabs.map((tab) => {
@@ -143,15 +149,9 @@ export default {
     },
   },
   watch: {
-    filters: debounce(async function () {
-      const params = {
-        areaMajors: this.filters.primary,
-        areaMinors: this.filters.secondary,
-        status: this.filters.terciary[0],
-      };
-
+    queryParams: debounce(async function () {
       try {
-        this.patents = await this.$PatentAdapter.filterData(params);
+        this.patents = await this.$PatentAdapter.filterData(this.queryParams);
       } catch (error) {
         console.log(error);
       }

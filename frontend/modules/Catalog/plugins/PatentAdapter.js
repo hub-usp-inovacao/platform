@@ -1,5 +1,5 @@
 function PatentAdapter(axios) {
-  const baseURL = "http://localhost:8080";
+  const baseURL = process.env.BACKEND_URL + "/api/catalog";
 
   async function requestData() {
     const url = baseURL + "/patents";
