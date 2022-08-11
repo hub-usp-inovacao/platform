@@ -127,15 +127,25 @@ services:
       - cli
 
 
-  caddy:
+  caddydev:
     build:
       context: ./caddy
+      target: dev
     ports:
       - 5000:5000
     profiles:
-      - if
       - local
       - catalog
+
+  caddy:
+    build:
+      context: ./caddy
+      target: prod
+    ports:
+      - 80:80
+      - 443:443
+    profiles:
+      - if
 
 volumes:
   railsdevdeps:
