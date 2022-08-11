@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-
 import Banner from "@/components/first_level/home/Banner.vue";
 import InfoHubBulletList from "@/components/first_level/home/InfoHubBulletList.vue";
 import InfoUSP from "@/components/first_level/home/InfoUSP.vue";
@@ -39,67 +37,22 @@ export default {
     InfoDNAUSP,
     InfoAuspin,
   },
-  computed: {
-    ...mapGetters({
-      eduStatus: "educacao/dataStatus",
-      pdiStatus: "pdi/dataStatus",
-      skillsStatus: "competencia/dataStatus",
-      iniciativesStatus: "iniciativas/dataStatus",
-      patentsStatus: "patentes/dataStatus",
-      companiesStatus: "empresas/dataStatus",
-
-      disciplines: "educacao/disciplines",
-      pdis: "pdi/pdis",
-      skills: "competencia/skills",
-      iniciatives: "iniciativas/iniciatives",
-      patents: "patentes/patents",
-      companies: "empresas/companies",
-    }),
-  },
-  beforeMount() {
-    const env = { sheetsAPIKey: process.env.sheetsAPIKey };
-
-    if (this.eduStatus == "ok" && this.disciplines.length == 0) {
-      this.fetchDisciplines(env);
-    }
-
-    if (this.pdiStatus == "ok" && this.pdis.length == 0) {
-      this.fetchPDIs(env);
-    }
-
-    if (this.skillsStatus == "ok" && this.skills.length == 0) {
-      this.fetchSkills({ ...env, areas: this.$knowledgeAreas });
-    }
-
-    if (this.iniciativesStatus == "ok" && this.iniciatives.length == 0) {
-      this.fetchIniciatives(env);
-    }
-
-    if (this.patentsStatus == "ok" && this.patents.length == 0) {
-      this.fetchPatents(env);
-    }
-
-    if (this.companiesStatus == "ok" && this.companies.length == 0) {
-      this.fetchCompanies();
-    }
-  },
   methods: {
-    ...mapActions({
-      fetchDisciplines: "educacao/fetchSpreadsheets",
-      fetchPDIs: "pdi/fetchSpreadsheets",
-      fetchSkills: "competencia/fetchSpreadsheets",
-      fetchIniciatives: "iniciativas/fetchSpreadsheets",
-      fetchPatents: "patentes/fetchSpreadsheets",
-      fetchCompanies: "empresas/fetchSpreadsheets",
-    }),
-    submitSearch(searchTerm) {
+    newGlobalSearch(searchTerm) {
       if (!searchTerm.trim()) {
         return;
       }
       this.$router.push({
-        name: "search_results",
+        name: "busca",
         query: { q: searchTerm },
       });
+    },
+    disabledGlobalSearch() {
+      alert("Este recurso está temporariamente indisponível.");
+    },
+    submitSearch(searchTerm) {
+      if (process.env.NEW_CATALOG === "true") this.newGlobalSearch(searchTerm);
+      else this.disabledGlobalSearch();
     },
   },
   head: {

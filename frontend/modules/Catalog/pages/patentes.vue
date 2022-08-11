@@ -163,6 +163,9 @@ export default {
     } catch (error) {
       this.patents = [];
     }
+
+    if (this.$route.query.q !== undefined)
+      this.search.term = this.$route.query.q;
   },
 };
 </script>

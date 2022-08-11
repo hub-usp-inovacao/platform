@@ -48,6 +48,14 @@ export default function CatalogModule() {
           : path.resolve(__dirname, "pages/legacy/iniciativas.vue"),
       }
     );
+
+    if (NEW_CATALOG) {
+      routes.push({
+        name: "busca",
+        path: "/busca",
+        component: path.resolve(__dirname, "pages/busca.vue"),
+      });
+    }
   });
 
   this.nuxt.options.plugins.push(

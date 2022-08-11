@@ -239,6 +239,8 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    if (this.$route.query.q !== undefined)
+      this.search.term = this.$route.query.q;
   },
   methods: {
     async runSearch() {

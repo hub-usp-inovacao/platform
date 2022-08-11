@@ -130,6 +130,9 @@ export default {
   },
   async beforeMount() {
     this.pdis = await this.$PDIAdapter.requestData();
+
+    if (this.$route.query.q !== undefined)
+      this.search.term = this.$route.query.q;
   },
 };
 </script>

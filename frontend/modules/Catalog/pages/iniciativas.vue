@@ -151,6 +151,8 @@ export default {
   },
   async beforeMount() {
     this.initiatives = await this.$InitiativeAdapter.requestData();
+    if (this.$route.query.q !== undefined)
+      this.search.term = this.$route.query.q;
   },
   methods: {
     async runSearch() {
