@@ -5,6 +5,7 @@ export default {
     sheetsAPIKey: process.env.sheetsAPIKey,
     sheetID: process.env.sheetID,
     BACKEND_URL: process.env.BACKEND_URL,
+    NEW_CATALOG: process.env.NEW_CATALOG,
     INICIATIVES_DATA_SOURCE_URL: process.env.INICIATIVES_DATA_SOURCE_URL,
     PDI_DATA_SOURCE_URL: process.env.PDI_DATA_SOURCE_URL,
     SKILLS_DATA_SOURCE_URL: process.env.SKILLS_DATA_SOURCE_URL,

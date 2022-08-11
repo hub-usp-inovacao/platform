@@ -1,37 +1,51 @@
 import * as path from "path";
 
 export default function CatalogModule() {
+  const NEW_CATALOG = process.env.NEW_CATALOG === "true";
+
   this.extendRoutes((routes) => {
     routes.push(
       {
         name: "inovacao",
         path: "/inovacao",
-        component: path.resolve(__dirname, "pages/inovacao.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/inovacao.vue")
+          : path.resolve(__dirname, "pages/legacy/inovacao.vue"),
       },
       {
         name: "educacao",
         path: "/educacao",
-        component: path.resolve(__dirname, "pages/educacao.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/educacao.vue")
+          : path.resolve(__dirname, "pages/legacy/educacao.vue"),
       },
       {
         name: "empresas",
         path: "/empresas",
-        component: path.resolve(__dirname, "pages/empresas.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/empresas.vue")
+          : path.resolve(__dirname, "pages/legacy/empresas.vue"),
       },
       {
         name: "competencias",
         path: "/competencias",
-        component: path.resolve(__dirname, "pages/competencias.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/competencias.vue")
+          : path.resolve(__dirname, "pages/legacy/competencias.vue"),
       },
       {
         name: "patentes",
         path: "/patentes",
-        component: path.resolve(__dirname, "pages/patentes.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/patentes.vue")
+          : path.resolve(__dirname, "pages/legacy/patentes.vue"),
       },
       {
         name: "iniciativas",
         path: "/iniciativas",
-        component: path.resolve(__dirname, "pages/iniciativas.vue"),
+        component: NEW_CATALOG
+          ? path.resolve(__dirname, "pages/iniciativas.vue")
+          : path.resolve(__dirname, "pages/legacy/iniciativas.vue"),
       }
     );
   });
