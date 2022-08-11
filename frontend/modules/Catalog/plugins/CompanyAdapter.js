@@ -1,5 +1,5 @@
 function CompanyAdapter(axios) {
-  const baseURL = process.env.BACKEND_URL + "/api/catalog";
+  const baseURL = process.env.BACKEND_URL + "/catalog";
 
   async function requestData() {
     const url = baseURL + "/companies";
