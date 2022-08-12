@@ -17,7 +17,6 @@ class CompanyUpdatesController < ApplicationController
     render json: { message: 'ok' }, status: :ok
   end
 
-  # rubocop:disable Metrics/AbcSize
   def create
     prms = create_params
     @comp_update = CompanyUpdateRequest.new
@@ -45,7 +44,6 @@ class CompanyUpdatesController < ApplicationController
       render json: { errors: @comp_update.errors.full_messages }, status: :bad_request
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -69,7 +67,7 @@ class CompanyUpdatesController < ApplicationController
       investment: {},
       revenue: {},
       incubation: {},
-      staff: {},
+      staff: {}
     )
   end
 end
