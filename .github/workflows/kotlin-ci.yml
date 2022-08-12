@@ -1,8 +1,8 @@
-name: rails-CI
+name: kotlin-CI
 on:
   pull_request:
   push:
-    branches: [main,if,sti]
+    branches: [master]
 
 jobs:
 

@@ -2,7 +2,7 @@ name: notify
 
 on:
   pull_request:
-    branches: [ main, if, sti ]
+    branches: [ master ]
     types: [ ready_for_review ]
 
 jobs:
