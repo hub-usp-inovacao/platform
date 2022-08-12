@@ -4,7 +4,7 @@
     <v-row>
       <v-col>
         <Dropdown
-          :multipleOption="true"
+          :multiple-option="true"
           :options="allUnities"
           label="Vinculado a quais unidades?"
           :value="unities"
@@ -26,10 +26,10 @@
     <h2>Grupos</h2>
     <MultipleInputs
       component="GroupInput"
-      inputLabel="grupo de pesquisa"
+      input-label="grupo de pesquisa"
       :value="groups"
-      @input="setGroups"
       :limit="3"
+      @input="setGroups"
     />
   </v-container>
 </template>
@@ -57,6 +57,11 @@ export default {
     }),
   },
 
+  beforeMount() {
+    this.loadUnities();
+    this.loadCampi();
+  },
+
   methods: {
     ...mapActions({
       setUnities: "skill_form/setUnities",
@@ -66,7 +71,7 @@ export default {
     async loadUnities() {
       try {
         const { unities } = await this.$axios.$get(
-          "http://localhost:3001/unities"
+          process.env.BACKEND_URL + "/unities"
         );
         this.allUnities = unities;
       } catch (error) {
@@ -75,17 +80,14 @@ export default {
     },
     async loadCampi() {
       try {
-        const { campi } = await this.$axios.$get("http://localhost:3001/campi");
+        const { campi } = await this.$axios.$get(
+          process.env.BACKEND_URL + "/campi"
+        );
         this.allCampi = campi;
       } catch (error) {
         console.log(error);
       }
     },
-  },
-
-  beforeMount() {
-    this.loadUnities();
-    this.loadCampi();
   },
 };
 </script>

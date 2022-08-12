@@ -1,10 +1,14 @@
 export default ({ $axios }, inject) => {
   inject("updateSkills", async (skillUpdate) => {
     try {
-      await $axios.$patch("http://localhost:3001/skills", skillUpdate)
-      return { success: true }
+      await $axios.$patch(process.env.BACKEND_URL + "/skills", skillUpdate);
+      return { success: true };
     } catch (error) {
-      return { success: false, error: 'failed' }
+      return {
+        success: false,
+        error:
+          "Falha na comunicação com o servidor. Tente novamente mais tarde.",
+      };
     }
-  })
-}
+  });
+};
