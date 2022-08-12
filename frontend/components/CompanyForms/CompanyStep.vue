@@ -48,7 +48,6 @@ export default {
     items: [
       { tab: "Dados da empresa", content: Base },
       { tab: "Sobre a empresa", content: About },
-      { tab: "Patentes", content: Patents },
       { tab: "Incubação", content: Incubator },
       { tab: "Colaboradores", content: Staff },
       { tab: "Faturamento", content: Finance },
