@@ -45,10 +45,10 @@ export default (_, inject) => {
       return {};
     } else if (response.status >= 400 && response.status < 500) {
       const { error, errors } = await response.json();
-      const result = [];
+      let result = [];
 
-      if (error) result.concat(error);
-      if (errors) result.concat(errors);
+      if (error) result = result.concat(error);
+      if (errors) result = result.concat(errors);
 
       return { errors: result };
     } else {
