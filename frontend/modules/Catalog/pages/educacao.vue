@@ -66,7 +66,6 @@ export default {
   data: () => ({
     search: { term: "" },
 
-    levels: ["Graduação", "Pós-Graduação"],
     tabs: [
       {
         name: "Inovação",
@@ -124,7 +123,7 @@ export default {
         },
         {
           label: "Natureza",
-          items: ["Graduação", "Pós-Graduação"],
+          items: ["Graduação", "Pós-graduação"],
         },
       ];
     },
