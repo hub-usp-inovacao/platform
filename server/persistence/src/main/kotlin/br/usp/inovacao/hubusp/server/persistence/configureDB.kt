@@ -4,7 +4,6 @@ import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.PDI
 import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.MongoCommandException
-import com.mongodb.MongoCommandException
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.createIndex
