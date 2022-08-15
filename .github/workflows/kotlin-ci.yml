@@ -25,5 +25,5 @@ jobs:
 
       - name: gradle build
         run: |
-          cd server && ./gradlew build || echo ""
+          cd server && ./gradlew build
 
