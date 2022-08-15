@@ -153,15 +153,17 @@ export default {
     filters: undefined,
     unities: undefined,
     researchers: [],
+    bonds: [
+      "Pesquisador (Pós-doutorando)",
+      "Docente",
+      "Aluno de doutorado",
+      "Docente Sênior",
+      "PART (Programa de Atração e Retenção de Talentos)",
+      "Professor Contratado",
+      "Funcionário",
+    ],
   }),
   computed: {
-    bonds() {
-      return this.researchers.reduce((acc, researcher) => {
-        return acc.includes(researcher.bond)
-          ? acc
-          : acc.concat(researcher.bond);
-      }, []);
-    },
     tabs() {
       return this.$knowledgeAreas.map((area) => ({ ...area, description: "" }));
     },
