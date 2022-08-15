@@ -148,6 +148,14 @@ export default {
     search: { term: "" },
     companies: [],
     ecosystems: [],
+    companySizes: [
+      "Microempresa",
+      "Pequena Empresa",
+      "Média Empresa",
+      "Grande Empresa",
+      "Unicórnio",
+      "Não Informado",
+    ],
   }),
   computed: {
     FLAG_COMPANY_UPDATE_RELEASED() {
@@ -174,15 +182,6 @@ export default {
         }, {});
 
       return Object.keys(citiesSet).sort((a, b) => a.localeCompare(b));
-    },
-    companySizes() {
-      return this.companies.reduce((sizes, comp) => {
-        comp.companySize.forEach((sz) => {
-          sizes.includes(sz) || sizes.push(sz);
-        });
-
-        return sizes;
-      }, []);
     },
     tabs() {
       return Object.keys(this.$cnae).reduce((acc, code) => {
