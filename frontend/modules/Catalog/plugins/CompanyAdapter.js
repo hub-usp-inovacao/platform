@@ -42,10 +42,20 @@ function CompanyAdapter(axios) {
     }
   }
 
+  async function getCities() {
+    try {
+      const { cities } = await axios.$get(baseURL + "/company_cities");
+      return cities;
+    } catch (error) {
+      return [];
+    }
+  }
+
   return {
     requestData,
     filterData,
     getEcosystems,
+    getCities,
   };
 }
 

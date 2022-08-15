@@ -148,6 +148,7 @@ export default {
     search: { term: "" },
     companies: [],
     ecosystems: [],
+    cities: [],
     companySizes: [
       "Microempresa",
       "Pequena Empresa",
@@ -160,28 +161,6 @@ export default {
   computed: {
     FLAG_COMPANY_UPDATE_RELEASED() {
       return process.env.OPEN_COMPANY_UPDATE_FORMS === "true";
-    },
-    cities() {
-      const cities = this.companies.reduce((all, company) => {
-        return all.concat(
-          company.address.city.filter((city) => {
-            return city !== "N/D" && city !== "n/d";
-          })
-        );
-      }, []);
-
-      const citiesSet = cities
-        .map((city) => city.trim())
-        .filter((city) => city.length > 0)
-        .reduce((set, city) => {
-          if (!set[city]) {
-            set[city] = city;
-          }
-
-          return set;
-        }, {});
-
-      return Object.keys(citiesSet).sort((a, b) => a.localeCompare(b));
     },
     tabs() {
       return Object.keys(this.$cnae).reduce((acc, code) => {
@@ -241,6 +220,7 @@ export default {
   async beforeMount() {
     this.companies = await this.$CompanyAdapter.requestData();
     this.ecosystems = await this.$CompanyAdapter.getEcosystems();
+    this.cities = await this.$CompanyAdapter.getCities();
 
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
