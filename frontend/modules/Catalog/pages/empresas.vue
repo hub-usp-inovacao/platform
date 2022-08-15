@@ -134,19 +134,9 @@ export default {
     filters: undefined,
     search: { term: "" },
     companies: [],
+    ecosystems: [],
   }),
   computed: {
-    incubators() {
-      return this.companies
-        .reduce((incubators, company) => {
-          const newIncubators = company.ecosystems.filter(
-            (incub) => !incubators.includes(incub)
-          );
-
-          return incubators.concat(newIncubators);
-        }, [])
-        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-    },
     cities() {
       const cities = this.companies.reduce((all, company) => {
         return all.concat(
@@ -206,7 +196,7 @@ export default {
         },
         {
           label: "Habitat de Inovação",
-          items: this.incubators,
+          items: this.ecosystems,
         },
         {
           label: "Porte",
@@ -234,11 +224,9 @@ export default {
     }, 1000),
   },
   async beforeMount() {
-    try {
-      this.companies = await this.$CompanyAdapter.requestData();
-    } catch (error) {
-      console.log(error);
-    }
+    this.companies = await this.$CompanyAdapter.requestData();
+    this.ecosystems = await this.$CompanyAdapter.getEcosystems();
+
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
   },

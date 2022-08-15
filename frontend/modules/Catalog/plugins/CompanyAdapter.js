@@ -33,9 +33,19 @@ function CompanyAdapter(axios) {
     }
   }
 
+  async function getEcosystems() {
+    try {
+      const { ecosystems } = await axios.$get(baseURL + "/ecosystems");
+      return ecosystems;
+    } catch (error) {
+      return [];
+    }
+  }
+
   return {
     requestData,
     filterData,
+    getEcosystems,
   };
 }
 
