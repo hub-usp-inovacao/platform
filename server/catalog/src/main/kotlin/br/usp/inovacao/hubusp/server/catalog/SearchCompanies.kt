@@ -6,4 +6,6 @@ class SearchCompanies(
     fun search(params: CompanySearchParams) = companyRepository.filter(params)
 
     fun getAllEcosystems(): Set<String> = companyRepository.getEcosystems()
+
+    fun getAllCities(): Set<String> = companyRepository.getCities()
 }

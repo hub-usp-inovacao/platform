@@ -129,10 +129,83 @@ class CatalogCompanyRepositoryImplTest() {
         assertTrue { result.all { expectedEcosystems.contains(it) } }
     }
 
+    @Test
+    fun `it reduces to a set of Cities`() {
+        // given
+        cleanTestDb()
+        seedDbForCities()
+
+        // when
+        val result = underTest.getCities()
+
+        // then
+        val expectedCities = setOf("São Paulo", "Caxias do Sul", "Pelotas")
+
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { expectedCities.contains(it)} }
+    }
+
+    private fun seedDbForCities() {
+        val coll = testDb.getCollection<Company>("companies")
+        coll.insertMany(citiesSeeds())
+    }
+
     private fun seedDbForEcosystems() {
         val coll = testDb.getCollection<Company>("companies")
         coll.insertMany(ecosystemsSeeds())
     }
+
+    private fun citiesSeeds() = listOf(
+        Company(
+            address = Address(
+                cep = "05555-020",
+                city = setOf("São Paulo"),
+                neighborhood = "Centro",
+                state = "SP",
+                venue = "Rua Barão de Itapetininga, 4"
+            ),
+            classification = Classification(
+                major = "Comércio e Serviços",
+                minor = "Serviços Domésticos"
+            ),
+            cnae = "042.0230-02",
+            companySize = setOf("Microempresa"),
+            description = "pluralidade foo bar baz",
+            ecosystems = setOf("ABC"),
+            emails = setOf("foo@example.com"),
+            incubated = "Sim. A empresa já está graduada",
+            name = "Foo inc.",
+            phones = setOf("(11) 98899-7654"),
+            services = emptySet(),
+            technologies = emptySet(),
+            url = "https://foo-comp.com.br"
+        ),
+        Company(
+            address = Address(
+                cep = "05555-020",
+                city = setOf("Caxias do Sul", "Pelotas"),
+                neighborhood = "Centro",
+                state = "SP",
+                venue = "Rua Barão de Itapetininga, 4"
+            ),
+            classification = Classification(
+                major = "Comércio e Serviços",
+                minor = "Serviços Domésticos"
+            ),
+            cnae = "042.0230-02",
+            companySize = setOf("Microempresa"),
+            description = "pluralidade foo bar baz",
+            ecosystems = setOf("ABC"),
+            emails = setOf("foo@example.com"),
+            incubated = "Sim. A empresa já está graduada",
+            name = "Foo inc.",
+            phones = setOf("(11) 98899-7654"),
+            services = emptySet(),
+            technologies = emptySet(),
+            url = "https://foo-comp.com.br"
+        ),
+    )
+
     private fun ecosystemsSeeds() = listOf<Company>(
         Company(
             address = Address(

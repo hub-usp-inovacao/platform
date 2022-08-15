@@ -45,6 +45,15 @@ fun Application.catalog() {
             )
         }
 
+        get("/company_cities") {
+            val cities = searchCompanies.getAllCities()
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("cities" to cities)
+            )
+        }
+
         get("/pdis") {
             val params = call.request.queryParameters
 

@@ -13,6 +13,11 @@ data class Ecosystem(
     val name: String,
 )
 
+@Serializable
+data class City (
+    val name: String
+)
+
 class CatalogCompanyRepositoryImpl(
     db: MongoDatabase
 ) : CompanyRepository {
@@ -34,6 +39,19 @@ class CatalogCompanyRepositoryImpl(
             "{ \$unwind: { path: '\$ecosystems' } }," +
             "{ \$project: { ecosystems: { \$ltrim: { input: '\$ecosystems', chars: ' ' } } } }," +
             "{ \$group: { _id: 'allEcos', name: { \$addToSet: '\$ecosystems' } } }," +
+            "{ \$project: { _id: 0, name: 1 } }," +
+            "{ \$unwind: { path: '\$name' } }," +
+            "{ \$sort: { name: 1 } }]"
+        )
+        .map { it.name }
+        .toSet()
+
+    override fun getCities(): Set<String> = companyCollection
+        .aggregate<City>(
+            "[{ \$project: { _id: 0, city: '\$address.city' } }," +
+            "{ \$unwind: { path: '\$city' } }," +
+            "{ \$project: { city: { \$ltrim: { input: '\$city', chars: ' ' } } } }," +
+            "{ \$group: { _id: 'allCities', name: { \$addToSet: '\$city' } } }," +
             "{ \$project: { _id: 0, name: 1 } }," +
             "{ \$unwind: { path: '\$name' } }," +
             "{ \$sort: { name: 1 } }]"

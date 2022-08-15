@@ -26,6 +26,18 @@ class CatalogTest {
     }
 
     @Test
+    fun `test GET company cities`() = testCatalogApplication {
+        // given ... when
+        val response = client.get("/company_cities")
+        val body = response.bodyAsText().let {
+            Json.decodeFromString<Map<String,List<String>>>(it)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(listOf("cities"), body.keys.toList())
+    }
+
+    @Test
     fun `test GET pdis`() = testCatalogApplication {
         // given ... when
         val response = client.get("/pdis")

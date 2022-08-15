@@ -12,4 +12,6 @@ interface CompanyRepository {
     fun filter(params: CompanySearchParams): Set<Company>
 
     fun getEcosystems(): Set<String>
+
+    fun getCities(): Set<String>
 }
