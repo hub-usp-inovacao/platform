@@ -4,4 +4,6 @@ class SearchCompanies(
     private val companyRepository: CompanyRepository
 ) {
     fun search(params: CompanySearchParams) = companyRepository.filter(params)
+
+    fun getAllEcosystems(): Set<String> = companyRepository.getEcosystems()
 }

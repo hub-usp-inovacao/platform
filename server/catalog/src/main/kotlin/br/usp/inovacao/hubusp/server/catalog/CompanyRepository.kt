@@ -10,4 +10,6 @@ interface CompanyRepository {
      * @return Set<Company> - the set of [Company] records found
      */
     fun filter(params: CompanySearchParams): Set<Company>
+
+    fun getEcosystems(): Set<String>
 }

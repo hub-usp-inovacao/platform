@@ -14,6 +14,18 @@ import kotlin.test.assertEquals
 
 class CatalogTest {
     @Test
+    fun `test GET company ecosystems`() = testCatalogApplication {
+        // given ... when
+        val response = client.get("/ecosystems")
+        val body = response.bodyAsText().let {
+            Json.decodeFromString<Map<String,List<String>>>(it)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(listOf("ecosystems"), body.keys.toList())
+    }
+
+    @Test
     fun `test GET pdis`() = testCatalogApplication {
         // given ... when
         val response = client.get("/pdis")

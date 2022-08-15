@@ -113,6 +113,101 @@ class CatalogCompanyRepositoryImplTest() {
         assertTrue { result.all { it.matches(term = term) } }
     }
 
+    @Test
+    fun `it reduces to a set of Ecosystems`() {
+        // given
+        cleanTestDb()
+        seedDbForEcosystems()
+
+        // when
+        val result = underTest.getEcosystems()
+
+        // then
+        val expectedEcosystems = setOf("ABC", "BCD", "CDE", "DEF", "EFG")
+
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { expectedEcosystems.contains(it) } }
+    }
+
+    private fun seedDbForEcosystems() {
+        val coll = testDb.getCollection<Company>("companies")
+        coll.insertMany(ecosystemsSeeds())
+    }
+    private fun ecosystemsSeeds() = listOf<Company>(
+        Company(
+            address = Address(
+                cep = "05555-020",
+                city = setOf("São Paulo"),
+                neighborhood = "Centro",
+                state = "SP",
+                venue = "Rua Barão de Itapetininga, 4"
+            ),
+            classification = Classification(
+                major = "Comércio e Serviços",
+                minor = "Serviços Domésticos"
+            ),
+            cnae = "042.0230-02",
+            companySize = setOf("Microempresa"),
+            description = "pluralidade foo bar baz",
+            ecosystems = setOf("ABC"),
+            emails = setOf("foo@example.com"),
+            incubated = "Sim. A empresa já está graduada",
+            name = "Foo inc.",
+            phones = setOf("(11) 98899-7654"),
+            services = emptySet(),
+            technologies = emptySet(),
+            url = "https://foo-comp.com.br"
+        ),
+        Company(
+            address = Address(
+                cep = "05555-020",
+                city = setOf("São Paulo"),
+                neighborhood = "Centro",
+                state = "SP",
+                venue = "Rua Barão de Itapetininga, 4"
+            ),
+            classification = Classification(
+                major = "Comércio e Serviços",
+                minor = "Serviços Domésticos"
+            ),
+            cnae = "042.0230-02",
+            companySize = setOf("Microempresa"),
+            description = "pluralidade foo bar baz",
+            ecosystems = setOf("BCD", "CDE"),
+            emails = setOf("foo@example.com"),
+            incubated = "Sim. A empresa já está graduada",
+            name = "Foo inc.",
+            phones = setOf("(11) 98899-7654"),
+            services = emptySet(),
+            technologies = emptySet(),
+            url = "https://foo-comp.com.br"
+        ),
+        Company(
+            address = Address(
+                cep = "05555-020",
+                city = setOf("São Paulo"),
+                neighborhood = "Centro",
+                state = "SP",
+                venue = "Rua Barão de Itapetininga, 4"
+            ),
+            classification = Classification(
+                major = "Comércio e Serviços",
+                minor = "Serviços Domésticos"
+            ),
+            cnae = "042.0230-02",
+            companySize = setOf("Microempresa"),
+            description = "pluralidade foo bar baz",
+            ecosystems = setOf("CDE", "DEF", "EFG"),
+            emails = setOf("foo@example.com"),
+            incubated = "Sim. A empresa já está graduada",
+            name = "Foo inc.",
+            phones = setOf("(11) 98899-7654"),
+            services = emptySet(),
+            technologies = emptySet(),
+            url = "https://foo-comp.com.br"
+        ),
+    )
+
     private fun cleanTestDb() {
         val companyCollection = testDb.getCollection<Company>("companies")
         companyCollection.deleteMany("{}")
@@ -163,7 +258,7 @@ class CatalogCompanyRepositoryImplTest() {
             cnae = "042.0230-02",
             companySize = setOf("Grande Empresa"),
             description = "foo bar baz",
-            ecosystems = setOf("InovaLab@POLI"),
+            ecosystems = setOf("Habits"),
             emails = setOf("foo@example.com"),
             incubated = "Sim. A empresa já está graduada",
             name = "Foo inc.",
