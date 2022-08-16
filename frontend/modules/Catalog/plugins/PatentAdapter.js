@@ -33,7 +33,22 @@ function PatentAdapter(axios) {
     }
   }
 
-  return { requestData, filterData };
+  async function getClassifications() {
+    try {
+      let { classifications } = await axios.$get(
+        baseURL + "/patent_classifications"
+      );
+      classifications.forEach(({ secondaries }) =>
+        secondaries.sort((a, b) => a.localeCompare(b))
+      );
+      classifications.sort((a, b) => a.primary.localeCompare(b.primary));
+      return classifications;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  return { requestData, filterData, getClassifications };
 }
 
 export default (context, inject) => {

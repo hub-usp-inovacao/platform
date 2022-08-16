@@ -93,6 +93,7 @@ export default {
     patents: [],
     selected_subareas: [],
     filters: undefined,
+    classifications: [],
     rawTabs: [
       { name: "Necessidades Humanas", code: "A" },
       { name: "Operações de Processamento; Transporte", code: "B" },
@@ -119,25 +120,10 @@ export default {
       };
     },
     tabs() {
-      return this.rawTabs.map((tab) => {
-        const subareas = this.patents.reduce((acc, pat) => {
-          if (pat.classification.primary.cip.substr(0, 1) === tab.code) {
-            acc.add(pat.classification.primary.subarea);
-          }
-
-          if (pat.classification.secondary?.cip.substr(0, 1) === tab.code) {
-            acc.add(pat.classification.secondary.subarea);
-          }
-
-          return acc;
-        }, new Set());
-
-        return {
-          code: tab.code,
-          name: `${tab.code} - ${tab.name}`,
-          subareas: Array.from(subareas),
-        };
-      });
+      return this.classifications.map(({ primary, secondaries }) => ({
+        name: primary,
+        subareas: secondaries,
+      }));
     },
     groups() {
       return [
@@ -158,11 +144,8 @@ export default {
     }, 1000),
   },
   async beforeMount() {
-    try {
-      this.patents = await this.$PatentAdapter.requestData();
-    } catch (error) {
-      this.patents = [];
-    }
+    this.patents = await this.$PatentAdapter.requestData();
+    this.classifications = await this.$PatentAdapter.getClassifications();
 
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
