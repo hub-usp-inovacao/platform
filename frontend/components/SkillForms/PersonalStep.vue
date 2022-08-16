@@ -3,26 +3,26 @@
     <h2>Dados Pessoais</h2>
     <v-row>
       <v-col cols="4">
-        <ShortTextInput :value="nusp" @input="setNusp" label="Nº USP" />
+        <ShortTextInput :value="nusp" label="Nº USP" @input="setNusp" />
       </v-col>
       <v-col cols="8">
-        <ShortTextInput :value="name" @input="setName" label="Nome" />
+        <ShortTextInput :value="name" label="Nome" @input="setName" />
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <Dropdown
           :value="bond"
-          @input="setBond"
           label="Vínculo com a Universidade"
           :options="bonds"
+          @input="setBond"
         />
       </v-col>
       <v-col v-if="isTemp">
         <ShortTextInput
           :value="limitDate"
-          @input="setLimitDate"
           label="Data limite do vínculo"
+          @input="setLimitDate"
         />
       </v-col>
     </v-row>
@@ -30,15 +30,15 @@
       <v-col>
         <ShortTextInput
           :value="phone"
-          @input="setPhone"
           label="Telefone institucional"
+          @input="setPhone"
         />
       </v-col>
       <v-col>
         <ShortTextInput
           :value="personalPhone"
-          @input="setPersonalPhone"
           label="Telefone pessoal (não será divulgado no Hub)"
+          @input="setPersonalPhone"
         />
       </v-col>
     </v-row>
@@ -46,8 +46,8 @@
       <v-col>
         <URLInput
           :value="lattes"
-          @input="setLattes"
           label="Link do curriculo lattes"
+          @input="setLattes"
         />
       </v-col>
     </v-row>
@@ -57,18 +57,18 @@
       <v-col>
         <Dropdown
           :value="major"
-          @input="setMajor"
           label="Grande área (CNPq)"
           :options="majors"
+          @input="setMajor"
         />
       </v-col>
       <v-col>
         <Dropdown
           :value="minors"
-          @input="setMinors"
           label="Area (CNPq)"
           :options="allMinors"
-          :multipleOption="true"
+          :multiple-option="true"
+          @input="setMinors"
         />
       </v-col>
     </v-row>
@@ -76,10 +76,10 @@
       <v-col>
         <MultipleInputs
           component="ShortTextInput"
-          inputLabel="palavra-chave"
+          input-label="palavra-chave"
           :value="keywords"
-          @input="setKeywords"
           :limit="5"
+          @input="setKeywords"
         />
       </v-col>
     </v-row>
@@ -145,6 +145,17 @@ export default {
     },
   },
 
+  async beforeMount() {
+    try {
+      const { areas } = await this.$axios.$get(
+        process.env.BACKEND_URL + "/areas"
+      );
+      this.areas = areas;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   methods: {
     ...mapActions({
       setName: "skill_form/setName",
@@ -158,15 +169,6 @@ export default {
       setKeywords: "skill_form/setKeywords",
       setLattes: "skill_form/setLattes",
     }),
-  },
-
-  async beforeMount() {
-    try {
-      const { areas } = await this.$axios.$get("http://localhost:3001/areas");
-      this.areas = areas;
-    } catch (error) {
-      console.log(error);
-    }
   },
 };
 </script>
