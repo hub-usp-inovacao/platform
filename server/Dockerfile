@@ -11,21 +11,21 @@ RUN mkdir catalog curatorship discovery hub-app hub-cli persistence techtransfer
 USER gradle
 
 # COPY ALL PROJECTS build.gradle.kts FILES TO THEIR DESTINATIONS
-COPY --chown=gradle:gradle  settings.gradle.kts                                                 .
-COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  .
-COPY --chown=gradle:gradle  catalog/build.gradle.kts         catalog/gradle.properties          ./catalog
-COPY --chown=gradle:gradle  curatorship/build.gradle.kts     curatorship/gradle.properties      ./curatorship
-COPY --chown=gradle:gradle  discovery/build.gradle.kts       discovery/gradle.properties        ./discovery
-COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.properties          ./hub-app
-COPY --chown=gradle:gradle  hub-cli/build.gradle.kts         hub-cli/gradle.properties          ./hub-cli
-COPY --chown=gradle:gradle  persistence/build.gradle.kts     persistence/gradle.properties      ./persistence
-COPY --chown=gradle:gradle  techtransfer/build.gradle.kts    techtransfer/gradle.properties     ./techtransfer
+COPY --chown=gradle:gradle  settings.gradle.kts                                                 ./
+COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  ./
+COPY --chown=gradle:gradle  catalog/build.gradle.kts         catalog/gradle.properties          ./catalog/
+COPY --chown=gradle:gradle  curatorship/build.gradle.kts     curatorship/gradle.properties      ./curatorship/
+COPY --chown=gradle:gradle  discovery/build.gradle.kts       discovery/gradle.properties        ./discovery/
+COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.properties          ./hub-app/
+COPY --chown=gradle:gradle  hub-cli/build.gradle.kts         hub-cli/gradle.properties          ./hub-cli/
+COPY --chown=gradle:gradle  persistence/build.gradle.kts     persistence/gradle.properties      ./persistence/
+COPY --chown=gradle:gradle  techtransfer/build.gradle.kts    techtransfer/gradle.properties     ./techtransfer/
 
 # PRE-INSTALL JUST THE DEPENDENCIES -- THIS SHALL SPEEDUP FUTURE BUILDS
 RUN gradle clean build
 
 # COPY THE REST OF THE CODE
-COPY --chown=gradle:gradle . .
+COPY --chown=gradle:gradle . ./
 
 
 
