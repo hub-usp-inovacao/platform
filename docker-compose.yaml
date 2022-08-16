@@ -1,29 +1,50 @@
 version: '3.9'
 
-# ###################################################################################### #
-# This file leverages on Docker-Compose profiles feature to define multiple environments #
-#                                                                                        #
-# To define a profile, run                                                               #
-# 'docker-compose --profile <name> ...'                                                  #
-#                                                                                        #
-# Complete reference: https://docs.docker.com/compose/profiles/                          #
-#                                                                                        #
-# -------------------------------------------------------------------------------------- #
-#                                                                                        #
-# The profiles and their description are as follows:                                     #
-# - 'local': for local development; it comprehends 3 containers -- frontdev, backdev,    #
-#  and mongo                                                                             #
-#                                                                                        #
-# - 'if': for staging environment; it comprehends 4 containers -- frontend, backend,     #
-#  mongo, and caddy                                                                      #
-#                                                                                        #
-# - 'stifront': for frontend production deploy; it comprehends solely frontend container #
-#                                                                                        #
-# - 'stiback': for backend production deploy; it comprehends 2 containers -- backend,    #
-#  and mongo                                                                             #
-# ###################################################################################### #
+
+
+
+###################################################################
+#                                                                 #
+#  This docker-compose.yaml file comprehends 5 profiles           #
+#                                                                 #
+#  - local:     development environment                           #
+#  - catalog:   development of the frontend using the new backend #
+#  - if:        staging environment                               #
+#  - stifront:  frontend production environment                   #
+#  - stiback:   backend production environment                    #
+#                                                                 #
+#  To setup a specific profile, run:                              #
+#  docker-compose --profile <profile> up -d                       #
+#                                                                 #
+#  More information at https://docs.docker.com/compose/profiles/  #
+#                                                                 #
+###################################################################
+
+
+
+
+volumes:
+  railsdevdeps:
+  railsdeps:
+  nuxtdevdeps:
+  data:
+
+
+
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./frontend/.env
+    ports:
+      - 3000:3000
+    profiles:
+      - if
+      - stifront
+
   frontdev:
     build:
       context: ./frontend
@@ -39,49 +60,8 @@ services:
       - local
       - catalog
 
-  backdev:
-    build:
-      context: ./backend
-      target: development
-      dockerfile: Dockerfile
-    ports:
-      - 3001:3000
-    volumes:
-      - railsdevdeps:/usr/src/app/vendor/bundle
-      - ./backend:/usr/src/app
-    env_file:
-      - ./backend/.env
-    depends_on:
-      - mongo
-    profiles:
-      - local
 
-  mongo:
-    image: mongo:4.4.1-bionic
-    ports:
-      - 27017:27017
-    env_file:
-      - ./backend/.env
-    volumes:
-      - data:/data/db
-    profiles:
-      - local
-      - if
-      - stiback
-      - catalog
-      - cli
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    env_file:
-      - ./frontend/.env
-    ports:
-      - 3000:3000
-    profiles:
-      - if
-      - stifront
 
   backend:
     build:
@@ -102,6 +82,44 @@ services:
       - if
       - stiback
 
+  backdev:
+    build:
+      context: ./backend
+      target: development
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3000
+    volumes:
+      - railsdevdeps:/usr/src/app/vendor/bundle
+      - ./backend:/usr/src/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    profiles:
+      - local
+
+
+
+
+  mongo:
+    image: mongo:4.4.1-bionic
+    ports:
+      - 27017:27017
+    env_file:
+      - ./backend/.env
+    volumes:
+      - data:/data/db
+    profiles:
+      - local
+      - if
+      - stiback
+      - catalog
+      - cli
+
+
+  
+
   catalogapp:
     build:
       context: ./server
@@ -113,6 +131,8 @@ services:
     env_file:
       - ./server/.env
     profiles:
+      - if
+      - stiback
       - catalog
 
   catalogcli:
@@ -127,6 +147,8 @@ services:
       - cli
 
 
+
+
   caddydev:
     build:
       context: ./caddy
@@ -135,7 +157,15 @@ services:
       - 5000:5000
     profiles:
       - local
-      - catalog
+
+  caddysti:
+    build:
+      context: ./caddy
+      target: sti
+    ports:
+      - 5000:5000
+    profiles:
+      - stiback
 
   caddy:
     build:
@@ -147,8 +177,3 @@ services:
     profiles:
       - if
 
-volumes:
-  railsdevdeps:
-  railsdeps:
-  nuxtdevdeps:
-  data:

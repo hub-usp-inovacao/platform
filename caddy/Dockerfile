@@ -15,3 +15,12 @@ EXPOSE 5000
 FROM base AS prod
 
 COPY Caddyfile /etc/caddy/Caddyfile
+
+
+
+
+FROM base AS sti
+
+COPY Caddyfile.sti /etc/caddy/Caddyfile
+
+EXPOSE 5000
