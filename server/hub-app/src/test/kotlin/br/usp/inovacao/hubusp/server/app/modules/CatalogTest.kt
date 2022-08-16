@@ -38,6 +38,18 @@ class CatalogTest {
     }
 
     @Test
+    fun `test GET patent classifications`() = testCatalogApplication {
+        // given ... when
+        val response = client.get("/patent_classifications")
+        val body = response.bodyAsText().let {
+            Json.decodeFromString<Map<String,List<String>>>(it)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(listOf("classifications"), body.keys.toList())
+    }
+
+    @Test
     fun `test GET pdis`() = testCatalogApplication {
         // given ... when
         val response = client.get("/pdis")

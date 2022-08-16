@@ -54,6 +54,15 @@ fun Application.catalog() {
             )
         }
 
+        get("/patent_classifications") {
+            val classifications = searchPatents.getAllClassifications()
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("classifications" to classifications)
+            )
+        }
+
         get("/pdis") {
             val params = call.request.queryParameters
 

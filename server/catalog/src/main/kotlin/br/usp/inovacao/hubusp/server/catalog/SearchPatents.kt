@@ -4,4 +4,6 @@ class SearchPatents(
     private val patentRepository: PatentRepository
 ) {
     fun search(params: PatentSearchParams) = patentRepository.filter(params)
+
+    fun getAllClassifications() = patentRepository.getClassifications()
 }

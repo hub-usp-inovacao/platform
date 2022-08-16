@@ -1,9 +1,6 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Area
-import br.usp.inovacao.hubusp.server.catalog.DualClassification
-import br.usp.inovacao.hubusp.server.catalog.Patent
-import br.usp.inovacao.hubusp.server.catalog.PatentSearchParams
+import br.usp.inovacao.hubusp.server.catalog.*
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -116,6 +113,69 @@ internal class CatalogPatentRepositoryImplTest {
                     (it.name.contains(term) || it.summary.contains(term) || it.owners.any { owner -> owner.contains(term) } || it.inventors.any { inventor -> inventor.contains(term) })
         } }
     }
+
+    @Test
+    fun `it reduces to all classifications`() {
+        // given
+        cleanTestDb()
+        seedDbForClassifications()
+
+        // when
+        val result = underTest.getClassifications()
+
+        // then
+        val expected = setOf(
+            IPC(primary = "A", secondaries = setOf("A61", "A62")),
+            IPC(primary = "B", secondaries = setOf("B01"))
+        )
+
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { expected.contains(it) } }
+    }
+
+    private fun seedDbForClassifications() {
+        val patentCollection = testDb.getCollection<Patent>("patents")
+        patentCollection.insertMany(testSeedsForClassifications())
+    }
+
+    private fun testSeedsForClassifications() = listOf(
+        Patent(
+            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            summary = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            classification = DualClassification(
+                primary = Area(
+                    cip = "A",
+                    subarea = "A61"
+                ),
+                secondary = Area(
+                    cip = "A",
+                    subarea = "A62"
+                )
+            ),
+            ipcs = setOf("A61K003847","A61P003104","C12N000119","C12N000936","C12N001556","C12N001581"),
+            owners = setOf("Univ. São Paulo"),
+            status = "Concedida",
+            url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
+            inventors = setOf("Elza Teresinha Grael"," Ana Clara Guerrini Schenberg"," Elisabete Jose Vicente"),
+            countries_with_protection = setOf("Brasil"),
+        ),
+        Patent(
+            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            summary = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            classification = DualClassification(
+                primary = Area(
+                    cip = "B",
+                    subarea = "B01"
+                )
+            ),
+            ipcs = setOf("A61K003847","A61P003104","C12N000119","C12N000936","C12N001556","C12N001581"),
+            owners = setOf("Univ. São Paulo"),
+            status = "Concedida",
+            url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
+            inventors = setOf("Elza Teresinha Grael"," Ana Clara Guerrini Schenberg"," Elisabete Jose Vicente"),
+            countries_with_protection = setOf("Brasil"),
+        ),
+    )
 
     private fun cleanTestDb() {
         val patentCollection = testDb.getCollection<Patent>("patents")

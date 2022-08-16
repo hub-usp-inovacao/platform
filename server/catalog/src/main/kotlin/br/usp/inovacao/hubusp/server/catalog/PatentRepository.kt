@@ -10,4 +10,6 @@ interface PatentRepository {
      * @return Set<Patent> - the set of [Patent] records found
      */
     fun filter(params: PatentSearchParams): Set<Patent>
+
+    fun getClassifications(): Set<IPC>
 }
