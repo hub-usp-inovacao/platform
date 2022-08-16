@@ -5,6 +5,9 @@ export default {
     sheetsAPIKey: process.env.sheetsAPIKey,
     sheetID: process.env.sheetID,
     BACKEND_URL: process.env.BACKEND_URL,
+    NEW_CATALOG: process.env.NEW_CATALOG,
+    OPEN_COMPANY_UPDATE_FORMS: process.env.OPEN_COMPANY_UPDATE_FORMS,
+    OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
     INICIATIVES_DATA_SOURCE_URL: process.env.INICIATIVES_DATA_SOURCE_URL,
     PDI_DATA_SOURCE_URL: process.env.PDI_DATA_SOURCE_URL,
     SKILLS_DATA_SOURCE_URL: process.env.SKILLS_DATA_SOURCE_URL,
@@ -109,7 +112,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "~/modules/Catalog/index.js"],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -145,7 +148,7 @@ export default {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line no-unused-vars
-    extend(config, ctx) { },
+    extend(config, ctx) {},
   },
   googleAnalytics: {
     id: process.env.GOOGLE_ANALYTICS_ID,

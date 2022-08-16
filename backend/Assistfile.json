@@ -1,0 +1,105 @@
+{
+    "requiredFiles": [
+        {
+            "path": "./config/master.key",
+            "description": "The encryption key to access credentials"
+        },
+        {
+            "path": "./.env"
+        }
+    ],
+    "envSample": [
+        {
+            "name": "email_username",
+            "description": "The email from which emails will be sent",
+            "default": "hubusp.inovacao@usp.br"
+        },
+        {
+            "name": "email_password",
+            "description": "The password for access to the email; in case of 2FA accounts, generate an app-password"
+        },
+        {
+            "name": "email_dev_username",
+            "description": "The email to receive a control copy",
+            "default": "devshubuspinovacao@googlegroups.com"
+        },
+        {
+            "name": "email_conexao_username",
+            "description": "The email to receive Conexao-related emails"
+        },
+        {
+            "name": "CORS_ALLOWED_ORIGIN",
+            "description": "Allowed address for CORS blocks",
+            "default": "*"
+        },
+        {
+            "name": "JWT_AUDIENCE",
+            "description": "The address of the targeted audience for JWT"
+        },
+        {
+            "name": "JWT_SECRET",
+            "description": "The secret key to generate JWT"
+        },
+        {
+            "name": "JWT_ISSUER",
+            "description": "The address of the issuer of JWT"
+        },
+        {
+            "name": "CSV_MAX_PARTNERS",
+            "description": "Max number of partners allowed for Company Update CSV",
+            "default": "5"
+        },
+        {
+            "name": "google_sheets_API_key",
+            "description": "API Key to access Google Spreadsheets"
+        },
+        {
+            "name": "INICIATIVE_SHEET_ID",
+            "description": "ID of the spreadsheet with data of Initiatives"
+        },
+        {
+            "name": "INICIATIVE_TAB_NAME",
+            "description": "Name of the tab in which the data are for Initiative"
+        },
+        {
+            "name": "SKILL_SHEET_ID",
+            "description": "ID of the spreadsheet with data of Skills"
+        },
+        {
+            "name": "SKILL_TAB_NAME",
+            "description": "Name of the tab in which the data are for Skills"
+        },
+        {
+            "name": "COMPANY_SHEET_ID",
+            "description": "ID of the spreadsheet with data of Companies"
+        },
+        {
+            "name": "COMPANY_TAB_NAME",
+            "description": "Name of the tab in which the data are for Companies"
+        },
+        {
+            "name": "PDI_SHEET_ID",
+            "description": "ID of the spreadsheet with data of PDIs"
+        },
+        {
+            "name": "PDI_TAB_NAME",
+            "description": "Name of the tab in which the data are for PDIs"
+        },
+        {
+            "name": "PATENT_SHEET_ID",
+            "description": "ID of the spreadsheet with data of Patents"
+        },
+        {
+            "name": "PATENT_TAB_NAME",
+            "description": "Name of the tab in which the data are for Patents"
+        },
+        {
+            "name": "DISCIPLINE_SHEET_ID",
+            "description": "ID of the spreadsheet with data of Disciplines"
+        },
+        {
+            "name": "DISCIPLINE_TAB_NAME",
+            "description": "Name of the tab in which the data are for Disciplines"
+        }
+    ]
+}

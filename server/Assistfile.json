@@ -1,0 +1,80 @@
+{
+    "requiredFiles": [
+        {
+            "path": "./.env"
+        }
+    ],
+    "envSample": [
+        {
+            "name": "HUB_DATASOURCE_PROTOCOL",
+            "description": "The protocol for db connection",
+            "default": "mongodb"
+        },
+        {
+            "name": "HUB_DATASOURCE_HOST",
+            "description": "The hostname on which the db is running",
+            "default": "mongo"
+        },
+        {
+            "name": "HUB_DATASOURCE_PORT",
+            "description": "The port on which the host is running the db",
+            "default": "27017"
+        },
+        {
+            "name": "HUB_DATASOURCE_DBNAME",
+            "description": "The name of the virtual database",
+            "default": "backend_development"
+        },
+        {
+            "name": "HUB_JWT_SECRET",
+            "description": "The secret used to generate JWTs (recommended a string 64-char long)"
+        },
+        {
+            "name": "HUB_JWT_ISSUER",
+            "description": "The entity that issues JWTs"
+        },
+        {
+            "name": "HUB_JWT_DOMAIN",
+            "description": "The domain on which the a JWT is valid"
+        },
+        {
+            "name": "HUB_JWT_AUDIENCE",
+            "description": "The audience for a JWT"
+        },
+        {
+            "name": "HUB_JWT_REALM",
+            "description": "The realm under which JWT lays"
+        },
+        {
+            "name": "HUB_HTTP_PORT",
+            "description": "The port used by hub-app Ktor server",
+            "default": "8080"
+
+        },
+        {
+            "name": "HUB_CORS_ALLOWED_HOSTS",
+            "description": "The comma-separated hostnames allowed by CORS, e.g., www.example.com;localhost:3000 -- allow all with an '*'",
+            "default": "*"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_PROTOCOL",
+            "description": "(TEST environment) The protocol for db connection",
+            "default": "mongodb"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_HOST",
+            "description": "(TEST environment) The hostname on which the db is running",
+            "default": "mongo"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_PORT",
+            "description": "(TEST environment) The port on which the host is running the db",
+            "default": "27017"
+        },
+        {
+            "name": "HUB_TEST_DATASOURCE_DBNAME",
+            "description": "(TEST environment) The name of the virtual database",
+            "default": "backend_test"
+        }
+    ]
+}

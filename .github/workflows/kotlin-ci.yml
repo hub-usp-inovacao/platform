@@ -9,6 +9,13 @@ jobs:
   build:
     name: Kotlin build 
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,5 +25,5 @@ jobs:
 
       - name: gradle build
         run: |
-          cd server && ./gradlew build || echo ""
+          cd server && ./gradlew build
 

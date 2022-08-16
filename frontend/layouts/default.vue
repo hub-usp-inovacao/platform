@@ -17,7 +17,7 @@
       <v-toolbar-items>
         <v-chip-group>
           <v-chip
-            v-for="(item, i) in items"
+            v-for="(item, i) in navItems"
             :key="i"
             :to="item.to"
             nuxt
@@ -70,46 +70,60 @@ export default {
   data: () => ({
     activeItem: 0,
     snackbar: true,
-    items: [
-      {
-        title: "Iniciativas",
-        to: "/iniciativas",
-      },
-      {
-        title: "P&D&I",
-        to: "/inovacao",
-      },
-      {
-        title: "Competências",
-        to: "/competencias",
-      },
-      {
-        title: "Educação",
-        to: "/educacao",
-      },
-      {
-        title: "Empresas",
-        to: "/empresas",
-      },
-      {
-        title: "Patentes",
-        to: "/patentes",
-      },
-      {
-        title: "Jornada",
-        to: "/jornada",
-      },
-      {
-        title: "Contato",
-        to: "/contato",
-      },
-    ],
     drawer: false,
     group: "",
   }),
   computed: {
     path() {
       return this.$route.path;
+    },
+    FLAG_CONEXAO_RELEASED() {
+      return process.env.OPEN_CONEXAO_FORMS === "true";
+    },
+    navItems() {
+      const base = [
+        {
+          title: "Iniciativas",
+          to: "/iniciativas",
+        },
+        {
+          title: "P&D&I",
+          to: "/inovacao",
+        },
+        {
+          title: "Competências",
+          to: "/competencias",
+        },
+        {
+          title: "Educação",
+          to: "/educacao",
+        },
+        {
+          title: "Empresas",
+          to: "/empresas",
+        },
+        {
+          title: "Patentes",
+          to: "/patentes",
+        },
+        {
+          title: "Jornada",
+          to: "/jornada",
+        },
+        {
+          title: "Contato",
+          to: "/contato",
+        },
+      ];
+
+      if (this.FLAG_CONEXAO_RELEASED)
+        return base.concat({
+          title: "Conexão",
+          to: "/conexao",
+          new: true,
+        });
+
+      return base;
     },
   },
   head() {

@@ -2,22 +2,21 @@
   <div>
     <div class="background">
       <Panel
+        v-model="search.term"
         title="Iniciativas"
         description="A USP mantém diversas iniciativas e programas para facilitar e estimular a inovação e o empreendedorismo, fazendo a ponte entre o ambiente acadêmico, as organizações e a sociedade. Clique nos ícones para conhecer os tipos de iniciativas e acessar as formas de contatar cada uma delas."
         url="http://www.inovacao.usp.br/editais/"
         forms-call="Confira os Editais"
         second-url="http://www.inovacao.usp.br/programas/"
         second-call="confira os Programas"
-        :value="preSearch"
         @search="search.term = $event"
-        @clear="search.iniciatives = undefined"
+        @clear="search.term = ''"
       />
     </div>
 
     <Background class="absolute" />
 
     <MultipleFilters
-      :pre-selected-tabs="preSelectedTabs"
       :tabs="tabs"
       :colors="{ base: '#222c63', active: '#525c93' }"
       :groups="groups"
@@ -25,9 +24,8 @@
     />
 
     <DisplayData
-      :items="display_entries"
+      :items="initiatives"
       group-name="Iniciativas"
-      :selected="preSelected"
       :has-image="false"
     >
       <template #title="{ item }">{{ item.name }}</template>
@@ -39,9 +37,7 @@
             <p class="body-2 mb-4 mr-8">{{ item.email }}</p>
           </v-col>
           <v-col>
-            <p
-              class="body-2 mb-4"
-            >
+            <p class="body-2 mb-4">
               {{ item.contact.info }}
             </p>
           </v-col>
@@ -63,13 +59,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { removeAccent } from "@/lib/format";
+import { debounce } from "debounce";
 
-import Background from "@/components/first_level/Background.vue";
-import Panel from "@/components/first_level/Panel.vue";
-import MultipleFilters from "@/components/first_level/MultipleFilters.vue";
-import DisplayData from "@/components/first_level/DisplayData.vue";
+import Background from "../components/Background.vue";
+import DisplayData from "../components/DisplayData.vue";
+import MultipleFilters from "../components/MultipleFilters.vue";
+import Panel from "../components/Panel.vue";
 
 export default {
   components: {
@@ -121,23 +116,12 @@ export default {
       },
     ],
 
-    search: {
-      term: "",
-      iniciatives: undefined,
-    },
+    search: { term: "" },
 
     filters: undefined,
-    filtered: undefined,
-    queryParam: undefined,
-    routeParam: undefined,
+    initiatives: [],
   }),
   computed: {
-    ...mapGetters({
-      iniciatives: "iniciativas/iniciatives",
-      isEmpty: "iniciativas/isEmpty",
-      dataStatus: "iniciativas/dataStatus",
-      searchKeys: "iniciativas/searchKeys",
-    }),
     groups() {
       return [
         {
@@ -146,110 +130,38 @@ export default {
             .map((c) => c.name)
             .concat(["Toda a USP"])
             .sort(),
-          preSelected: this.queryParam ? this.queryParam.campus : undefined,
         },
       ];
     },
     searchTerm() {
-      return this.search.term;
+      return this.search.term === "" ? undefined : this.search.term;
     },
-    baseItems() {
-      return this.filtered !== undefined ? this.filtered : this.iniciatives;
-    },
-    display_entries() {
-      return this.search.iniciatives !== undefined
-        ? this.search.iniciatives
-        : this.baseItems;
-    },
-    preSelected() {
-      if (this.queryParam && this.queryParam.nome) {
-        return this.display_entries.find(
-          (item) => item.name == this.queryParam.nome
-        );
-      }
-
-      return this.routeParam;
-    },
-    preSearch() {
-      return this.queryParam ? this.queryParam.buscar : undefined;
-    },
-    preSelectedTabs() {
-      if (this.queryParam && this.queryParam.areas) {
-        return this.queryParam.areas
-          .split(";")
-          .map((area) => area.trim())
-          .filter((area) => area.trim().length > 0);
-      }
-
-      return undefined;
+    queryParams() {
+      return {
+        classifications: this.filters?.primary,
+        campus: this.filters?.terciary[0],
+        term: this.searchTerm,
+      };
     },
   },
   watch: {
-    isEmpty() {
-      if (!this.isEmpty) {
-        if (this.filters != undefined || this.searchTerm != "") {
-          this.pipeline();
-        }
-      }
-    },
-    searchTerm() {
-      console.log(this.search.term);
-      this.pipeline();
-    },
-    filters() {
-      this.pipeline();
-    },
+    queryParams: debounce(function () {
+      this.runSearch();
+    }, 1000),
   },
-  beforeMount() {
-    const env = { sheetsAPIKey: process.env.sheetsAPIKey };
-    const route = this.$route;
-
-    if (this.dataStatus == "ok" && this.iniciatives.length == 0) {
-      this.fetchSpreadsheets(env);
-    }
-
-    if (route.params.id) {
-      this.routeParam = this.iniciatives.find(
-        (iniciative) => iniciative.id == route.params.id
-      );
-    } else if (route.query && Object.keys(route.query).length > 0) {
-      this.queryParam = route.query;
-    }
-
-    if (this.queryParam && this.queryParam.buscar) {
-      this.search.term = this.queryParam.buscar;
-    }
+  async beforeMount() {
+    this.initiatives = await this.$InitiativeAdapter.requestData();
+    if (this.$route.query.q !== undefined)
+      this.search.term = this.$route.query.q;
   },
   methods: {
-    ...mapActions({
-      fetchSpreadsheets: "iniciativas/fetchSpreadsheets",
-      setStrictResults: "global/setStrictResults",
-      setFlexibleResults: "global/setFlexibleResults",
-    }),
-    fuzzySearch() {
-      const searchResult = this.$fuzzySearch(
-        removeAccent(this.search.term.trim()),
-        this.baseItems,
-        this.searchKeys
-      );
-
-      this.search.iniciatives = searchResult;
-    },
-    filterData(context) {
-      this.filtered = this.iniciatives.filter((iniciative) =>
-        this.$iniciativeMatchesFilter(iniciative,context)
-      );
-    },
-    async pipeline() {
-      if (this.filters) this.filterData(this.filters);
-
-      if (this.search.term && this.search.term.trim()) {
-        this.$ga.event({
-          eventCategory: "Iniciativas",
-          eventAction: "Search",
-          eventLabel: this.search.term,
-        });
-        this.fuzzySearch();
+    async runSearch() {
+      try {
+        this.initiatives = await this.$InitiativeAdapter.filterData(
+          this.queryParams
+        );
+      } catch (e) {
+        console.log(e);
       }
     },
   },
