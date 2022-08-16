@@ -1,12 +1,11 @@
-import dnaUspStamp from './dna_usp_stamp'
-import companyData from './company_data'
-import about from './about'
-import investment from './investment'
-import revenue from './revenue'
-import incubation from './incubation'
-import staff from './staff'
-import partners from './partners'
-import patents from './patents'
+import dnaUspStamp from "./dna_usp_stamp";
+import companyData from "./company_data";
+import about from "./about";
+import investment from "./investment";
+import revenue from "./revenue";
+import incubation from "./incubation";
+import staff from "./staff";
+import partners from "./partners";
 
 export const state = () => ({
   collaboratorsLastUpdatedAt: new Date(),
@@ -23,7 +22,6 @@ export const state = () => ({
   ...incubation.state(),
   ...staff.state(),
   ...partners.state(),
-  ...patents.state(),
 });
 
 export const getters = {
@@ -37,7 +35,6 @@ export const getters = {
   ...incubation.getters,
   ...staff.getters,
   ...partners.getters,
-  ...patents.getters,
 };
 
 export const mutations = {
@@ -52,7 +49,6 @@ export const mutations = {
   ...incubation.mutations,
   ...staff.mutations,
   ...partners.mutations,
-  ...patents.mutations,
 };
 
 export const actions = {
@@ -64,9 +60,8 @@ export const actions = {
   ...incubation.actions,
   ...staff.actions,
   ...partners.actions,
-  ...patents.actions,
 
-  getCompanyData: async function({ commit, getters }) {
+  getCompanyData: async function ({ commit, getters }) {
     const cnpj = getters.cnpj;
     const { status, message } = await this.$getCompanyData(cnpj);
 
@@ -100,7 +95,7 @@ export const actions = {
     }
   },
 
-  updateCompanyForm: async function({ commit, getters }) {
+  updateCompanyForm: async function ({ commit, getters }) {
     if (!getters.cnpj || !getters.name || getters.partners.length === 0) {
       commit("setErrors", [
         "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
@@ -126,7 +121,6 @@ export const actions = {
     commit("setErrors", []);
     return true;
   },
-
 };
 
 const snakeToCamelCase = (key) => {
@@ -154,8 +148,5 @@ const prepareCompanyObject = (obj) => ({
     ...incubation.prepareSection(obj),
     ...staff.prepareSection(obj),
     ...partners.prepareSection(obj),
-    ...patents.prepareSection(obj),
   },
 });
-
-

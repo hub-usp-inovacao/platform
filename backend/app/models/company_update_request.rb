@@ -16,7 +16,6 @@ class CompanyUpdateRequest
   embeds_one :incubation
   embeds_one :staff
   embeds_many :partners
-  embeds_many :company_patents
 
   def self.csv_headers
     subsection_classes = [
