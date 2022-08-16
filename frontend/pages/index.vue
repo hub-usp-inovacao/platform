@@ -51,7 +51,7 @@ export default {
       alert("Este recurso está temporariamente indisponível.");
     },
     submitSearch(searchTerm) {
-      if (process.env.NEW_CATALOG === "true") this.newGlobalSearch(searchTerm);
+      if (process.env.NEW_CATALOG == "true") this.newGlobalSearch(searchTerm);
       else this.disabledGlobalSearch();
     },
   },

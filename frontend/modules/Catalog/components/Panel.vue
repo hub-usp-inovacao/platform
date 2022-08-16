@@ -38,7 +38,6 @@
           :hint="hint"
           persistent-hint
           @click:clear="clearSearch"
-          @keydown.enter="scroll(submitSearch)"
         ></v-text-field>
       </v-col>
     </v-row>
