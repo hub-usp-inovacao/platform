@@ -1,0 +1,41 @@
+{
+    "requiredFiles": [
+      {
+        "path": "./nuxt.config.js"
+      }
+    ],
+    "envSample": [
+      {
+        "name": "sheetsAPIKey",
+        "description": "API Key to access Google Spreadsheets API as incognito user"
+      },
+      {
+        "name": "BACKEND_URL",
+        "description": "Address of the entrypoint of the backend",
+        "default": "http://localhost:5000/api"
+      },
+      {
+        "name": "GOOGLE_ANALYTICS_ID",
+        "description": "The ID for the Google Analytics plugin"
+      },
+      {
+        "name": "NEW_CATALOG",
+        "description": "[Feature Flag] Indicates the adoption of the new catalog backend ('true' or 'false')",
+        "default": "false"
+      },
+      {
+        "name": "OPEN_COMPANY_UPDATE_FORMS",
+        "description": "[Feature Flag] Indicates whether Company Update forms is open ('true' or 'false')",
+        "default": "false"
+      },
+      {
+        "name": "OPEN_CONEXAO_FORMS",
+        "description": "[Feature Flag] Indicates whether Conexao forms is open ('true' or 'false')",
+        "default": "false"
+      },
+      {
+        "name": "PDI_DATA_SOURCE_URL",
+        "description": "The address of the old catalog endpoint for PDI"
+      }
+    ]
+}
