@@ -58,12 +58,12 @@ export default {
     backButtonName() {
       if (this.disableBackButton) return "Voltar";
       const tabName = this.items[this.tab - 1].tab;
-      return `Voltar para "${tabName}"`;
+      return `Voltar para aba "${tabName}"`;
     },
     nextButtonName() {
       if (this.disableNextButton) return "Próximo";
       const tabName = this.items[this.tab + 1].tab;
-      return `Ir para "${tabName}"`;
+      return `Ir para aba "${tabName}"`;
     },
     disableBackButton() {
       return this.tab === 0;
