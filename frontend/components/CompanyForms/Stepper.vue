@@ -25,7 +25,11 @@
           :key="id"
           :step="id"
         >
-          <component :is="component" :isUpdate=update class="component-border mb-12"></component>
+          <component
+            :is="component"
+            :is-update="update"
+            class="component-border mb-12"
+          ></component>
 
           <v-row class="mr-4" justify="end">
             <v-btn
@@ -59,10 +63,10 @@ export default {
     DNAUSPStep,
   },
   props: {
-   update: {
-     type: Boolean,
-     default: true,
-   }
+    update: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => ({
     e1: 1,
@@ -82,7 +86,11 @@ export default {
     nextStepBtnText(id) {
       const length = this.numberOfSteps;
       const lastId = this.steps[length - 1].id;
-      return id < lastId ? "Seguir" : "Finalizar";
+
+      const nextStepIndex = this.steps.findIndex((step) => step.id === id) + 1;
+      const nextStepName = this.steps[nextStepIndex]?.title;
+
+      return id < lastId ? `Seguir para passo "${nextStepName}"` : "Finalizar";
     },
     isStepCompleted(number) {
       return this.e1 > number;
