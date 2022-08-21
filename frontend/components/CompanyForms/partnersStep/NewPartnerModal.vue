@@ -109,7 +109,7 @@ export default {
   watch: {
     updatedPartner() {
       this.formData = this.updatedPartner
-        ? Object.assign({}, { ...this.updatedPartner.partner, phone: "" })
+        ? Object.assign({}, { ...this.updatedPartner.partner })
         : {
             name: "",
             email: "",
