@@ -21,13 +21,12 @@
 
       <v-row>
         <v-col cols="12" offset-md="3" md="6">
-            <v-text-field
+          <v-text-field
             v-model="email"
             label="E-mail"
             placeholder="Seu e-mail"
           />
         </v-col>
-
       </v-row>
 
       <v-row>
@@ -39,8 +38,8 @@
       <v-row>
         <v-col cols="12" offset-md="3" md="6" align="center">
           <p>
-            Já solicitou sua atualização?
-            <nuxt-link to="/competencias/atualizar">Cole seu token aqui</nuxt-link>
+            Já tem um token de atualização?
+            <nuxt-link to="/competencias/atualizar">Cole aqui</nuxt-link>
           </p>
         </v-col>
       </v-row>

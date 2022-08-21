@@ -49,10 +49,8 @@
         <v-row>
           <v-col cols="12" offset-md="3" md="6" align="center">
             <p>
-              Ainda não solicitou uma atualização?
-              <nuxt-link to="/empresas/atualizar/solicitar">
-                Solicite aqui
-              </nuxt-link>
+              Solicite o token de atualização
+              <nuxt-link to="/empresas/atualizar/solicitar"> aqui </nuxt-link>
             </p>
           </v-col>
         </v-row>
