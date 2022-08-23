@@ -31,6 +31,19 @@ async function updateData(data, logo) {
   }
 }
 
+function translateError(error) {
+  return error
+    .replaceAll("Partners", "Sócios")
+    .replaceAll("Colaborators", "Colaboradores")
+    .replaceAll("Investiment", "Investimento")
+    .replaceAll("Dna usp stamp", "Selo DNA USP")
+    .replaceAll("Incubation", "Incubação");
+}
+
+function translate(errors) {
+  return errors.map(translateError);
+}
+
 export default (_, inject) => {
   inject("updateCompanyData", async (data, logo) => {
     const response = await updateData(data, logo);
@@ -44,13 +57,9 @@ export default (_, inject) => {
     if (response.status >= 200 && response.status < 300) {
       return {};
     } else if (response.status >= 400 && response.status < 500) {
-      const { error, errors } = await response.json();
-      let result = [];
+      const { errors } = await response.json();
 
-      if (error) result = result.concat(error);
-      if (errors) result = result.concat(errors);
-
-      return { errors: result };
+      return { errors: translate(errors) };
     } else {
       return {
         errors: [
