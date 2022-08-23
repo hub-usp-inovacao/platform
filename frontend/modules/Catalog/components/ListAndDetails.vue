@@ -42,6 +42,8 @@ export default {
   },
   watch: {
     items() {
+      this.selected = undefined;
+
       if (this.items.length == 1) this.selected = this.items[0];
     },
   },
