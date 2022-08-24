@@ -34,6 +34,11 @@
         "default": "false"
       },
       {
+        "name": "BETA_VERSION",
+        "description": "[Feature Flag] Indicates whether the current deployment is a beta version ('true' or 'false')",
+        "default": "false"
+      },
+      {
         "name": "PDI_DATA_SOURCE_URL",
         "description": "The address of the old catalog endpoint for PDI"
       }
