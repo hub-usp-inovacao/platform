@@ -31,26 +31,16 @@ async function updateData(data, logo) {
   }
 }
 
-function translateError(error) {
-  return error
-    .replaceAll("Partners", "Sócios")
-    .replaceAll("Colaborators", "Colaboradores")
-    .replaceAll("Investiment", "Investimento")
-    .replaceAll("Dna usp stamp", "Selo DNA USP")
-    .replaceAll("Incubation", "Incubação");
-}
-
-function translate(errors) {
-  return errors.map(translateError);
-}
-
 export default (_, inject) => {
   inject("updateCompanyData", async (data, logo) => {
     const response = await updateData(data, logo);
 
     if (!response) {
       return {
-        error: ["Falha de conexão com o servidor. Tente novamente mais tarde."],
+        errors: {
+          server:
+            "Falha de conexão com o servidor. Tente novamente mais tarde.",
+        },
       };
     }
 
@@ -59,12 +49,13 @@ export default (_, inject) => {
     } else if (response.status >= 400 && response.status < 500) {
       const { errors } = await response.json();
 
-      return { errors: translate(errors) };
+      return { errors };
     } else {
       return {
-        errors: [
-          "Erro do servidor ao processar os dados. Tente novamente mais tarde.",
-        ],
+        errors: {
+          server:
+            "Erro do servidor ao processar os dados. Tente novamente mais tarde.",
+        },
       };
     }
   });

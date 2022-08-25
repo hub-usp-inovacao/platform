@@ -12,7 +12,7 @@ export const state = () => ({
   numberOfCLTEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
-  errors: [],
+  errors: {},
 
   ...dnaUspStamp.state(),
   ...companyData.state(),
@@ -97,16 +97,20 @@ export const actions = {
 
   updateCompanyForm: async function ({ commit, getters }) {
     if (!getters.cnpj || !getters.name || getters.partners.length === 0) {
-      commit("setErrors", [
-        "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
-      ]);
+      commit("setErrors", {
+        company_data:
+          "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
+        partners:
+          "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
+      });
       return false;
     }
 
     if (!getters.truthfulInformations) {
-      commit("setErrors", [
-        "É necessário declarar que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos",
-      ]);
+      commit("setErrors", {
+        dna_usp_stamp:
+          "É necessário declarar que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos",
+      });
       return false;
     }
 
@@ -118,7 +122,7 @@ export const actions = {
       return false;
     }
 
-    commit("setErrors", []);
+    commit("setErrors", {});
     return true;
   },
 };

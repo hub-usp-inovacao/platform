@@ -1,15 +1,19 @@
 <template>
   <v-container>
+    <p v-if="hasErrors">
+      Etapas marcadas com <code>(!)</code> contém erros de validação
+    </p>
+
     <v-stepper v-model="e1" alt-labels non-linear>
       <v-stepper-header>
-        <template v-for="{ id, title } in steps">
+        <template v-for="{ id, title, hasError } in steps">
           <v-stepper-step
             :key="`header_${id}`"
             editable
             :step="id"
-            color="success"
+            :color="hasError ? 'warning' : 'success'"
           >
-            {{ title }}
+            {{ title + (hasError ? " (!)" : "") }}
           </v-stepper-step>
 
           <v-divider
@@ -25,6 +29,12 @@
           :key="id"
           :step="id"
         >
+          <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
+            <p>Erros de validação</p>
+            <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
+              {{ errMsg }}
+            </li>
+          </ul>
           <component
             :is="component"
             :is-update="update"
@@ -67,22 +77,108 @@ export default {
       type: Boolean,
       default: true,
     },
+    errors: {
+      type: Object,
+      default: undefined,
+    },
   },
   data: () => ({
     e1: 1,
-    steps: [
-      { id: 1, title: "Introdução", component: IntroStep },
-      { id: 2, title: "Sócios", component: PartnersStep },
-      { id: 3, title: "Empresa", component: CompanyStep },
-      { id: 4, title: "Encerramento", component: DNAUSPStep },
-    ],
   }),
   computed: {
+    partnersHasErrors() {
+      return Object.keys(this.errors).includes("partners");
+    },
+    companyHasErrors() {
+      return [
+        "company_data",
+        "about_company",
+        "investment",
+        "revenue",
+        "incubation",
+        "colaborators",
+      ].some((el) => Object.keys(this.errors).includes(el));
+    },
+    DNAHasErrors() {
+      return Object.keys(this.errors).includes("dna_usp_stamp");
+    },
+    hasErrors() {
+      return (
+        this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
+      );
+    },
+    steps() {
+      return [
+        { id: 1, title: "Introdução", component: IntroStep, hasError: false },
+        {
+          id: 2,
+          title: "Sócios",
+          component: PartnersStep,
+          hasError: this.partnersHasErrors,
+        },
+        {
+          id: 3,
+          title: "Empresa",
+          component: CompanyStep,
+          hasError: this.companyHasErrors,
+        },
+        {
+          id: 4,
+          title: "Encerramento",
+          component: DNAUSPStep,
+          hasError: this.DNAHasErrors,
+        },
+      ];
+    },
     numberOfSteps() {
       return this.steps.length;
     },
   },
+
+  watch: {
+    errors() {
+      console.log("errors");
+      console.log(this.errors);
+    },
+  },
+
   methods: {
+    errorsOfStep(id) {
+      let companyErrors = [];
+
+      if (this.errors.company_data) {
+        companyErrors = companyErrors.concat(this.errors.company_data);
+      }
+
+      if (this.errors.about_company) {
+        companyErrors = companyErrors.concat(this.errors.about_company);
+      }
+
+      if (this.errors.investment) {
+        companyErrors = companyErrors.concat(this.errors.investment);
+      }
+
+      if (this.errors.incubation) {
+        companyErrors = companyErrors.concat(this.errors.incubation);
+      }
+
+      if (this.errors.colaborators) {
+        companyErrors = companyErrors.concat(this.errors.colaborators);
+      }
+
+      if (this.errors.revenue) {
+        companyErrors = companyErrors.concat(this.errors.revenue);
+      }
+
+      switch (id) {
+        case 2:
+          return this.errors.partners;
+        case 3:
+          return companyErrors;
+        case 4:
+          return this.errors.dna_usp_stamp;
+      }
+    },
     nextStepBtnText(id) {
       const length = this.numberOfSteps;
       const lastId = this.steps[length - 1].id;
