@@ -38,9 +38,18 @@ RSpec.describe 'Conexoes', type: :request do
     fixture_file_upload('spec/requests/test_images/test.png', 'image/png')
   end
 
+  let(:mock_deliver) do
+    mock_deliver = Object.new
+    def mock_deliver.deliver_now; end
+
+    mock_deliver
+  end
+
   describe 'POST /conexao' do
     before do
-      post '/conexao', params: { conexao: valid_attr }
+      allow(ApplicationMailer)
+        .to receive(:conexao_confirmation)
+        .and_return(mock_deliver)
     end
 
     after do
@@ -48,8 +57,16 @@ RSpec.describe 'Conexoes', type: :request do
     end
 
     it 'returns the just-created object' do
+      post '/conexao', params: { conexao: valid_attr }
       body = JSON.parse(response.body)
       expect(body['conexao']['_id']).not_to be_nil
+    end
+
+    it 'sends a confirmation email' do
+      post '/conexao', params: { conexao: valid_attr }
+
+      expect(ApplicationMailer)
+        .to have_received(:conexao_confirmation)
     end
 
     it 'blocks requests that fail validation' do
@@ -57,6 +74,14 @@ RSpec.describe 'Conexoes', type: :request do
       attr.delete(:demand)
       post '/conexao', params: { conexao: attr }
       expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'does not send email for requests that fail validation' do
+      expect(ApplicationMailer)
+        .not_to have_received(:conexao_confirmation)
+      attr = valid_attr.clone
+      attr.delete(:demand)
+      post '/conexao', params: { conexao: attr }
     end
   end
 

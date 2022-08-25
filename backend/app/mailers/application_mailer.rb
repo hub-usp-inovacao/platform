@@ -53,6 +53,11 @@ class ApplicationMailer < ActionMailer::Base
          subject: subject('Novas demandas foram solicitadas no Conexão USP'))
   end
 
+  def conexao_confirmation(author_email)
+    mail(to: author_email,
+         subject: subject('Confirmação - ConexãoUSP'))
+  end
+
   def company_update_token(company_email, token)
     @token = token
     @base_url = ENV['JWT_AUDIENCE']
