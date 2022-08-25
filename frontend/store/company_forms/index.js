@@ -96,12 +96,16 @@ export const actions = {
   },
 
   updateCompanyForm: async function ({ commit, getters }) {
-    if (!getters.cnpj || !getters.name || getters.partners.length === 0) {
+    if (getters.partners.length === 0) {
       commit("setErrors", {
-        company_data:
-          "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
-        partners:
-          "É necessário informar o nome, CNPJ e pelo menos um sócio da empresa para atualizar os dados",
+        partners: ["É necessário informar pelo menos um sócio da empresa"],
+      });
+      return false;
+    }
+
+    if (!getters.cnpj || !getters.name) {
+      commit("setErrors", {
+        company_data: ["É necessário informar o nome e o CNPJ da empresa"],
       });
       return false;
     }
@@ -117,7 +121,7 @@ export const actions = {
     const company = prepareCompanyObject(getters);
     const { errors } = await this.$updateCompanyData(company, getters.logo);
 
-    if (errors) {
+    if (errors !== undefined) {
       commit("setErrors", errors);
       return false;
     }

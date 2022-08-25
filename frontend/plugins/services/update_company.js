@@ -31,6 +31,37 @@ async function updateData(data, logo) {
   }
 }
 
+function translateErrorMessage(englishError) {
+  if (englishError === "Wants inválido")
+    return "Pedido de DNA USP inválido - necessário informar nome e email";
+
+  if (englishError === "Was incubated inválido")
+    return "Empresas que foram ou estão incubadas devem informar a incubadora";
+
+  if (englishError === "Ecosystem inválido")
+    return "Empresas que foram ou estão incubadas devem informar a incubadora";
+
+  if (englishError === "Site deve ser um link válido(HTTP(s))")
+    return "Site deve ser um link com HTTP ou HTTPS";
+
+  if (englishError === "Public name inválido")
+    return "Nome público não pode ser vazio";
+
+  if (englishError === "Corporate name inválido")
+    return "Razão social não pode ser vazia";
+
+  if (englishError === "Year inválido") return "Ano de criação inválido";
+
+  return englishError;
+}
+
+function translate(errors) {
+  return Object.keys(errors).reduce((acc, curr) => {
+    acc[curr] = errors[curr].map(translateErrorMessage);
+    return acc;
+  }, {});
+}
+
 export default (_, inject) => {
   inject("updateCompanyData", async (data, logo) => {
     const response = await updateData(data, logo);
@@ -39,24 +70,30 @@ export default (_, inject) => {
       return {
         errors: {
           server:
-            "Falha de conexão com o servidor. Tente novamente mais tarde.",
+            "Falha de conexão com o servidor. Por favor, entre em contato com a AUSPIN.",
         },
       };
     }
 
     if (response.status >= 200 && response.status < 300) {
       return {};
-    } else if (response.status >= 400 && response.status < 500) {
+    }
+
+    if (response.status >= 400 && response.status < 500) {
       const { errors } = await response.json();
 
-      return { errors };
-    } else {
-      return {
-        errors: {
-          server:
-            "Erro do servidor ao processar os dados. Tente novamente mais tarde.",
-        },
-      };
+      const returnValue = { errors: translate(errors) };
+
+      console.log(returnValue);
+
+      return returnValue;
     }
+
+    return {
+      errors: {
+        server:
+          "Erro do servidor ao processar os dados. Por favor, entre em contato com a AUSPIN.",
+      },
+    };
   });
 };

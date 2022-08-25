@@ -159,11 +159,14 @@ export default {
             "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
         };
       } else {
+        const message =
+          this.errors.server || "Verifique o formulário e tente novamente.";
+
         this.dialog = {
           show: true,
           status: "error",
           title: "Erro ao atualizar os dados",
-          message: "Verifique o formulário e tente novamente.",
+          message,
         };
       }
     },
