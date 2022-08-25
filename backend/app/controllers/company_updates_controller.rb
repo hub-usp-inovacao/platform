@@ -17,6 +17,9 @@ class CompanyUpdatesController < ApplicationController
     render json: { message: 'ok' }, status: :ok
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
   def create
     prms = create_params
     errors = {}
@@ -64,7 +67,6 @@ class CompanyUpdatesController < ApplicationController
       has_error = true
     end
 
-
     partners = []
     partners_errors = []
     prms[:partners].each_with_index do |raw_partner, index|
@@ -99,6 +101,9 @@ class CompanyUpdatesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity
 
   private
 
