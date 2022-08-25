@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'CompanyUpdates', type: :request do
   let(:valid_data) do
     {
-      data: {
+      company_data: {
         cnpj: '42.420.420/0001-21',
         public_name: 'test inc.',
         corporate_name: 'benefit of testing rails and other apps',
@@ -36,7 +36,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
         email: 'fulano@mail.com',
         name: 'fulano de tal'
       },
-      about: {
+      about_company: {
         description: 'long text about the company',
         services: %w[foo bar baz],
         technologies: %w[baz bla foo],
@@ -108,7 +108,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
       CompanyUpdateRequest.delete_all
     end
 
-    %i[data dna_usp_stamp about incubation].each do |k|
+    %i[company_data dna_usp_stamp about_company incubation].each do |k|
       it "blocks requests that fails validation (missing #{k})" do
         valid_data.delete k
         patch '/companies', params: { company: valid_data }
