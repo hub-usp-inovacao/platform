@@ -20,8 +20,8 @@ class CompanyController < ApplicationController
 
     @company = Company.where({ cnpj: payload['cnpj'] }).first
     render json: @company, status: :ok
-  rescue StandardError => e
-    render json: { error: "No token provided" }, status: :bad_request
+  rescue StandardError
+    render json: { error: 'No token provided' }, status: :bad_request
   end
 
   private

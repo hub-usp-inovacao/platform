@@ -105,8 +105,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
   let(:mock_deliver) do
     mock = Object.new
-    def mock.deliver_now
-    end
+    def mock.deliver_now; end
 
     mock
   end
