@@ -176,7 +176,6 @@ RSpec.describe 'CompanyUpdates', type: :request do
       params = { update_request: { cnpj: mock.cnpj } }
       allow(Company).to receive(:where).and_return([mock])
       allow(TokenManager).to receive(:create_token).and_return(mock.token)
-      allow(ApplicationMailer).to receive(:company_update_token)
 
       post '/companies/update_request', params: params
 
