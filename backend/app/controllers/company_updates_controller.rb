@@ -19,29 +19,84 @@ class CompanyUpdatesController < ApplicationController
 
   def create
     prms = create_params
-    @comp_update = CompanyUpdateRequest.new
-    @comp_update.timestamp = Time.zone.now
-    @comp_update.dna_usp_stamp = DnaUspStamp.new(prms[:dna_usp_stamp])
-    @comp_update.company_data = CompanyDatum.new(prms[:data])
-    @comp_update.about_company = AboutCompany.new(prms[:about])
-    @comp_update.investment = Investment.new(prms[:investment])
-    @comp_update.revenue = Revenue.new(prms[:revenue])
-    @comp_update.incubation = Incubation.new(prms[:incubation])
-    @comp_update.staff = Staff.new(prms[:staff])
+    errors = {}
+    has_error = false
+
+    dna_usp_stamp = DnaUspStamp.new(prms[:dna_usp_stamp])
+    unless dna_usp_stamp.valid?
+      errors[:dna_usp_stamp] = dna_usp_stamp.errors.full_messages
+      has_error = true
+    end
+
+    company_data = CompanyDatum.new(prms[:company_data])
+    unless company_data.valid?
+      errors[:company_data] = company_data.errors.full_messages
+      has_error = true
+    end
+
+    about_company = AboutCompany.new(prms[:about_company])
+    unless about_company.valid?
+      errors[:about_company] = about_company.errors.full_messages
+      has_error = true
+    end
+
+    investment = Investment.new(prms[:investment])
+    unless investment.valid?
+      errors[:investment] = investment.errors.full_messages
+      has_error = true
+    end
+
+    revenue = Revenue.new(prms[:revenue])
+    unless revenue.valid?
+      errors[:revenue] = revenue.errors.full_messages
+      has_error = true
+    end
+
+    incubation = Incubation.new(prms[:incubation])
+    unless incubation.valid?
+      errors[:incubation] = incubation.errors.full_messages
+      has_error = true
+    end
+
+    staff = Staff.new(prms[:staff])
+    unless staff.valid?
+      errors[:staff] = staff.errors.full_messages
+      has_error = true
+    end
+
 
     partners = []
+    partners_errors = []
     prms[:partners].each_with_index do |raw_partner, index|
       partner = Partner.new(raw_partner.merge(index: index + 1))
+      unless partner.valid?
+        partners_errors << partner.errors.full_messages
+        has_error = true
+      end
+
       partners << partner
     end
 
-    @comp_update.partners = partners
-
-    if @comp_update.valid?
-      @comp_update.save
-      render json: { company_update: @comp_update }
+    if has_error
+      render json: { errors: errors }, status: :bad_request
     else
-      render json: { errors: @comp_update.errors.full_messages }, status: :bad_request
+      @comp_update = CompanyUpdateRequest.new
+      @comp_update.timestamp = Time.zone.now
+
+      @comp_update.dna_usp_stamp = dna_usp_stamp
+      @comp_update.company_data = company_data
+      @comp_update.about_company = about_company
+      @comp_update.investment = investment
+      @comp_update.revenue = revenue
+      @comp_update.incubation = incubation
+      @comp_update.staff = staff
+      @comp_update.partners = partners
+
+      if @comp_update.save
+        render json: { company_update: @comp_update }
+      else
+        render json: { error: @comp_update.errors.full_messages }, status: :bad_request
+      end
     end
   end
 
@@ -62,8 +117,8 @@ class CompanyUpdatesController < ApplicationController
         unity
       ],
       dna_usp_stamp: {},
-      data: {},
-      about: {},
+      company_data: {},
+      about_company: {},
       investment: {},
       revenue: {},
       incubation: {},
