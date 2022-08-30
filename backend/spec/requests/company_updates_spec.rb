@@ -103,6 +103,13 @@ RSpec.describe 'CompanyUpdates', type: :request do
     }
   end
 
+  let(:mock_deliver) do
+    mock = Object.new
+    def mock.deliver_now; end
+
+    mock
+  end
+
   describe 'PATCH /companies' do
     before do
       CompanyUpdateRequest.delete_all
@@ -125,7 +132,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
   context 'when requesting update' do
     before do
-      allow(ApplicationMailer).to receive(:company_update_token)
+      allow(ApplicationMailer).to receive(:company_update_token).and_return(mock_deliver)
     end
 
     let :mock do
@@ -169,7 +176,6 @@ RSpec.describe 'CompanyUpdates', type: :request do
       params = { update_request: { cnpj: mock.cnpj } }
       allow(Company).to receive(:where).and_return([mock])
       allow(TokenManager).to receive(:create_token).and_return(mock.token)
-      allow(ApplicationMailer).to receive(:company_update_token)
 
       post '/companies/update_request', params: params
 
