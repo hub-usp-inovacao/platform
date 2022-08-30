@@ -6,14 +6,19 @@
         <v-icon v-text="'mdi-circle-small'"></v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <p class="mb-0">{{ item }}</p>
+        <NDText classes="mb-0" :text="item"/>
       </v-list-item-content>
     </v-list-item>
   </v-list>
 </template>
 
 <script>
+import NDText from "../components/NDText.vue";
+
 export default {
+  components: {
+    NDText,
+  },
   props: {
     title: {
       type: String,

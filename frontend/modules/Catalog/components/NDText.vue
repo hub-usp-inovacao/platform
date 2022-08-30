@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p v-if="text !== 'N/D'" :class="classes">{{ text }}</p>
+    <p v-if="!textIsEmpty" :class="classes">
+      <strong v-if="label">{{ label }}:</strong>
+      {{ text }}
+    </p>
+
   </div>
 </template>
 
@@ -15,6 +19,21 @@ export default {
       type: String,
       default: "",
     },
+    label: {
+      type: String,
+      default: undefined,
+    }
   },
+  watch: {
+    text() {
+      if (this.textIsEmpty) 
+        this.$emit("empty")
+    }
+  },
+  computed: {
+    textIsEmpty() {
+      return this.text == "N/D"
+    }
+  }
 };
 </script>

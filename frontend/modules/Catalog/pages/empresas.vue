@@ -90,10 +90,7 @@
           </p>
         </div>
 
-        <p>
-          <span class="font-weight-bold">Descrição:</span>
-          {{ item.description }}
-        </p>
+        <NDText :text="item.description" label="Descrição"/>
 
         <BulletList
           v-if="item.services.length > 0"
@@ -133,6 +130,7 @@ import DisplayData from "../components/DisplayData.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import Panel from "../components/Panel.vue";
 import USPDNA from "../components/USPDNA.vue";
+import NDText from "../components/NDText.vue";
 
 export default {
   components: {
@@ -142,6 +140,7 @@ export default {
     MultipleFilters,
     Panel,
     USPDNA,
+    NDText,
   },
   data: () => ({
     filters: undefined,
