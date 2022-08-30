@@ -10,7 +10,7 @@
     <v-form ref="form">
       <v-container>
         <v-row v-if="ok">
-          <Stepper @finish="updateCompany" />
+          <Stepper :errors="errors" @finish="updateCompany" />
           <v-dialog v-model="dialog.show" persistent max-width="500">
             <v-card>
               <v-card-title class="text-h5">
@@ -159,11 +159,14 @@ export default {
             "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
         };
       } else {
+        const message =
+          this.errors.server || "Verifique o formulário e tente novamente.";
+
         this.dialog = {
           show: true,
           status: "error",
           title: "Erro ao atualizar os dados",
-          message: this.errors.join("; "),
+          message,
         };
       }
     },

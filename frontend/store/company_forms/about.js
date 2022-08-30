@@ -2,9 +2,9 @@ const state = () => ({
   description: "",
   services: [],
   technologies: [],
-  site: '',
+  site: "",
   odss: [],
-  socialMedias: []
+  socialMedias: [],
 });
 
 const getters = {
@@ -14,7 +14,7 @@ const getters = {
   technologies: (s) => s.technologies,
   site: (s) => s.site,
   odss: (s) => s.odss,
-  socialMedias: (s) => s.socialMedias
+  socialMedias: (s) => s.socialMedias,
 };
 
 const mutations = {
@@ -34,26 +34,24 @@ const actions = {
   setOdss: ({ commit }, value) =>
     commit("setFormField", { key: "odss", value }),
   setSocialMedias: ({ commit }, value) =>
-    commit("setFormField", { key: "socialMedias", value })
+    commit("setFormField", { key: "socialMedias", value }),
 };
 
 const prepareSection = (obj) => ({
-  about: {
+  about_company: {
     description: obj.descriptionLong,
     services: obj.services,
     technologies: obj.technologies,
     site: obj.site,
     odss: obj.odss,
-    social_medias: obj.socialMedias
-  }
+    social_medias: obj.socialMedias,
+  },
 });
-
-
 
 export default {
   state,
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

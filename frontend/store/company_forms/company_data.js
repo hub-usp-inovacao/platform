@@ -81,7 +81,7 @@ const actions = {
 };
 
 const prepareSection = (obj) => ({
-  data: {
+  company_data: {
     cnpj: obj.cnpj,
     public_name: obj.name,
     corporate_name: obj.corporateName,
@@ -102,5 +102,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};
