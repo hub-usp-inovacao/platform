@@ -6,6 +6,10 @@ import com.typesafe.config.ConfigFactory
 object Configuration {
     private val loader: Config = ConfigFactory.load()
 
+    val DEVS_EMAIL = loader.getString("curatorship.email.devs")
+    val EMAIL_USERNAME = loader.getString("curatorship.email.username")
+    val EMAIL_PASSWORD = loader.getString("curatorship.email.password")
+
     val SHEETS_API_KEY = loader.getString("curatorship.sheets.api_key")
 
     val PDI_SHEET_ID = loader.getString("curatorship.sheets.pdi_id")

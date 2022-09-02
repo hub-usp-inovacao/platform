@@ -127,6 +127,18 @@
         {
             "name": "HUB_INITIATIVE_TAB_NAME",
             "description": "Name of the tab with Initiative data"
+        },
+        {
+            "name": "HUB_DEVS_EMAIL",
+            "description": "Email to notify developers"
+        },
+        {
+            "name": "HUB_EMAIL_ADDRESS",
+            "description": "Email from which all notifications will be sent"
+        },
+        {
+            "name": "HUB_EMAIL_PASSWORD",
+            "description": "Password to give access to the email address"
         }
     ]
 }
