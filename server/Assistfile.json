@@ -75,6 +75,58 @@
             "name": "HUB_TEST_DATASOURCE_DBNAME",
             "description": "(TEST environment) The name of the virtual database",
             "default": "backend_test"
+        },
+        {
+            "name": "HUB_GOOGLE_SHEETS_API_KEY",
+            "description": "API Key to access Google Sheets"
+        },
+        {
+            "name": "HUB_PDI_SHEET_ID",
+            "description": "Sheet ID for PDI"
+        },
+        {
+            "name": "HUB_PDI_TAB_NAME",
+            "description": "Name of the tab with PDI data"
+        },
+        {
+            "name": "HUB_COMPANY_SHEET_ID",
+            "description": "Sheet ID for Company"
+        },
+        {
+            "name": "HUB_COMPANY_TAB_NAME",
+            "description": "Name of the tab with Company data"
+        },
+        {
+            "name": "HUB_DISCIPLINE_SHEET_ID",
+            "description": "Sheet ID for Discipline"
+        },
+        {
+            "name": "HUB_DISCIPLINE_TAB_NAME",
+            "description": "Name of the tab with Discipline data"
+        },
+        {
+            "name": "HUB_PATENT_SHEET_ID",
+            "description": "Sheet ID for Patent"
+        },
+        {
+            "name": "HUB_PATENT_TAB_NAME",
+            "description": "Name of the tab with Patent data"
+        },
+        {
+            "name": "HUB_RESEARCHER_SHEET_ID",
+            "description": "Sheet ID for Researcher"
+        },
+        {
+            "name": "HUB_RESEARCHER_TAB_NAME",
+            "description": "Name of the tab with Researcher data"
+        },
+        {
+            "name": "HUB_INITIATIVE_SHEET_ID",
+            "description": "Sheet ID for Initiative"
+        },
+        {
+            "name": "HUB_INITIATIVE_TAB_NAME",
+            "description": "Name of the tab with Initiative data"
         }
     ]
 }
