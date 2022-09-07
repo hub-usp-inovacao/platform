@@ -1,11 +1,10 @@
 :5000
 
-handle /api/catalog/* {
-  uri strip_prefix /api/catalog
+handle_path /catalog/* {
+  uri strip_prefix /catalog
   reverse_proxy catalogapp:8080
 }
 
-handle_path /api/* {
-  uri strip_prefix /api
+handle_path /* {
   reverse_proxy backend:3000
 }
