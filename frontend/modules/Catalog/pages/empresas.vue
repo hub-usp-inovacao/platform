@@ -2,7 +2,6 @@
   <div>
     <div class="background">
       <Panel
-        v-if="FLAG_COMPANY_UPDATE_RELEASED"
         v-model="search.term"
         title="Empresas"
         description="As Empresas DNA USP estão organizadas nesta plataforma por: CNAEs (Classificação Nacional de Atividades Econômicas), cidade, habitats de inovação e porte."
@@ -12,18 +11,6 @@
         second-call="Atualize seu cadastro aqui"
         third-url="/DNA_manual.pdf"
         third-call="Manual de uso da marca DNA USP"
-        @search="search.term = $event"
-        @clear="search.term = ''"
-      />
-      <Panel
-        v-else
-        v-model="search.term"
-        title="Empresas"
-        description="As Empresas DNA USP estão organizadas nesta plataforma por: CNAEs (Classificação Nacional de Atividades Econômicas), cidade, habitats de inovação e porte."
-        url="https://docs.google.com/forms/d/1q354be1_cPpeSIWVQkU2CXUpjUiyYuC0IU5W1_4W_zA/edit?usp=sharing"
-        forms-call="Cadastre sua empresa aqui"
-        second-url="/DNA_manual.pdf"
-        second-call="Manual de uso da marca DNA USP"
         @search="search.term = $event"
         @clear="search.term = ''"
       />
@@ -159,9 +146,6 @@ export default {
     ],
   }),
   computed: {
-    FLAG_COMPANY_UPDATE_RELEASED() {
-      return process.env.OPEN_COMPANY_UPDATE_FORMS === "true";
-    },
     tabs() {
       return Object.keys(this.$cnae).reduce((acc, code) => {
         const { major, minor } = this.$cnae[code];

@@ -24,11 +24,6 @@
         "default": "false"
       },
       {
-        "name": "OPEN_COMPANY_UPDATE_FORMS",
-        "description": "[Feature Flag] Indicates whether Company Update forms is open ('true' or 'false')",
-        "default": "false"
-      },
-      {
         "name": "OPEN_CONEXAO_FORMS",
         "description": "[Feature Flag] Indicates whether Conexao forms is open ('true' or 'false')",
         "default": "false"
