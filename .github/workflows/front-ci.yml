@@ -1,0 +1,25 @@
+name: front-CI
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  lint:
+    name: Nuxt Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 15
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
