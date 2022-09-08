@@ -18,6 +18,7 @@
           alt="Hub USPInovação"
         ></v-img>
       </v-card>
+
     </v-container>
   </div>
 </template>
