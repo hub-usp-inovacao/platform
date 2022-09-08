@@ -6,7 +6,6 @@ export default {
     sheetID: process.env.sheetID,
     BACKEND_URL: process.env.BACKEND_URL,
     NEW_CATALOG: process.env.NEW_CATALOG,
-    OPEN_COMPANY_UPDATE_FORMS: process.env.OPEN_COMPANY_UPDATE_FORMS,
     OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
     BETA_VERSION: process.env.BETA_VERSION,
     INICIATIVES_DATA_SOURCE_URL: process.env.INICIATIVES_DATA_SOURCE_URL,
