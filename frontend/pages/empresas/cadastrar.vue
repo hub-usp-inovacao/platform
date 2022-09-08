@@ -3,7 +3,7 @@
     <div class="background">
       <Panel :title="title" :description="description" no-search />
     </div>
-    <Stepper :update="false"/>
+    <Stepper :update="false" />
   </div>
 </template>
 

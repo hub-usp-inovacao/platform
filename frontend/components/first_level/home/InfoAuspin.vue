@@ -33,7 +33,11 @@
                 <a href="http://www.inovacao.usp.br/" target="_blank">
                   <img
                     :src="require('@/vectors/logo_auspin.svg')"
-                    style="max-width: 100%; max-height: 100%; object-fit: contain"
+                    style="
+                      max-width: 100%;
+                      max-height: 100%;
+                      object-fit: contain;
+                    "
                   />
                 </a>
               </v-row>

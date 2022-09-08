@@ -11,14 +11,14 @@ const getters = {
   dnaContactName: (s) => s.dnaContactName,
   dnaContactEmail: (s) => s.dnaContactEmail,
   truthfulInformations: (s) => s.truthfulInformations,
-  permissions: (s) => s.permissions
+  permissions: (s) => s.permissions,
 };
 
 const mutations = {
   setFormField: (s, { key, value }) => {
-    console.log('changing ', key)
-    console.log('to ', value)
-    s[key] = value
+    console.log("changing ", key);
+    console.log("to ", value);
+    s[key] = value;
   },
   setErrors: (s, errors) => (s.errors = errors),
 };
@@ -51,5 +51,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

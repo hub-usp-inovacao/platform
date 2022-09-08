@@ -1,6 +1,6 @@
 const state = () => ({
   incubated: "",
-  ecosystem: '',
+  ecosystem: "",
 });
 
 const getters = {
@@ -23,7 +23,7 @@ const actions = {
 const prepareSection = (obj) => ({
   incubation: {
     was_incubated: obj.incubated,
-    ecosystem: obj.ecosystems
+    ecosystem: obj.ecosystems,
   },
 });
 
@@ -32,5 +32,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

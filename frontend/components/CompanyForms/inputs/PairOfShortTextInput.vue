@@ -1,10 +1,10 @@
 <template>
   <v-row>
     <v-col>
-      <ShortTextInput :label="labelOne" v-model="one" />
+      <ShortTextInput v-model="one" :label="labelOne" />
     </v-col>
     <v-col cols="4">
-      <ShortTextInput :label="labelTwo" v-model="two" />
+      <ShortTextInput v-model="two" :label="labelTwo" />
     </v-col>
   </v-row>
 </template>
@@ -17,10 +17,6 @@ export default {
   components: {
     ShortTextInput,
   },
-  data: () => ({
-    one: "",
-    two: "",
-  }),
   props: {
     labelOne: {
       type: String,
@@ -31,6 +27,10 @@ export default {
       default: () => "label two",
     },
   },
+  data: () => ({
+    one: "",
+    two: "",
+  }),
   computed: {
     inputEvent() {
       const event = {};

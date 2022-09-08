@@ -2,13 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="8">
-        <ShortTextInput :value="name" @input="setName" label="Nome do grupo" />
+        <ShortTextInput :value="name" label="Nome do grupo" @input="setName" />
       </v-col>
       <v-col cols="4">
         <ShortTextInput
           :value="initials"
-          @input="setInitials"
           label="Iniciais"
+          @input="setInitials"
         />
       </v-col>
     </v-row>
@@ -16,9 +16,9 @@
       <v-col>
         <Dropdown
           :value="bond"
-          @input="setBond"
           label="Qual seu vínculo com o grupo?"
           :options="bonds"
+          @input="setBond"
         />
       </v-col>
     </v-row>
@@ -26,15 +26,15 @@
       <v-col>
         <Dropdown
           :value="category"
-          @input="setCategory"
           label="Em qual categoria este grupo se encaixa?"
           :options="categories"
+          @input="setCategory"
         />
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <URLInput :value="url" @input="setUrl" label="Qual o site do grupo?" />
+        <URLInput :value="url" label="Qual o site do grupo?" @input="setUrl" />
       </v-col>
     </v-row>
   </v-container>

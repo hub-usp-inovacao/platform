@@ -11,7 +11,7 @@ const getters = {
 const mutations = {
   setFormField: (s, { key, value }) => (s[key] = value),
   setErrors: (s, errors) => (s.errors = errors),
-}
+};
 
 const actions = {
   setFinanceValue: ({ commit }, value) =>
@@ -21,7 +21,7 @@ const actions = {
 const prepareSection = (obj) => ({
   revenue: {
     last_year: obj.financeValue,
-    last_update: updateRevenuesDate(obj)
+    last_update: updateRevenuesDate(obj),
   },
 });
 
@@ -35,5 +35,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

@@ -74,11 +74,7 @@
         Site
         <v-divider />
         <v-container>
-          <URLInput
-            :value="url"
-            label="Site"
-            @input="setUrl"
-          />
+          <URLInput :value="url" label="Site" @input="setUrl" />
         </v-container>
       </div>
 

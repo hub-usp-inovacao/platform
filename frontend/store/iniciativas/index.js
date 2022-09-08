@@ -2,13 +2,7 @@ export const state = () => ({
   iniciatives: [],
   isLoading: false,
   errors: undefined,
-  keys: [
-    "name",
-    "descriptionLong",
-    "descriptionShort",
-    "keywords",
-    "services",
-  ],
+  keys: ["name", "descriptionLong", "descriptionShort", "keywords", "services"],
 });
 
 export const getters = {

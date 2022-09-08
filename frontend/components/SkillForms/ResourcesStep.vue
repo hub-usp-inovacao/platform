@@ -5,9 +5,9 @@
         <h2>Competências</h2>
         <MultipleInputs
           :value="skills"
-          @input="setSkills"
           component="ShortTextInput"
-          inputLabel="Competência"
+          input-label="Competência"
+          @input="setSkills"
         />
       </v-col>
     </v-row>
@@ -16,9 +16,9 @@
         <h2>Equipamentos</h2>
         <MultipleInputs
           :value="equipments"
-          @input="setEquipments"
           component="ShortTextInput"
-          inputLabel="Equipamento"
+          input-label="Equipamento"
+          @input="setEquipments"
         />
       </v-col>
     </v-row>
@@ -27,9 +27,9 @@
         <h2>Serviços Tecnológicos</h2>
         <MultipleInputs
           :value="services"
-          @input="setServices"
           component="ShortTextInput"
-          inputLabel="Serviço"
+          input-label="Serviço"
+          @input="setServices"
         />
       </v-col>
     </v-row>

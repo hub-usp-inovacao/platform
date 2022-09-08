@@ -28,12 +28,12 @@ export const actions = {
 };
 
 const prepareSection = (obj) => ({
-    staff: {
-      number_of_CLT_employees: obj.numberOfCLTEmployees,
-      number_of_PJ_colaborators: obj.numberOfPJColaborators,
-      number_of_interns: obj.numberOfInterns,
-      last_update: updateCollaboratorsDate(obj)
-    }
+  staff: {
+    number_of_CLT_employees: obj.numberOfCLTEmployees,
+    number_of_PJ_colaborators: obj.numberOfPJColaborators,
+    number_of_interns: obj.numberOfInterns,
+    last_update: updateCollaboratorsDate(obj),
+  },
 });
 
 const updateCollaboratorsDate = (obj) => {
@@ -52,5 +52,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};
