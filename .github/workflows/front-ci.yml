@@ -19,7 +19,11 @@ jobs:
           node-version: 15
 
       - name: Install dependencies
-        run: yarn install
+        run: |
+          cd frontend
+          yarn install
 
       - name: Lint
-        run: yarn lint
+        run: |
+          cd frontend
+          yarn lint
