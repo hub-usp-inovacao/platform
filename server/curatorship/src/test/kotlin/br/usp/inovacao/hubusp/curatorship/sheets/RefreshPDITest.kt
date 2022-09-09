@@ -13,12 +13,12 @@ internal class RefreshPDITest {
     @MockK
     private lateinit var mockSpreadsheetReader: SpreadsheetReader
 
-    @MockK(relaxUnitFun = true)
+    @MockK
     private lateinit var mockMailer: Mailer
 
     @BeforeTest
     fun setup() {
-        MockKAnnotations.init(this, relaxUnitFun = true)
+        MockKAnnotations.init(this)
     }
 
     @Test
