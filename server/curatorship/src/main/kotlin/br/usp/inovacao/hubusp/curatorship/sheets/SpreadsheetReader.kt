@@ -8,6 +8,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
@@ -37,9 +38,10 @@ class SpreadsheetReader(
         }
     }
 
+    @Suppress("unused")
     fun fakeRead(sheet: Sheets): Matrix<String> = emptyList()
 
-    suspend fun read(sheet: Sheets): Matrix<String> = when(sheet) {
+    fun read(sheet: Sheets): Matrix<String> = when(sheet) {
         Sheets.PDIs -> readPDI()
         Sheets.Companies -> readCompany()
         Sheets.Disciplines -> readDiscipline()
@@ -48,49 +50,51 @@ class SpreadsheetReader(
         Sheets.Initiatives -> readInitiative()
     }
 
-    private suspend fun readPDI(): Matrix<String> = readOneSpreadsheet(
+    private fun readPDI(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.PDI_SHEET_ID,
         sheetName = Configuration.PDI_TAB_NAME
     )
 
-    private suspend fun readCompany(): Matrix<String> = readOneSpreadsheet(
+    private fun readCompany(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.COMPANY_SHEET_ID,
         sheetName = Configuration.COMPANY_TAB_NAME
     )
 
-    private suspend fun readDiscipline(): Matrix<String> = readOneSpreadsheet(
+    private fun readDiscipline(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.DISCIPLINE_SHEET_ID,
         sheetName = Configuration.DISCIPLINE_TAB_NAME
     )
 
-    private suspend fun readPatent(): Matrix<String> = readOneSpreadsheet(
+    private fun readPatent(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.PATENT_SHEET_ID,
         sheetName = Configuration.PATENT_TAB_NAME
     )
 
-    private suspend fun readResearcher(): Matrix<String> = readOneSpreadsheet(
+    private fun readResearcher(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.RESEARCHER_SHEET_ID,
         sheetName = Configuration.RESEARCHER_TAB_NAME
     )
 
-    private suspend fun readInitiative(): Matrix<String> = readOneSpreadsheet(
+    private fun readInitiative(): Matrix<String> = readOneSpreadsheet(
         sheetId = Configuration.INITIATIVE_SHEET_ID,
         sheetName = Configuration.INITIATIVE_TAB_NAME
     )
 
-    private suspend fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String> = try {
-        val values = httpClient
-            .get {
-                url {
-                    protocol = URLProtocol.HTTPS
-                    host = "sheets.googleapis.com"
-                    appendPathSegments("v4", "spreadsheets", sheetId, "values", "'$sheetName'")
-                    parameters.append("key", apiKey)
+    private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String> = try {
+        val values = runBlocking {
+            httpClient
+                .get {
+                    url {
+                        protocol = URLProtocol.HTTPS
+                        host = "sheets.googleapis.com"
+                        appendPathSegments("v4", "spreadsheets", sheetId, "values", "'$sheetName'")
+                        parameters.append("key", apiKey)
+                    }
                 }
-            }
-            .bodyAsText()
-            .let { Json.decodeFromString<ValueRange>(it) }
-            .values
+                .bodyAsText()
+                .let { Json.decodeFromString<ValueRange>(it) }
+                .values
+        }
 
         if (values.isEmpty()) throw SheetReadingException(sheetName, sheetId, message = "Spreadsheet is empty")
 
