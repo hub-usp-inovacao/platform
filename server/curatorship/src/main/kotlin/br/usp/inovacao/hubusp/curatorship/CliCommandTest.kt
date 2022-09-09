@@ -16,7 +16,7 @@ class CliCommandTest {
         mailer = Mailer(user, password)
     }
 
-    suspend fun execute() {
+    fun execute() {
         val data = reader.read(Sheets.PDIs)
         mailer.notifySpreadsheetError("Found ${data.size} PDI records")
     }
