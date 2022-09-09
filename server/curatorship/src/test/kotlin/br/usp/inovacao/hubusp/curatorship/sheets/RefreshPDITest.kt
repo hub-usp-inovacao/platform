@@ -25,7 +25,7 @@ internal class RefreshPDITest {
     fun `it informs if an sheet error happens` () {
         // given
         every {
-            mockSpreadsheetReader.fakeRead(any())
+            mockSpreadsheetReader.read(any())
         } throws SheetReadingException("", "", "Mock error")
         every {
             mockMailer.notifySpreadsheetError(any())

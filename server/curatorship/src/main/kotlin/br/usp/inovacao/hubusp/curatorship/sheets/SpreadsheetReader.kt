@@ -38,9 +38,6 @@ class SpreadsheetReader(
         }
     }
 
-    @Suppress("unused")
-    fun fakeRead(sheet: Sheets): Matrix<String> = emptyList()
-
     fun read(sheet: Sheets): Matrix<String> = when(sheet) {
         Sheets.PDIs -> readPDI()
         Sheets.Companies -> readCompany()

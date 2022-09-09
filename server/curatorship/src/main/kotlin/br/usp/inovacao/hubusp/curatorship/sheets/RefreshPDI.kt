@@ -13,7 +13,7 @@ class RefreshPDI(
         // if it valid, save PDI
         // else, save a PDIValidationError
         try {
-            spreadsheetReader.fakeRead(Sheets.PDIs)
+            spreadsheetReader.read(Sheets.PDIs)
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
         }
