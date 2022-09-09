@@ -43,6 +43,10 @@ $campi = [
     unities: ['Centro de Biologia Marinha - CEBIMar']
   },
   {
+    name: 'São Sebastião (Butantã)',
+    unities: ['Centro de Biologia Marinha - CEBIMar']
+  },
+  {
     name: 'Largo São Francisco',
     unities: ['Faculdade de Direito - FD']
   },
