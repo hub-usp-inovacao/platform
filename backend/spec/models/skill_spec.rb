@@ -88,6 +88,13 @@ RSpec.describe Skill, type: :model do
       expect(skill).to be_invalid
     end
 
+    it 'blocks duplicated names' do
+      described_class.create valid_attr
+      skill = described_class.new valid_attr
+      expect(skill).to be_valid
+      described_class.delete_all
+    end
+
     it 'is valid when bond is aluno de doutorado' do
       valid_attr[:bond] = 'Aluno de doutorado'
       expect(described_class.new(valid_attr)).to be_valid
