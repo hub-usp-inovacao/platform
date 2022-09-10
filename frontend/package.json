@@ -12,8 +12,7 @@
     "lint": "eslint --ext .js,.vue .",
     "lintfix": "eslint --fix --ext .js,.vue .",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "prepare": "husky install"
+    "docs:build": "vuepress build docs"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
@@ -37,7 +36,6 @@
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^7.0.4",
     "prettier": "^2.0.5",
     "sass-loader": "^8.0.0",
     "vuepress": "^1.8.2"
