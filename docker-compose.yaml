@@ -116,6 +116,7 @@ services:
       - stiback
       - catalog
       - cli
+      - monitoring
 
 
   
@@ -134,6 +135,7 @@ services:
       - if
       - stiback
       - catalog
+      - monitoring
 
   catalogcli:
     build:
@@ -177,3 +179,14 @@ services:
     profiles:
       - if
 
+
+
+
+  prom:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prom/prometheus.yml:/etc/prometheus/prometheus.yml
+    profiles:
+      - monitoring

@@ -13,6 +13,7 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
     configureCallLogging()
+    configureMetrics()
 
     catalog()
 }
