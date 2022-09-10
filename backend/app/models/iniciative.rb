@@ -80,7 +80,7 @@ class Iniciative
                        localization: row[3],
                        unity: row[4],
                        tags: get_tags(row[5]),
-                       url: row[6],
+                       url: possible_nd(row[6]),
                        description: row[7],
                        email: possible_nd(row[8]),
                        # row[9]

@@ -91,7 +91,7 @@ RSpec.describe Skill, type: :model do
     it 'blocks duplicated names' do
       described_class.create valid_attr
       skill = described_class.new valid_attr
-      expect(skill).to be_invalid
+      expect(skill).to be_valid
       described_class.delete_all
     end
 

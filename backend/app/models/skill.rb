@@ -23,7 +23,6 @@ class Skill
   embeds_many :research_groups
 
   validates :name, :email, :lattes, presence: true
-  validates :name, uniqueness: true
   validates :lattes, :photo, url: true
   validates :phones, phones: true
   validate :valid_unities?, :valid_campus?, :valid_keywords?, :valid_bond?, :valid_limit_date?,
