@@ -66,6 +66,16 @@ class ApplicationMailer < ActionMailer::Base
          subject: subject('Token de segurança para atualização - Hub USPInovação'))
   end
 
+  def confirmation_company_update(company_update_request)
+    @update_data = company_update_request
+
+    email = @update_data.company_data.emails.first
+    name = @update_data.company_data.public_name
+    email_subject = subject("Confirmação de Atualização de Empresa - #{name}")
+
+    mail(to: email, subject: email_subject)
+  end
+
   def skill_update_token(skill_email, token)
     @token = token
     @base_url = ENV['JWT_AUDIENCE']

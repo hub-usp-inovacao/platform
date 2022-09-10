@@ -1,0 +1,138 @@
+<p>Os dados atualizados de sua empresa foram recebidos. Eles serão analisados e, em breve, disponibilizados na plataforma.</p>
+
+<p>Abaixo, segue uma cópia das respostas ao formulário.</p>
+
+<hr>
+
+<h2>Dados da Empresa</h2>
+
+<p><strong>Empresa:</strong> <%= @update_data.company_data.public_name %></p>
+<p><strong>Razão Social:</strong> <%= @update_data.company_data.corporate_name %></p>
+<p><strong>CNPJ:</strong> <%= @update_data.company_data.cnpj %></p>
+<p><strong>Ano:</strong> <%= @update_data.company_data.year %></p>
+<p><strong>CNAE:</strong> <%= @update_data.company_data.cnae %></p>
+<p><strong>Telefones:</strong></p>
+<ul>
+  <%@update_data.company_data.phones.each do |phone| %>
+    <li><%= phone %></li>
+  <% end %>
+</ul>
+<p>Emails de contato:</p>
+<ul>
+  <%@update_data.company_data.emails.each do |email| %>
+    <p><%= email %></p>
+  <% end %>
+</ul>
+<p>Cidades Sede:</p>
+<ul>
+  <% @update_data.company_data.city.each do |city| %>
+    <p><%= city %></p>
+  <% end %>
+</ul>
+<p>Endereço:</p>
+<ul>
+  <li>logradouro: <%= @update_data.company_data.street %></li>
+  <li>bairro: <%= @update_data.company_data.neighborhood %></li>
+  <li>estado: <%= @update_data.company_data.state %></li>
+  <li>CEP: <%= @update_data.company_data.zipcode %></li>
+</ul>
+
+
+
+<h2>Sobre a empresa</h2>
+
+<p><strong>Descrição:</strong> <%= @update_data.about_company.description %></p>
+<p><strong>Site:</strong> <%= @update_data.about_company.site %></p>
+<p><strong>Serviços:</strong></p>
+<ul>
+  <% @update_data.about_company.services.each do |service| %>
+    <li><%= service %></li>
+  <% end %>
+</ul>
+<p><strong>Tecnologias:</strong></p>
+<ul>
+  <% @update_data.about_company.technologies.each do |tech| %>
+    <li><%= tech %></li>
+  <% end %>
+</ul>
+<p><strong>Mídias Sociais:</strong></p>
+<ul>
+  <% @update_data.about_company.social_medias.each do |midia| %>
+    <li><%= midia %></li>
+  <% end %>
+</ul>
+<p><strong>ODSs:</strong></p>
+<ul>
+  <% @update_data.about_company.odss.each do |ods| %>
+    <li><%= ods %></li>
+  <% end %>
+</ul>
+
+
+
+<h2>Sócios</h2>
+
+<% @update_data.partners.each do |partner| %>
+  <h3>Sócio <%= partner.index %></h3>
+  <p>Nome: <%= partner.name %></p>
+  <p>NUSP: <%= partner.nusp %></p>
+  <p>Vínculo com a USP: <%= partner.bond %></p>
+  <p>Unidade: <%= partner.unity %></p>
+  <p>Email: <%= partner.email %></p>
+  <p>Telefone: <%= partner.phone %></p>
+
+<% end %>
+
+
+
+<h2>Incubação</h2>
+
+<p><strong>Esteve incubada?</strong> <%= @update_data.incubation.was_incubated %></p>
+<% if @update_data.incubation.was_incubated[0...3].eql? "Sim" %>
+  <p><strong>Incubadora:</strong> <%= @update_data.incubation.ecosystem %></p>
+<% end %>
+
+
+<hr>
+
+<h2>Dados sensíveis (não ficarão disponíveis na plataforma)</h2>
+
+<p><strong>Colaboradores:</strong></p>
+<ul>
+  <li>CLTs: <%= @update_data.staff.number_of_CLT_employees %></li>
+  <li>PJs: <%= @update_data.staff.number_of_PJ_colaborators %></li>
+  <li>estags: <%= @update_data.staff.number_of_interns %></li>
+</ul>
+
+<p><strong>Faturamento:</strong></p>
+<ul>
+  <li>ano anterior: <%= @update_data.revenue.last_year %></li>
+</ul>
+
+<p><strong>Investimento:</strong></p>
+<% if @update_data.investment.received %>
+  <ul>
+    <li>próprio: <%= @update_data.investment.own %></li>
+    <li>anjo: <%= @update_data.investment.angel %></li>
+    <li>VC: <%= @update_data.investment.venture %></li>
+    <li>equity: <%= @update_data.investment.equity %></li>
+    <li>PIPE/FAPESP: <%= @update_data.investment.pipe %></li>
+    <li>demais: <%= @update_data.investment.others %></li>
+  </ul>
+<% end %>
+
+<p><strong>Selo DNA-USP:</strong></p>
+<ul>
+  <li>deseja?: <%= @update_data.dna_usp_stamp.wants ? "Sim" : "Não" %></li>
+  <% if @update_data.dna_usp_stamp.wants %>
+    <li>contato: <%= @update_data.dna_usp_stamp.name %>, <%= @update_data.dna_usp_stamp.email %></li>
+    <li>
+      permissões de dados:
+      <ul>
+        <% @update_data.dna_usp_stamp.permissions.each do |perm| %>
+          <li><%= perm %></li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

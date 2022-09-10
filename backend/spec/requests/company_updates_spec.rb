@@ -113,6 +113,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
   describe 'PATCH /companies' do
     before do
       CompanyUpdateRequest.delete_all
+      allow(ApplicationMailer).to receive(:confirmation_company_update).and_return(mock_deliver)
     end
 
     %i[company_data dna_usp_stamp about_company incubation].each do |k|
@@ -127,6 +128,11 @@ RSpec.describe 'CompanyUpdates', type: :request do
       patch '/companies', params: { company: valid_data }
       body = JSON.parse response.body
       expect(body['company_update']['_id']).not_to be_nil
+    end
+
+    it 'sends a confirmation email' do
+      patch '/companies', params: { company: valid_data }
+      expect(ApplicationMailer).to have_received(:confirmation_company_update)
     end
   end
 

@@ -1,0 +1,109 @@
+Os dados atualizados de sua empresa foram recebidos. Eles serão analisados e, em breve, disponibilizados na plataforma.
+
+Abaixo, segue uma cópia das respostas ao formulário.
+
+---
+
+- Dados da Empresa
+
+Empresa: <%= @update_data.company_data.public_name %>
+Razão Social: <%= @update_data.company_data.corporate_name %>
+CNPJ: <%= @update_data.company_data.cnpj %>
+Ano: <%= @update_data.company_data.year %>
+CNAE: <%= @update_data.company_data.cnae %>
+Telefones:
+<%@update_data.company_data.phones.each do |phone| %>
+  - <%= phone %>
+<% end %>
+Emails de contato:
+<%@update_data.company_data.emails.each do |email| %>
+  - <%= email %>
+<% end %>
+Cidades Sede:
+<% @update_data.company_data.city.each do |city| %>
+  - <%= city %>
+<% end %>
+Endereço:
+  - logradouro: <%= @update_data.company_data.street %>
+  - bairro: <%= @update_data.company_data.neighborhood %>
+  - estado: <%= @update_data.company_data.state %>
+  - CEP: <%= @update_data.company_data.zipcode %>
+
+
+
+- Sobre a empresa
+
+Descrição: <%= @update_data.about_company.description %>
+Site: <%= @update_data.about_company.site %>
+Serviços:
+<% @update_data.about_company.services.each do |service| %>
+  - <%= service %>
+<% end %>
+Tecnologias:
+<% @update_data.about_company.technologies.each do |tech| %>
+  - <%= tech %>
+<% end %>
+Mídias Sociais:
+<% @update_data.about_company.social_medias.each do |midia| %>
+  - <%= midia %>
+<% end %>
+ODSs:
+<% @update_data.about_company.odss.each do |ods| %>
+  - <%= ods %>
+<% end %>
+
+
+
+- Sócios
+
+<% @update_data.partners.each do |partner| %>
+  == Sócio <%= partner.index %> ==
+  Nome: <%= partner.name %>
+  NUSP: <%= partner.nusp %>
+  Vínculo com a USP: <%= partner.bond %>
+  Unidade: <%= partner.unity %>
+  Email: <%= partner.email %>
+  Telefone: <%= partner.phone %>
+
+<% end %>
+
+
+
+- Incubação
+
+Esteve incubada? <%= @update_data.incubation.was_incubated %>
+<% if @update_data.incubation.was_incubated[0...3].eql? "Sim" %>
+  Incubadora: <%= @update_data.incubation.ecosystem %>
+<% end %>
+
+
+
+= Dados sensíveis (não ficarão disponíveis na plataforma) =
+
+Colaboradores:
+- CLTs: <%= @update_data.staff.number_of_CLT_employees %>
+- PJs: <%= @update_data.staff.number_of_PJ_colaborators %>
+- estags: <%= @update_data.staff.number_of_interns %>
+
+Faturamento
+- ano anterior: <%= @update_data.revenue.last_year %>
+
+Investimento
+<% if @update_data.investment.received %>
+  - próprio: <%= @update_data.investment.own %>
+  - anjo: <%= @update_data.investment.angel %>
+  - VC: <%= @update_data.investment.venture %>
+  - equity: <%= @update_data.investment.equity %>
+  - PIPE/FAPESP: <%= @update_data.investment.pipe %>
+  - demais: <%= @update_data.investment.others %>
+<% end %>
+
+Selo DNA-USP:
+- deseja?: <%= @update_data.dna_usp_stamp.wants ? "Sim" : "Não" %>
+<% if @update_data.dna_usp_stamp.wants %>
+  - contato: <%= @update_data.dna_usp_stamp.name %>, <%= @update_data.dna_usp_stamp.email %>
+  - permissões de dados:
+  <% @update_data.dna_usp_stamp.permissions.each do |perm| %>
+    - <%= perm %>
+  <% end %>
+<% end %>

@@ -95,6 +95,7 @@ class CompanyUpdatesController < ApplicationController
       @comp_update.partners = partners
 
       if @comp_update.save
+        ApplicationMailer.confirmation_company_update(@comp_update).deliver_now
         render json: { company_update: @comp_update }
       else
         render json: { error: @comp_update.errors.full_messages }, status: :bad_request
