@@ -5,6 +5,7 @@ val mockk_version: String by project
 val ktor_version : String by project
 val typesafe_config_version: String by project
 val coroutines_version: String by project
+val valiktor_version: String by project
 
 plugins {
     kotlin("jvm")
@@ -23,6 +24,7 @@ repositories {
 dependencies {
     implementation(project(":mailer"))
 
+    implementation("org.valiktor:valiktor-core:$valiktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
