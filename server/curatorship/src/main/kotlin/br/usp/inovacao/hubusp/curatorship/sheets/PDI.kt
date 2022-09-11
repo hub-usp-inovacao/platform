@@ -1,37 +1,103 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import org.valiktor.Constraint
+import org.valiktor.ConstraintViolationException
+import org.valiktor.Validator
+import org.valiktor.functions.*
+import org.valiktor.i18n.mapToMessage
+import org.valiktor.validate
+
 @kotlinx.serialization.Serializable
 data class PDI(
-    val category: PDICategory,
-    val name: String
+    val category: String,
+    val name: String,
+    val unity: String,
+    val campus: String,
+    val coordinator: String?,
+    val phone: String?,
+    val email: String?,
+    val description: String,
+    val site: String?,
+    val keywords: Set<String>
 ) {
     companion object {
-        fun from(category: String, name: String): PDI {
-            ensureNameIsNotEmpty(name)
-            val pdiCategory = PDICategory.from(category)
-            return PDI(category = pdiCategory, name = name)
-        }
+        val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
+    }
 
-        private fun ensureNameIsNotEmpty(name: String) {
-            if (name.isEmpty()) throw ValidationException("Name cannot be empty")
+    init {
+        try {
+            validate(this) {
+                validate(PDI::category)
+                    .isNotNull()
+                    .isPDICategory()
+
+                validate(PDI::name)
+                    .isNotBlank()
+
+                validate(PDI::unity)
+                    .isNotNull()
+                    .isUnity()
+
+                validate(PDI::campus)
+                    .isNotNull()
+                    .isCampus()
+
+                validate(PDI::phone)
+                    .isPhone()
+
+                validate(PDI::email)
+                    .isEmail()
+
+                validate(PDI::description)
+                    .isNotNull()
+                    .isNotBlank()
+
+                validate(PDI::site)
+                    .isWebsite()
+
+                validate(PDI::keywords)
+                    .isNotNull()
+                    .isNotEmpty()
+            }
+        } catch (cve: ConstraintViolationException) {
+            val violations: List<String> = cve.constraintViolations
+                .mapToMessage(baseName = "messages")
+                .map { "${it.property}: ${it.message}" }
+
+            throw ValidationException(messages = violations)
         }
     }
 }
 
-enum class PDICategory {
-    CEPID, EMBRAPII, INCT, NAP, EngineeringCenter;
+class PDICategory: Constraint
 
-    companion object {
-        fun from(value: String) = when (value) {
-            "CEPID" -> CEPID
-            "EMBRAPII" -> EMBRAPII
-            "INCT" -> INCT
-            "NAP" -> NAP
-            "Centro de Pesquisa em Engenharia" -> EngineeringCenter
-
-            else -> throw ValidationException("$value is not accepted as PDICategory")
-        }
-    }
+fun <E> Validator<E>.Property<String?>.isPDICategory() = this.validate(PDICategory()) {
+    it == null || PDI.categories
+        .contains(it)
 }
 
-class ValidationException(msg: String) : RuntimeException(msg)
+class Campi : Constraint
+
+fun <E> Validator<E>.Property<String?>.isCampus() = this.validate(Campi()) {
+    (it == null) || Campus
+        .all()
+        .contains(it)
+}
+
+class Unity : Constraint
+
+fun <E> Validator<E>.Property<String?>.isUnity() = this.validate(Unity()) {
+    it == null || it in Campus.allUnities()
+}
+
+class Phone : Constraint
+
+fun <E> Validator<E>.Property<String?>.isPhone() = this.validate(Phone()) {
+    (it == null) || it
+        .replace("""\D""".toRegex(), "")
+        .matches("""^\d{8,13}$""".toRegex())
+}
+
+class ValidationException(
+    messages: Iterable<String>
+) : RuntimeException(messages.joinToString("|"))
