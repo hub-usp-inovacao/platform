@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation(project(":catalog"))
     implementation(project(":curatorship"))
+    implementation(project(":discovery"))
 
     implementation("org.litote.kmongo:kmongo-serialization:$kmongo_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
