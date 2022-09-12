@@ -1,7 +1,7 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.PDI
 import br.usp.inovacao.hubusp.server.catalog.PDISearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -111,19 +111,19 @@ class CatalogPDIRepositoryImplTest {
     }
 
     fun cleanTestDb() {
-        val pdiCollection = testDb.getCollection<PDI>("pdis")
+        val pdiCollection = testDb.getCollection<PDIModel>("pdis")
 
         pdiCollection.deleteMany("{}")
     }
 
     fun seedTestDb() {
-        val pdiCollection = testDb.getCollection<PDI>("pdis")
+        val pdiCollection = testDb.getCollection<PDIModel>("pdis")
 
         pdiCollection.insertMany(testSeeds())
     }
 
     fun testSeeds() = listOf(
-        PDI (
+        PDIModel (
             category = "CEPID",
             name = "CTC - Centro de Terapia Celular",
             campus = "Ribeirão Preto",
@@ -135,7 +135,7 @@ class CatalogPDIRepositoryImplTest {
             description = "Seu objetivo é desenvolver pesquisas para entender a biologia das células-tronco, bem como em desenvolver novas tecnologias para seu uso no tratamento de doenças. O grupo de pesquisadores envolve médicos, biólogos, profissionais biomédicos, farmacêuticos e veterinários, entre outros.",
             tags = setOf("Célula-tronco", "Ensaios clínicos")
         ),
-        PDI (
+        PDIModel (
             category = "Centro de Pesquisa em Engenharia",
             name = "C4AI - Centro de Inteligência Artificial",
             campus = "Butantã",
