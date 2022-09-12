@@ -2,21 +2,63 @@ package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
-import io.ktor.http.HttpStatusCode
+import com.mongodb.client.MongoDatabase
+import io.ktor.http.*
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 
-fun Application.catalog() {
-    val db = configureDB(
-        protocol = environment.config.property("datasource.protocol").getString(),
-        host = environment.config.property("datasource.host").getString(),
-        port = environment.config.property("datasource.port").getString(),
-        dbName = environment.config.property("datasource.dbName").getString()
-    )
 
+fun Parameters.toPDISearchParams() = PDISearchParams(
+    categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+    term = this["term"],
+)
+
+fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
+    majorArea = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
+    minorArea = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+    unity = this["unity"],
+    bond = this["bond"],
+    term = this["term"]
+)
+
+fun Parameters.toCompanySearchParams() = CompanySearchParams(
+    areaMajors = this["areaMajors"]?.split(',')?.toSet() ?: emptySet(),
+    areaMinors = this["areaMinors"]?.split(',')?.toSet() ?: emptySet(),
+    city = this["city"],
+    ecosystem = this["ecosystem"],
+    size = this["size"],
+    term = this["term"]
+)
+
+fun Parameters.toPatentSearchParams() = PatentSearchParams(
+    majorAreas = this["areaMajors"]?.split(",")?.toSet() ?: emptySet(),
+    minorAreas = this["areaMinors"]?.split(",")?.toSet() ?: emptySet(),
+    status = this["status"],
+    term = this["term"],
+)
+
+fun Parameters.toInitiativeSearchParams() = InitiativeSearchParams(
+    classifications = this["classifications"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+    term = this["term"]
+)
+
+fun Parameters.toDisciplineSearchParams() = DisciplineSearchParams(
+    categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
+    campus = this["campus"],
+    unity = this["unity"],
+    level = this["level"],
+    nature = this["nature"],
+    term = this["term"],
+)
+
+
+fun Application.catalog(db: MongoDatabase) {
     val searchDisciplines = CatalogDisciplineRepositoryImpl(db)
         .let { SearchDisciplines(it) }
 

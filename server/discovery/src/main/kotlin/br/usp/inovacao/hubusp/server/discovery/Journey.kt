@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.discovery
 
-@Suppress("unused")
 class Journey(private val repo: JourneyRepository) {
     fun learnStep(filter: LearnStepFilters) = repo.find(JourneyStep.Learn, filter)
 

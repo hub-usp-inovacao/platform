@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.*
+import br.usp.inovacao.hubusp.server.persistence.configureDB
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
@@ -131,7 +132,13 @@ class CatalogTest {
         block: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {
-            catalog()
+            val db = configureDB(
+                protocol = environment.config.property("datasource.protocol").getString(),
+                host = environment.config.property("datasource.host").getString(),
+                port = environment.config.property("datasource.port").getString(),
+                dbName = environment.config.property("datasource.dbName").getString()
+            )
+            catalog(db)
         }
 
         block()
