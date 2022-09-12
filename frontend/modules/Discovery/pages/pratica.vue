@@ -9,7 +9,7 @@
       previous="aprenda"
       next-color="#F4C41E"
       previous-color="#C0161B"
-      :items="filteredItems"
+      :items="records"
     >
       <template v-slot:SecondaryButtons>
         <v-row justify="center">
@@ -19,9 +19,9 @@
                 v-for="{ label } in buttons"
                 :key="label"
                 class="white px-6 py-6 ma-1 flex-grow-1 button text-capitalize"
-                :color="selected == label ? 'grey' : 'white'"
+                :color="filter === label ? 'grey' : 'white'"
                 max-width="100%"
-                @click="select"
+                @click="setFilter(label)"
               >
                 {{ label }}
               </v-btn>
@@ -35,7 +35,6 @@
 
 <script>
 import Step from "../components/Step.vue";
-import { formatURL } from "@/lib/format";
 
 export default {
   components: {
@@ -48,7 +47,7 @@ export default {
       `Na hora de colocar a sua ideia em prática, você pode participar de programas que inspiram e promovem o desenvolvimento de iniciativas inovadoras e empreendedoras disponíveis para a Comunidade USP.`,
       `Precisando de um lugar para colocar a sua ideia em prática? Procure os espaços de convivência e coworking, onde você poderá interagir com projetos e organizações ligadas à inovação e ao empreendedorismo`,
     ],
-    route: "pratica",
+
     buttons: [
       { label: "Empresa Jr." },
       { label: "Ideação" },
@@ -56,83 +55,32 @@ export default {
       { label: "Entidade Estudantil" },
       { label: "Espaço/coworking" },
     ],
-    selected: "",
 
-    items: {
-      "EMPRESA JR.": [],
-      IDEAÇÃO: [],
-      "GRUPOS E INICIATIVAS ESTUDANTIS": [],
-      "ENTIDADE ESTUDANTIL": [],
-      "ESPAÇO/COWORKING": [],
-    },
-
-    selectedButtonSecondary: undefined,
+    records: [],
+    filter: undefined,
   }),
 
   computed: {
-    filteredItems() {
-      const secondaryButton = this.selectedButtonSecondary;
+    params() {
+      return {
+        category: this.filter,
+      };
+    },
+  },
 
-      if (secondaryButton != undefined) {
-        return this.items[secondaryButton];
-      } else {
-        return [];
-      }
+  watch: {
+    async params() {
+      this.records = await this.$JornadaAdapter.updatePractice(this.params);
     },
   },
 
   async beforeMount() {
-    const sheetID = "1MGRBDs-Bb2PGdyUkTN92dM5kqQuw5dtOpFHwAV1FQpA";
-    const sheetName = "INICIATIVAS";
-    const sheetsAPIKey = process.env.sheetsAPIKey;
-
-    let empresaJr = [];
-    let ideacao = [];
-    let grupos = [];
-    let entidade = [];
-    let coworking = [];
-
-    const resp = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/'${sheetName}'?key=${sheetsAPIKey}`
-    );
-    const { values } = await resp.json();
-
-    values.slice(1).forEach((element) => {
-      const name = element[0];
-      let newUrl = formatURL(element[6]);
-
-      switch (name) {
-        case "Empresa Jr.":
-          empresaJr.push({ nome: element[1], url: newUrl });
-          break;
-        case "Ideação":
-          ideacao.push({ nome: element[1], url: newUrl });
-          break;
-        case "Grupos e Iniciativas Estudantis":
-          grupos.push({ nome: element[1], url: newUrl });
-          break;
-        case "Entidade Estudantil":
-          entidade.push({ nome: element[1], url: newUrl });
-          break;
-        case "Espaço/Coworking":
-          coworking.push({ nome: element[1], url: newUrl });
-          break;
-      }
-    });
-
-    this.items["EMPRESA JR."] = empresaJr;
-    this.items["IDEAÇÃO"] = ideacao;
-    this.items["GRUPOS E INICIATIVAS ESTUDANTIS"] = grupos;
-    this.items["ENTIDADE ESTUDANTIL"] = entidade;
-    this.items["ESPAÇO/COWORKING"] = coworking;
+    this.records = await this.$JornadaAdapter.requestPractice();
   },
 
   methods: {
-    select({ target }) {
-      let text = target.innerText;
-      this.selected = text;
-      text = text.toUpperCase();
-      this.selectedButtonSecondary = text;
+    setFilter(label) {
+      this.filter = this.filter === label ? undefined : label;
     },
   },
 };
