@@ -2,7 +2,7 @@
   <v-card
     height="35rem"
     class="d-flex flex-column"
-    :class="{ 'justify-center': items.length == 0 }"
+    :class="{ 'justify-center': items.length === 0 }"
   >
     <div v-if="items.length > 0">
       <div class="d-flex justify-center">
@@ -13,13 +13,13 @@
         <v-list-item-group>
           <v-list-item
             v-for="i in items"
-            :key="i.nome"
+            :key="i.name"
             :value="i"
-            :href="i.url == 'N/D' ? '' : i.url"
+            :href="i.url === 'N/D' ? '' : i.url"
             target="_blank"
           >
             <v-list-item-content>
-              <v-list-item-title v-text="i.nome" />
+              <v-list-item-title v-text="i.name" />
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
