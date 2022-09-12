@@ -9,7 +9,7 @@
       previous="criar"
       next-color="#214E8C"
       previous-color="#F4C41E"
-      :items="filteredItems"
+      :items="pdis"
     >
       <template v-slot:SecondaryButtons>
         <v-row justify="center">
@@ -19,9 +19,9 @@
                 v-for="{ label } in buttons"
                 :key="label"
                 class="white px-6 py-6 ma-1 flex-grow-1 button text-capitalize"
-                :color="selected == label ? 'grey' : 'white'"
+                :color="filter === label ? 'grey' : 'white'"
                 max-width="100%"
-                @click="select"
+                @click="setFilter(label)"
               >
                 {{ label }}
               </v-btn>
@@ -35,7 +35,6 @@
 
 <script>
 import Step from "../components/Step.vue";
-import { formatURL } from "@/lib/format";
 
 export default {
   components: {
@@ -47,71 +46,33 @@ export default {
       `É possível contar com a ajuda de especialistas e suas competências no momento de desenvolver o seu produto ou serviço. Você pode consultar quais as competências da(o)s pesquisadora(e)s da USP, os serviços e equipamentos disponíveis em seus laboratórios.`,
       `Se você precisa finalizar o desenvolvimento do seu produto ou testá-lo, ou então está em busca por serviços especializados e equipamentos de alta complexidade, verifique as Centrais Multiusuário disponíveis na USP. `,
     ],
-    buttons: [
-      { label: "CEPID" },
-      { label: "INCT" },
-      { label: "Centrais Multiusuário" },
-    ],
-    selected: "",
+    buttons: [{ label: "CEPID" }, { label: "INCT" }],
 
-    items: {
-      CEPID: [],
-      INCT: [],
-      "CENTRAIS MULTIUSUÁRIO": [],
-    },
-
-    selectedButtonSecondary: undefined,
+    pdis: [],
+    filter: undefined,
   }),
 
   computed: {
-    filteredItems() {
-      const secondaryButton = this.selectedButtonSecondary;
+    params() {
+      return {
+        category: this.filter,
+      };
+    },
+  },
 
-      if (secondaryButton != undefined) {
-        return this.items[secondaryButton];
-      } else {
-        return [];
-      }
+  watch: {
+    async params() {
+      this.pdis = await this.$JornadaAdapter.updateImprove(this.params);
     },
   },
 
   async beforeMount() {
-    const sheetID = "1TZWMGvvn6TUmwo8DdWvtkLcbDVqVuif9HKMRPVcb2eo";
-    const sheetName = "PDI";
-    const sheetsAPIKey = process.env.sheetsAPIKey;
-
-    let cepid = [];
-    let inct = [];
-    let uspmulti = [];
-
-    const resp = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/'${sheetName}'?key=${sheetsAPIKey}`
-    );
-    const { values } = await resp.json();
-
-    values.slice(1).forEach((element) => {
-      const name = element[0];
-
-      let newUrl = formatURL(element[6]);
-
-      if (name == "CEPID") {
-        cepid.push({ nome: element[1], url: newUrl });
-      } else if (name == "INCT") {
-        inct.push({ nome: element[1], url: newUrl });
-      }
-    });
-
-    this.items["CEPID"] = cepid;
-    this.items["INCT"] = inct;
-    this.items["CENTRAIS MULTIUSUÁRIO"] = uspmulti;
+    this.pdis = await this.$JornadaAdapter.requestImprove();
   },
 
   methods: {
-    select({ target }) {
-      let text = target.innerText;
-      this.selected = text;
-      text = text.toUpperCase();
-      this.selectedButtonSecondary = text;
+    setFilter(label) {
+      this.filter = this.filter === label ? undefined : label;
     },
   },
 };
