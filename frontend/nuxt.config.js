@@ -5,12 +5,14 @@ export default {
     sheetsAPIKey: process.env.sheetsAPIKey,
     sheetID: process.env.sheetID,
     BACKEND_URL: process.env.BACKEND_URL,
-    NEW_CATALOG: process.env.NEW_CATALOG,
-    OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
-    BETA_VERSION: process.env.BETA_VERSION,
     INICIATIVES_DATA_SOURCE_URL: process.env.INICIATIVES_DATA_SOURCE_URL,
     PDI_DATA_SOURCE_URL: process.env.PDI_DATA_SOURCE_URL,
     SKILLS_DATA_SOURCE_URL: process.env.SKILLS_DATA_SOURCE_URL,
+    // below, the Feature toggles
+    NEW_CATALOG: process.env.NEW_CATALOG,
+    OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
+    BETA_VERSION: process.env.BETA_VERSION,
+    NEW_JOURNEY: process.env.NEW_JOURNEY,
   },
   ssr: true,
   target: "server",
@@ -112,7 +114,11 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/axios", "~/modules/Catalog/index.js"],
+  modules: [
+    "@nuxtjs/axios",
+    "~/modules/Catalog/index.js",
+    "~/modules/Discovery/index.js",
+  ],
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

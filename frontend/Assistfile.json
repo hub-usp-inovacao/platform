@@ -24,6 +24,11 @@
         "default": "false"
       },
       {
+        "name": "NEW_JOURNEY",
+        "description": "[Feature Flag] Indicates the adoption of the new journey backend ('true' or 'false')",
+        "default": "false"
+      },
+      {
         "name": "OPEN_CONEXAO_FORMS",
         "description": "[Feature Flag] Indicates whether Conexao forms is open ('true' or 'false')",
         "default": "false"
