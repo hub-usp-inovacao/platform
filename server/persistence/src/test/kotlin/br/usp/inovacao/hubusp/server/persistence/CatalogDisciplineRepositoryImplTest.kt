@@ -1,8 +1,10 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Category
 import br.usp.inovacao.hubusp.server.catalog.Discipline
 import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.DisciplineCategory
+import br.usp.inovacao.hubusp.server.persistence.models.DisciplineDescription
+import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -119,67 +121,99 @@ internal class CatalogDisciplineRepositoryImplTest {
     }
 
     private fun seedTestDb() {
-        val disciplineCollection = testDb.getCollection<Discipline>("disciplines")
+        val disciplineCollection = testDb.getCollection<DisciplineModel>("disciplines")
         disciplineCollection.insertMany(testSeeds())
     }
 
     private fun cleanTestDb() {
-        val disciplineCollection = testDb.getCollection<Discipline>("disciplines")
+        val disciplineCollection = testDb.getCollection<DisciplineModel>("disciplines")
         disciplineCollection.deleteMany("{}")
     }
 
     private fun testSeeds() = listOf(
-        Discipline(
-            name = "ABC0001",
-            unity = "ABC",
+        DisciplineModel(
             campus = "Butantã",
             level = "Quero aprender!",
+            name = "ABC0001",
             nature = "Graduação",
-            category = Category(
+            unity = "ABC",
+            category = DisciplineCategory(
                 innovation = false,
                 entrepreneurship = false,
                 business = false,
                 intellectual_property = true
-            )
+            ),
+            description = DisciplineDescription(
+                long = "",
+                short = ""
+            ),
+            keywords = setOf("foo", "baz"),
+            offeringPeriod = "N/D",
+            start_date = "",
+            url = ""
         ),
-        Discipline(
+        DisciplineModel(
             name = "ABC0004",
             unity = "ABC",
             campus = "Butantã",
             level = "Quero aprender!",
             nature = "Pós-graduação",
-            category = Category(
+            category = DisciplineCategory(
                 innovation = false,
                 entrepreneurship = true,
                 business = false,
                 intellectual_property = true
-            )
+            ),
+            description = DisciplineDescription(
+                long = "",
+                short = ""
+            ),
+            keywords = setOf("foo", "baz"),
+            offeringPeriod = "N/D",
+            start_date = "",
+            url = ""
         ),
-        Discipline(
+        DisciplineModel(
             name = "ABC0002",
             unity = "ABC",
             campus = "Butantã",
             level = "Quero aprender!",
             nature = "Pós-graduação",
-            category = Category(
+            category = DisciplineCategory(
                 innovation = false,
                 entrepreneurship = false,
                 business = false,
                 intellectual_property = true
-            )
+            ),
+            description = DisciplineDescription(
+                long = "",
+                short = ""
+            ),
+            keywords = setOf("foo", "baz"),
+            offeringPeriod = "N/D",
+            start_date = "",
+            url = ""
         ),
-        Discipline(
+        DisciplineModel(
             name = "ABC0003 utilidade",
             unity = "BCD",
             campus = "São Carlos",
             level = "Tenho uma ideia, e agora?",
             nature = "Pós-graduação",
-            category = Category(
+            category = DisciplineCategory(
                 innovation = false,
                 entrepreneurship = false,
                 business = true,
                 intellectual_property = true
-            )
+            ),
+            description = DisciplineDescription(
+                long = "",
+                short = ""
+            ),
+            keywords = setOf("foo", "baz"),
+            offeringPeriod = "N/D",
+            start_date = "",
+            url = ""
         )
     )
 }
