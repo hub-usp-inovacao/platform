@@ -99,5 +99,5 @@ fun <E> Validator<E>.Property<String?>.isPhone() = this.validate(Phone()) {
 }
 
 class ValidationException(
-    messages: Iterable<String>
+    val messages: Iterable<String>
 ) : RuntimeException(messages.joinToString("|"))
