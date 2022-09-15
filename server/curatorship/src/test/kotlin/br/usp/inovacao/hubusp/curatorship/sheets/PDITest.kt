@@ -6,6 +6,18 @@ import kotlin.test.assertIs
 
 internal class PDITest {
     @Test
+    fun `it parses correctly from a row in the spreadsheet`() {
+        // given
+        val row: List<String?> = PDITestHelp.validRow
+
+        // when
+        val result = PDI.fromRow(row)
+
+        // then
+        assertIs<PDI>(result)
+    }
+
+    @Test
     fun `it throws when creating with invalid category`() {
         assertFailsWith<ValidationException> {
             valid.copy(category = "Wrong")

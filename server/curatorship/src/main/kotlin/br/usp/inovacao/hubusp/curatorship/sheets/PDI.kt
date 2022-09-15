@@ -20,6 +20,19 @@ data class PDI(
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
+
+        fun fromRow(row: List<String?>) = PDI(
+            category = row[0],
+            name = row[1],
+            campus = row[2],
+            unity = row[3],
+            coordinator = row[4],
+            site = row[5],
+            email = row[6],
+            phone = row[7],
+            description = row[8],
+            keywords = row[9]?.split(";")?.toSet()
+        )
     }
 
     init {

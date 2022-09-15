@@ -35,5 +35,18 @@ class PDITestHelp {
 
             return listOf(validRow, invalidRow)
         }
+
+        val validRow: List<String?> = listOf(
+            "CEPID",
+            "Flau flau",
+            "USP Leste",
+            "Escola de Artes, Ciências e Humanidades - EACH",
+            null,
+            null,
+            null,
+            null,
+            "Lorem ipsum",
+            "foo;baz"
+        )
     }
 }

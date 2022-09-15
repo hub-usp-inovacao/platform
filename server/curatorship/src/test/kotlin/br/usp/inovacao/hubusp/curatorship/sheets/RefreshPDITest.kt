@@ -22,9 +22,12 @@ internal class RefreshPDITest {
     @MockK
     private lateinit var mockPDIErrorRepo: PDIErrorRepository
 
+    private lateinit var underTest: RefreshPDI
+
     @BeforeTest
     fun setup() {
         MockKAnnotations.init(this)
+        underTest = RefreshPDI(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
     }
 
     @Test
@@ -32,7 +35,6 @@ internal class RefreshPDITest {
         // given
         every { mockSSReader.read(any()) } throws SheetReadingException("", "", "Mock error")
         every { mockMailer.notifySpreadsheetError(any()) } returns Unit
-        val underTest = RefreshPDI(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
 
         // when
         underTest.refresh()
@@ -50,7 +52,6 @@ internal class RefreshPDITest {
         every { mockMailer.notifySpreadsheetError(any()) } returns Unit
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
-        val underTest = RefreshPDI(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
 
         // when
         underTest.refresh()

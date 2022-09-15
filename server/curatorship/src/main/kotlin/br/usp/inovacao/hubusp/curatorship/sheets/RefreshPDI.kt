@@ -8,33 +8,31 @@ class RefreshPDI(
     val pdiRepository: PDIRepository,
     val pdiErrorRepository: PDIErrorRepository
 ) {
-    private fun persistAfterValidation(data: Matrix<String?>) {
-        data.forEachIndexed { listIndex, row ->
-            try {
-                val pdi = PDI(
-                    category = row[0],
-                    name = row[1],
-                    campus = row[2],
-                    unity = row[3],
-                    coordinator = row[4],
-                    site = row[5],
-                    email = row[6],
-                    phone = row[7],
-                    description = row[8],
-                    keywords = row[9]?.split(";")?.toSet()
-                )
-                pdiRepository.save(pdi)
-            } catch (e: ValidationException) {
-                val correctionFactor = 2
-                val error = PDIValidationError(e.messages,listIndex + correctionFactor)
-                pdiErrorRepository.save(error)
-            }
-        }
+    companion object {
+        private const val INDEX_CORRECTION_FACTOR = 2
     }
+
+    private fun validateRow(rowIndex: Int, row: List<String?>) = try {
+        PDI.fromRow(row)
+    } catch (e: ValidationException) {
+        PDIValidationError(
+            errors = e.messages,
+            spreadsheetLineNumber = rowIndex + INDEX_CORRECTION_FACTOR
+        )
+    }
+
+    private fun persistValidData(data: Any) = when(data) {
+        is PDI -> pdiRepository.save(data)
+        is PDIValidationError -> pdiErrorRepository.save(data)
+        else -> throw RuntimeException("Error while persisting PDI: data isn't PDI nor PDIValidationError")
+    }
+
     fun refresh() {
         try {
-            val data = spreadsheetReader.read(Sheets.PDIs)
-            persistAfterValidation(data)
+            spreadsheetReader
+                .read(Sheets.PDIs)
+                .mapIndexed(this::validateRow)
+                .forEach(this::persistValidData)
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
         }

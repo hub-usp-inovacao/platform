@@ -1,4 +1,11 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-data class PDIValidationError(val errors:Iterable<String>, val SpreadsheetLineNumber:Int )
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class PDIValidationError(
+    val errors: Iterable<String>,
+    val spreadsheetLineNumber: Int,
+    val delivered: Boolean = false
+)
 
