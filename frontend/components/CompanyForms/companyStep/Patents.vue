@@ -10,13 +10,11 @@
 </template>
 
 <script>
-import PairOfShortTextInput from "@/components/CompanyForms/inputs/PairOfShortTextInput.vue";
 import MultipleInputs from "../inputs/MultipleInputs.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
-    PairOfShortTextInput,
     MultipleInputs,
   },
   computed: {

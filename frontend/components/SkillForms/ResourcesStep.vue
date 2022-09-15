@@ -44,6 +44,7 @@ import ShortTextInput from "../CompanyForms/inputs/ShortTextInput.vue";
 export default {
   components: {
     MultipleInputs,
+    // eslint-disable-next-line vue/no-unused-components
     ShortTextInput,
   },
   computed: {

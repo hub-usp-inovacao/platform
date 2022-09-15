@@ -537,7 +537,7 @@ export default {
       return { isvalid, errors };
     },
     async submit() {
-      const { isvalid, errors } = this.validate();
+      const { isvalid } = this.validate();
       this.loading = true;
       this.$refs.form.validate();
       if (isvalid) {

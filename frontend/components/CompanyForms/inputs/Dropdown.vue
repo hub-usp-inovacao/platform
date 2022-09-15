@@ -32,6 +32,7 @@ export default {
       type: Array,
       required: true,
     },
+    // eslint-disable-next-line vue/require-default-prop,vue/require-prop-types
     value: {
       required: false,
     },

@@ -52,6 +52,7 @@ export default {
     URLInput,
   },
 
+  // eslint-disable-next-line vue/require-prop-types
   props: ["value"],
 
   data: () => ({

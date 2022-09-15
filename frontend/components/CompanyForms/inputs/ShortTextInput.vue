@@ -30,6 +30,7 @@ export default {
       required: false,
       default: -1,
     },
+    // eslint-disable-next-line vue/require-default-prop
     value: {
       type: String,
     },
