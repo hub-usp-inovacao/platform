@@ -118,16 +118,5 @@ internal class PDITest {
         }
     }
 
-    private val valid = PDI(
-        category = "CEPID",
-        name = "Flau flau",
-        unity = "Escola de Artes, Ciências e Humanidades - EACH",
-        campus = "USP Leste",
-        coordinator = null,
-        phone = null,
-        email = null,
-        description = "lorem ipsum",
-        site = null,
-        keywords = setOf("foo", "baz")
-    )
+    private val valid = PDITestHelp.VALID_RECORD.copy()
 }
