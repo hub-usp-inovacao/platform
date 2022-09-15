@@ -9,7 +9,7 @@
       previous="pratica"
       next-color="#338C21"
       previous-color="#E46926"
-      :items="filteredIncubators"
+      :items="incubs"
     >
       <template v-slot:SecondaryButtons>
         <v-row justify="center">
@@ -19,9 +19,9 @@
                 v-for="{ label } in buttons"
                 :key="label"
                 class="white px-6 py-6 ma-1 flex-grow-1 button text-capitalize"
-                :color="selected == label ? 'grey' : 'white'"
+                :color="primary === label ? 'grey' : 'white'"
                 max-width="100%"
-                @click="select"
+                @click="selectFilter(label)"
               >
                 {{ label }}
               </v-btn>
@@ -35,7 +35,6 @@
 
 <script>
 import Step from "../components/Step.vue";
-import { formatURL } from "@/lib/format";
 
 export default {
   components: {
@@ -50,63 +49,31 @@ export default {
       { label: "Incubadoras E Parques Técnologicos Da USP" },
       { label: "Incubadoras E Parques Técnologicos Externos" },
     ],
-    selected: "",
-    incubadoras: {
-      "INCUBADORAS E PARQUES TÉCNOLOGICOS DA USP": [],
-      "INCUBADORAS E PARQUES TÉCNOLOGICOS EXTERNOS": [],
-    },
-
-    selectedButtonSecondary: undefined,
+    primary: "",
+    incubs: [],
   }),
 
   computed: {
-    filteredIncubators() {
-      const secondaryButton = this.selectedButtonSecondary;
+    params() {
+      if (this.primary === undefined) return {};
 
-      if (secondaryButton != undefined) {
-        return this.incubadoras[secondaryButton];
-      } else {
-        return [];
-      }
+      return { insideUSP: this.primary === this.buttons[0].label };
     },
   },
+
+  watch: {
+    async params() {
+      this.incubs = await this.$JornadaAdapter.updateCreate(this.params);
+    },
+  },
+
   async beforeMount() {
-    const sheetID = "1kS55eqf_xEfOExh1aEGSvjTFDbtCRWHYSEyh4f31nww";
-    const sheetName = "Upload";
-    const sheetsAPIKey = process.env.sheetsAPIKey;
-
-    let incubadorasUsp = [];
-    let incubadorasExternas = [];
-
-    const resp = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/'${sheetName}'?key=${sheetsAPIKey}`
-    );
-    const { values } = await resp.json();
-
-    values.slice(1).forEach((element) => {
-      let newUrl = formatURL(element[3]);
-
-      element[1] == "Outro"
-        ? incubadorasExternas.push({ nome: element[2], url: newUrl })
-        : incubadorasUsp.push({ nome: element[2], url: newUrl });
-    });
-
-    this.incubadoras[
-      "INCUBADORAS E PARQUES TÉCNOLOGICOS DA USP"
-    ] = incubadorasUsp;
-
-    this.incubadoras[
-      "INCUBADORAS E PARQUES TÉCNOLOGICOS EXTERNOS"
-    ] = incubadorasExternas;
+    this.incubs = await this.$JornadaAdapter.requestCreate();
   },
 
   methods: {
-    select({ target }) {
-      let text = target.innerText;
-      this.selected = text;
-      console.log(this.selected);
-      text = text.toUpperCase();
-      this.selectedButtonSecondary = text;
+    selectFilter(label) {
+      this.primary = this.primary === label ? undefined : label;
     },
   },
 };
