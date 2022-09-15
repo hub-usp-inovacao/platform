@@ -8,7 +8,7 @@
       previous="aprimorar"
       previous-color="#338C21"
       next=""
-      :items="filteredItems"
+      :items="funds"
     >
       <template v-slot:SecondaryButtons>
         <v-row justify="center">
@@ -18,9 +18,9 @@
                 v-for="{ label } in buttons"
                 :key="label"
                 class="white px-6 py-6 ma-1 flex-grow-1 button text-capitalize"
-                :color="selected == label ? 'grey' : 'white'"
+                :color="primary === label ? 'grey' : 'white'"
                 max-width="100%"
-                @click="select"
+                @click="selectFilter(label)"
               >
                 {{ label }}
               </v-btn>
@@ -34,7 +34,6 @@
 
 <script>
 import Step from "../components/Step.vue";
-import { formatURL } from "@/lib/format";
 
 export default {
   components: {
@@ -51,88 +50,36 @@ export default {
     buttons: [
       { label: "EMBRAPII" },
       { label: "Fomento" },
-      { label: "Investidores Anjo" },
-      { label: "Early Stage" },
-      { label: "Venture Capital" },
+      { label: "Investidores anjo" },
+      { label: "Early stage" },
+      { label: "Venture capital" },
     ],
 
-    selected: "",
-
-    items: {
-      EMBRAPII: [],
-      FOMENTO: [],
-      "INVESTIDORES ANJO": [],
-      "EARLY STAGE": [],
-      "VENTURE CAPITAL": [],
-    },
-
-    selectedButtonSecondary: undefined,
+    funds: [],
+    primary: undefined,
   }),
 
   computed: {
-    filteredItems() {
-      const secondaryButton = this.selectedButtonSecondary;
+    params() {
+      return {
+        type: this.primary,
+      };
+    },
+  },
 
-      if (secondaryButton != undefined) {
-        return this.items[secondaryButton];
-      } else {
-        return [];
-      }
+  watch: {
+    async params() {
+      this.funds = await this.$JornadaAdapter.updateFund(this.params);
     },
   },
 
   async beforeMount() {
-    const sheetID = "12O4u6P5Ytf9_uXmHu89vC_7oE_orw7GDKRajzSzLh5g";
-    const sheetName = "Upload";
-    const sheetsAPIKey = process.env.sheetsAPIKey;
-
-    let embrapii = [];
-    let fomento = [];
-    let investidores = [];
-    let earlyStage = [];
-    let ventureCapital = [];
-
-    const resp = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/'${sheetName}'?key=${sheetsAPIKey}`
-    );
-    const { values } = await resp.json();
-
-    values.slice(1).forEach((element) => {
-      const name = element[0];
-      let newUrl = formatURL(element[2]);
-
-      switch (name) {
-        case "EMBRAPII":
-          embrapii.push({ nome: element[1], url: newUrl });
-          break;
-        case "Fomento":
-          fomento.push({ nome: element[1], url: newUrl });
-          break;
-        case "Investidores anjo":
-          investidores.push({ nome: element[1], url: newUrl });
-          break;
-        case "Early stage":
-          earlyStage.push({ nome: element[1], url: newUrl });
-          break;
-        case "Venture capital":
-          ventureCapital.push({ nome: element[1], url: newUrl });
-          break;
-      }
-    });
-
-    this.items["EMBRAPII"] = embrapii;
-    this.items["FOMENTO"] = fomento;
-    this.items["INVESTIDORES ANJO"] = investidores;
-    this.items["EARLY STAGE"] = earlyStage;
-    this.items["VENTURE CAPITAL"] = ventureCapital;
+    this.funds = await this.$JornadaAdapter.requestFund();
   },
 
   methods: {
-    select({ target }) {
-      let text = target.innerText;
-      this.selected = text;
-      text = text.toUpperCase();
-      this.selectedButtonSecondary = text;
+    selectFilter(label) {
+      this.primary = label === this.primary ? undefined : label;
     },
   },
 };
