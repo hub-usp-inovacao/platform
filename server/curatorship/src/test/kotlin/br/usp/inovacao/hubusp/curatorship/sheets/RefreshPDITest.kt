@@ -11,10 +11,16 @@ import kotlin.test.Test
 internal class RefreshPDITest {
 
     @MockK
-    private lateinit var mockSpreadsheetReader: SpreadsheetReader
+    private lateinit var mockSSReader: SpreadsheetReader
 
     @MockK
     private lateinit var mockMailer: Mailer
+
+    @MockK
+    private lateinit var mockPDIRepo: PDIRepository
+
+    @MockK
+    private lateinit var mockPDIErrorRepo: PDIErrorRepository
 
     @BeforeTest
     fun setup() {
@@ -24,16 +30,9 @@ internal class RefreshPDITest {
     @Test
     fun `it informs if an sheet error happens` () {
         // given
-        every {
-            mockSpreadsheetReader.read(any())
-        } throws SheetReadingException("", "", "Mock error")
-        every {
-            mockMailer.notifySpreadsheetError(any())
-        } returns Unit
-        val underTest = RefreshPDI(
-            mailer = mockMailer,
-            spreadsheetReader = mockSpreadsheetReader
-        )
+        every { mockSSReader.read(any()) } throws SheetReadingException("", "", "Mock error")
+        every { mockMailer.notifySpreadsheetError(any()) } returns Unit
+        val underTest = RefreshPDI(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
 
         // when
         underTest.refresh()
@@ -42,16 +41,22 @@ internal class RefreshPDITest {
         verify {
             mockMailer.notifySpreadsheetError(any())
         }
-
     }
+
     @Test
-    fun ``(){
-    // given
+    fun `it stores valid rows as PDI and invalid as PDIError`() {
+        // given
+        every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
+        every { mockMailer.notifySpreadsheetError(any()) } returns Unit
+        every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIErrorRepo.save(any()) } returns Unit
+        val underTest = RefreshPDI(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
 
-    // when
+        // when
+        underTest.refresh()
 
-    // then
-
+        // then
+        verify(exactly = 1) { mockPDIRepo.save(any()) }
+        verify(exactly = 1) { mockPDIErrorRepo.save(any()) }
     }
-
 }

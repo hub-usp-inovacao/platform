@@ -9,16 +9,16 @@ import org.valiktor.validate
 
 @kotlinx.serialization.Serializable
 data class PDI(
-    val category: String,
-    val name: String,
-    val unity: String,
-    val campus: String,
+    val category: String?,
+    val name: String?,
+    val unity: String?,
+    val campus: String?,
     val coordinator: String?,
     val phone: String?,
     val email: String?,
-    val description: String,
+    val description: String?,
     val site: String?,
-    val keywords: Set<String>
+    val keywords: Set<String>?
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
@@ -32,6 +32,7 @@ data class PDI(
                     .isPDICategory()
 
                 validate(PDI::name)
+                    .isNotNull()
                     .isNotBlank()
 
                 validate(PDI::unity)

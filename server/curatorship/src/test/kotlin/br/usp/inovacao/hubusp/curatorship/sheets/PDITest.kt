@@ -13,6 +13,13 @@ internal class PDITest {
     }
 
     @Test
+    fun `it throws when creating with null in category`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(category = null)
+        }
+    }
+
+    @Test
     fun `it throws when creating with empty name`() {
         assertFailsWith<ValidationException> {
             valid.copy(name = "")
@@ -20,9 +27,23 @@ internal class PDITest {
     }
 
     @Test
+    fun `it throws when creating with null in name`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(name = null)
+        }
+    }
+
+    @Test
     fun `it throws when creating with empty unity`() {
         assertFailsWith<ValidationException> {
             valid.copy(unity = "")
+        }
+    }
+
+    @Test
+    fun `it throws when creating with null in unity`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(unity = null)
         }
     }
 
@@ -41,6 +62,13 @@ internal class PDITest {
     }
 
     @Test
+    fun `it throws when creating with null in campus`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(campus = null)
+        }
+    }
+
+    @Test
     fun `it throws when creating with invalid campus`() {
         assertFailsWith<ValidationException> {
             valid.copy(campus = "Wrong")
@@ -51,6 +79,13 @@ internal class PDITest {
     fun `it throws when creating with empty description`() {
         assertFailsWith<ValidationException> {
             valid.copy(description = "")
+        }
+    }
+
+    @Test
+    fun `it throws when creating with null in description`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(description = null)
         }
     }
 
@@ -115,6 +150,13 @@ internal class PDITest {
     fun `it throws when creating with empty set of keywords`() {
         assertFailsWith<ValidationException> {
             valid.copy(keywords = emptySet())
+        }
+    }
+
+    @Test
+    fun `it throws when creating with null in keywords`() {
+        assertFailsWith<ValidationException> {
+            valid.copy(keywords = null)
         }
     }
 

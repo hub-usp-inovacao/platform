@@ -8,7 +8,7 @@ class RefreshPDI(
     val pdiRepository: PDIRepository,
     val pdiErrorRepository: PDIErrorRepository
 ) {
-    private fun persistAfterValidation(data:Matrix<String>){
+    private fun persistAfterValidation(data: Matrix<String?>) {
         data.forEachIndexed { listIndex, row ->
             try {
                 val pdi = PDI(
@@ -21,16 +21,14 @@ class RefreshPDI(
                     email = row[6],
                     phone = row[7],
                     description = row[8],
-                    keywords = row[9].split(";").toSet()
+                    keywords = row[9]?.split(";")?.toSet()
                 )
                 pdiRepository.save(pdi)
-            }
-            catch (e:ValidationException){
-                val error = PDIValidationError(e.messages,listIndex+2)
+            } catch (e: ValidationException) {
+                val correctionFactor = 2
+                val error = PDIValidationError(e.messages,listIndex + correctionFactor)
                 pdiErrorRepository.save(error)
             }
-
-
         }
     }
     fun refresh() {

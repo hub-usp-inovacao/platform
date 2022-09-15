@@ -38,7 +38,7 @@ class SpreadsheetReader(
         }
     }
 
-    fun read(sheet: Sheets): Matrix<String> = when(sheet) {
+    fun read(sheet: Sheets): Matrix<String?> = when(sheet) {
         Sheets.PDIs -> readPDI()
         Sheets.Companies -> readCompany()
         Sheets.Disciplines -> readDiscipline()
@@ -47,37 +47,37 @@ class SpreadsheetReader(
         Sheets.Initiatives -> readInitiative()
     }
 
-    private fun readPDI(): Matrix<String> = readOneSpreadsheet(
+    private fun readPDI(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.PDI_SHEET_ID,
         sheetName = Configuration.PDI_TAB_NAME
     )
 
-    private fun readCompany(): Matrix<String> = readOneSpreadsheet(
+    private fun readCompany(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.COMPANY_SHEET_ID,
         sheetName = Configuration.COMPANY_TAB_NAME
     )
 
-    private fun readDiscipline(): Matrix<String> = readOneSpreadsheet(
+    private fun readDiscipline(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.DISCIPLINE_SHEET_ID,
         sheetName = Configuration.DISCIPLINE_TAB_NAME
     )
 
-    private fun readPatent(): Matrix<String> = readOneSpreadsheet(
+    private fun readPatent(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.PATENT_SHEET_ID,
         sheetName = Configuration.PATENT_TAB_NAME
     )
 
-    private fun readResearcher(): Matrix<String> = readOneSpreadsheet(
+    private fun readResearcher(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.RESEARCHER_SHEET_ID,
         sheetName = Configuration.RESEARCHER_TAB_NAME
     )
 
-    private fun readInitiative(): Matrix<String> = readOneSpreadsheet(
+    private fun readInitiative(): Matrix<String?> = readOneSpreadsheet(
         sheetId = Configuration.INITIATIVE_SHEET_ID,
         sheetName = Configuration.INITIATIVE_TAB_NAME
     )
 
-    private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String> = try {
+    private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String?> = try {
         val values = runBlocking {
             httpClient
                 .get {
@@ -91,6 +91,11 @@ class SpreadsheetReader(
                 .bodyAsText()
                 .let { Json.decodeFromString<ValueRange>(it) }
                 .values
+                .map { row ->
+                    row.map { cell ->
+                        if (cell.isBlankCell()) null else cell
+                    }
+                }
         }
 
         if (values.isEmpty()) throw SheetReadingException(sheetName, sheetId, message = "Spreadsheet is empty")
@@ -101,4 +106,8 @@ class SpreadsheetReader(
     } catch (_: SerializationException) {
         throw SheetReadingException(sheetName, sheetId, message = "Unexpected response from spreadsheet")
     }
+}
+
+private fun String.isBlankCell(): Boolean {
+    return isBlank() || equals("N/D")
 }
