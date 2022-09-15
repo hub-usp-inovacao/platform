@@ -12,6 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install GCC
+        uses: egor-tensin/setup-gcc@v1
+
+      - name: Install Python
+        uses: palewire/install-python-pipenv-pipfile@v2
+        with:
+          python-version: 3.8
+
       - name: Install dependencies
         run: |
           cd frontend
