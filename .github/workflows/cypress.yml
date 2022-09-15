@@ -1,0 +1,23 @@
+name: cypress-CI
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Test with Cypress
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          yarn install
+
+      - name: run tests
+        run: |
+          cd frontend
+          yarn run cypress-ci

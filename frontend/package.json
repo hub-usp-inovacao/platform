@@ -12,7 +12,10 @@
     "lint": "eslint --ext .js,.vue .",
     "lintfix": "eslint --fix --ext .js,.vue .",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "start-nuxt-server": "$npm_execpath build && $npm_execpath start",
+    "cy-run": "cypress run",
+    "cypress-ci": "start-server-and-test start-nuxt-server http://localhost:3000 cy-run"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
@@ -38,6 +41,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^2.0.5",
     "sass-loader": "^8.0.0",
+    "start-server-and-test": "^1.14.0",
     "vuepress": "^1.8.2"
   }
 }
