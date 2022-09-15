@@ -129,6 +129,22 @@
             "description": "Name of the tab with Initiative data"
         },
         {
+            "name": "HUB_INCUBATOR_SHEET_ID",
+            "description": "Sheet ID for Incubators (Jornada)"
+        },
+        {
+            "name": "HUB_INCUBATOR_TAB_NAME",
+            "description": "Name of the tab with Incubators data (Jornada)"
+        },
+        {
+            "name": "HUB_FUNDS_SHEET_ID",
+            "description": "Sheet ID for Funds (Jornada)"
+        },
+        {
+            "name": "HUB_FUNDS_TAB_NAME",
+            "description": "Name of the tab with Funds data (Jornada)"
+        },
+        {
             "name": "HUB_DEVS_EMAIL",
             "description": "Email to notify developers"
         },
