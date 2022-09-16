@@ -1,8 +1,8 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Contact
-import br.usp.inovacao.hubusp.server.catalog.Initiative
 import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.InitiativeContact
+import br.usp.inovacao.hubusp.server.persistence.models.InitiativeModel
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -110,12 +110,12 @@ internal class CatalogInitiativeRepositoryImplTest {
     }
 
     private fun seedTestDb() {
-        val initiativeCollection = testDb.getCollection<Initiative>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
         initiativeCollection.insertMany(testSeeds())
     }
 
     private fun testSeeds() = listOf(
-        Initiative(
+        InitiativeModel(
             classification ="Agente Institucional",
             name = "Agência USP de Inovação (AUSPIN)",
             localization = "Toda a USP",
@@ -124,12 +124,12 @@ internal class CatalogInitiativeRepositoryImplTest {
             url = "http://www.inovacao.usp.br/",
             description = "superintendencia A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
             email = "auspin@usp.br",
-            contact = Contact(
+            contact = InitiativeContact(
                 person = "",
                 info = "(11) 3091-4165"
             )
         ),
-        Initiative(
+        InitiativeModel(
             classification ="Entidade Estudantil",
             name = "Agência USP de Inovação (AUSPIN)",
             localization = "Butantã",
@@ -138,7 +138,7 @@ internal class CatalogInitiativeRepositoryImplTest {
             url = "http://www.inovacao.usp.br/",
             description = "A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
             email = "auspin@usp.br",
-            contact = Contact(
+            contact = InitiativeContact(
                 person = "",
                 info = "(11) 3091-4165"
             )
@@ -146,7 +146,7 @@ internal class CatalogInitiativeRepositoryImplTest {
     )
 
     private fun cleanTestDb() {
-        val initiativeCollection = testDb.getCollection<Initiative>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
         initiativeCollection.deleteMany("{}")
     }
 }
