@@ -11,6 +11,7 @@ class RefreshPDI : CliktCommand() {
     private val refreshPDI : br.usp.inovacao.hubusp.curatorship.sheets.RefreshPDI
 
     init {
+        // TODO: replace empty strings with configuration
         val db = configureDB("", "", "", "")
         refreshPDI = br.usp.inovacao.hubusp.curatorship.sheets.RefreshPDI(
             mailer = Mailer("", ""),

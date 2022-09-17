@@ -29,6 +29,7 @@ class RefreshPDI(
 
     fun refresh() {
         try {
+            // TODO: delete "old" documents, when due
             spreadsheetReader
                 .read(Sheets.PDIs)
                 .mapIndexed(this::validateRow)
