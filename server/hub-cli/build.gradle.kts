@@ -3,7 +3,6 @@ val logback_version: String by project
 val mockk_version: String by project
 val clikt_version: String by project
 val kmongo_version: String by project
-val coroutines_version: String by project
 
 plugins {
     kotlin("jvm")
@@ -31,7 +30,6 @@ dependencies {
     implementation(project(":techtransfer"))
     implementation(project(":persistence"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.litote.kmongo:kmongo-serialization:$kmongo_version")
     implementation("com.github.ajalt.clikt:clikt:$clikt_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
