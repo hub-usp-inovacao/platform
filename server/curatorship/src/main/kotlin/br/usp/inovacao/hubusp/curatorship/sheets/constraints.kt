@@ -31,3 +31,10 @@ class Unity : Constraint
 fun <E> Validator<E>.Property<String?>.isUnity() = this.validate(Unity()) {
     it == null || it in Campus.allUnities()
 }
+
+class InitiativeClassification : Constraint
+
+fun <E> Validator<E>.Property<String?>.isInitiativeClassification() = this.validate(InitiativeClassification()) {
+    Initiative.classifications
+        .contains(it)
+}
