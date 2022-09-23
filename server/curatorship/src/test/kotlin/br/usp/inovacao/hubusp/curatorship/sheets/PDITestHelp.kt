@@ -30,10 +30,21 @@ class PDITestHelp {
 
         fun validRowAndInvalidRow(): List<List<String?>> {
             val validRow = VALID_RECORD.toRow()
-            val invalidRow = VALID_RECORD.toRow().toMutableList()
-            invalidRow[0] = "Wrong Category"
+            val invalidRow = generateInvalidRow()
 
             return listOf(validRow, invalidRow)
+        }
+
+        fun invalidRow(): List<List<String?>> {
+            val invalidRow = generateInvalidRow()
+
+            return listOf(invalidRow)
+        }
+
+        private fun generateInvalidRow(): MutableList<String?> {
+            val invalidRow = VALID_RECORD.toRow().toMutableList()
+            invalidRow[0] = "Wrong Category"
+            return invalidRow
         }
 
         val validRow: List<String?> = listOf(

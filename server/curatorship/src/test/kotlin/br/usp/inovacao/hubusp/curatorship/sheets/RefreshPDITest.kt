@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
 import br.usp.inovacao.hubusp.curatorship.Mailer
+import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -51,6 +52,7 @@ internal class RefreshPDITest {
         every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
         every { mockMailer.notifySpreadsheetError(any()) } returns Unit
         every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIRepo.deleteAll() } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
 
         // when
@@ -59,5 +61,38 @@ internal class RefreshPDITest {
         // then
         verify(exactly = 1) { mockPDIRepo.save(any()) }
         verify(exactly = 1) { mockPDIErrorRepo.save(any()) }
+    }
+
+    @Test
+    fun `it overwrites database if there is a valid PDI`() {
+        // given
+        every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
+        every { mockMailer.notifySpreadsheetError(any()) } returns Unit
+        every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIRepo.deleteAll() } returns Unit
+        every { mockPDIErrorRepo.save(any()) } returns Unit
+
+        // when
+        underTest.refresh()
+
+        // then
+        verify(exactly = 1) { mockPDIRepo.deleteAll() }
+        verify(atLeast = 1) { mockPDIRepo.save(any()) }
+    }
+
+    @Test
+    fun `it does not clear database if there is no valid PDI`() {
+        // given
+        every { mockSSReader.read(any()) } returns PDITestHelp.invalidRow()
+        every { mockMailer.notifySpreadsheetError(any()) } returns Unit
+        every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIRepo.deleteAll() } returns Unit
+        every { mockPDIErrorRepo.save(any()) } returns Unit
+
+        // when
+        underTest.refresh()
+
+        // then
+        verify { mockPDIRepo wasNot Called }
     }
 }

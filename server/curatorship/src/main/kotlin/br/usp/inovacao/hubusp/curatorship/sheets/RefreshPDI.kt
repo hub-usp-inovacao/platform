@@ -27,16 +27,24 @@ class RefreshPDI(
         else -> throw RuntimeException("Error while persisting PDI: data isn't PDI nor PDIValidationError")
     }
 
+    private fun deleteIfNecessary(pdisOrErrors: List<Any>) {
+        val atLeastOnePDI = pdisOrErrors.any { it is PDI }
+        if (atLeastOnePDI) pdiRepository.deleteAll()
+    }
+
     fun refresh() {
         try {
-            // TODO: delete "old" documents, when due
-            spreadsheetReader
+            val pdisOrErrors = spreadsheetReader
                 .read(Sheets.PDIs)
                 .mapIndexed(this::validateRow)
+
+            deleteIfNecessary(pdisOrErrors)
+
+            pdisOrErrors
                 .forEach(this::persistValidData)
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
         }
-
     }
+
 }
