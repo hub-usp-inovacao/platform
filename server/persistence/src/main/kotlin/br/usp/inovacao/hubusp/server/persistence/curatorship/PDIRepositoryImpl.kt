@@ -5,6 +5,7 @@ import br.usp.inovacao.hubusp.curatorship.sheets.PDIRepository
 import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
 
 class PDIRepositoryImpl(
@@ -33,5 +34,10 @@ class PDIRepositoryImpl(
         )
 
         pdiCollection.insertOne(pdiModel)
+    }
+
+    override fun deleteAll() {
+        val matchesAllDocuments = """{}"""
+        pdiCollection.deleteMany(matchesAllDocuments)
     }
 }
