@@ -19,18 +19,18 @@ class PDIRepositoryImpl(
 
     override fun save(pdi: PDI) {
         // TODO: test
-        // TODO: improve PDIModel to follow validation structure (avoid parsing null)
         val pdiModel = PDIModel(
            category = pdi.category!!,
            name = pdi.name!!,
            campus = pdi.campus!!,
            unity = pdi.unity!!,
-           coordinator = pdi.coordinator ?: "",
-           site = pdi.site ?: "",
-           email = pdi.email ?: "",
-           phone = pdi.phone ?: "",
            description = pdi.description!!,
-           tags = pdi.keywords!!
+           tags = pdi.keywords!!,
+
+           coordinator = pdi.coordinator,
+           site = pdi.site,
+           email = pdi.email,
+           phone = pdi.phone,
         )
 
         pdiCollection.insertOne(pdiModel)

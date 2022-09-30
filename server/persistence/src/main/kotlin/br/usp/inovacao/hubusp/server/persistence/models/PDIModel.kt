@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 data class PDIModel(
     val category: String,
     val name: String,
-    val campus: String,
     val unity: String,
-    val coordinator: String,
-    val site: String,
-    val email: String,
-    val phone: String,
+    val campus: String,
     val description: String,
-    val tags: Set<String>
+    val tags: Set<String>,
+    val coordinator: String?,
+    val site: String?,
+    val email: String?,
+    val phone: String?,
 )

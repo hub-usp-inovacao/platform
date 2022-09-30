@@ -110,7 +110,7 @@ class JourneyRepositoryImpl(
             .map {
                 JourneyRecord(
                     name = it.name,
-                    url = it.site
+                    url = it.site ?: ""
                 )
             }
             .toSet()
