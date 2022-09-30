@@ -15,7 +15,7 @@ class RefreshPDI(
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
         PDI.fromRow(row)
     } catch (e: ValidationException) {
-        PDIValidationError(
+        ValidationError(
             errors = e.messages,
             spreadsheetLineNumber = rowIndex + INDEX_CORRECTION_FACTOR
         )
@@ -23,7 +23,7 @@ class RefreshPDI(
 
     private fun persistValidData(data: Any) = when(data) {
         is PDI -> pdiRepository.save(data)
-        is PDIValidationError -> pdiErrorRepository.save(data)
+        is ValidationError -> pdiErrorRepository.save(data)
         else -> throw RuntimeException("Error while persisting PDI: data isn't PDI nor PDIValidationError")
     }
 

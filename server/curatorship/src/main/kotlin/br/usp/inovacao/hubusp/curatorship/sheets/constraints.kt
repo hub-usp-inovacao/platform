@@ -31,3 +31,16 @@ class Unity : Constraint
 fun <E> Validator<E>.Property<String?>.isUnity() = this.validate(Unity()) {
     it == null || it in Campus.allUnities()
 }
+
+class CNPJ : Constraint {
+    companion object {
+        fun isFormatValid(input: String): Boolean {
+            val cnpjRegex = """^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$""".toRegex()
+            return input.matches(cnpjRegex)
+        }
+    }
+}
+
+fun <E> Validator<E>.Property<String?>.isCNPJ() = this.validate(CNPJ()) {
+    it == null || CNPJ.isFormatValid(it)
+}
