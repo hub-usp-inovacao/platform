@@ -36,7 +36,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      target: production
     env_file:
       - ./frontend/.env
     ports:
@@ -48,7 +48,7 @@ services:
   frontdev:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      target: development
     ports:
       - 3000:3000
     volumes:
