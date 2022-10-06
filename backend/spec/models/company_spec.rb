@@ -271,7 +271,6 @@ RSpec.describe Company, type: :model do
     it 'returns invalid company when two companies has the same cnpj' do
       described_class.create valid_attr
       company = described_class.new valid_attr
-      company[:cnpj] = { value: '12.123.123/0001-21' }
       expect(company).to be_invalid
       described_class.delete_all
     end
@@ -279,7 +278,7 @@ RSpec.describe Company, type: :model do
     it 'returns valid company when two companies has the same name' do
       described_class.create valid_attr
       company = described_class.new valid_attr
-      company[:cnpj] = '13.123.123/0001-21'
+      company[:cnpj] = '99.999.999/9999-99'
       expect(company).to be_valid
       described_class.delete_all
     end
