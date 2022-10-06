@@ -46,7 +46,6 @@ class Company
 
   validates :cnpj, uniqueness: { message: 'Já cadastrado (Duplicado)' }
 
-
   validates :url, :logo, url: true
   validates :phones, phones: true
 
