@@ -100,6 +100,20 @@ class CatalogCompanyRepositoryImplTest() {
     }
 
     @Test
+    fun `it filters by unity`() {
+        // given
+        val unity = "FEA"
+        val params = CompanySearchParams(unity = unity)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { unity in it.unities } }
+    }
+
+    @Test
     fun `it filters by single-token text`() {
         // given
         val term = "pluralidade"
@@ -178,7 +192,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FEA", "IME")
         ),
         Company(
             address = Address(
@@ -202,7 +217,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FAU")
         ),
     )
 
@@ -229,7 +245,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FEA", "IME")
         ),
         Company(
             address = Address(
@@ -253,7 +270,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FAU")
         ),
         Company(
             address = Address(
@@ -277,7 +295,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("IF", "IQ", "IPT")
         ),
     )
 
@@ -314,7 +333,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FEA", "IME")
         ),
         Company(
             address = Address(
@@ -338,7 +358,8 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            unities = setOf("FEA")
         )
     )
 }

@@ -118,4 +118,18 @@ class CompanyExtensionKtTest {
         val handmade = "{\"\$text\":{\"\$search\":\"$term\"}}"
         assertEquals(handmade, result)
     }
+
+    @Test
+    fun `it parses unity`() {
+        // given
+        val unity = "FEA"
+        val params = CompanySearchParams(unity = unity)
+
+        // when
+        val result = params.toCollectionFilter()
+
+        // then
+        val handmade = "{\"unities\":\"$unity\"}"
+        assertEquals(handmade, result)
+    }
 }

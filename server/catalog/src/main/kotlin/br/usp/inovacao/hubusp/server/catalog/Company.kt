@@ -15,6 +15,7 @@ data class Company(
     val phones: Set<String>,
     val services: Set<String>,
     val technologies: Set<String>,
+    val unities: Set<String>,
     val url: String? = null
 ) {
     companion object {
