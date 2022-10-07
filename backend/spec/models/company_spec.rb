@@ -267,5 +267,20 @@ RSpec.describe Company, type: :model do
 
       expect(described_class.timestamp(ts)).to eql(dt)
     end
+
+    it 'returns invalid company when two companies has the same cnpj' do
+      described_class.create valid_attr
+      company = described_class.new valid_attr
+      expect(company).to be_invalid
+      described_class.delete_all
+    end
+
+    it 'returns valid company when two companies has the same name' do
+      described_class.create valid_attr
+      company = described_class.new valid_attr
+      company[:cnpj] = '99.999.999/9999-99'
+      expect(company).to be_valid
+      described_class.delete_all
+    end
   end
 end

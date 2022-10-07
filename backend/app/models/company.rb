@@ -44,8 +44,8 @@ class Company
             :corporate_name,
             presence: true
 
-  validates :corporate_name,
-            uniqueness: { message: 'já cadastrado (Duplicado)' }
+  validates :cnpj, uniqueness: { message: 'Já cadastrado (Duplicado)' }
+
   validates :url, :logo, url: true
   validates :phones, phones: true
 
