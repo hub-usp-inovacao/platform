@@ -193,7 +193,8 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            unities = setOf("FEA", "IME")
+            unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
+                            "Instituto de Matemática e Estatística - IME")
         ),
         Company(
             address = Address(
@@ -218,7 +219,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            unities = setOf("FAU")
+            unities = setOf("Faculdade de Arquitetura e Urbanismo - FAU")
         ),
     )
 
@@ -246,7 +247,8 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            unities = setOf("FEA", "IME")
+            unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
+                            "Instituto de Matemática e Estatística - IME")
         ),
         Company(
             address = Address(
@@ -271,7 +273,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            unities = setOf("FAU")
+            unities = setOf("Faculdade de Arquitetura e Urbanismo - FAU")
         ),
         Company(
             address = Address(
@@ -296,7 +298,9 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            unities = setOf("IF", "IQ", "IPT")
+            unities = setOf("Instituto de Física - IF",
+                            "Instituto de Química - IQ",
+                            "Instituto de Pesquisa e Tecnologia - IPT")
         ),
     )
 
