@@ -136,6 +136,7 @@ export default {
     companies: [],
     ecosystems: [],
     cities: [],
+    unities: [],
     companySizes: [
       "Microempresa",
       "Pequena Empresa",
@@ -177,6 +178,10 @@ export default {
           items: this.ecosystems,
         },
         {
+          label: "Unidade",
+          items: this.unities
+        },
+        {
           label: "Porte",
           items: this.companySizes,
         },
@@ -205,6 +210,7 @@ export default {
     this.companies = await this.$CompanyAdapter.requestData();
     this.ecosystems = await this.$CompanyAdapter.getEcosystems();
     this.cities = await this.$CompanyAdapter.getCities();
+    this.unities = await this.$CompanyAdapter.getUnities();
 
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
