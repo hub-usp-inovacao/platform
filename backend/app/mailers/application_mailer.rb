@@ -2,8 +2,7 @@
 
 class ApplicationMailer < ActionMailer::Base
   default from: ENV['email_username'],
-          to: ENV['email_username'],
-          cc: ENV['email_dev_username']
+          to: ENV['email_username']
 
   def subject(text)
     "Hub USP Inovação - #{text}"
@@ -12,26 +11,28 @@ class ApplicationMailer < ActionMailer::Base
   def skill_update_data(sheet)
     attachments["updated-skills-#{Time.zone.today}.csv"] = { mime_type: 'text/csv', content: sheet }
 
-    mail(subject: subject('Atualização de Competências'))
+    mail(subject: subject('Atualização de Competências'), cc: ENV['email_dev_username'])
   end
 
   def warnings
     @warnings = params[:warnings]
     @entity = params[:entity]
     @sheet_url = "https://docs.google.com/spreadsheets/d/#{params[:sheet_id]}"
-    mail(subject: subject("Aviso semanal de #{@entity}"))
+    mail(subject: subject("Aviso semanal de #{@entity}"), cc: ENV['email_dev_username'])
   end
 
   def update_companies
     attachments["updated-companies-#{Time.zone.today}.csv"] =
       { mime_type: 'text/csv', content: CompanyUpdateRequest.to_csv }
-    mail(subject: subject('Novas empresas solicitaram atualização dos dados'))
+    mail(subject: subject('Novas empresas solicitaram atualização dos dados'),
+         cc: ENV['email_dev_username'])
   end
 
   def update_skills
     attachments["updated-skills-#{Time.zone.today}.csv"] =
       { mime_type: 'text/csv', content: SkillUpdateRequest.to_csv }
-    mail(subject: subject('Novas competências solicitaram atualização dos dados'))
+    mail(subject: subject('Novas competências solicitaram atualização dos dados'),
+         cc: ENV['email_dev_username'])
   end
 
   def conexao
