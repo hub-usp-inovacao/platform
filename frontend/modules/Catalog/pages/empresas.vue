@@ -178,12 +178,12 @@ export default {
           items: this.ecosystems,
         },
         {
-          label: "Unidade",
-          items: this.unities
-        },
-        {
           label: "Porte",
           items: this.companySizes,
+        },
+        {
+          label: "Unidade",
+          items: this.unities,
         },
       ];
     },
