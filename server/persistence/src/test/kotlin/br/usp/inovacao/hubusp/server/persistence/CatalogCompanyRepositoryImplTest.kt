@@ -4,6 +4,9 @@ import br.usp.inovacao.hubusp.server.catalog.Address
 import br.usp.inovacao.hubusp.server.catalog.Classification
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -160,25 +163,25 @@ class CatalogCompanyRepositoryImplTest() {
     }
 
     private fun seedDbForCities() {
-        val coll = testDb.getCollection<Company>("companies")
+        val coll = testDb.getCollection<CompanyModel>("companies")
         coll.insertMany(citiesSeeds())
     }
 
     private fun seedDbForEcosystems() {
-        val coll = testDb.getCollection<Company>("companies")
+        val coll = testDb.getCollection<CompanyModel>("companies")
         coll.insertMany(ecosystemsSeeds())
     }
 
     private fun citiesSeeds() = listOf(
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -196,15 +199,15 @@ class CatalogCompanyRepositoryImplTest() {
             unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
                             "Instituto de Matemática e Estatística - IME")
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("Caxias do Sul", "Pelotas"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -223,16 +226,16 @@ class CatalogCompanyRepositoryImplTest() {
         ),
     )
 
-    private fun ecosystemsSeeds() = listOf<Company>(
-        Company(
-            address = Address(
+    private fun ecosystemsSeeds() = listOf(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -250,15 +253,15 @@ class CatalogCompanyRepositoryImplTest() {
             unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
                             "Instituto de Matemática e Estatística - IME")
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -275,15 +278,15 @@ class CatalogCompanyRepositoryImplTest() {
             url = "https://foo-comp.com.br",
             unities = setOf("Faculdade de Arquitetura e Urbanismo - FAU")
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -305,25 +308,25 @@ class CatalogCompanyRepositoryImplTest() {
     )
 
     private fun cleanTestDb() {
-        val companyCollection = testDb.getCollection<Company>("companies")
+        val companyCollection = testDb.getCollection<CompanyModel>("companies")
         companyCollection.deleteMany("{}")
     }
 
     private fun seedTestDb() {
-        val companyCollection = testDb.getCollection<Company>("companies")
+        val companyCollection = testDb.getCollection<CompanyModel>("companies")
         companyCollection.insertMany(testSeeds())
     }
 
     private fun testSeeds() = listOf(
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -340,15 +343,15 @@ class CatalogCompanyRepositoryImplTest() {
             url = "https://foo-comp.com.br",
             unities = setOf("FEA", "IME")
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("Rio de Janeiro"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Infraestrutura e Construção",
                 minor = "Construção"
             ),

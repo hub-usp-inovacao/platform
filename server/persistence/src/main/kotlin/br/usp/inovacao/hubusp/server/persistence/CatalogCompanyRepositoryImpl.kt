@@ -1,8 +1,9 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Company
-import br.usp.inovacao.hubusp.server.catalog.CompanyRepository
-import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.catalog.*
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import kotlinx.serialization.Serializable
@@ -18,19 +19,53 @@ data class City (
     val name: String
 )
 
+fun CompanyClassification.toCatalogClassification(): Classification = Classification(
+    major = this.major,
+    minor = this.minor
+)
+
+fun CompanyAddress.toCatalogAddress(): Address = Address(
+    cep = this.cep,
+    city = this.city,
+    neighborhood = this.neighborhood,
+    state = this.state,
+    venue = this.venue
+)
+
+fun CompanyModel.toCatalogCompany(): Company = Company(
+    address = this.address.toCatalogAddress(),
+    classification = this.classification.toCatalogClassification(),
+    cnae = this.cnae,
+    companySize = this.companySize,
+    description = this.description,
+    ecosystems = this.ecosystems,
+    emails = this.emails,
+    incubated = this.incubated,
+    logo = this.logo,
+    name = this.name,
+    phones = this.phones,
+    services = this.services,
+    technologies = this.technologies,
+    unities = this.unities,
+    url = this.url
+)
+
 class CatalogCompanyRepositoryImpl(
     db: MongoDatabase
 ) : CompanyRepository {
-    private val companyCollection: MongoCollection<Company>
+    private val companyCollection: MongoCollection<CompanyModel>
 
     init {
-        companyCollection = db.getCollection<Company>("companies")
+        companyCollection = db.getCollection<CompanyModel>("companies")
     }
 
     override fun filter(params: CompanySearchParams): Set<Company> {
         val filter = params.toCollectionFilter()
 
-        return companyCollection.find(filter).toSet()
+        return companyCollection
+            .find(filter)
+            .map { it.toCatalogCompany() }
+            .toSet()
     }
 
     override fun getEcosystems(): Set<String> = companyCollection
