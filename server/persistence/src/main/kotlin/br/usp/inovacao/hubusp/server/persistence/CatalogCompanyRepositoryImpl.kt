@@ -46,7 +46,7 @@ fun CompanyModel.toCatalogCompany(): Company = Company(
     phones = this.phones,
     services = this.services,
     technologies = this.technologies,
-    unities = this.unities,
+    unities = this.partners.map { it.unity }.toSet(),
     url = this.url
 )
 

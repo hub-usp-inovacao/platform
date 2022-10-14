@@ -19,7 +19,7 @@ fun CompanySearchParams.toCollectionFilter(): String {
         inner.add("\"\$or\":[$orCriteria]")
     }
 
-    if (unity != null) inner.add("\"unities\":\"$unity\"")
+    if (unity != null) inner.add("\"partners.unity\":\"$unity\"")
 
     if (city != null) inner.add("\"address.city\":\"$city\"")
 

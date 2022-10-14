@@ -197,6 +197,7 @@ export default {
         city: this.filters?.terciary[0],
         ecosystem: this.filters?.terciary[1],
         size: this.filters?.terciary[2],
+        unity: this.filters?.terciary[3],
         term: this.searchTerm,
       };
     },

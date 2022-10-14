@@ -18,8 +18,17 @@ data class CompanyModel(
     val phones: Set<String>,
     val services: Set<String>,
     val technologies: Set<String>,
-    val unities: Set<String>,
+    val partners: Set<Partner>,
     val url: String? = null
+)
+@Serializable
+data class Partner(
+    val name: String,
+    val nusp: String,
+    val bond: String,
+    val unity: String,
+    val email: String,
+    val phone: String,
 )
 
 @kotlinx.serialization.Serializable
