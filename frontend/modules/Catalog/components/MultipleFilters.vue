@@ -24,6 +24,7 @@
         <DropdownFilter
           :groups="groups"
           @select="selected.dropdownFilters = $event"
+          :pre-selected-filter="preSelectedFilter"
         />
       </v-col>
     </v-row>
@@ -99,6 +100,11 @@ export default {
       },
     },
     preSelectedTabs: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+    preSelectedFilter: {
       type: Array,
       required: false,
       default: () => [],
