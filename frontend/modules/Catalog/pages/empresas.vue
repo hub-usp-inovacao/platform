@@ -209,12 +209,8 @@ export default {
       this.runSearch();
     }, 1000),
   },
-  async beforeMount() {
-    this.companies = await this.$CompanyAdapter.requestData();
-    this.ecosystems = await this.$CompanyAdapter.getEcosystems();
-    this.cities = await this.$CompanyAdapter.getCities();
-    this.unities = await this.$CompanyAdapter.getUnities();
-    if (this.$route.query.city !== undefined) {
+  mounted() {
+        if (this.$route.query.city !== undefined) {
       this.preselect[0] = this.$route.query.city;
     }
     if (this.$route.query.ecosystem !== undefined) {
@@ -226,6 +222,12 @@ export default {
     if (this.$route.query.unity !== undefined) {
       this.preselect[3] = this.$route.query.unity;
     }
+  },
+  async beforeMount() {
+    this.companies = await this.$CompanyAdapter.requestData();
+    this.ecosystems = await this.$CompanyAdapter.getEcosystems();
+    this.cities = await this.$CompanyAdapter.getCities();
+    this.unities = await this.$CompanyAdapter.getUnities();
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
   },
