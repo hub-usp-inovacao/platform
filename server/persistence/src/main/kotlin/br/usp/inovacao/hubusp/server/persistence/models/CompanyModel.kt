@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence.models
 
-import br.usp.inovacao.hubusp.server.catalog.Classification
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +18,8 @@ data class CompanyModel(
     val services: Set<String>,
     val technologies: Set<String>,
     val partners: Set<Partner>,
-    val url: String? = null
+    val url: String? = null,
+    val unities: Set<String>
 )
 @Serializable
 data class Partner(
@@ -31,13 +31,13 @@ data class Partner(
     val phone: String,
 )
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class CompanyClassification(
     val major: String,
     val minor: String
 )
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class CompanyAddress(
     val cep: String,
     val city: Set<String>,

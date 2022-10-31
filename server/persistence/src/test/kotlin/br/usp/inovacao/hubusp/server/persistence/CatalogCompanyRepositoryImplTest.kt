@@ -1,8 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Address
-import br.usp.inovacao.hubusp.server.catalog.Classification
-import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
@@ -15,7 +12,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class CatalogCompanyRepositoryImplTest() {
+class CatalogCompanyRepositoryImplTest {
 
     private lateinit var testDb: MongoDatabase
     private lateinit var underTest: CatalogCompanyRepositoryImpl
@@ -196,6 +193,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            partners = emptySet(),
             unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
                             "Instituto de Matemática e Estatística - IME")
         ),
@@ -221,6 +219,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("Faculdade de Arquitetura e Urbanismo - FAU")
         ),
@@ -249,6 +248,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("Faculdade de Economia, Administração e Contabilidade - FEA",
                             "Instituto de Matemática e Estatística - IME")
@@ -275,6 +275,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("Faculdade de Arquitetura e Urbanismo - FAU")
         ),
@@ -300,6 +301,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("Instituto de Física - IF",
                             "Instituto de Química - IQ",
@@ -340,6 +342,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("FEA", "IME")
         ),
@@ -365,6 +368,7 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
+            partners = emptySet(),
             url = "https://foo-comp.com.br",
             unities = setOf("FEA")
         )

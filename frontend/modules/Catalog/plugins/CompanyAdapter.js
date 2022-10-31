@@ -108,7 +108,6 @@ function CompanyAdapter(axios) {
             'Instituto de Física de São Carlos - IFSC',
             'Instituto de Química de São Carlos - IQSC',
             'Escola de Artes, Ciências e Humanidades - EACH',
-            'Pró-Reitoria de Graduação'
           ].sort()
   }
 
