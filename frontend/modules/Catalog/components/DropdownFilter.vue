@@ -96,6 +96,11 @@ export default {
         );
       },
     },
+    preSelectedFilter: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   data: () => ({
     selected: [],
@@ -115,6 +120,9 @@ export default {
     },
   },
   beforeMount() {
+     if (this.preSelectedFilter){
+      this.selected = this.preSelectedFilter
+    }
     this.groups.forEach(({ preSelected }, i) => {
       if (preSelected) {
         this.selected[i] = preSelected;

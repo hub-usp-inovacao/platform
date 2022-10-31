@@ -24,6 +24,7 @@
       :groups="groups"
       :colors="{ base: '#074744', active: '#0A8680' }"
       @select="filters = $event"
+      :preSelectedFilter="this.preselect"
     />
 
     <DisplayData :items="companies" group-name="Empresas">
@@ -131,6 +132,7 @@ export default {
     USPDNA,
   },
   data: () => ({
+    preselect: [],
     filters: undefined,
     search: { term: "" },
     companies: [],
@@ -207,12 +209,25 @@ export default {
       this.runSearch();
     }, 1000),
   },
+  mounted() {
+        if (this.$route.query.city !== undefined) {
+      this.preselect[0] = this.$route.query.city;
+    }
+    if (this.$route.query.ecosystem !== undefined) {
+      this.preselect[1] = this.$route.query.ecosystem;
+    }
+    if (this.$route.query.size !== undefined) {
+      this.preselect[2] = this.$route.query.size;
+    }
+    if (this.$route.query.unity !== undefined) {
+      this.preselect[3] = this.$route.query.unity;
+    }
+  },
   async beforeMount() {
     this.companies = await this.$CompanyAdapter.requestData();
     this.ecosystems = await this.$CompanyAdapter.getEcosystems();
     this.cities = await this.$CompanyAdapter.getCities();
     this.unities = await this.$CompanyAdapter.getUnities();
-
     if (this.$route.query.q !== undefined)
       this.search.term = this.$route.query.q;
   },
