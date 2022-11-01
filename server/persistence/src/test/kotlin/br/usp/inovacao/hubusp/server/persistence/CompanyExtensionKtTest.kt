@@ -129,7 +129,7 @@ class CompanyExtensionKtTest {
         val result = params.toCollectionFilter()
 
         // then
-        val handmade = "{\"unities\":\"$unity\"}"
+        val handmade = "{\"partners.unity\":\"$unity\"}"
         assertEquals(handmade, result)
     }
 }
