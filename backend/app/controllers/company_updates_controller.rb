@@ -14,7 +14,9 @@ class CompanyUpdatesController < ApplicationController
     email = @company.emails.first
     token = TokenManager.create_token({ cnpj: cnpj })
     ApplicationMailer.company_update_token(email, token).deliver_now
-    render json: { message: 'ok' }, status: :ok
+    email = format_email(email)
+
+    render json: { message: 'ok', email: email }, status: :ok
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -130,5 +132,24 @@ class CompanyUpdatesController < ApplicationController
       incubation: {},
       staff: {}
     )
+  end
+
+  def format_email(email)
+    first_part_length = email.index('@')
+
+    case first_part_length
+
+    when 1, 2
+      email.gsub(/.{1}@/, '*@')
+
+    when 3, 4
+      email.gsub(/.{2}@/, '**@')
+
+    when 5, 6
+      email.gsub(/.{3}@/, '***@')
+
+    else
+      email.gsub(/.{5}@/, '*****@')
+    end
   end
 end

@@ -92,19 +92,20 @@ export default {
           body: JSON.stringify(body),
         });
 
-        const data = await resp.json();
+        const data = await resp.json();  
         if (data.error !== undefined) {
           this.message = { type: "error", text: "CNPJ não encontrado" };
         } else {
           this.message = {
             type: "success",
-            text: "Um email com o token e as instruções foi enviado",
+            text: `O token e as instruções foram enviados para o email ${data.email}`,
           };
         }
+        
       } catch (err) {
         console.log(err);
       }
-
+      
       this.requestRunning = false;
     },
   },
