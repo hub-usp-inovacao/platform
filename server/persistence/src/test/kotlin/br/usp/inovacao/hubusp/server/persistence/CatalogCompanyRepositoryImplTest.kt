@@ -4,6 +4,10 @@ import br.usp.inovacao.hubusp.server.catalog.Address
 import br.usp.inovacao.hubusp.server.catalog.Classification
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
+import br.usp.inovacao.hubusp.server.persistence.models.Partner
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -100,6 +104,20 @@ class CatalogCompanyRepositoryImplTest() {
     }
 
     @Test
+    fun `it filters by unity`() {
+        // given
+        val unity = "FEA"
+        val params = CompanySearchParams(unity = unity)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.all { unity in it.unities } }
+    }
+
+    @Test
     fun `it filters by single-token text`() {
         // given
         val term = "pluralidade"
@@ -146,25 +164,25 @@ class CatalogCompanyRepositoryImplTest() {
     }
 
     private fun seedDbForCities() {
-        val coll = testDb.getCollection<Company>("companies")
+        val coll = testDb.getCollection<CompanyModel>("companies")
         coll.insertMany(citiesSeeds())
     }
 
     private fun seedDbForEcosystems() {
-        val coll = testDb.getCollection<Company>("companies")
+        val coll = testDb.getCollection<CompanyModel>("companies")
         coll.insertMany(ecosystemsSeeds())
     }
 
     private fun citiesSeeds() = listOf(
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -178,17 +196,23 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
+                    "Faculdade de Economia, Administração e Contabilidade - FEA", "fulano@example.com", "(11) 98899-7654"),
+                Partner("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
+                    "Instituto de Matemática e Estatística - IME", "cliclano@example.com", "(11) 98989-7676")
+            )
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("Caxias do Sul", "Pelotas"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -202,20 +226,24 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Beltrano", "53726812", "Pesquisador",
+                    "Faculdade de Arquitetura e Urbanismo - FAU", "beltrano@example.com", "(11) 98899-7654")
+            )
         ),
     )
 
-    private fun ecosystemsSeeds() = listOf<Company>(
-        Company(
-            address = Address(
+    private fun ecosystemsSeeds() = listOf(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -229,17 +257,23 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
+                    "Faculdade de Economia, Administração e Contabilidade - FEA", "foobaz@example.com", "(11) 99999-8888"),
+                Partner("Bazfoo", "87654321", "Aluno ou ex-aluno (pós-graduação)",
+                    "Instituto de Matemática e Estatística - IME", "bazfoo@example.com", "(11) 99111-2121")
+            )
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -253,17 +287,21 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
+                    "Faculdade de Arquitetura e Urbanismo - FAU", "nome@example.com", "(11) 99444-3535")
+            )
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -277,30 +315,38 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Pessoa","1029384", "Pesquisador",
+                    "Instituto de Física - IF", "pessoa@example.com", "(11) 99595-9494"),
+                Partner("Ser humano", "94857632", "Aluno ou ex-aluno (graduação)",
+                    "Instituto de Química - IQ", "ser_humano@example.com", "(11) 99234-5678"),
+                Partner("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
+                    "Instituto de Pesquisa e Tecnologia - IPT", "gente@example.com", "(11) 99080-5070")
+            )
         ),
     )
 
     private fun cleanTestDb() {
-        val companyCollection = testDb.getCollection<Company>("companies")
+        val companyCollection = testDb.getCollection<CompanyModel>("companies")
         companyCollection.deleteMany("{}")
     }
 
     private fun seedTestDb() {
-        val companyCollection = testDb.getCollection<Company>("companies")
+        val companyCollection = testDb.getCollection<CompanyModel>("companies")
         companyCollection.insertMany(testSeeds())
     }
 
     private fun testSeeds() = listOf(
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("São Paulo"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -314,17 +360,23 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
+                    "FEA", "fulano@example.com", "(11) 98899-7654"),
+                Partner("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
+                    "IME", "cliclano@example.com", "(11) 98989-7676")
+            )
         ),
-        Company(
-            address = Address(
+        CompanyModel(
+            address = CompanyAddress(
                 cep = "05555-020",
                 city = setOf("Rio de Janeiro"),
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = Classification(
+            classification = CompanyClassification(
                 major = "Infraestrutura e Construção",
                 minor = "Construção"
             ),
@@ -338,7 +390,11 @@ class CatalogCompanyRepositoryImplTest() {
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
-            url = "https://foo-comp.com.br"
+            url = "https://foo-comp.com.br",
+            partners = setOf(
+                Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
+                    "FEA", "foobaz@example.com", "(11) 99999-8888"),
+                )
         )
     )
 }

@@ -29,6 +29,7 @@ fun Parameters.toResearcherSearchParams() = ResearcherSearchParams(
 fun Parameters.toCompanySearchParams() = CompanySearchParams(
     areaMajors = this["areaMajors"]?.split(',')?.toSet() ?: emptySet(),
     areaMinors = this["areaMinors"]?.split(',')?.toSet() ?: emptySet(),
+    unity = this["unity"],
     city = this["city"],
     ecosystem = this["ecosystem"],
     size = this["size"],
