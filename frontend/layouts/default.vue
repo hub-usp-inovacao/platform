@@ -1,34 +1,58 @@
 <template>
   <v-app>
-    <HubNavButton
-      v-if="path != '/'"
-      class="custom-hidden-sm-and-down"
-      :margin="path == '/contato' ? false : true"
-      :background="path == '/contato' ? false : true"
-    />
-    <v-toolbar
-      class="custom-hidden-sm-and-down d-flex justify-end"
-      color="transparent"
-      width="75%"
-      style="margin-left: 25%"
-      absolute
-      flat
-    >
-      <v-toolbar-items>
-        <v-chip-group>
-          <v-chip
-            v-for="(item, i) in navItems"
-            :key="i"
-            :to="item.to"
-            nuxt
-            class="white--text mx-1 py-auto secondary px-4 subtitle-1"
-          >
-            {{ item.title }}
-            <v-icon v-if="item.new" right>mdi-star</v-icon>
-          </v-chip>
-        </v-chip-group>
-      </v-toolbar-items>
-    </v-toolbar>
+    <header>
+      <div class="text-center d-flex align-center justify-space-around black custom-hidden-sm-and-down" >
+        <v-btn
+          color="black"
+          dark
+          href="http://www.inovacao.usp.br/"
+          target="_blank"
+        >
+          AUSPIN
+        </v-btn>
+
+        <v-btn
+          color="black"
+          dark
+          href="https://patente.inovacao.usp.br/inteumweb/inventorportal/"
+          target="_blank"
+        >
+          Portal do Inventor
+        </v-btn>
+
+        <v-btn color="black" dark href="/"> HUB USP inovação </v-btn>
+      </div>
+    </header>
+    <div>
+      <HubNavButton
+        v-if="path != '/'"
+        class="custom-hidden-sm-and-down"
+        :margin="path == '/contato' ? false : true"
+        :background="path == '/contato' ? false : true"
+      />
+      <v-toolbar
+        class="custom-hidden-sm-and-down d-flex justify-end nav"
+        color="transparent"
+        width="75%"
+        absolute
+        flat
+      >
+        <v-toolbar-items>
+          <v-chip-group>
+            <v-chip
+              v-for="(item, i) in navItems"
+              :key="i"
+              :to="item.to"
+              nuxt
+              class="white--text mx-1 py-auto secondary px-4 subtitle-1"
+            >
+              {{ item.title }}
+              <v-icon v-if="item.new" right>mdi-star</v-icon>
+            </v-chip>
+          </v-chip-group>
+        </v-toolbar-items>
+      </v-toolbar>
+    </div>
 
     <v-app-bar class="custom-hidden-md-and-up" color="white" dense flat fixed>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -146,6 +170,9 @@ export default {
 </script>
 
 <style scoped>
+.nav {
+  margin: 2% 0 0 25%;
+}
 #app .v-bottom-navigation .v-btn {
   height: inherit !important;
 }
