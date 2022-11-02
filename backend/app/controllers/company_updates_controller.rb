@@ -3,8 +3,7 @@
 class CompanyUpdatesController < ApplicationController
   def request_update
     params = request_update_params
-    
-    
+
     cnpj = params[:cnpj]
     @company = Company.where({ cnpj: cnpj }).first
     if @company.nil?
@@ -16,7 +15,7 @@ class CompanyUpdatesController < ApplicationController
     token = TokenManager.create_token({ cnpj: cnpj })
     ApplicationMailer.company_update_token(email, token).deliver_now
     email = format_email(email)
-    
+
     render json: { message: 'ok', email: email }, status: :ok
   end
 
@@ -137,24 +136,20 @@ class CompanyUpdatesController < ApplicationController
 
   def format_email(email)
     first_part_length = email.index('@')
-    formated = ""
 
     case first_part_length
 
-      when 1, 2
-        formated = email.gsub(/.{1}@/, '*@')
-      
-      when 3, 4
-        formated = email.gsub(/.{2}@/, '**@')
-      
-      when 5, 6
-        formated = email.gsub(/.{3}@/, '***@')
+    when 1, 2
+      email.gsub(/.{1}@/, '*@')
 
-      else 
-        formated = email.gsub(/.{5}@/, '*****@')
+    when 3, 4
+      email.gsub(/.{2}@/, '**@')
+
+    when 5, 6
+      email.gsub(/.{3}@/, '***@')
+
+    else
+      email.gsub(/.{5}@/, '*****@')
     end
-
-    return formated
   end
-
 end
