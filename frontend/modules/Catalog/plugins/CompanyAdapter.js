@@ -107,8 +107,7 @@ function CompanyAdapter(axios) {
             'Instituto de Ciências Matemáticas e de Computação - ICMC',
             'Instituto de Física de São Carlos - IFSC',
             'Instituto de Química de São Carlos - IQSC',
-            'Escola de Artes, Ciências e Humanidades - EACH',
-            'Pró-Reitoria de Graduação'
+            'Escola de Artes, Ciências e Humanidades - EACH'
           ].sort()
   }
 
