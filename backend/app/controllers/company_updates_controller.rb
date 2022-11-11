@@ -74,6 +74,7 @@ class CompanyUpdatesController < ApplicationController
     prms[:partners].each_with_index do |raw_partner, index|
       partner = Partner.new(raw_partner.merge(index: index + 1))
       unless partner.valid?
+        errors[:partners] = partner.errors.full_messages
         partners_errors << partner.errors.full_messages
         has_error = true
       end
