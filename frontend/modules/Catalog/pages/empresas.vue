@@ -184,7 +184,7 @@ export default {
           items: this.companySizes,
         },
         {
-          label: "Unidade",
+          label: "Unidade de Origem",
           items: this.unities,
         },
       ];
