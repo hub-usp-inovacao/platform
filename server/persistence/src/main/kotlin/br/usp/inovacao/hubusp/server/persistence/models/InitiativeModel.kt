@@ -12,7 +12,7 @@ data class InitiativeModel(
     val name: String,
     val tags: Set<String>,
     val unity: String,
-    val url: String,
+    val url: String? = null,
 )
 
 @Serializable

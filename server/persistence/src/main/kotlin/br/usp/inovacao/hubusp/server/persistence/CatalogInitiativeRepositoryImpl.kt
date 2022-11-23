@@ -4,8 +4,10 @@ import br.usp.inovacao.hubusp.server.catalog.Contact
 import br.usp.inovacao.hubusp.server.catalog.Initiative
 import br.usp.inovacao.hubusp.server.catalog.InitiativeRepository
 import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
+import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeContact
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeModel
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.find
 import org.litote.kmongo.getCollection
@@ -30,7 +32,11 @@ fun InitiativeModel.toCatalogInitiative(): Initiative = Initiative(
 class CatalogInitiativeRepositoryImpl(
     db: MongoDatabase
 ): InitiativeRepository {
-    private val initiativeCollection = db.getCollection<InitiativeModel>("iniciatives")
+    private val initiativeCollection : MongoCollection<InitiativeModel>
+
+    init {
+        initiativeCollection = db.getCollection<InitiativeModel>("iniciatives")
+    }
 
     override fun filter(params: InitiativeSearchParams): Set<Initiative> {
         val filter = params.toCollectionFilter()

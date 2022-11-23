@@ -138,6 +138,7 @@ fun Application.catalog(db: MongoDatabase) {
         }
 
         get("/companies") {
+
             val params = call.request.queryParameters
 
             val companies = searchCompanies.search(params.toCompanySearchParams())
@@ -145,6 +146,11 @@ fun Application.catalog(db: MongoDatabase) {
             call.respond(
                 HttpStatusCode.OK,
                 mapOf("companies" to companies)
+            )
+
+            call.respond(
+                HttpStatusCode.OK,
+                mapOf("comapanies" to "oi")
             )
         }
 
@@ -159,7 +165,9 @@ fun Application.catalog(db: MongoDatabase) {
             )
         }
 
+
         get("/initiatives") {
+
             val params = call.request.queryParameters
 
             val initiatives = searchInitiatives.search(params.toInitiativeSearchParams())
