@@ -130,7 +130,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <v-text-field
             v-model="conexao.org.phone"
             label="Telefone de Contato"
-            :rules="rules.value"
           />
           <v-text-field
             v-model="conexao.org.address"
@@ -145,7 +144,6 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           <v-text-field
             v-model="conexao.org.site"
             label="Site da organização"
-            :rules="rules.value"
           />
         </v-container>
 
@@ -208,32 +206,19 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
           ></v-file-input>
           -->
           <div>
-            <v-radio-group
+            <legend class="legendColor">
+              Indique sua principal expectativa em relação à solução da demanda?
+            </legend>
+            <v-combobox
               v-model="conexao.demand.expectation"
-              label="Indique sua principal expectativa em relação à solução da
-                demanda:"
+              :items="radioButtonData[2]"
+              label="Escolha as expectativa, ou digite outras caso necessário"
+              multiple
               :rules="rules.value"
-              @change="enableOtherOption('demand', 'expectation')"
-            >
-              <v-radio
-                v-for="(option, i) of radioButtonData[2]"
-                :key="i"
-                :value="option"
-                :label="option"
-              />
-              <v-radio label="Outro, qual?" value="Outro" />
-            </v-radio-group>
-            <v-row v-if="isOtherExpectationEnable">
-              <v-col class="mt-n5 pt-0" cols="6">
-                <v-text-field
-                  v-model="conexao.demand.expectationOther"
-                  :rules="rules.value"
-                  placeholder="Outro, qual?"
-                  autofocus
-                />
-              </v-col>
-            </v-row>
+              chips
+            ></v-combobox>
           </div>
+
           <v-row>
             <v-col>
               <legend class="legendColor">
