@@ -35,7 +35,7 @@ class Partner
 
     is_valid = bonds.include?(bond)
 
-    errors.add(:bond) unless is_valid
+    errors.add(:bond, 'inválido. Tente atualizar o seu vínculo.') unless is_valid
   end
 
   def prepare_to_csv
