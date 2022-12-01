@@ -246,6 +246,7 @@ Para participar, cadastre sua demanda no formulário abaixo, e com base nas info
                 label="Escolha um perfil"
                 :rules="rules.value"
                 clearable
+                multiple
               >
               </v-select>
             </v-col>
