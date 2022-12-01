@@ -30,7 +30,7 @@
             label="CNPJ"
             mask="##.###.###/####-##"
             @input="setCnpj"
-            disabled=true
+            :disabled="true"
           />
         </v-container>
       </div>
