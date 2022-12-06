@@ -168,6 +168,9 @@ export default {
           title: "Erro ao atualizar os dados",
           message,
         };
+
+        //this.$vuetify.goTo('#background')
+        window.scrollTo(0,0);
       }
     },
 
