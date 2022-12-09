@@ -113,7 +113,7 @@ export const actions = {
     if (!getters.truthfulInformations) {
       commit("setErrors", {
         dna_usp_stamp:
-          "É necessário declarar que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos",
+          ["É necessário declarar que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos"],
       });
       return false;
     }
