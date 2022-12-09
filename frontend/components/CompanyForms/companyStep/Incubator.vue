@@ -66,7 +66,11 @@ export default {
       ecosystems: "company_forms/ecosystems",
     }),
     disabledIncubatorsSelect() {
-      return this.incubated === "Não";
+      if (this.incubated === "Não") {
+        this.setEcosystems('')
+        return true
+      }
+      return false
     },
     defaultIncubators() {
       return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : ''
