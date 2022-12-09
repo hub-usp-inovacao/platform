@@ -168,6 +168,8 @@ export default {
           title: "Erro ao atualizar os dados",
           message,
         };
+
+        window.scrollTo(0,0);
       }
     },
 
