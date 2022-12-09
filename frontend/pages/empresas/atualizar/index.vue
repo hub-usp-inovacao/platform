@@ -169,7 +169,6 @@ export default {
           message,
         };
 
-        //this.$vuetify.goTo('#background')
         window.scrollTo(0,0);
       }
     },
