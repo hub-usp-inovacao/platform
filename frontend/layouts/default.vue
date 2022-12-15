@@ -11,7 +11,7 @@
         :background="path == '/contato' ? false : true"
       />
       <v-toolbar
-        class="custom-hidden-md-and-down d-flex justify-end nav"
+        class="custom-hidden-sm-and-down d-flex justify-end nav"
         color="transparent"
         width="75%"
         absolute
