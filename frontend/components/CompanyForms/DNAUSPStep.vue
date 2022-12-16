@@ -26,7 +26,7 @@
 
             <ShortTextInput
               :value="dnaContactEmail"
-              label="Email de contato"
+              label="Email de contato *"
               hint="Este dado não será publicado."
               @input="setDnaContactEmail"
             />
@@ -36,7 +36,7 @@
             </p>
             <ShortTextInput
               :value="dnaContactName"
-              label="Nome"
+              label="Nome *"
               hint="Este dado não será publicado."
               @input="setDnaContactName"
             />
@@ -55,7 +55,7 @@
         </p>
         <BooleanInput
           :value="truthfulInformations"
-          label="Estou de acordo com tal afirmação"
+          label="Estou de acordo com tal afirmação *"
           @input="setTruthfulInformations"
         />
 
