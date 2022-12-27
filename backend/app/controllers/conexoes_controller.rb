@@ -5,12 +5,12 @@ class ConexoesController < ApplicationController
     @conexao = Conexao.create!(create_params)
     author_email = create_params[:personal][:email]
     ApplicationMailer.conexao_confirmation(author_email).deliver_now
+    render json: { conexao: @conexao }
     new_entries = Conexao.where(delivered: false)
     ApplicationMailer.with(entities: new_entries).conexao.deliver_now
     new_entries.each do |entry|
       entry.update(delivered: true)
     end
-    render json: { conexao: @conexao }
   rescue StandardError => e
     render json: { error: e }, status: :bad_request
   end
