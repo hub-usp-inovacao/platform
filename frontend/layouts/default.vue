@@ -67,14 +67,14 @@
 import HubNavButton from "@/components/first_level/HubNavButton.vue";
 import Footer from "@/components/layout/Footer.vue";
 import BetaVersionModal from "@/components/layout/BetaVersionModal.vue";
-import UniversalAuspinBar from "@/components/UniversalAuspinBar.vue";
+import UniversalAuspinBar from "@/components/UniversalAuspinBar.vue"
 
 export default {
   components: {
     HubNavButton,
     Footer,
     BetaVersionModal,
-    UniversalAuspinBar,
+    UniversalAuspinBar
   },
   data: () => ({
     activeItem: 0,

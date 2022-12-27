@@ -30,7 +30,8 @@ export default {
 }
 </script>
 
-<style scoped>
+
+<style>
 .barra {
   background-color: #000428;
   height: 3.1em;
