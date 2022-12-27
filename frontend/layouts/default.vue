@@ -1,27 +1,7 @@
 <template>
   <v-app>
     <header>
-      <div class="text-center d-flex align-center justify-space-around black custom-hidden-sm-and-down" >
-        <v-btn
-          color="black"
-          dark
-          href="http://www.inovacao.usp.br/"
-          target="_blank"
-        >
-          AUSPIN
-        </v-btn>
-
-        <v-btn
-          color="black"
-          dark
-          href="https://patente.inovacao.usp.br/inteumweb/inventorportal/"
-          target="_blank"
-        >
-          Portal do Inventor
-        </v-btn>
-
-        <v-btn color="black" dark href="/"> HUB USP inovação </v-btn>
-      </div>
+      <UniversalAuspinBar />
     </header>
     <div>
       <HubNavButton
@@ -87,12 +67,14 @@
 import HubNavButton from "@/components/first_level/HubNavButton.vue";
 import Footer from "@/components/layout/Footer.vue";
 import BetaVersionModal from "@/components/layout/BetaVersionModal.vue";
+import UniversalAuspinBar from "@/components/UniversalAuspinBar.vue"
 
 export default {
   components: {
     HubNavButton,
     Footer,
     BetaVersionModal,
+    UniversalAuspinBar
   },
   data: () => ({
     activeItem: 0,
@@ -171,7 +153,7 @@ export default {
 
 <style scoped>
 .nav {
-  margin: 2% 0 0 25%;
+  margin: 2.5% 0 0 25%;
 }
 #app .v-bottom-navigation .v-btn {
   height: inherit !important;
