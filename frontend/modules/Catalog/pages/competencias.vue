@@ -94,6 +94,7 @@
               {{ desc.title }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <p v-if="item[desc.key].length === 0">Nada a exibir</p>
               <v-list>
                 <v-list-item
                   v-for="description in item[desc.key]"

@@ -30,16 +30,14 @@
     >
       <template #title="{ item }">{{ item.name }}</template>
       <template #detailsText="{ item }">
-        <p class="body-2">{{ item.unity }}</p>
+        <NDText classes="body-2" :text="item.unity" />
         <p class="body-2 mb-4">{{ item.localization }}</p>
         <v-row>
           <v-col v-if="item.email">
             <p class="body-2 mb-4 mr-8">{{ item.email }}</p>
           </v-col>
           <v-col>
-            <p class="body-2 mb-4">
-              {{ item.contact.info }}
-            </p>
+            <NDText classes="body-2 mb-4" :text="item.contact.info" />
           </v-col>
         </v-row>
       </template>
@@ -65,6 +63,7 @@ import Background from "../components/Background.vue";
 import DisplayData from "../components/DisplayData.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import Panel from "../components/Panel.vue";
+import NDText from "../components/NDText.vue";
 
 export default {
   components: {
@@ -72,6 +71,7 @@ export default {
     Background,
     MultipleFilters,
     DisplayData,
+    NDText,
   },
   data: () => ({
     tabs: [
