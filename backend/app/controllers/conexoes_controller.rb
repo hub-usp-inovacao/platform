@@ -8,7 +8,7 @@ class ConexoesController < ApplicationController
     new_entries = Conexao.where(delivered: false)
     ApplicationMailer.with(entities: new_entries).conexao.deliver_now
     new_entries.each do |entry|
-      entry.update(delivered:true)
+      entry.update(delivered: true)
     end
     render json: { conexao: @conexao }
   rescue StandardError => e
