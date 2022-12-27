@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <header>
-      <NavAuspin />
+      <UniversalAuspinBar />
     </header>
     <div>
       <HubNavButton
@@ -67,14 +67,14 @@
 import HubNavButton from "@/components/first_level/HubNavButton.vue";
 import Footer from "@/components/layout/Footer.vue";
 import BetaVersionModal from "@/components/layout/BetaVersionModal.vue";
-import NavAuspin from "@/components/navAuspin.vue"
+import UniversalAuspinBar from "@/components/UniversalAuspinBar.vue";
 
 export default {
   components: {
     HubNavButton,
     Footer,
     BetaVersionModal,
-    NavAuspin
+    UniversalAuspinBar,
   },
   data: () => ({
     activeItem: 0,
