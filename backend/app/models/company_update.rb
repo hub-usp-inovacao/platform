@@ -156,7 +156,7 @@ para unidades da USP"
 
   def self.basic_values_to_csv(company)
     result = []
-    result.concat(%i[created_at cnpj name].map do |attr|
+    result.concat(%i[cnpj name].map do |attr|
       sanitize_value(company[attr])
     end)
 
