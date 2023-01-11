@@ -57,6 +57,15 @@ RSpec.describe DnaUspStamp, type: :model do
     end
   end
 
+  context 'with no validation problems' do
+    it 'on all required fields expected to be valid' do
+      attrs[:name] = 'fulano de tal'
+      attrs[:email] = 'fulano@email.com'
+      attrs[:truthful_informations] = true
+      expect(described_class.new(attrs)).to be_valid
+    end
+  end
+
   context 'with type parsing by mongoid' do
     [42, 0, '', {}, []].each do |value|
       %i[wants truthful_informations].each do |attr|

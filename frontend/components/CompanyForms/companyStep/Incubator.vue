@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2 class="text-h6 mt-6 font-weight-regular">
-      A empresa está ou esteve em alguma incubadora ou Parque tecnológico?
+      A empresa está ou esteve em alguma incubadora ou Parque tecnológico? *
     </h2>
     <Dropdown
       :value="incubated"
@@ -12,7 +12,7 @@
 
     <div v-if="!disabledIncubatorsSelect">
       <h2 class="text-h6 mt-6 font-weight-regular">
-        Se sim, em qual incubadora ou Parque Tecnológico?
+        Se sim, em qual incubadora ou Parque Tecnológico? *
       </h2>
       <Dropdown
         :value="defaultIncubators"

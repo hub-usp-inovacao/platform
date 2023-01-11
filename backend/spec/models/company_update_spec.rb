@@ -66,6 +66,70 @@ RSpec.describe CompanyUpdate, type: :model do
       ]
     }
   end
+  let(:required_attr) do
+    {
+      created_at: DateTime.new(2020, 1, 1).getutc,
+      cnpj: '14.380.200/0001-21',
+      name: 'Fulano',
+      partners_values: [
+        {
+          name: '',
+          phone: '',
+          email: 'Foo@bar.com',
+          bond: '',
+          nusp: '',
+          unity: '',
+          role: ''
+        }
+      ],
+      company_values: {
+        'Nome Fantasia da empresa': 'Fulano',
+        'Razão social da empresa': 'Fulano inc.',
+        'Ano de fundação': 1990,
+        'cnae': '85.29-4-15',
+        'Telefone comercial': [],
+        'Emails': [],
+        'Endereço': '',
+        'Bairro': '',
+        'Cidade sede': [],
+        'Estado': '',
+        'CEP': '88804-342',
+        'Breve descrição': '',
+        'Produtos e serviços': '',
+        'Tecnologias': '',
+        'Site': '',
+        'A empresa está ou esteve em alguma incubadora ou Parque tecnológico': '',
+        'Em qual incubadora?': [],
+        'Redes sociais': '',
+        'Número de funcionários contratados como CLT': 0,
+        'Número de colaboradores contratados como Pessoa Jurídica (PJ)': 0,
+        'Número de estagiários/bolsistas contratados': 0,
+        'A empresa recebeu investimento?': '',
+        'Investimentos': '',
+        'Valor do investimento próprio (R$)': '',
+        'Valor do investimento-anjo (R$)': '',
+        'Valor do Venture Capital (R$)': '',
+        'Valor do Private Equity (R$)': '',
+        'Valor do PIPE-FAPESP (R$)': '',
+        'Valor de outros investimentos (R$)': '',
+        'Faturamento': '',
+        'Objetivos de Desenvolvimento Sustentável': '',
+        'Data da última atualização de Colaboradores': '',
+        'Data da última atualização de Faturamento': '',
+        'Data da última atualização de Investimento': ''
+      },
+      dna_values: {
+        wants_dna: false,
+        name: 'Fulano',
+        email: 'fulano@email.com'
+      },
+      truthful_informations: true,
+      permission: [
+        "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes \
+à empresa"
+      ]
+    }
+  end
   let(:valid_csv) do
     <<~MULTILINE
       Carimbo de data/hora,CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Telefone comercial,Emails,\
@@ -168,6 +232,12 @@ RSpec.describe CompanyUpdate, type: :model do
     company_updated = described_class.new(valid_attr)
     allow(described_class).to receive(:all).and_return([company_updated])
     expect(described_class.to_csv).to eql(valid_csv)
+  end
+
+  context 'with no validation problems' do
+    it 'on all required fields expected to be valid' do
+      expect(described_class.new(required_attr)).to be_valid
+    end
   end
 
   context 'with different partner_values' do

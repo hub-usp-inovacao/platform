@@ -8,26 +8,26 @@
           <ShortTextInput
             class="mb-8"
             :value="name"
-            label="Nome fantasia da empresa"
+            label="Nome fantasia da empresa *"
             hint="A empresa será listada no Hub USPInovação a partir do nome fantasia da mesma."
             @input="setName"
           />
           <ShortTextInput
             class="mb-4"
             :value="corporateName"
-            label="Razão social da empresa"
+            label="Razão social da empresa *"
             @input="setCorporateName"
           />
           <MaskInput
             class="mb-4"
             :value="year"
             mask="####"
-            label="Ano de fundação"
+            label="Ano de fundação *"
             @input="setYear"
           />
           <MaskInput
             :value="cnpj"
-            label="CNPJ"
+            label="CNPJ *"
             mask="##.###.###/####-##"
             @input="setCnpj"
             :disabled="true"
@@ -52,7 +52,7 @@
           </legend>
           <MaskInput
             :value="cnae"
-            label="CNAE"
+            label="CNAE *"
             mask="##.##-#-##"
             :rule="/^\d{2}\.\d{2}-\d(-\d{2})?$/"
             @input="setCnae"
@@ -103,7 +103,7 @@
           />
           <MaskInput
             :value="cep"
-            label="CEP"
+            label="CEP *"
             mask="#####-###"
             :rule="/\d{5}-\d{3}/"
             @input="setCep"
