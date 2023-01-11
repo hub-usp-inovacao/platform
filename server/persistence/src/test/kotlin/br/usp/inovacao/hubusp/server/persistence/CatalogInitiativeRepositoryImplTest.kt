@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.persistence
 
+import br.usp.inovacao.hubusp.server.catalog.Initiative
 import br.usp.inovacao.hubusp.server.catalog.InitiativeSearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeContact
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeModel
@@ -107,6 +108,32 @@ internal class CatalogInitiativeRepositoryImplTest {
             it.classification == classification && it.localization == campus && (
                     it.description.contains(term) || it.name.contains(term) || it.tags.any { tag -> tag.contains(term) })
         } }
+    }
+
+    @Test
+    fun `it converts InitiativeModel into Initiative`() {
+        // given
+        val initiative = InitiativeModel(
+            classification ="Entidade Estudantil",
+            name = "Agência USP de Inovação (AUSPIN)",
+            localization = "Butantã",
+            unity = "N/D",
+            tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
+            url = null,
+            description = "A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
+            email = "auspin@usp.br",
+            contact = InitiativeContact(
+                person = "",
+                info = "(11) 3091-4165"
+            )
+        )
+
+        // when
+        val result = initiative.toCatalogInitiative()
+
+        // then
+        assertTrue { result is Initiative }
+
     }
 
     private fun seedTestDb() {
