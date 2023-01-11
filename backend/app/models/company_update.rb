@@ -126,7 +126,7 @@ para unidades da USP"
   end
 
   def self.csv_columns(max_partners)
-    attributes = ['Carimbo de data/hora', 'CNPJ', 'Nome', 'Razão social da empresa',
+    attributes = ['CNPJ', 'Nome', 'Razão social da empresa',
                   'Ano de fundação', 'CNAE', 'Telefone comercial', 'Emails',
                   'Endereço', 'Bairro', 'Cidade sede', 'Estado', 'CEP', 'Breve descrição',
                   'Produtos e serviços', 'Tecnologias', '_', 'Site',
@@ -148,10 +148,7 @@ para unidades da USP"
                        'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                        'Faturamento',
                        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                       'Objetivos de Desenvolvimento Sustentável',
-                       'Data da última atualização de Colaboradores',
-                       'Data da última atualização de Faturamento',
-                       'Data da última atualização de Investimento'])
+                       'Objetivos de Desenvolvimento Sustentável'])
   end
 
   def self.basic_values_to_csv(company)

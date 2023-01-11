@@ -67,7 +67,7 @@ RSpec.describe CompanyUpdate, type: :model do
   end
   let(:valid_csv) do
     <<~MULTILINE
-      Carimbo de data/hora,CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Telefone comercial,Emails,\
+      CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Telefone comercial,Emails,\
       Endereço,Bairro,Cidade sede,Estado,CEP,Breve descrição,Produtos e serviços,Tecnologias,_,Site,\
       A empresa está ou esteve em alguma incubadora ou Parque tecnológico,Em qual incubadora?,_,_,\
       Redes sociais,Deseja a marca DNAUSP?,Email,Nome,_,Confirmação,Permissão,\
