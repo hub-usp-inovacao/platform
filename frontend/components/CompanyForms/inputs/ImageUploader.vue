@@ -1,5 +1,5 @@
 <template>
-  <LastUpdated :label="label" :last-updated="lastUpdated">
+  <div>
     <v-file-input
       chips
       :label="label"
@@ -15,14 +15,12 @@
       max-width="250"
       max-height="250"
     ></v-img>
-  </LastUpdated>
+  </div>
 </template>
 
 <script>
-import LastUpdated from "@/components/CompanyForms/inputs/LastUpdated.vue";
-
 export default {
-  components: { LastUpdated },
+  components: {},
   model: {
     prop: "value",
     event: "change",
@@ -41,11 +39,6 @@ export default {
       type: String,
       required: false,
       default: () => "",
-    },
-    lastUpdated: {
-      type: String,
-      required: false,
-      default: undefined,
     },
   },
   data: () => ({

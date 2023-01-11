@@ -254,20 +254,6 @@ RSpec.describe Company, type: :model do
       end
     end
 
-    it 'returns N/D if the row is empty' do
-      expect(described_class.timestamp('')).to eql('N/D')
-    end
-
-    it 'returns the proper DateTime when a timestamp is given' do
-      y = 2020
-      m = 4
-      d = 21
-      dt = DateTime.new y, m, d
-      ts = "#{d}/#{m}/#{y}"
-
-      expect(described_class.timestamp(ts)).to eql(dt)
-    end
-
     it 'returns invalid company when two companies has the same cnpj' do
       described_class.create valid_attr
       company = described_class.new valid_attr

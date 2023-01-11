@@ -4,7 +4,6 @@ require 'csv'
 
 class CompanyUpdate
   include Mongoid::Document
-  include Mongoid::Timestamps::Created
 
   field :name, type: String
   field :cnpj, type: String

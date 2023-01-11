@@ -8,7 +8,6 @@ import staff from "./staff";
 import partners from "./partners";
 
 export const state = () => ({
-  collaboratorsLastUpdatedAt: new Date(),
   numberOfCLTEmployees: "",
   numberOfPJColaborators: "",
   numberOfInterns: "",
@@ -77,19 +76,6 @@ export const actions = {
         if (getters.hasOwnProperty(k)) {
           commit("setFormField", { key: k, value: message[key] });
         }
-      });
-
-      commit("setFormField", {
-        key: "collaboratorsLastUpdatedAt",
-        value: new Date(message["collaborators_last_updated_at"]),
-      });
-      commit("setFormField", {
-        key: "investmentsLastUpdatedAt",
-        value: new Date(message["investments_last_updated_at"]),
-      });
-      commit("setFormField", {
-        key: "revenuesLastUpdatedAt",
-        value: new Date(message["revenues_last_updated_at"]),
       });
       commit("setFormField", { key: "logo", value: undefined });
     }

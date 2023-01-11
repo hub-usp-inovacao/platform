@@ -1,5 +1,4 @@
 const state = () => ({
-  investmentsLastUpdatedAt: new Date(),
   receivedInvestments: false,
   investments: [],
   investmentsValues: {
@@ -13,7 +12,6 @@ const state = () => ({
 });
 
 const getters = {
-  investmentsLastUpdatedAt: (s) => s.investmentsLastUpdatedAt,
   receivedInvestments: (s) => s.receivedInvestments,
   investments: (s) => s.investments,
   investmentsValues: (s) => s.investmentsValues,
@@ -52,14 +50,8 @@ const prepareSection = (obj) => {
       equity,
       pipe,
       others,
-      last_update: updateInvestmentsDate(obj)
     }
   };
-};
-
-const updateInvestmentsDate = (obj) => {
-  const wasUpdated = obj.receivedInvestments;
-  return wasUpdated ? new Date() : obj.investmentsLastUpdatedAt;
 };
 
 export default {

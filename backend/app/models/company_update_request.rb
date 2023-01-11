@@ -5,7 +5,6 @@ require 'csv'
 class CompanyUpdateRequest
   include Mongoid::Document
 
-  field :timestamp, type: Time
   field :delivered, type: Boolean, default: false
 
   embeds_one :dna_usp_stamp
@@ -39,7 +38,6 @@ class CompanyUpdateRequest
       csv << csv_headers
       all.each do |cur|
         csv << merge([
-                       [cur.timestamp],
                        cur.dna_usp_stamp.prepare_to_csv,
                        cur.company_data.prepare_to_csv,
                        cur.about_company.prepare_to_csv,

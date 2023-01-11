@@ -86,7 +86,6 @@ class CompanyUpdatesController < ApplicationController
       render json: { errors: errors }, status: :bad_request
     else
       @comp_update = CompanyUpdateRequest.new
-      @comp_update.timestamp = Time.zone.now
 
       @comp_update.dna_usp_stamp = dna_usp_stamp
       @comp_update.company_data = company_data
