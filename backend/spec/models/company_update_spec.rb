@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe CompanyUpdate, type: :model do
   let(:valid_attr) do
     {
+      created_at: DateTime.new(2020, 1, 1).getutc,
       cnpj: '14.380.200/0001-21',
       name: 'Fulano',
       partners_values: [
@@ -48,7 +49,10 @@ RSpec.describe CompanyUpdate, type: :model do
         'Valor do PIPE-FAPESP (R$)': 'R$ 0,00',
         'Valor de outros investimentos (R$)': 'R$ 0,00',
         'Faturamento': 'R$ 6.666,66',
-        'Objetivos de Desenvolvimento Sustentável': 'Sim'
+        'Objetivos de Desenvolvimento Sustentável': 'Sim',
+        'Data da última atualização de Colaboradores': '2019',
+        'Data da última atualização de Faturamento': '2019',
+        'Data da última atualização de Investimento': '2019'
       },
       dna_values: {
         wants_dna: true,
@@ -64,7 +68,7 @@ RSpec.describe CompanyUpdate, type: :model do
   end
   let(:valid_csv) do
     <<~MULTILINE
-      CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Telefone comercial,Emails,\
+      Carimbo de data/hora,CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Telefone comercial,Emails,\
       Endereço,Bairro,Cidade sede,Estado,CEP,Breve descrição,Produtos e serviços,Tecnologias,_,Site,\
       A empresa está ou esteve em alguma incubadora ou Parque tecnológico,Em qual incubadora?,_,_,\
       Redes sociais,Deseja a marca DNAUSP?,Email,Nome,_,Confirmação,Permissão,\
@@ -75,7 +79,8 @@ RSpec.describe CompanyUpdate, type: :model do
       Número de estagiários/bolsistas contratados,A empresa recebeu investimento?,Investimentos,\
       Valor do investimento próprio (R$),Valor do investimento-anjo (R$),Valor do Venture Capital (R$),\
       Valor do Private Equity (R$),Valor do PIPE-FAPESP (R$),Valor de outros investimentos (R$),Faturamento,\
-      _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,Objetivos de Desenvolvimento Sustentável
+      _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,Objetivos de Desenvolvimento Sustentável,Data da última atualização de Colaboradores,\
+      Data da última atualização de Faturamento,Data da última atualização de Investimento
       #{valid_attr[:created_at]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
       #{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
       #{valid_attr[:company_values]['Ano de fundação'.to_sym]},\
@@ -105,7 +110,10 @@ RSpec.describe CompanyUpdate, type: :model do
       "#{valid_attr[:company_values]['Valor do PIPE-FAPESP (R$)'.to_sym]}",\
       "#{valid_attr[:company_values]['Valor de outros investimentos (R$)'.to_sym]}",\
       "#{valid_attr[:company_values][:Faturamento]}","","","","","","","","","","","","","","","",\
-      #{valid_attr[:company_values]['Objetivos de Desenvolvimento Sustentável'.to_sym]}
+      #{valid_attr[:company_values]['Objetivos de Desenvolvimento Sustentável'.to_sym]},\
+      #{valid_attr[:company_values]['Data da última atualização de Colaboradores'.to_sym]},\
+      #{valid_attr[:company_values]['Data da última atualização de Faturamento'.to_sym]},\
+      #{valid_attr[:company_values]['Data da última atualização de Investimento'.to_sym]}
     MULTILINE
   end
 

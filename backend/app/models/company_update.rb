@@ -4,6 +4,7 @@ require 'csv'
 
 class CompanyUpdate
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   field :name, type: String
   field :cnpj, type: String
@@ -126,7 +127,7 @@ para unidades da USP"
   end
 
   def self.csv_columns(max_partners)
-    attributes = ['CNPJ', 'Nome', 'Razão social da empresa',
+    attributes = ['Carimbo de data/hora', 'CNPJ', 'Nome', 'Razão social da empresa',
                   'Ano de fundação', 'CNAE', 'Telefone comercial', 'Emails',
                   'Endereço', 'Bairro', 'Cidade sede', 'Estado', 'CEP', 'Breve descrição',
                   'Produtos e serviços', 'Tecnologias', '_', 'Site',
@@ -148,12 +149,15 @@ para unidades da USP"
                        'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                        'Faturamento',
                        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                       'Objetivos de Desenvolvimento Sustentável'])
+                       'Objetivos de Desenvolvimento Sustentável',
+                       'Data da última atualização de Colaboradores',
+                       'Data da última atualização de Faturamento',
+                       'Data da última atualização de Investimento'])
   end
 
   def self.basic_values_to_csv(company)
     result = []
-    result.concat(%i[cnpj name].map do |attr|
+    result.concat(%i[created_at cnpj name].map do |attr|
       sanitize_value(company[attr])
     end)
 
@@ -225,7 +229,10 @@ para unidades da USP"
                   'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                   'Faturamento',
                   '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                  'Objetivos de Desenvolvimento Sustentável']
+                  'Objetivos de Desenvolvimento Sustentável',
+                  'Data da última atualização de Colaboradores',
+                  'Data da última atualização de Faturamento',
+                  'Data da última atualização de Investimento']
 
     attributes.map do |attr|
       next '' if attr.eql?('_')

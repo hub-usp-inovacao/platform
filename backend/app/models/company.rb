@@ -2,6 +2,7 @@
 
 class Company
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   field :cnpj, type: String
   field :name, type: String
@@ -104,13 +105,23 @@ class Company
         cnae: row[5],
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
-        corporate_name: row[3]
+        corporate_name: row[3],
+        collaborators_last_updated_at: timestamp(row[85]),
+        investments_last_updated_at: timestamp(row[87]),
+        revenues_last_updated_at: timestamp(row[86])
       }
     )
 
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def self.timestamp(raw)
+    return 'N/D' if raw.nil? || raw.size.eql?(0)
+
+    d, m, y = raw.split('/').map(&:to_i)
+    DateTime.new y, m, d
   end
 
   def self.partner(subrow)
