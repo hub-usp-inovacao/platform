@@ -104,7 +104,7 @@ class Company
         cnae: row[5],
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
-        corporate_name: row[3],
+        corporate_name: row[3]
       }
     )
 
