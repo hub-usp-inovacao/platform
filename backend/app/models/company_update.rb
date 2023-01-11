@@ -225,10 +225,7 @@ para unidades da USP"
                   'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                   'Faturamento',
                   '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                  'Objetivos de Desenvolvimento Sustentável',
-                  'Data da última atualização de Colaboradores',
-                  'Data da última atualização de Faturamento',
-                  'Data da última atualização de Investimento']
+                  'Objetivos de Desenvolvimento Sustentável']
 
     attributes.map do |attr|
       next '' if attr.eql?('_')

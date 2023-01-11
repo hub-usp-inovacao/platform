@@ -57,8 +57,6 @@ class Investment
       'Valor do Private Equity',
       'Valor do PIPE-FAPESP',
       'Valor do Outros'
-    ] + middle_offset + [
-      'Data da última atualização de Investimentos'
     ]
   end
 

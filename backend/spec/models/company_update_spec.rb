@@ -48,10 +48,7 @@ RSpec.describe CompanyUpdate, type: :model do
         'Valor do PIPE-FAPESP (R$)': 'R$ 0,00',
         'Valor de outros investimentos (R$)': 'R$ 0,00',
         'Faturamento': 'R$ 6.666,66',
-        'Objetivos de Desenvolvimento Sustentável': 'Sim',
-        'Data da última atualização de Colaboradores': '2019',
-        'Data da última atualização de Faturamento': '2019',
-        'Data da última atualização de Investimento': '2019'
+        'Objetivos de Desenvolvimento Sustentável': 'Sim'
       },
       dna_values: {
         wants_dna: true,
@@ -78,8 +75,8 @@ RSpec.describe CompanyUpdate, type: :model do
       Número de estagiários/bolsistas contratados,A empresa recebeu investimento?,Investimentos,\
       Valor do investimento próprio (R$),Valor do investimento-anjo (R$),Valor do Venture Capital (R$),\
       Valor do Private Equity (R$),Valor do PIPE-FAPESP (R$),Valor de outros investimentos (R$),Faturamento,\
-      _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,Objetivos de Desenvolvimento Sustentável,Data da última atualização de Colaboradores,\
-      Data da última atualização de Faturamento,Data da última atualização de Investimento
+      _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,Objetivos de Desenvolvimento Sustentável
+      #{valid_attr[:created_at]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
       #{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
       #{valid_attr[:company_values]['Ano de fundação'.to_sym]},\
       #{valid_attr[:company_values][:cnae]},#{valid_attr[:company_values]['Telefone comercial'.to_sym].join(';')},\
@@ -108,10 +105,7 @@ RSpec.describe CompanyUpdate, type: :model do
       "#{valid_attr[:company_values]['Valor do PIPE-FAPESP (R$)'.to_sym]}",\
       "#{valid_attr[:company_values]['Valor de outros investimentos (R$)'.to_sym]}",\
       "#{valid_attr[:company_values][:Faturamento]}","","","","","","","","","","","","","","","",\
-      #{valid_attr[:company_values]['Objetivos de Desenvolvimento Sustentável'.to_sym]},\
-      #{valid_attr[:company_values]['Data da última atualização de Colaboradores'.to_sym]},\
-      #{valid_attr[:company_values]['Data da última atualização de Faturamento'.to_sym]},\
-      #{valid_attr[:company_values]['Data da última atualização de Investimento'.to_sym]}
+      #{valid_attr[:company_values]['Objetivos de Desenvolvimento Sustentável'.to_sym]}
     MULTILINE
   end
 
