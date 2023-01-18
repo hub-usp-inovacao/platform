@@ -2,6 +2,7 @@
 
 class Report
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   field :entity, type: String
   field :sheet_id, type: String
