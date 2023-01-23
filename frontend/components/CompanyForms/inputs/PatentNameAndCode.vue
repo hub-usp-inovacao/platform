@@ -1,7 +1,7 @@
 <template>
   <PairOfShortTextInput
-    labelOne="Nome"
-    labelTwo="Código"
+    label-one="Nome"
+    label-two="Código"
     @input="$emit('input', $event)"
   />
 </template>

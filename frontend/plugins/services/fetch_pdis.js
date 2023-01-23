@@ -66,7 +66,7 @@ function pdiGenerator(row, $campi) {
   return base;
 }
 
-export default ({ isDev, $campi }, inject) => {
+export default ({ $campi }, inject) => {
   inject("fetchPDIs", async () => {
     const values = await fetchData();
     if (values == undefined) return { pdis: [], errors: [] };

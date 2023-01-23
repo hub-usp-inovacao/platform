@@ -18,7 +18,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-btn color="primary" rounded @click="newItem" :disabled="!canAdd"
+    <v-btn color="primary" rounded :disabled="!canAdd" @click="newItem"
       >Adicionar {{ inputLabel }}</v-btn
     >
   </div>

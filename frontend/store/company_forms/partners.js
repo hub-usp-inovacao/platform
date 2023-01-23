@@ -25,5 +25,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

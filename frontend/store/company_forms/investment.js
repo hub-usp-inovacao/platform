@@ -40,8 +40,8 @@ const prepareSection = (obj) => {
     ventureCapital: venture,
     privateEquity: equity,
     pipeFapesp: pipe,
-    other: others
-  } = obj.investmentsValues
+    other: others,
+  } = obj.investmentsValues;
 
   return {
     investment: {
@@ -52,8 +52,8 @@ const prepareSection = (obj) => {
       equity,
       pipe,
       others,
-      last_update: updateInvestmentsDate(obj)
-    }
+      last_update: updateInvestmentsDate(obj),
+    },
   };
 };
 
@@ -67,5 +67,5 @@ export default {
   getters,
   mutations,
   actions,
-  prepareSection
-}
+  prepareSection,
+};

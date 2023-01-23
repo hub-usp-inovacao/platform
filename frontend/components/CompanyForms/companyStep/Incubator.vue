@@ -73,10 +73,10 @@ export default {
       return false
     },
     defaultIncubators() {
-      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : ''
+      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : "";
     },
     otherIncubator() {
-      return this.incubadoras.includes(this.ecosystems) ? '' : this.ecosystems
+      return this.incubadoras.includes(this.ecosystems) ? "" : this.ecosystems;
     },
   },
   methods: {

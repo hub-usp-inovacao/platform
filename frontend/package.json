@@ -13,7 +13,9 @@
     "lintfix": "eslint --fix --ext .js,.vue .",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "prepare": "husky install"
+    "start-nuxt-server": "yarn build && yarn start",
+    "cy-run": "cypress run",
+    "cypress-ci": "start-server-and-test start-nuxt-server http://localhost:3000 cy-run"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
@@ -31,15 +33,16 @@
   "devDependencies": {
     "aos": "^3.0.0-beta.6",
     "babel-eslint": "^10.1.0",
+    "cypress": "^10.8.0",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^7.0.4",
     "prettier": "^2.0.5",
     "sass-loader": "^8.0.0",
+    "start-server-and-test": "^1.14.0",
     "vuepress": "^1.8.2"
   }
 }

@@ -27,7 +27,7 @@
         >
           <component
             :is="component"
-            :isUpdate="update"
+            :is-update="update"
             class="component-border mb-12"
           ></component>
 

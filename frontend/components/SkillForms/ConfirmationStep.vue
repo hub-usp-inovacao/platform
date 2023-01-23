@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <h2>Você tem interesse em participar de P&amp;D&amp;I?</h2>
-        <Dropdown :value="interest" @input="setInterest" :options="interests" />
+        <Dropdown :value="interest" :options="interests" @input="setInterest" />
       </v-col>
     </v-row>
     <v-row>
@@ -11,8 +11,8 @@
         <h2>Declaração de Responsabilidade</h2>
         <BooleanInput
           :value="truthful"
-          @input="setTruthful"
           :label="truthfulStatement"
+          @input="setTruthful"
         />
       </v-col>
     </v-row>
@@ -21,8 +21,8 @@
         <h2>Permissão</h2>
         <BooleanInput
           :value="allow"
-          @input="setAllow"
           :label="allowingStatement"
+          @input="setAllow"
         />
       </v-col>
     </v-row>
