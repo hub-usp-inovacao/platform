@@ -7,16 +7,8 @@ RSpec.describe Staff, type: :model do
     {
       number_of_CLT_employees: 4,
       number_of_PJ_colaborators: 5,
-      number_of_interns: 6,
-      last_update: 10.seconds.ago
+      number_of_interns: 6
     }
-  end
-
-  context 'with validation problems' do
-    it 'on future last_update' do
-      attrs[:last_update] = 10.seconds.from_now
-      expect(described_class.new(attrs)).to be_invalid
-    end
   end
 
   context 'with validation passing' do
@@ -39,7 +31,7 @@ RSpec.describe Staff, type: :model do
         attrs[:number_of_CLT_employees],
         attrs[:number_of_PJ_colaborators],
         attrs[:number_of_interns]
-      ] + [nil] * 24 + [attrs[:last_update]]
+      ] + [nil] * 24
     end
 
     it 'prepares to CSV correctly' do

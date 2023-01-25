@@ -6,11 +6,9 @@ class Staff
   field :number_of_CLT_employees, type: Integer
   field :number_of_PJ_colaborators, type: Integer
   field :number_of_interns, type: Integer
-  field :last_update, type: Time
 
   embedded_in :company_update_request, inverse_of: :staff
 
-  validates :last_update, past_date: true
   validate :number_of_clt_employees_not_a_number?
   validate :number_of_pj_colaborators_not_a_number?
   validate :number_of_interns_not_a_number?
@@ -39,21 +37,12 @@ class Staff
     errors.add(:number_of_interns) unless is_valid
   end
 
-  def last_update_in_the_past?
-    is_valid = last_update.nil? ||
-               last_update < Time.zone.now
-
-    errors.add(:last_update) unless is_valid
-  end
-
   def self.csv_headers
     row_offset + [
       'Qual o número de funcionários contratados como CLT?',
       'Qual o número de colaboradores contratados como pessoa jurídica (PJ)?',
       'Qual o número de estagiários/bolsistas contratados?'
-    ] + middle_offset + [
-      'Última atualização de Colaboradores'
-    ]
+    ] + middle_offset
   end
 
   def prepare_to_csv
@@ -61,9 +50,7 @@ class Staff
       number_of_CLT_employees,
       number_of_PJ_colaborators,
       number_of_interns
-    ] + Staff.middle_offset + [
-      last_update
-    ]
+    ] + Staff.middle_offset
   end
 
   def self.row_offset

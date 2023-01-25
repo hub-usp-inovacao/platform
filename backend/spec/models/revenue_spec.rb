@@ -5,19 +5,13 @@ require 'rails_helper'
 RSpec.describe Revenue, type: :model do
   let :attrs do
     {
-      last_year: 'R$ 1.200.000,00',
-      last_update: 10.seconds.ago
+      last_year: 'R$ 1.200.000,00'
     }
   end
 
   context 'with validation errors' do
     it 'on last_year being not money value' do
       attrs[:last_year] = 'twenty'
-      expect(described_class.new(attrs)).to be_invalid
-    end
-
-    it 'on future last_update' do
-      attrs[:last_update] = 10.seconds.from_now
       expect(described_class.new(attrs)).to be_invalid
     end
   end
@@ -32,9 +26,7 @@ RSpec.describe Revenue, type: :model do
     let :handmade do
       [nil] * 69 + [
         attrs[:last_year]
-      ] + [nil] * 16 + [
-        attrs[:last_update]
-      ]
+      ] + [nil] * 16
     end
 
     it 'prepares to CSV correctly' do

@@ -52,12 +52,10 @@ RSpec.describe 'CompanyUpdates', type: :request do
         social_medias: ['https://instagram.com/foo-bar']
       },
       investment: {
-        received: false,
-        last_update: 10.seconds.ago
+        received: false
       },
       revenue: {
-        last_year: 'R$ 1.200.000',
-        last_update: 10.seconds.ago
+        last_year: 'R$ 1.200.000'
       },
       incubation: {
         was_incubated: 'Não',
