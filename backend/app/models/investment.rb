@@ -10,19 +10,10 @@ class Investment
   field :equity, type: String
   field :pipe, type: String
   field :others, type: String
-  field :last_update, type: Time
 
   embedded_in :company_update_request, inverse_of: :investment
 
-  validates :last_update, past_date: true
   validate :types_only_money?, :data_consistent?
-
-  def last_update_in_the_past?
-    is_valid = last_update.nil? ||
-               last_update < Time.zone.now
-
-    errors.add(:last_update) unless is_valid
-  end
 
   def data_consistent?
     is_valid = !received || (
@@ -57,9 +48,7 @@ class Investment
       'Valor do Private Equity',
       'Valor do PIPE-FAPESP',
       'Valor do Outros'
-    ] + middle_offset + [
-      'Data da última atualização de Investimentos'
-    ]
+    ] + middle_offset
   end
 
   def prepare_to_csv
@@ -72,9 +61,7 @@ class Investment
       equity,
       pipe,
       others
-    ] + Investment.middle_offset + [
-      last_update
-    ]
+    ] + Investment.middle_offset
   end
 
   private

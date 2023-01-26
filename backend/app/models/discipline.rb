@@ -3,7 +3,6 @@
 class Discipline
   include Mongoid::Document
   include Mongoid::Timestamps::Created
-
   field :name, type: String
   field :campus, type: String
   field :unity, type: String

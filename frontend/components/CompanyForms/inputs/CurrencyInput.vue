@@ -1,23 +1,17 @@
 <template>
-  <LastUpdated :label="label" :last-updated="lastUpdated">
-    <v-text-field
-      :label="label"
-      :value="value"
-      :hint="hint"
-      persistent-hint
-      @keydown="handleKeyDown"
-      @click="moveCursorToTheEnd"
-    />
-  </LastUpdated>
+  <v-text-field
+    :label="label"
+    :value="value"
+    :hint="hint"
+    persistent-hint
+    @keydown="handleKeyDown"
+    @click="moveCursorToTheEnd"
+  />
 </template>
 
 <script>
-import LastUpdated from "@/components/CompanyForms/inputs/LastUpdated.vue";
-
 export default {
-  components: {
-    LastUpdated,
-  },
+  components: {},
   props: {
     value: {
       type: String,
@@ -32,10 +26,6 @@ export default {
       type: String,
       required: false,
       default: () => "",
-    },
-    lastUpdated: {
-      type: String,
-      default: undefined,
     },
   },
   methods: {

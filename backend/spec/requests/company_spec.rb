@@ -84,10 +84,7 @@ RSpec.describe 'Companies', type: :request do
             phone: ''
           }
         ],
-        corporate_name: 'razão social',
-        collaborators_last_updated_at: DateTime.now,
-        investments_last_updated_at: DateTime.now,
-        revenues_last_updated_at: DateTime.now
+        corporate_name: 'razão social'
       }
     ]
   end
@@ -96,8 +93,7 @@ RSpec.describe 'Companies', type: :request do
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
        phones logo companySize classification created_at
-       partners corporate_name cnae cnpj revenues_last_updated_at
-       investments_last_updated_at collaborators_last_updated_at]
+       partners corporate_name cnae cnpj]
   end
 
   describe 'get all' do

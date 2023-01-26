@@ -11,17 +11,11 @@ RSpec.describe Investment, type: :model do
       venture: 'R$ 4.000.000',
       equity: 'R$ 500.000',
       pipe: 'R$ 200.000',
-      others: 'R$ 360.000',
-      last_update: 10.seconds.ago
+      others: 'R$ 360.000'
     }
   end
 
   context 'with validation errors' do
-    it 'on future last_update' do
-      attrs[:last_update] = 10.seconds.from_now
-      expect(described_class.new(attrs)).to be_invalid
-    end
-
     %i[own angel venture equity pipe others].each do |type|
       it 'on no digits for values' do
         attrs[type] = 'twelve'
@@ -54,9 +48,7 @@ RSpec.describe Investment, type: :model do
         attrs[:equity],
         attrs[:pipe],
         attrs[:others]
-      ] + [nil] * 18 + [
-        attrs[:last_update]
-      ]
+      ] + [nil] * 18
     end
 
     it 'prepares to CSV correctly' do

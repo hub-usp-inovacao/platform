@@ -28,10 +28,6 @@ class Company
   field :classification, type: Hash
   field :address, type: Hash
 
-  field :collaborators_last_updated_at, type: DateTime
-  field :investments_last_updated_at, type: DateTime
-  field :revenues_last_updated_at, type: DateTime
-
   validates :cnpj,
             :name,
             :year,
@@ -105,10 +101,7 @@ class Company
         cnae: row[5],
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
-        corporate_name: row[3],
-        collaborators_last_updated_at: timestamp(row[85]),
-        investments_last_updated_at: timestamp(row[87]),
-        revenues_last_updated_at: timestamp(row[86])
+        corporate_name: row[3]
       }
     )
 

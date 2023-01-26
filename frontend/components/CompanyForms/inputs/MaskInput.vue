@@ -1,28 +1,22 @@
 <template>
   <div>
-    <LastUpdated :label="label" :last-updated="lastUpdated">
-      <v-text-field
-        v-mask="mask"
-        :label="label"
-        type="text"
-        :rules="rules.input"
-        :value="value"
-        :disabled="disabled"
-        :hint="hint"
-        persistent-hint
-        @input="$emit('input', $event)"
-      />
-    </LastUpdated>
+    <v-text-field
+      v-mask="mask"
+      :label="label"
+      type="text"
+      :rules="rules.input"
+      :value="value"
+      :disabled="disabled"
+      :hint="hint"
+      persistent-hint
+      @input="$emit('input', $event)"
+    />
   </div>
 </template>
 
 <script>
-import LastUpdated from "@/components/CompanyForms/inputs/LastUpdated.vue";
-
 export default {
-  components: {
-    LastUpdated,
-  },
+  components: {},
 
   props: {
     label: {
@@ -50,10 +44,6 @@ export default {
       type: String,
       required: false,
       default: () => "",
-    },
-    lastUpdated: {
-      type: String,
-      default: undefined,
     },
   },
 

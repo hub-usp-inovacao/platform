@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <p class="body-2 my-5">
-      Ultima atualização feita em: {{ formattedLastUpdated }}
-    </p>
     <h2 class="text-h6 mt-6 font-weight-regular">
       A empresa recebeu investimento? *
     </h2>
@@ -104,15 +101,11 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      investmentsLastUpdatedAt: "company_forms/investmentsLastUpdatedAt",
       receivedInvestments: "company_forms/receivedInvestments",
       investments: "company_forms/investments",
       investmentsValues: "company_forms/investmentsValues",
     }),
-    formattedLastUpdated() {
-      const date = this.investmentsLastUpdatedAt;
-      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    },
+    
     preDefinedInvestments() {
       return this.investments.filter((inv) =>
         this.investimentos.find((i) => i == inv)

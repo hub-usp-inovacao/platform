@@ -1,10 +1,8 @@
 const state = () => ({
-  revenuesLastUpdatedAt: new Date(),
   financeValue: "R$ 0,00",
 });
 
 const getters = {
-  revenuesLastUpdatedAt: (s) => s.revenuesLastUpdatedAt,
   financeValue: (s) => s.financeValue,
 };
 
@@ -21,14 +19,9 @@ const actions = {
 const prepareSection = (obj) => ({
   revenue: {
     last_year: obj.financeValue,
-    last_update: updateRevenuesDate(obj)
   },
 });
 
-const updateRevenuesDate = (obj) => {
-  const wasUpdated = obj.financeValue !== "R$ 0,00";
-  return wasUpdated ? new Date() : obj.revenuesLastUpdatedAt;
-};
 
 export default {
   state,

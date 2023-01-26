@@ -1,24 +1,18 @@
 <template>
-  <LastUpdated :label="label" :last-updated="lastUpdated">
-    <v-text-field
-      :value="value"
-      :clearable="clearable"
-      :counter="counter"
-      :label="label"
-      :hint="hint"
-      persistent-hint
-      @input="$emit('input', $event)"
-    />
-  </LastUpdated>
+  <v-text-field
+    :value="value"
+    :clearable="clearable"
+    :counter="counter"
+    :label="label"
+    :hint="hint"
+    persistent-hint
+    @input="$emit('input', $event)"
+  />
 </template>
 
 <script>
-import LastUpdated from "@/components/CompanyForms/inputs/LastUpdated.vue";
-
 export default {
-  components: {
-    LastUpdated,
-  },
+  components: {},
   props: {
     clearable: {
       type: Boolean,
@@ -41,10 +35,6 @@ export default {
       type: String,
       required: false,
       default: () => "",
-    },
-    lastUpdated: {
-      type: String,
-      default: undefined,
     },
   },
 

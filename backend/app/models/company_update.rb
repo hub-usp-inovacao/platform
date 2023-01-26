@@ -127,6 +127,7 @@ para unidades da USP"
   end
 
   def self.csv_columns(max_partners)
+    max_partners = max_partners.to_i
     attributes = ['Carimbo de data/hora', 'CNPJ', 'Nome', 'Razão social da empresa',
                   'Ano de fundação', 'CNAE', 'Telefone comercial', 'Emails',
                   'Endereço', 'Bairro', 'Cidade sede', 'Estado', 'CEP', 'Breve descrição',
@@ -149,10 +150,7 @@ para unidades da USP"
                        'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                        'Faturamento',
                        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                       'Objetivos de Desenvolvimento Sustentável',
-                       'Data da última atualização de Colaboradores',
-                       'Data da última atualização de Faturamento',
-                       'Data da última atualização de Investimento'])
+                       'Objetivos de Desenvolvimento Sustentável'])
   end
 
   def self.basic_values_to_csv(company)
@@ -192,6 +190,7 @@ para unidades da USP"
   end
 
   def self.partners_values_to_csv(max_partners, company)
+    max_partners = max_partners.to_i
     partners = company[:partners_values]
     return ([''] * 6 * max_partners).concat([''] * 3) if partners.nil? || !partners.length.positive?
 
@@ -229,10 +228,7 @@ para unidades da USP"
                   'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
                   'Faturamento',
                   '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-                  'Objetivos de Desenvolvimento Sustentável',
-                  'Data da última atualização de Colaboradores',
-                  'Data da última atualização de Faturamento',
-                  'Data da última atualização de Investimento']
+                  'Objetivos de Desenvolvimento Sustentável']
 
     attributes.map do |attr|
       next '' if attr.eql?('_')

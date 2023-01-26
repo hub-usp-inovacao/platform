@@ -1,10 +1,7 @@
 <template>
   <v-container>
-    <p class="body-2 my-5">
-      Ultima atualização feita em: {{ formattedLastUpdated }}
-    </p>
     <div class="mt-5 text-h6 font-weight-regular">
-      Qual foi o faturamento da empresa em {{lastYear()}}?
+      Qual foi o faturamento da empresa em {{ lastYear() }}?
       <CurrencyInput
         label="Faturamento"
         :value="financeValue"
@@ -28,21 +25,16 @@ export default {
   computed: {
     ...mapGetters({
       financeValue: "company_forms/financeValue",
-      revenuesLastUpdatedAt: "company_forms/revenuesLastUpdatedAt",
     }),
-    formattedLastUpdated() {
-      const date = this.revenuesLastUpdatedAt;
-      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    },
   },
   methods: {
     ...mapActions({
       setFinanceValue: "company_forms/setFinanceValue",
     }),
     lastYear() {
-      const date = new Date
-      return date.getFullYear() - 1
-    }
+      const date = new Date();
+      return date.getFullYear() - 1;
+    },
   },
 };
 </script>
