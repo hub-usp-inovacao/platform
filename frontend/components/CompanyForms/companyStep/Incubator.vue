@@ -22,7 +22,7 @@
         @input="setDefaultIncubators"
       />
       <div class="mt-5 text-h6 font-weight-regular">
-        Outros
+        Em caso de outros, digite abaixo:
         <v-divider />
         <v-container>
           <ShortTextInput
@@ -58,6 +58,7 @@ export default {
       "HABITs - Habitat de Inovação Tecnológica e Social/Incubadora-Escola",
       "Supera - Incubadora de Empresas de Base Tecnológica de Ribeirão Preto",
       "Supera Parque de Inovação e Tecnologia",
+      "Fundação ParqTec"
     ],
   }),
   computed: {
