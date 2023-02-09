@@ -12,7 +12,12 @@
             :step="id"
             :color="hasError ? 'error' : 'success'"
           >
-            {{ title + (hasError ? " (!)" : "") }}
+            <v-flex justify-center>
+              <template v-if="hasError">
+                <v-icon color="error">mdi-alert-circle</v-icon>
+              </template>
+              {{ title }}
+            </v-flex>
           </v-stepper-step>
 
           <v-divider
