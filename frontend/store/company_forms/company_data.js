@@ -9,7 +9,7 @@ const state = () => ({
   address: {
     venue: "",
     neighborhood: "",
-    city: [],
+    city: "",
     state: "",
     cep: "",
   },
