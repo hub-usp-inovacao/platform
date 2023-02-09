@@ -88,10 +88,9 @@
             label="Bairro"
             @input="setNeighborhood"
           />
-          <p class="body-2">Cidades sede</p>
-          <MultipleInputs
+          <ShortTextInput
             :value="city"
-            input-label="Cidade sede"
+            label="Cidade sede"
             @input="setCity"
           />
           <Dropdown
