@@ -23,9 +23,10 @@ class Incubation
   end
 
   def consistent_pair?
+    return if was_incubated.nil? || was_incubated.eql?('')
+
     is_valid = both_negative? || both_positive?
 
-    errors.add(:was_incubated) unless is_valid
     errors.add(:ecosystem) unless is_valid
   end
 

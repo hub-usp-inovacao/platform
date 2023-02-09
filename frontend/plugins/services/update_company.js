@@ -35,6 +35,9 @@ function translateErrorMessage(englishError) {
   if (englishError === "Wants inválido")
     return "Pedido de DNA USP inválido - necessário informar nome e email";
 
+  if (englishError === "Was incubated não pode estar em branco")
+    return "O primeiro campo de incubação não pode ser vazio";
+
   if (englishError === "Was incubated inválido")
     return "Empresas que foram ou estão incubadas devem informar a incubadora";
 
