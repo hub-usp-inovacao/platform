@@ -64,7 +64,7 @@
             :value="ods"
             :options="odsList"
             multiple-option
-            label=""
+            label="Objetivos de Desenvolvimento Sustentável"
             @input="setOds"
           />
         </v-container>
