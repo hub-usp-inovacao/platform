@@ -31,7 +31,8 @@ fun DisciplineModel.toCatalogDiscipline(): Discipline = Discipline(
     unity = this.unity,
     campus = this.campus,
     level = this.level,
-    nature = this.nature
+    nature = this.nature,
+    url = this.url
 )
 
 class CatalogDisciplineRepositoryImpl(
