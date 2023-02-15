@@ -121,7 +121,7 @@ internal class CatalogDisciplineRepositoryImplTest {
     @Test
     fun `it converts DisciplineModel into Discipline`() {
         // given
-        val discipline = getDisciplineModelWithLongDescription()
+        val discipline = getDisciplineModel()
 
         // when
         val result = discipline.toCatalogDiscipline()
@@ -130,7 +130,7 @@ internal class CatalogDisciplineRepositoryImplTest {
         assertIs<Discipline>(result)
     }
 
-    private fun getDisciplineModelWithLongDescription() =  DisciplineModel(
+    private fun getDisciplineModel() =  DisciplineModel(
         campus = "USP Leste",
         category = DisciplineCategory(
             innovation = false,
@@ -149,7 +149,7 @@ internal class CatalogDisciplineRepositoryImplTest {
         offeringPeriod = "N/D",
         start_date = "",
         unity = "Escola de Artes, Ciências e Humanidades - EACH",
-        url = ""
+        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis="
     )
 
     private fun seedTestDb() {
