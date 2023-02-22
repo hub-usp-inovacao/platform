@@ -22,5 +22,6 @@ data class Discipline(
     val unity: String,
     val campus: String,
     val level: String,
-    val nature: String
+    val nature: String,
+    val url: String
 )
