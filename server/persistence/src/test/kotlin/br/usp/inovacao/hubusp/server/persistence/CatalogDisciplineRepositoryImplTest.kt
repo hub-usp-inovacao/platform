@@ -93,6 +93,19 @@ internal class CatalogDisciplineRepositoryImplTest {
     }
 
     @Test
+    fun `it filters by offering period`() {
+        // given
+        val givenPeriod = "1º sem. 2023"
+        val params = DisciplineSearchParams(offeringPeriod = givenPeriod)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.all { it.offeringPeriod == givenPeriod } }
+    }
+
+    @Test
     fun `it filters by category`() {
         // given
         val params = DisciplineSearchParams(categories = setOf("Negócios","Empreendedorismo"))
@@ -180,7 +193,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 short = ""
             ),
             keywords = setOf("foo", "baz"),
-            offeringPeriod = "N/D",
+            offeringPeriod = "1º sem. 2023",
             start_date = "",
             url = ""
         ),
@@ -243,7 +256,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 short = ""
             ),
             keywords = setOf("foo", "baz"),
-            offeringPeriod = "N/D",
+            offeringPeriod = "2º sem. 2022",
             start_date = "",
             url = ""
         )
