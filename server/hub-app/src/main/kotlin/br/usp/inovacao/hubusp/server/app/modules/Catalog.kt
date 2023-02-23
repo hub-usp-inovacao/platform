@@ -55,6 +55,7 @@ fun Parameters.toDisciplineSearchParams() = DisciplineSearchParams(
     unity = this["unity"],
     level = this["level"],
     nature = this["nature"],
+    offeringPeriod = this["offeringPeriod"],
     term = this["term"],
 )
 
