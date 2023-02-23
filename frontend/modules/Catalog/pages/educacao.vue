@@ -125,6 +125,21 @@ export default {
           label: "Natureza",
           items: ["Graduação", "Pós-graduação"],
         },
+        {
+          label: "Período de Oferecimento",
+          items: Array.from(
+            this.disciplines.reduce((acc, discipline) => {
+              const offeringPeriod = discipline.offeringPeriod;
+              if (
+                offeringPeriod &&
+                !acc.has(offeringPeriod) &&
+                offeringPeriod != "N/D"
+              )
+                acc.add(offeringPeriod);
+              return acc;
+            }, new Set())
+          ),
+        },
       ];
     },
     searchTerm() {
@@ -137,6 +152,7 @@ export default {
         unity: this.filters?.terciary[1],
         level: this.filters?.terciary[2],
         nature: this.filters?.terciary[3],
+        offeringPeriod: this.filters?.terciary[4],
         term: this.searchTerm,
       };
     },
