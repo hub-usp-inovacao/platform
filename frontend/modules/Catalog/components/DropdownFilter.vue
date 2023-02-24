@@ -110,7 +110,7 @@ export default {
     colSize() {
       const nGroups = this.groups.length;
 
-      return nGroups > 4 ? Math.floor(12 / nGroups) : 3;
+      return nGroups > 4 ? (12 / nGroups) : 3;
     },
   },
   watch: {
