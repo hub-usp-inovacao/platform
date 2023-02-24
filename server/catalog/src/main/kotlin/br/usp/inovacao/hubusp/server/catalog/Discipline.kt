@@ -23,5 +23,6 @@ data class Discipline(
     val campus: String,
     val level: String,
     val nature: String,
-    val url: String
+    val url: String,
+    val offeringPeriod: String
 )
