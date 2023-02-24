@@ -28,7 +28,7 @@
         <v-container>
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
-          <p class="body-2">{{ item.offeringPeriod }}</p>
+          <NDText :text="item.offeringPeriod" label=""/>
           <p class="body-2">{{ item.nature }}</p>
         </v-container>
       </template>
@@ -53,6 +53,7 @@ import Background from "../components/Background.vue";
 import Panel from "../components/Panel.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import DisplayData from "../components/DisplayData.vue";
+import NDText from "../components/NDText.vue";
 
 import { debounce } from "debounce";
 
@@ -62,6 +63,7 @@ export default {
     Background,
     MultipleFilters,
     DisplayData,
+    NDText,
   },
   data: () => ({
     search: { term: "" },
@@ -130,11 +132,8 @@ export default {
           items: Array.from(
             this.disciplines.reduce((acc, discipline) => {
               const offeringPeriod = discipline.offeringPeriod;
-              if (
-                offeringPeriod &&
-                !acc.has(offeringPeriod) &&
-                offeringPeriod != "N/D"
-              )
+              const hasPeriod = offeringPeriod && !acc.has(offeringPeriod) && offeringPeriod != "N/D"
+              if (hasPeriod)
                 acc.add(offeringPeriod);
               return acc;
             }, new Set())
