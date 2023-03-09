@@ -12,7 +12,7 @@ class CompanyDatum
   field :emails, type: Array
   field :street, type: String
   field :neighborhood, type: String
-  field :city, type: Array
+  field :city, type: String
   field :state, type: String
   field :zipcode, type: String
 
@@ -27,7 +27,7 @@ class CompanyDatum
   embedded_in :company_update_request, inverse_of: :company_data
 
   def array_of_cities?
-    errors.add(:city) unless city.is_a?(Array)
+    errors.add(:city) unless city.is_a?(String)
   end
 
   def valid_zipcode?

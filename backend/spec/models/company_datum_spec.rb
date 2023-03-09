@@ -18,16 +18,16 @@ RSpec.describe CompanyDatum, type: :model do
       ],
       street: 'rua das couves, 37 - apt 51',
       neighborhood: 'vila vegetal',
-      city: ['fito'],
+      city: "fito",
       state: 'plantae',
       zipcode: '04331-000'
     }
   end
 
   context 'with validation errors' do
-    it 'on string city' do
-      attrs[:city] = 'foo'
-      expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
+    it 'on array city' do
+      attrs[:city] = ["Italia"]
+      expect { described_class.new(attrs) }.to be_invalid
     end
 
     it 'on malformed zipcode' do
