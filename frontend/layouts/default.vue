@@ -3,20 +3,15 @@
     <header>
       <UniversalAuspinBar />
     </header>
-    <div>
-      <HubNavButton
-        v-if="path != '/'"
-        class="custom-hidden-sm-and-down"
-        :margin="path == '/contato' ? false : true"
-        :background="path == '/contato' ? false : true"
-      />
+    <div class="nav">
       <v-toolbar
-        class="custom-hidden-sm-and-down d-flex justify-end nav"
+        class="custom-hidden-sm-and-down bar"
         color="transparent"
-        width="75%"
+        width="100%"
         absolute
         flat
       >
+        <v-spacer></v-spacer>
         <v-toolbar-items>
           <v-chip-group>
             <v-chip
@@ -32,7 +27,13 @@
           </v-chip-group>
         </v-toolbar-items>
       </v-toolbar>
-    </div>
+      <HubNavButton
+        v-if="path != '/'"
+        class="custom-hidden-sm-and-down"
+        :margin="path == '/contato' ? false : true"
+        :background="path == '/contato' ? false : true"
+      />
+   </div>
 
     <v-app-bar class="custom-hidden-md-and-up" color="white" dense flat fixed>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -153,7 +154,7 @@ export default {
 
 <style scoped>
 .nav {
-  margin: 2.5% 0 0 25%;
+  position: relative;
 }
 #app .v-bottom-navigation .v-btn {
   height: inherit !important;
