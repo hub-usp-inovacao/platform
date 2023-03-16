@@ -8,22 +8,24 @@
       :height="barHeight + 'px'"
       class="custom-hidden-md-and-down bar"
     >
-      <v-container>
-        <div class="d-inline-flex align-center page-list">
-          <a
-            v-for="item in items"
-            :key="item.title"
-            :href="item.href"
-            target="_blank"
-            :class="{ active: item.href == '/' }"
-          >
-            <div class="page">
-              {{ item.title }}
-            </div>
-          </a>
-        </div>
-        <v-spacer></v-spacer>
-      </v-container>
+      <div class="d-inline-flex align-center page-list">
+        <a
+          v-for="item in items"
+          :key="item.title"
+          :href="item.href"
+          target="_blank"
+          :class="{ active: item.href == '/' }"
+        >
+          <div class="page">
+            {{ item.title }}
+          </div>
+        </a>
+      </div>
+      <v-spacer></v-spacer>
+      <v-divider vertical></v-divider>
+      <v-btn class="ml-2" icon>
+        <v-icon class="search">mdi-magnify</v-icon>
+      </v-btn>
     </v-app-bar>
     <div class="bar filler" :style="{ height: barHeight + 'px' }"></div>
   </div>
@@ -58,6 +60,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0 0 5px rgba(0,0,0,0.2),
     0 1px 0 rgba(255,255,255,0.15) !important;
+  padding: 0px 60px;
 }
 .filler {
   background-color: #000428;
