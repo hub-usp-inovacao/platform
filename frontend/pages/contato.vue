@@ -198,13 +198,18 @@ export default {
           {
             src: "https://drive.google.com/uc?export=view&id=1fBO0461oSTPapARTnfWNYXc5edWsBwH_",
             name: "Briza Mel",
-            role: "Desenvolvedor - CodeLaba",
+            role: "Desenvolvedora - CodeLab",
           },
           {
             src: "https://drive.google.com/uc?export=view&id=1mOcHd5Zzm82P4jADIalg43X8ysJo01ye",
             name: "Marília Dicezare",
-            role: "Desenvolvedor - CodeLaba",
+            role: "Desenvolvedora - CodeLab",
           },
+          {
+            src: "https://drive.google.com/uc?export=view&id=1GyGawNBtoyeLK7B2O5SJF3lp1WfKM94P",
+            name: "Clara Yuki",
+            role: "Desenvolvedora - CodeLab",
+          }
         ],
       },
       {
