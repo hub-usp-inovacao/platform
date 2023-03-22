@@ -54,7 +54,7 @@ class CompanyUpdateRequest
   end
 
   def self.merge(sections)
-    base = [nil] * 91
+    base = [nil] * 95
     base.each_with_index do |_b, i|
       sections.each do |sec|
         base[i] = base[i] || sec[i]

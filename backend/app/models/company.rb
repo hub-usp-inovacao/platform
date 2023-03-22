@@ -131,7 +131,7 @@ class Company
   def self.partners(row)
     parsed_partners = []
 
-    subrows_indices = [29..35, 39..42, 44..47, 49..52, 54..57]
+    subrows_indices = [33..39, 43..46, 48..51, 53..56, 58..61]
     subrows_indices.each do |subrow_indices|
       return parsed_partners if row[subrow_indices].nil?
 
@@ -230,7 +230,7 @@ class Company
     {
       venue: row[8],
       neighborhood: row[9],
-      city: row[10]&.split(';'),
+      city: row[10],
       state: row[11],
       cep: row[12]
     }
