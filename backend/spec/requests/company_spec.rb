@@ -26,7 +26,7 @@ RSpec.describe 'Companies', type: :request do
         allowed: true,
         address: {
           cep: '13414-157',
-          city: 'Piracicaba',
+          city: ['Piracicaba'],
           neighborhood: 'Loteamento Santa Rosa',
           state: 'São Paulo',
           venue: 'Rua Cezira Giovanni'
