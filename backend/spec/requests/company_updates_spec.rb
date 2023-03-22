@@ -19,7 +19,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
         ],
         street: 'rua das couves, 37 - apt 51',
         neighborhood: 'vila vegetal',
-        city: 'fito',
+        city: ['fito'],
         state: 'plantae',
         zipcode: '04331-000'
       },
