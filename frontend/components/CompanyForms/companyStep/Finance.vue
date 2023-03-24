@@ -1,5 +1,14 @@
 <template>
   <v-container>
+    <v-alert
+      border="top"
+      colored-border
+      type="info"
+      elevation="2"
+      color="secondary"
+    >
+      Este dado <b>não</b> será publicado
+    </v-alert>
     <div class="mt-5 text-h6 font-weight-regular">
       Qual foi o faturamento da empresa em {{ lastYear() }}?
       <CurrencyInput
@@ -8,7 +17,7 @@
         @input="setFinanceValue"
       />
       <legend class="body-2">
-        Se for R$0,00 digite 0. Este dado NÃO será publicado.
+        Se for R$0,00 digite 0.
       </legend>
     </div>
   </v-container>
