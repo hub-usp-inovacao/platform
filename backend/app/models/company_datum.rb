@@ -12,7 +12,7 @@ class CompanyDatum
   field :emails, type: Array
   field :street, type: String
   field :neighborhood, type: String
-  field :city, type: Array
+  field :city, type: String
   field :state, type: String
   field :zipcode, type: String
 
@@ -22,13 +22,9 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?
+           :valid_zipcode?
 
   embedded_in :company_update_request, inverse_of: :company_data
-
-  def array_of_cities?
-    errors.add(:city) unless city.is_a?(Array)
-  end
 
   def valid_zipcode?
     return if zipcode.nil?

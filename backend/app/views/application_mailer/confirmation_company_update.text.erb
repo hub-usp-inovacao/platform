@@ -19,10 +19,7 @@ Emails de contato:
 <%@update_data.company_data.emails.each do |email| %>
   - <%= email %>
 <% end %>
-Cidades Sede:
-<% @update_data.company_data.city.each do |city| %>
-  - <%= city %>
-<% end %>
+Cidade Sede: <%= @update_data.company_data.city %>
 Endereço:
   - logradouro: <%= @update_data.company_data.street %>
   - bairro: <%= @update_data.company_data.neighborhood %>
