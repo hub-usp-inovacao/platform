@@ -1,5 +1,15 @@
 <template>
   <v-container>
+    <v-alert
+      border="top"
+      colored-border
+      color="secondary"
+      type="info"
+      elevation="2"
+    >
+      Este dado <b>não</b> será publicado
+    </v-alert>
+
     <h2 class="text-h6 mt-6 font-weight-regular">
       A empresa recebeu investimento? *
     </h2>
@@ -105,7 +115,7 @@ export default {
       investments: "company_forms/investments",
       investmentsValues: "company_forms/investmentsValues",
     }),
-    
+
     preDefinedInvestments() {
       return this.investments.filter((inv) =>
         this.investimentos.find((i) => i == inv)
