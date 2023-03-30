@@ -68,7 +68,8 @@
           <MultipleInputs
             :value="phones"
             input-label="Telefone comercial"
-            component="ShortTextInput"
+            component="MaskInput"
+            mask="(##) #########"
             @input="setPhones"
           />
           <p class="body-2 mt-5">Emails</p>
