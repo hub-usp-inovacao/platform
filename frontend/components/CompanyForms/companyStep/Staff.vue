@@ -1,5 +1,14 @@
 <template>
   <v-container>
+    <v-alert
+      type="info"
+      color="secondary"
+      elevation="2"
+      colored-border
+      border="top"
+    >
+      Este dado <b>não</b> será publicado
+    </v-alert>
     <v-form>
       <NumberInput
         :value="numberOfCLTEmployees"
