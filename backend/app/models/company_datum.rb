@@ -66,6 +66,7 @@ class CompanyDatum
       'Nome Fantasia',
       'Razão Social',
       'Ano de fundação',
+      'Porte',
       'CNAE',
       'Telefones',
       'Emails',
