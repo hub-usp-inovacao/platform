@@ -19,12 +19,18 @@ RSpec.describe CompanyDatum, type: :model do
       street: 'rua das couves, 37 - apt 51',
       neighborhood: 'vila vegetal',
       city: ['fito'],
+      size: 'MEI',
       state: 'plantae',
       zipcode: '04331-000'
     }
   end
 
   context 'with validation errors' do
+    it 'on invalid size name' do
+      attrs[:size] = 'Abacate'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on string city' do
       attrs[:city] = 'foo'
       expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
@@ -101,6 +107,13 @@ RSpec.describe CompanyDatum, type: :model do
         end
       end
     end
+
+    %w[MEI DEMAIS ME EPP].each do |val|
+      it 'on company size' do
+        attrs[:size] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
   end
 
   context 'with CSV preparation' do
@@ -111,6 +124,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:public_name],
         attrs[:corporate_name],
         attrs[:year],
+        attrs[:size],
         attrs[:cnae],
         attrs[:phones].join(';'),
         attrs[:emails].join(';'),
