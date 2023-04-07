@@ -119,6 +119,11 @@ RSpec.describe CompanyDatum, type: :model do
         expect(described_class.new(attrs)).to be_valid
       end
     end
+
+    it 'on missing registry_status' do
+      attrs[:registry_status] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
   end
 
   context 'with CSV preparation' do
