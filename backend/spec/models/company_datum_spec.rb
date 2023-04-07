@@ -10,6 +10,7 @@ RSpec.describe CompanyDatum, type: :model do
       corporate_name: 'benefit of testing rails and other apps',
       year: 2019,
       cnae: '99.21-3-54',
+      registry_status: 'Ativa',
       phones: [
         '(11) 99999-4433'
       ],
@@ -25,6 +26,15 @@ RSpec.describe CompanyDatum, type: :model do
   end
 
   context 'with validation errors' do
+    it 'on invalid registry status' do
+      attrs[:registry_status] = 'bar'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on inexistent attribute registry status' do
+      expect(attrs).to include(:registry_status)
+    end
+
     it 'on string city' do
       attrs[:city] = 'foo'
       expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
@@ -101,6 +111,14 @@ RSpec.describe CompanyDatum, type: :model do
         end
       end
     end
+
+    ['Ativa', 'Ativa Não Regular', 'Baixada',
+     'Inapta', 'Nula', 'Suspensa'].each do |val|
+      it "with registry status #{val}" do
+        attrs[:registry_status] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
   end
 
   context 'with CSV preparation' do
@@ -112,6 +130,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:corporate_name],
         attrs[:year],
         attrs[:cnae],
+        attrs[:registry_status],
         attrs[:phones].join(';'),
         attrs[:emails].join(';'),
         attrs[:street],
