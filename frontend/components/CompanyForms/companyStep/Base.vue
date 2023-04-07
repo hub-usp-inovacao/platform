@@ -32,6 +32,12 @@
             @input="setCnpj"
             :disabled="true"
           />
+          <Dropdown
+            :value="registry_status"
+            label="Situação cadastral"
+            :options="allRegistryStatus"
+            @input="setRegistryStatus"
+          />
         </v-container>
       </div>
 
@@ -131,6 +137,14 @@ export default {
   },
   data: () => ({
     allStates: [],
+    allRegistryStatus: [
+      "Ativa",
+      "Ativa Não Regular",
+      "Baixada",
+      "Inapta",
+      "Nula",
+      "Suspensa"
+    ],
   }),
   computed: {
     ...mapGetters({
@@ -139,6 +153,7 @@ export default {
       year: "company_forms/year",
       cnpj: "company_forms/cnpj",
       cnae: "company_forms/cnae",
+      registry_status: "company_forms/registry_status",
       phones: "company_forms/phones",
       emails: "company_forms/emails",
       address: "company_forms/address",
@@ -159,6 +174,7 @@ export default {
       setYear: "company_forms/setYear",
       setCnpj: "company_forms/setCnpj",
       setCnae: "company_forms/setCnae",
+      setRegistryStatus: "company_forms/setRegistryStatus",
       setPhones: "company_forms/setPhones",
       setEmails: "company_forms/setEmails",
       setVenue: "company_forms/setVenue",

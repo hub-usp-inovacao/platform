@@ -4,6 +4,7 @@ const state = () => ({
   year: "",
   cnpj: "",
   cnae: "",
+  registry_status: null,
   phones: [],
   emails: [],
   address: {
@@ -21,6 +22,7 @@ const getters = {
   year: (s) => s.year,
   cnpj: (s) => s.cnpj,
   cnae: (s) => s.cnae,
+  registry_status: (s) => s.registry_status,
   phones: (s) => s.phones,
   emails: (s) => s.emails,
   address: (s) => s.address,
@@ -47,6 +49,8 @@ const actions = {
     commit("setFormField", { key: "cnpj", value }),
   setCnae: ({ commit }, value) =>
     commit("setFormField", { key: "cnae", value }),
+  setRegistryStatus: ({ commit }, value) =>
+    commit("setFormField", { key: "registry_status", value }),
   setPhones: ({ commit }, value) =>
     commit("setFormField", { key: "phones", value }),
   setEmails: ({ commit }, value) =>
@@ -87,6 +91,7 @@ const prepareSection = (obj) => ({
     corporate_name: obj.corporateName,
     year: obj.year,
     cnae: obj.cnae,
+    registry_status: obj.registry_status,
     phones: obj.phones,
     emails: obj.emails,
     street: obj.address.venue,
