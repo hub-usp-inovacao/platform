@@ -30,7 +30,11 @@
         </v-row>
         <v-row v-else>
           <v-col cols="10">
-            <v-text-field v-model="token" label="token" />
+            <v-text-field
+              v-model="token"
+              label="token"
+              @keydown.enter.prevent="submit"
+            />
           </v-col>
           <v-col cols="2" align="bottom">
             <v-btn
