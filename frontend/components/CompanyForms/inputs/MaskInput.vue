@@ -8,6 +8,7 @@
       :value="value"
       :disabled="disabled"
       :hint="hint"
+      :placeholder="placeholder"
       persistent-hint
       @input="$emit('input', $event)"
     />
@@ -41,6 +42,11 @@ export default {
       default: () => false,
     },
     hint: {
+      type: String,
+      required: false,
+      default: () => "",
+    },
+    placeholder: {
       type: String,
       required: false,
       default: () => "",
