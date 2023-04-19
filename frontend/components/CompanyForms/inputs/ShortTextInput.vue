@@ -6,6 +6,7 @@
     :label="label"
     :hint="hint"
     persistent-hint
+    :placeholder="placeholder"
     @input="$emit('input', $event)"
   />
 </template>
@@ -26,6 +27,11 @@ export default {
     },
     value: {
       type: String,
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      default: () => "",
     },
     label: {
       type: String,
