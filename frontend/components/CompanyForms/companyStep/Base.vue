@@ -32,6 +32,13 @@
             @input="setCnpj"
             :disabled="true"
           />
+          <Dropdown
+            :value="size"
+            :options="sizeList"
+            label="Porte da empresa"
+            hint="Escolha de acordo com o Comprovante de Inscrição e de Situação Cadastral"
+            @input="setSize"
+          />
         </v-container>
       </div>
 
@@ -131,12 +138,14 @@ export default {
   },
   data: () => ({
     allStates: [],
+    sizeList: ["MEI", "ME", "EPP", "DEMAIS"],
   }),
   computed: {
     ...mapGetters({
       name: "company_forms/name",
       corporateName: "company_forms/corporateName",
       year: "company_forms/year",
+      size: "company_forms/size",
       cnpj: "company_forms/cnpj",
       cnae: "company_forms/cnae",
       phones: "company_forms/phones",
@@ -157,6 +166,7 @@ export default {
       setName: "company_forms/setName",
       setCorporateName: "company_forms/setCorporateName",
       setYear: "company_forms/setYear",
+      setSize: "company_forms/setSize",
       setCnpj: "company_forms/setCnpj",
       setCnae: "company_forms/setCnae",
       setPhones: "company_forms/setPhones",
