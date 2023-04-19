@@ -15,6 +15,7 @@ class CompanyDatum
   field :city, type: Array
   field :state, type: String
   field :zipcode, type: String
+  field :company_nature, type: String
 
   validates :cnpj, cnpj: true, presence: true
   validates :cnae, cnae: true
@@ -22,9 +23,17 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?
+           :valid_zipcode?, :array_of_cities?, :valid_company_nature?
 
   embedded_in :company_update_request, inverse_of: :company_data
+
+  def valid_company_nature?
+    return if company_nature.nil?
+
+    is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s([A-zÀ-ú0-9_ ()-]*)\Z/)
+
+    errors.add(:company_nature) unless is_valid
+  end
 
   def array_of_cities?
     errors.add(:city) unless city.is_a?(Array)
@@ -65,7 +74,8 @@ class CompanyDatum
       'Bairro',
       'Cidade',
       'Estado',
-      'CEP'
+      'CEP',
+      'Natureza Jurídica'
     ]
   end
 
@@ -82,7 +92,8 @@ class CompanyDatum
       neighborhood,
       city,
       state,
-      zipcode
+      zipcode,
+      company_nature
     ]
   end
 

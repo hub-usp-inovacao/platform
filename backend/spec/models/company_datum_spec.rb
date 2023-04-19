@@ -20,11 +20,16 @@ RSpec.describe CompanyDatum, type: :model do
       neighborhood: 'vila vegetal',
       city: ['fito'],
       state: 'plantae',
-      zipcode: '04331-000'
+      zipcode: '04331-000',
+      company_nature: '000-0 - Indústria de Testes Automatizados'
     }
   end
 
   context 'with validation errors' do
+    it 'on inexistent attribute company nature' do
+      expect(attrs).to include(:company_nature)
+    end
+
     it 'on string city' do
       attrs[:city] = 'foo'
       expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
@@ -118,7 +123,8 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:neighborhood],
         attrs[:city],
         attrs[:state],
-        attrs[:zipcode]
+        attrs[:zipcode],
+        attrs[:company_nature]
       ]
     end
 
