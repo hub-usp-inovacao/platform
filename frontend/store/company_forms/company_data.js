@@ -4,7 +4,7 @@ const state = () => ({
   year: "",
   cnpj: "",
   cnae: "",
-  registry_status: null,
+  registry_status: "",
   phones: [],
   emails: [],
   address: {
