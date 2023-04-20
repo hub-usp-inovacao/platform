@@ -35,7 +35,7 @@ RSpec.describe CompanyDatum, type: :model do
     it 'on inexistent attribute registry status' do
       expect(attrs).to include(:registry_status)
     end
-    
+
     it 'on invalid size name' do
       attrs[:size] = 'Abacate'
       expect(described_class.new(attrs)).to be_invalid

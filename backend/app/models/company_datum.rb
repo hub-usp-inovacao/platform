@@ -42,7 +42,7 @@ class CompanyDatum
 
     errors.add(:registry_status) unless registry_options.include?(registry_status)
   end
-  
+
   def invalid_size_name?
     return if size.nil?
 
