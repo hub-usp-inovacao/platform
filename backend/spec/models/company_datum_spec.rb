@@ -10,6 +10,7 @@ RSpec.describe CompanyDatum, type: :model do
       corporate_name: 'benefit of testing rails and other apps',
       year: 2019,
       cnae: '99.21-3-54',
+      registry_status: 'Ativa',
       phones: [
         '(11) 99999-4433'
       ],
@@ -26,6 +27,15 @@ RSpec.describe CompanyDatum, type: :model do
   end
 
   context 'with validation errors' do
+    it 'on invalid registry status' do
+      attrs[:registry_status] = 'bar'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on inexistent attribute registry status' do
+      expect(attrs).to include(:registry_status)
+    end
+
     it 'on invalid size name' do
       attrs[:size] = 'Abacate'
       expect(described_class.new(attrs)).to be_invalid
@@ -108,6 +118,19 @@ RSpec.describe CompanyDatum, type: :model do
       end
     end
 
+    ['Ativa', 'Ativa Não Regular', 'Baixada',
+     'Inapta', 'Nula', 'Suspensa'].each do |val|
+      it "with registry status #{val}" do
+        attrs[:registry_status] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
+
+    it 'on missing registry_status' do
+      attrs[:registry_status] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
+
     %w[MEI DEMAIS ME EPP].each do |val|
       it 'on company size' do
         attrs[:size] = val
@@ -126,6 +149,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:year],
         attrs[:size],
         attrs[:cnae],
+        attrs[:registry_status],
         attrs[:phones].join(';'),
         attrs[:emails].join(';'),
         attrs[:street],

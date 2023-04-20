@@ -8,6 +8,7 @@ class CompanyDatum
   field :corporate_name, type: String
   field :year, type: Integer
   field :cnae, type: String
+  field :registry_status, type: String
   field :phones, type: Array
   field :emails, type: Array
   field :street, type: String
@@ -23,9 +24,24 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?, :invalid_size_name?
+           :valid_zipcode?, :array_of_cities?, :valid_registry_status?, :invalid_size_name?
 
   embedded_in :company_update_request, inverse_of: :company_data
+
+  def valid_registry_status?
+    return if registry_status.nil?
+
+    registry_options = [
+      'Ativa',
+      'Ativa Não Regular',
+      'Baixada',
+      'Inapta',
+      'Nula',
+      'Suspensa'
+    ]
+
+    errors.add(:registry_status) unless registry_options.include?(registry_status)
+  end
 
   def invalid_size_name?
     return if size.nil?
@@ -68,6 +84,7 @@ class CompanyDatum
       'Ano de fundação',
       'Porte',
       'CNAE',
+      'Situação cadastral',
       'Telefones',
       'Emails',
       'Endereço',
@@ -86,6 +103,7 @@ class CompanyDatum
       year,
       size,
       cnae,
+      registry_status,
       phones_to_csv,
       emails_to_csv,
       street,

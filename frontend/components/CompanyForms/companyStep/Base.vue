@@ -33,6 +33,12 @@
             :disabled="true"
           />
           <Dropdown
+            :value="registry_status"
+            label="Situação cadastral"
+            :options="allRegistryStatus"
+            @input="setRegistryStatus"
+          />
+          <Dropdown
             :value="size"
             :options="sizeList"
             label="Porte da empresa"
@@ -138,6 +144,14 @@ export default {
   },
   data: () => ({
     allStates: [],
+    allRegistryStatus: [
+      "Ativa",
+      "Ativa Não Regular",
+      "Baixada",
+      "Inapta",
+      "Nula",
+      "Suspensa"
+    ],
     sizeList: ["MEI", "ME", "EPP", "DEMAIS"],
   }),
   computed: {
@@ -148,6 +162,7 @@ export default {
       size: "company_forms/size",
       cnpj: "company_forms/cnpj",
       cnae: "company_forms/cnae",
+      registry_status: "company_forms/registry_status",
       phones: "company_forms/phones",
       emails: "company_forms/emails",
       address: "company_forms/address",
@@ -169,6 +184,7 @@ export default {
       setSize: "company_forms/setSize",
       setCnpj: "company_forms/setCnpj",
       setCnae: "company_forms/setCnae",
+      setRegistryStatus: "company_forms/setRegistryStatus",
       setPhones: "company_forms/setPhones",
       setEmails: "company_forms/setEmails",
       setVenue: "company_forms/setVenue",

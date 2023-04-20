@@ -12,6 +12,7 @@
 <p><strong>Ano:</strong> <%= @update_data.company_data.year %></p>
 <p><strong>Porte:</strong> <%= @update_data.company_data.size %></p>
 <p><strong>CNAE:</strong> <%= @update_data.company_data.cnae %></p>
+<p><strong>Situação cadastral:</strong> <%= @update_data.company_data.registry_status %></p>
 <p><strong>Telefones:</strong></p>
 <ul>
   <%@update_data.company_data.phones.each do |phone| %>
