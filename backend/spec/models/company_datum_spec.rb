@@ -32,6 +32,11 @@ RSpec.describe CompanyDatum, type: :model do
       expect(attrs).to include(:company_nature)
     end
 
+    it 'on invalid company nature' do
+      attrs[:company_nature] = 'foo'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on invalid registry status' do
       attrs[:registry_status] = 'bar'
       expect(described_class.new(attrs)).to be_invalid
@@ -133,6 +138,16 @@ RSpec.describe CompanyDatum, type: :model do
 
     it 'on missing registry_status' do
       attrs[:registry_status] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'on missing company_nature' do
+      attrs[:company_nature] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'on company_nature' do
+      attrs[:company_nature] = '123-4 - Automatização'
       expect(described_class.new(attrs)).to be_valid
     end
 
