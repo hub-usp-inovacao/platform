@@ -68,7 +68,8 @@ RSpec.describe 'CompanyUpdates', type: :request do
           bond: 'Aluno ou ex-aluno (graduação)',
           unity: 'Instituto de Matemática e Estatística - IME',
           email: 'pedro@mail.com',
-          phone: '(11) 99999-7665'
+          phone: '(11) 99999-7665',
+          role: 'CEO'
         },
         {
           name: 'Pedro de Tal',
