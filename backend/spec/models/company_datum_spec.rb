@@ -10,6 +10,7 @@ RSpec.describe CompanyDatum, type: :model do
       corporate_name: 'benefit of testing rails and other apps',
       year: 2019,
       cnae: '99.21-3-54',
+      registry_status: 'Ativa',
       phones: [
         '(11) 99999-4433'
       ],
@@ -19,6 +20,7 @@ RSpec.describe CompanyDatum, type: :model do
       street: 'rua das couves, 37 - apt 51',
       neighborhood: 'vila vegetal',
       city: ['fito'],
+      size: 'MEI',
       state: 'plantae',
       zipcode: '04331-000',
       company_nature: '000-0 - Indústria de Testes Automatizados'
@@ -28,6 +30,20 @@ RSpec.describe CompanyDatum, type: :model do
   context 'with validation errors' do
     it 'on inexistent attribute company nature' do
       expect(attrs).to include(:company_nature)
+    end
+
+    it 'on invalid registry status' do
+      attrs[:registry_status] = 'bar'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on inexistent attribute registry status' do
+      expect(attrs).to include(:registry_status)
+    end
+
+    it 'on invalid size name' do
+      attrs[:size] = 'Abacate'
+      expect(described_class.new(attrs)).to be_invalid
     end
 
     it 'on string city' do
@@ -106,6 +122,26 @@ RSpec.describe CompanyDatum, type: :model do
         end
       end
     end
+
+    ['Ativa', 'Ativa Não Regular', 'Baixada',
+     'Inapta', 'Nula', 'Suspensa'].each do |val|
+      it "with registry status #{val}" do
+        attrs[:registry_status] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
+
+    it 'on missing registry_status' do
+      attrs[:registry_status] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    %w[MEI DEMAIS ME EPP].each do |val|
+      it 'on company size' do
+        attrs[:size] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
   end
 
   context 'with CSV preparation' do
@@ -116,7 +152,9 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:public_name],
         attrs[:corporate_name],
         attrs[:year],
+        attrs[:size],
         attrs[:cnae],
+        attrs[:registry_status],
         attrs[:phones].join(';'),
         attrs[:emails].join(';'),
         attrs[:street],

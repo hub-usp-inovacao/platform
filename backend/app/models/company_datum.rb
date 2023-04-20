@@ -8,6 +8,7 @@ class CompanyDatum
   field :corporate_name, type: String
   field :year, type: Integer
   field :cnae, type: String
+  field :registry_status, type: String
   field :phones, type: Array
   field :emails, type: Array
   field :street, type: String
@@ -16,6 +17,7 @@ class CompanyDatum
   field :state, type: String
   field :zipcode, type: String
   field :company_nature, type: String
+  field :size, type: String
 
   validates :cnpj, cnpj: true, presence: true
   validates :cnae, cnae: true
@@ -23,7 +25,8 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?, :valid_company_nature?
+           :valid_zipcode?, :array_of_cities?, :valid_registry_status?, :invalid_size_name?,
+           :valid_company_nature?
 
   embedded_in :company_update_request, inverse_of: :company_data
 
@@ -33,6 +36,28 @@ class CompanyDatum
     is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s([A-zÀ-ú0-9_ ()-]*)\Z/)
 
     errors.add(:company_nature) unless is_valid
+  end
+
+  def valid_registry_status?
+    return if registry_status.nil?
+
+    registry_options = [
+      'Ativa',
+      'Ativa Não Regular',
+      'Baixada',
+      'Inapta',
+      'Nula',
+      'Suspensa'
+    ]
+
+    errors.add(:registry_status) unless registry_options.include?(registry_status)
+  end
+
+  def invalid_size_name?
+    return if size.nil?
+
+    size_options = %w[MEI ME EPP DEMAIS]
+    errors.add(:size) unless size_options.include?(size)
   end
 
   def array_of_cities?
@@ -67,7 +92,9 @@ class CompanyDatum
       'Nome Fantasia',
       'Razão Social',
       'Ano de fundação',
+      'Porte',
       'CNAE',
+      'Situação cadastral',
       'Telefones',
       'Emails',
       'Endereço',
@@ -85,7 +112,9 @@ class CompanyDatum
       public_name,
       corporate_name,
       year,
+      size,
       cnae,
+      registry_status,
       phones_to_csv,
       emails_to_csv,
       street,
