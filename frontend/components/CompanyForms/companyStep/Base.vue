@@ -38,6 +38,13 @@
             :options="allRegistryStatus"
             @input="setRegistryStatus"
           />
+          <Dropdown
+            :value="size"
+            :options="sizeList"
+            label="Porte da empresa"
+            hint="Escolha de acordo com o Comprovante de Inscrição e de Situação Cadastral"
+            @input="setSize"
+          />
         </v-container>
       </div>
 
@@ -145,12 +152,14 @@ export default {
       "Nula",
       "Suspensa"
     ],
+    sizeList: ["MEI", "ME", "EPP", "DEMAIS"],
   }),
   computed: {
     ...mapGetters({
       name: "company_forms/name",
       corporateName: "company_forms/corporateName",
       year: "company_forms/year",
+      size: "company_forms/size",
       cnpj: "company_forms/cnpj",
       cnae: "company_forms/cnae",
       registry_status: "company_forms/registry_status",
@@ -172,6 +181,7 @@ export default {
       setName: "company_forms/setName",
       setCorporateName: "company_forms/setCorporateName",
       setYear: "company_forms/setYear",
+      setSize: "company_forms/setSize",
       setCnpj: "company_forms/setCnpj",
       setCnae: "company_forms/setCnae",
       setRegistryStatus: "company_forms/setRegistryStatus",

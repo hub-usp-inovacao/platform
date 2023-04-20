@@ -16,6 +16,7 @@ class CompanyDatum
   field :city, type: Array
   field :state, type: String
   field :zipcode, type: String
+  field :size, type: String
 
   validates :cnpj, cnpj: true, presence: true
   validates :cnae, cnae: true
@@ -23,7 +24,7 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?, :valid_registry_status?
+           :valid_zipcode?, :array_of_cities?, :valid_registry_status?, :invalid_size_name?
 
   embedded_in :company_update_request, inverse_of: :company_data
 
@@ -40,6 +41,13 @@ class CompanyDatum
     ]
 
     errors.add(:registry_status) unless registry_options.include?(registry_status)
+  end
+  
+  def invalid_size_name?
+    return if size.nil?
+
+    size_options = %w[MEI ME EPP DEMAIS]
+    errors.add(:size) unless size_options.include?(size)
   end
 
   def array_of_cities?
@@ -74,6 +82,7 @@ class CompanyDatum
       'Nome Fantasia',
       'Razão Social',
       'Ano de fundação',
+      'Porte',
       'CNAE',
       'Situação cadastral',
       'Telefones',
@@ -92,6 +101,7 @@ class CompanyDatum
       public_name,
       corporate_name,
       year,
+      size,
       cnae,
       registry_status,
       phones_to_csv,

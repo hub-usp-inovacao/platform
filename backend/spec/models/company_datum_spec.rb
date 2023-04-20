@@ -20,6 +20,7 @@ RSpec.describe CompanyDatum, type: :model do
       street: 'rua das couves, 37 - apt 51',
       neighborhood: 'vila vegetal',
       city: ['fito'],
+      size: 'MEI',
       state: 'plantae',
       zipcode: '04331-000'
     }
@@ -33,6 +34,11 @@ RSpec.describe CompanyDatum, type: :model do
 
     it 'on inexistent attribute registry status' do
       expect(attrs).to include(:registry_status)
+    end
+    
+    it 'on invalid size name' do
+      attrs[:size] = 'Abacate'
+      expect(described_class.new(attrs)).to be_invalid
     end
 
     it 'on string city' do
@@ -124,6 +130,13 @@ RSpec.describe CompanyDatum, type: :model do
       attrs[:registry_status] = nil
       expect(described_class.new(attrs)).to be_valid
     end
+
+    %w[MEI DEMAIS ME EPP].each do |val|
+      it 'on company size' do
+        attrs[:size] = val
+        expect(described_class.new(attrs)).to be_valid
+      end
+    end
   end
 
   context 'with CSV preparation' do
@@ -134,6 +147,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:public_name],
         attrs[:corporate_name],
         attrs[:year],
+        attrs[:size],
         attrs[:cnae],
         attrs[:registry_status],
         attrs[:phones].join(';'),

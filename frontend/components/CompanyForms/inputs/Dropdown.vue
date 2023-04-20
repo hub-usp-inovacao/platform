@@ -7,6 +7,8 @@
     :disabled="disabled"
     :multiple="multipleOption"
     @input="$emit('input', $event)"
+    :hint=hint
+    persistent-hint
   />
 </template>
 
@@ -33,6 +35,10 @@ export default {
       type: String,
       default: "",
     },
+    hint: {
+      type: String,
+      default: "",
+    }
   },
 };
 </script>
