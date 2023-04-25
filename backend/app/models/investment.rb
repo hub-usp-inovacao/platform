@@ -48,7 +48,7 @@ class Investment
       'Valor do Private Equity',
       'Valor do PIPE-FAPESP',
       'Valor do Outros'
-    ] + middle_offset
+    ]
   end
 
   def prepare_to_csv
@@ -61,19 +61,16 @@ class Investment
       equity,
       pipe,
       others
-    ] + Investment.middle_offset
+    ]
   end
 
   private
 
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
-    [nil] * 61
+    [nil] * 65
   end
 
-  def self.middle_offset
-    [nil] * 18
-  end
   # rubocop:enable Lint/IneffectiveAccessModifier
 
   def received_to_csv

@@ -67,7 +67,7 @@ class Partner
   end
 
   def self.row_offset
-    [nil] * 29
+    [nil] * 33
   end
 
   def self.csv_headers
