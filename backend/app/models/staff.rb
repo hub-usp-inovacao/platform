@@ -42,7 +42,7 @@ class Staff
       'Qual o número de funcionários contratados como CLT?',
       'Qual o número de colaboradores contratados como pessoa jurídica (PJ)?',
       'Qual o número de estagiários/bolsistas contratados?'
-    ] + middle_offset
+    ]
   end
 
   def prepare_to_csv
@@ -50,14 +50,10 @@ class Staff
       number_of_CLT_employees,
       number_of_PJ_colaborators,
       number_of_interns
-    ] + Staff.middle_offset
+    ]
   end
 
   def self.row_offset
-    [nil] * 58
-  end
-
-  def self.middle_offset
-    [nil] * 24
+    [nil] * 62
   end
 end

@@ -17,7 +17,7 @@ RSpec.describe AboutCompany, type: :model do
         '15 - Vida Terrestre',
         '17 - Parcerias e Meios de Implementação'
       ],
-      social_medias: ['https://instagram.com/foo-bar']
+      social_medias: ['https://instagram.com/foo-bar', 'https://www.facebook.com/']
     }
   end
 
@@ -53,9 +53,9 @@ RSpec.describe AboutCompany, type: :model do
         nil,
         attrs[:site]
       ] + [nil] * 4 + [
-        attrs[:social_medias].join(';')
-      ] + [nil] * 61 + [
         attrs[:odss].join(';')
+      ] + [
+        attrs[:social_medias].join(';')
       ]
     end
 

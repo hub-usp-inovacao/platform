@@ -142,9 +142,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:public_name],
         attrs[:corporate_name],
         attrs[:year],
-        attrs[:size],
         attrs[:cnae],
-        attrs[:registry_status],
         attrs[:phones].join(';'),
         attrs[:emails].join(';'),
         attrs[:street],
@@ -152,7 +150,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:city],
         attrs[:state],
         attrs[:zipcode]
-      ]
+      ] + [nil] * 61 + [attrs[:size], nil, nil, attrs[:registry_status]]
     end
 
     it 'prepares CSV correctly' do

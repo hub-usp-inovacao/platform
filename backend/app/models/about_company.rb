@@ -54,9 +54,8 @@ class AboutCompany
       nil,
       nil,
       nil,
+      'ODS',
       'Redes Sociais'
-    ] + middle_range + [
-      'ODS'
     ]
     # rubocop:enable Layout/LineLength
   end
@@ -72,9 +71,8 @@ class AboutCompany
       nil,
       nil,
       nil,
+      odss_to_csv,
       social_medias_to_csv
-    ] + AboutCompany.middle_range + [
-      odss_to_csv
     ]
   end
 
@@ -107,10 +105,6 @@ class AboutCompany
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil] * 13
-  end
-
-  def self.middle_range
-    [nil] * 61
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 end

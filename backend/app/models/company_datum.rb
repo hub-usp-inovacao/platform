@@ -78,9 +78,7 @@ class CompanyDatum
       'Nome Fantasia',
       'Razão Social',
       'Ano de fundação',
-      'Porte',
       'CNAE',
-      'Situação cadastral',
       'Telefones',
       'Emails',
       'Endereço',
@@ -88,6 +86,11 @@ class CompanyDatum
       'Cidade',
       'Estado',
       'CEP'
+    ] + middle_offset + [
+      'Porte',
+      nil,
+      nil,
+      'Situação cadastral'
     ]
   end
 
@@ -97,9 +100,7 @@ class CompanyDatum
       public_name,
       corporate_name,
       year,
-      size,
       cnae,
-      registry_status,
       phones_to_csv,
       emails_to_csv,
       street,
@@ -107,6 +108,11 @@ class CompanyDatum
       city,
       state,
       zipcode
+    ] + CompanyDatum.middle_offset + [
+      size,
+      nil,
+      nil,
+      registry_status
     ]
   end
 
@@ -115,6 +121,10 @@ class CompanyDatum
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil]
+  end
+
+  def self.middle_offset
+    [nil] * 61
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 

@@ -8,14 +8,14 @@ class CompanyUpdateRequest
   field :timestamp, type: Time
   field :delivered, type: Boolean, default: false
 
-  embeds_one :dna_usp_stamp
   embeds_one :company_data
   embeds_one :about_company
-  embeds_one :investment
-  embeds_one :revenue
   embeds_one :incubation
-  embeds_one :staff
-  embeds_many :partners
+  embeds_one :dna_usp_stamp
+  embeds_many :partners ## [nil] * 29 + 5 + 5 + 20
+  embeds_one :investment ##   [nil] * 61 + 8
+  embeds_one :revenue ## [nil] * 69 + 1
+  embeds_one :staff ## [nil] * 58 + 3
 
   def self.csv_headers
     subsection_classes = [

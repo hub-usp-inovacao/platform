@@ -19,22 +19,6 @@ RSpec.describe DnaUspStamp, type: :model do
     }
   end
 
-  context 'with CSV preparation' do
-    it 'prepares to CSV correctly' do
-      handmade = [nil] * 23 + [
-        attrs[:wants],
-        attrs[:email],
-        attrs[:name],
-        nil,
-        attrs[:truthful_informations],
-        attrs[:permissions].join(';')
-      ]
-
-      dna = described_class.new(attrs)
-      expect(dna.prepare_to_csv).to match_array(handmade)
-    end
-  end
-
   context 'with validation problems' do
     it 'on nil permissions' do
       attrs.delete :permissions
@@ -74,6 +58,22 @@ RSpec.describe DnaUspStamp, type: :model do
           expect(described_class.new(attrs)).to be_valid
         end
       end
+    end
+  end
+
+  context 'with CSV preparation' do
+    it 'prepares to CSV correctly' do
+      handmade = [nil] * 27 + [
+        attrs[:wants],
+        attrs[:email],
+        attrs[:name],
+        nil,
+        attrs[:truthful_informations],
+        attrs[:permissions].join(';')
+      ]
+
+      dna = described_class.new(attrs)
+      expect(dna.prepare_to_csv).to match_array(handmade)
     end
   end
 end
