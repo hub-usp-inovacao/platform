@@ -29,7 +29,7 @@ class CompanyDatum
   embedded_in :company_update_request, inverse_of: :company_data
 
   def valid_registry_status?
-    return if registry_status.nil?
+    return if registry_status.nil? || registry_status.empty?
 
     registry_options = [
       'Ativa',
@@ -44,7 +44,7 @@ class CompanyDatum
   end
 
   def invalid_size_name?
-    return if size.nil?
+    return if size.nil? || size.empty?
 
     size_options = %w[MEI ME EPP DEMAIS]
     errors.add(:size) unless size_options.include?(size)
