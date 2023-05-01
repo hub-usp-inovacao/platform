@@ -22,7 +22,7 @@
         @input="setDefaultIncubators"
       />
       <div class="mt-5 text-h6 font-weight-regular">
-        Outros
+        Em caso de outros, digite abaixo:
         <v-divider />
         <v-container>
           <ShortTextInput
@@ -56,8 +56,8 @@ export default {
       "CIETEC - Centro de Inovação, Empreendedorismo e Tecnologia",
       "ESALQTec - Incubadora de Empresas Agrozootécnicas de Piracicaba",
       "HABITs - Habitat de Inovação Tecnológica e Social/Incubadora-Escola",
-      "Supera - Incubadora de Empresas de Base Tecnológica de Ribeirão Preto",
-      "Supera Parque de Inovação e Tecnologia",
+      "ParqTec - Fundação Parque Tecnológico de São Carlos",
+      "Supera - Parque de Inovação e Tecnologia de Ribeirão Preto",
     ],
   }),
   computed: {
@@ -67,16 +67,16 @@ export default {
     }),
     disabledIncubatorsSelect() {
       if (this.incubated === "Não") {
-        this.setEcosystems('')
-        return true
+        this.setEcosystems("");
+        return true;
       }
-      return false
+      return false;
     },
     defaultIncubators() {
-      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : ''
+      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : "";
     },
     otherIncubator() {
-      return this.incubadoras.includes(this.ecosystems) ? '' : this.ecosystems
+      return this.incubadoras.includes(this.ecosystems) ? "" : this.ecosystems;
     },
   },
   methods: {

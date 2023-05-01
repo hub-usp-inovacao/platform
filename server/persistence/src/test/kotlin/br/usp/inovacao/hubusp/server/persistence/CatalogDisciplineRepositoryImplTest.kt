@@ -2,9 +2,7 @@ package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Discipline
 import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
-import br.usp.inovacao.hubusp.server.persistence.models.DisciplineCategory
-import br.usp.inovacao.hubusp.server.persistence.models.DisciplineDescription
-import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
+import br.usp.inovacao.hubusp.server.persistence.models.*
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -95,6 +93,19 @@ internal class CatalogDisciplineRepositoryImplTest {
     }
 
     @Test
+    fun `it filters by offering period`() {
+        // given
+        val givenPeriod = "1º sem. 2023"
+        val params = DisciplineSearchParams(offeringPeriod = givenPeriod)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.all { it.offeringPeriod == givenPeriod } }
+    }
+
+    @Test
     fun `it filters by category`() {
         // given
         val params = DisciplineSearchParams(categories = setOf("Negócios","Empreendedorismo"))
@@ -119,6 +130,40 @@ internal class CatalogDisciplineRepositoryImplTest {
         assertTrue { result.isNotEmpty() }
         assertTrue { result.all { it.name.contains(term) } }
     }
+
+    @Test
+    fun `it converts DisciplineModel into Discipline`() {
+        // given
+        val discipline = getDisciplineModel()
+
+        // when
+        val result = discipline.toCatalogDiscipline()
+
+        // then
+        assertIs<Discipline>(result)
+    }
+
+    private fun getDisciplineModel() =  DisciplineModel(
+        campus = "USP Leste",
+        category = DisciplineCategory(
+            innovation = false,
+            entrepreneurship = false,
+            business = false,
+            intellectual_property = true
+        ),
+        description = DisciplineDescription(
+            long = "Analisar as contribuições da inovação para o desenvolvimento do setor de serviços, ...",
+            short = ""
+        ),
+        keywords = setOf("foo", "baz"),
+        level = "Quero aprender!",
+        name = "ACH1575",
+        nature = "Graduação",
+        offeringPeriod = "N/D",
+        start_date = "",
+        unity = "Escola de Artes, Ciências e Humanidades - EACH",
+        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis="
+    )
 
     private fun seedTestDb() {
         val disciplineCollection = testDb.getCollection<DisciplineModel>("disciplines")
@@ -148,7 +193,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 short = ""
             ),
             keywords = setOf("foo", "baz"),
-            offeringPeriod = "N/D",
+            offeringPeriod = "1º sem. 2023",
             start_date = "",
             url = ""
         ),
@@ -211,7 +256,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 short = ""
             ),
             keywords = setOf("foo", "baz"),
-            offeringPeriod = "N/D",
+            offeringPeriod = "2º sem. 2022",
             start_date = "",
             url = ""
         )

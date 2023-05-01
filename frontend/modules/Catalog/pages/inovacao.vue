@@ -8,6 +8,15 @@
         @search="search.term = $event"
         @clear="search.term = ''"
       />
+      <v-alert
+      prominent
+      type="error"
+      color="red"
+      class="text-center"
+      style="font-size: 18px;"
+      >
+        <b> A página está sob manutenção </b>
+      </v-alert>
     </div>
 
     <Background class="absolute" />
@@ -137,4 +146,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.text-center {
+  text-align: center;
+}
+</style>

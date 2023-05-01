@@ -28,7 +28,7 @@
         <v-container>
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
-          <p class="body-2">{{ item.offeringPeriod }}</p>
+          <NDText :text="item.offeringPeriod" label=""/>
           <p class="body-2">{{ item.nature }}</p>
         </v-container>
       </template>
@@ -53,6 +53,7 @@ import Background from "../components/Background.vue";
 import Panel from "../components/Panel.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import DisplayData from "../components/DisplayData.vue";
+import NDText from "../components/NDText.vue";
 
 import { debounce } from "debounce";
 
@@ -62,6 +63,7 @@ export default {
     Background,
     MultipleFilters,
     DisplayData,
+    NDText,
   },
   data: () => ({
     search: { term: "" },
@@ -125,6 +127,18 @@ export default {
           label: "Natureza",
           items: ["Graduação", "Pós-graduação"],
         },
+        {
+          label: "Período de Oferecimento",
+          items: Array.from(
+            this.disciplines.reduce((acc, discipline) => {
+              const offeringPeriod = discipline.offeringPeriod;
+              const hasPeriod = offeringPeriod && !acc.has(offeringPeriod) && offeringPeriod != "N/D"
+              if (hasPeriod)
+                acc.add(offeringPeriod);
+              return acc;
+            }, new Set())
+          ),
+        },
       ];
     },
     searchTerm() {
@@ -137,6 +151,7 @@ export default {
         unity: this.filters?.terciary[1],
         level: this.filters?.terciary[2],
         nature: this.filters?.terciary[3],
+        offeringPeriod: this.filters?.terciary[4],
         term: this.searchTerm,
       };
     },

@@ -6,5 +6,6 @@ data class DisciplineSearchParams(
     val unity: String? = null,
     val level: String? = null,
     val nature: String? = null,
-    val term: String? = null,
+    val offeringPeriod: String? = null,
+    val term: String? = null
 )

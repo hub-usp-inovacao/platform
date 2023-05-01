@@ -11,6 +11,7 @@ fun DisciplineSearchParams.toCollectionFilter(): String {
     if (campus != null) inner.add("\"campus\":\"$campus\"")
     if (level != null) inner.add("\"level\":\"$level\"")
     if (nature != null) inner.add("\"nature\":\"$nature\"")
+    if (offeringPeriod != null) inner.add("\"offeringPeriod\":\"$offeringPeriod\"")
 
     if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
 
