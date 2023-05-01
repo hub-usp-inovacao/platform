@@ -230,7 +230,7 @@ class Company
     {
       venue: row[8],
       neighborhood: row[9],
-      city: row[10]&.split(';'),
+      city: row[10],
       state: row[11],
       cep: row[12]
     }

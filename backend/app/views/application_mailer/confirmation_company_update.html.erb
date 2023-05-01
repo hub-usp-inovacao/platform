@@ -25,12 +25,7 @@
     <p><%= email %></p>
   <% end %>
 </ul>
-<p>Cidades Sede:</p>
-<ul>
-  <% @update_data.company_data.city.each do |city| %>
-    <p><%= city %></p>
-  <% end %>
-</ul>
+<p><strong>Cidade Sede:</strong> <%= @update_data.company_data.city %></p>
 <p>Endereço:</p>
 <ul>
   <li>logradouro: <%= @update_data.company_data.street %></li>

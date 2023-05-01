@@ -19,7 +19,7 @@ RSpec.describe CompanyDatum, type: :model do
       ],
       street: 'rua das couves, 37 - apt 51',
       neighborhood: 'vila vegetal',
-      city: ['fito'],
+      city: 'fito',
       size: 'MEI',
       state: 'plantae',
       zipcode: '04331-000'
@@ -39,11 +39,6 @@ RSpec.describe CompanyDatum, type: :model do
     it 'on invalid size name' do
       attrs[:size] = 'Abacate'
       expect(described_class.new(attrs)).to be_invalid
-    end
-
-    it 'on string city' do
-      attrs[:city] = 'foo'
-      expect { described_class.new(attrs) }.to raise_error(Mongoid::Errors::InvalidValue)
     end
 
     it 'on malformed zipcode' do
