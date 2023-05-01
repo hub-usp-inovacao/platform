@@ -13,6 +13,7 @@ RSpec.describe Partner, type: :model do
       email: 'pedro@mail.com',
       phone: '(11) 99999-7665'
     }
+
   end
 
   context 'with validation problems' do
@@ -73,22 +74,23 @@ RSpec.describe Partner, type: :model do
 
   context 'with CSV preparation' do
     let :first_handmade do
-      [nil] * 29 + [
+      [nil] * 33 + [
         attrs[:name],
         attrs[:nusp],
         attrs[:bond],
         attrs[:unity],
+        nil,
         attrs[:email],
         attrs[:phone]
       ]
     end
 
     let :fifth_handmade do
-      [nil] * 54 + [
+      [nil] * 58 + [
         attrs[:name],
         attrs[:nusp],
         attrs[:bond],
-        attrs[:unity]
+        attrs[:unity],
       ]
     end
 
