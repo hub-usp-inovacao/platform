@@ -13,7 +13,6 @@ RSpec.describe Partner, type: :model do
       email: 'pedro@mail.com',
       phone: '(11) 99999-7665'
     }
-
   end
 
   context 'with validation problems' do
@@ -89,7 +88,7 @@ RSpec.describe Partner, type: :model do
         attrs[:name],
         attrs[:nusp],
         attrs[:bond],
-        attrs[:unity],
+        attrs[:unity]
       ]
     end
 
