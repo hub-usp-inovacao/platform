@@ -79,7 +79,6 @@ RSpec.describe Partner, type: :model do
         attrs[:nusp],
         attrs[:bond],
         attrs[:unity],
-        nil,
         attrs[:email],
         attrs[:phone]
       ]
