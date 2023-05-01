@@ -13,7 +13,7 @@ class CompanyDatum
   field :emails, type: Array
   field :street, type: String
   field :neighborhood, type: String
-  field :city, type: Array
+  field :city, type: String
   field :state, type: String
   field :zipcode, type: String
   field :company_nature, type: String
@@ -25,8 +25,7 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :array_of_cities?, :valid_registry_status?, :invalid_size_name?,
-           :valid_company_nature?
+           :valid_zipcode?, :valid_registry_status?, :invalid_size_name?, :valid_company_nature?
 
   embedded_in :company_update_request, inverse_of: :company_data
 
@@ -58,10 +57,6 @@ class CompanyDatum
 
     size_options = %w[MEI ME EPP DEMAIS]
     errors.add(:size) unless size_options.include?(size)
-  end
-
-  def array_of_cities?
-    errors.add(:city) unless city.is_a?(Array)
   end
 
   def valid_zipcode?
