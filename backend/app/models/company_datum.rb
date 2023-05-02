@@ -30,7 +30,7 @@ class CompanyDatum
   embedded_in :company_update_request, inverse_of: :company_data
 
   def valid_company_nature?
-    return if company_nature.nil?
+    return if company_nature.blank?
 
     is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s([A-zÀ-ú0-9_ ()-]*)\Z/)
 
