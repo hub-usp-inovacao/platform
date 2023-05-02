@@ -38,7 +38,7 @@ class CompanyDatum
   end
 
   def valid_registry_status?
-    return if registry_status.nil?
+    return if registry_status.blank?
 
     registry_options = [
       'Ativa',
@@ -53,7 +53,7 @@ class CompanyDatum
   end
 
   def invalid_size_name?
-    return if size.nil?
+    return if size.blank?
 
     size_options = %w[MEI ME EPP DEMAIS]
     errors.add(:size) unless size_options.include?(size)
@@ -87,17 +87,19 @@ class CompanyDatum
       'Nome Fantasia',
       'Razão Social',
       'Ano de fundação',
-      'Porte',
       'CNAE',
-      'Situação cadastral',
       'Telefones',
       'Emails',
       'Endereço',
       'Bairro',
       'Cidade',
       'Estado',
-      'CEP',
-      'Natureza Jurídica'
+      'CEP'
+    ] + middle_offset + [
+      'Porte',
+      'Natureza Jurídica',
+      nil,
+      'Situação cadastral'
     ]
   end
 
@@ -107,17 +109,19 @@ class CompanyDatum
       public_name,
       corporate_name,
       year,
-      size,
       cnae,
-      registry_status,
       phones_to_csv,
       emails_to_csv,
       street,
       neighborhood,
       city,
       state,
-      zipcode,
-      company_nature
+      zipcode
+    ] + CompanyDatum.middle_offset + [
+      size,
+      company_nature,
+      nil,
+      registry_status
     ]
   end
 
@@ -126,6 +130,10 @@ class CompanyDatum
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil]
+  end
+
+  def self.middle_offset
+    [nil] * 61
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 

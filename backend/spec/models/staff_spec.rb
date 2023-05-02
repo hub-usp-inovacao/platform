@@ -27,11 +27,11 @@ RSpec.describe Staff, type: :model do
 
   context 'with CSV preparation' do
     let :handmade do
-      [nil] * 58 + [
+      [nil] * 62 + [
         attrs[:number_of_CLT_employees],
         attrs[:number_of_PJ_colaborators],
         attrs[:number_of_interns]
-      ] + [nil] * 24
+      ]
     end
 
     it 'prepares to CSV correctly' do

@@ -73,7 +73,7 @@ RSpec.describe Partner, type: :model do
 
   context 'with CSV preparation' do
     let :first_handmade do
-      [nil] * 29 + [
+      [nil] * 33 + [
         attrs[:name],
         attrs[:nusp],
         attrs[:bond],
@@ -84,7 +84,7 @@ RSpec.describe Partner, type: :model do
     end
 
     let :fifth_handmade do
-      [nil] * 54 + [
+      [nil] * 58 + [
         attrs[:name],
         attrs[:nusp],
         attrs[:bond],
