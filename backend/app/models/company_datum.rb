@@ -89,7 +89,7 @@ class CompanyDatum
     ] + middle_offset + [
       'Porte',
       nil,
-      nil,
+      'Número de sócios',
       'Situação cadastral'
     ]
   end
@@ -111,7 +111,7 @@ class CompanyDatum
     ] + CompanyDatum.middle_offset + [
       size,
       nil,
-      nil,
+      company_update_request.partners.size,
       registry_status
     ]
   end
