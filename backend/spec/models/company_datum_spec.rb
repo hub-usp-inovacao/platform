@@ -37,6 +37,11 @@ RSpec.describe CompanyDatum, type: :model do
       expect(described_class.new(attrs)).to be_invalid
     end
 
+    it 'on empty string of company nature' do
+      attrs[:company_nature] = '000-0 - '
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on invalid registry status' do
       attrs[:registry_status] = 'bar'
       expect(described_class.new(attrs)).to be_invalid
