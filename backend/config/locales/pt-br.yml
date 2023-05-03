@@ -13,6 +13,7 @@ pt-br:
         public_name: Nome Fantasia
         corporate_name: Razão Social
         zipcode: Código Postal (CEP)
+        company_nature: Natureza jurídica da empresa
       discipline:
         name: Nome
         unity: Unidade
