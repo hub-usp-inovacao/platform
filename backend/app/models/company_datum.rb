@@ -32,7 +32,7 @@ class CompanyDatum
   def valid_company_nature?
     return if company_nature.blank?
 
-    is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s([A-zÀ-ú0-9_ ()-]*)\Z/)
+    is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s+(?=\S)([A-zÀ-ú0-9_ ()-]+)\Z/)
 
     errors.add(:company_nature) unless is_valid
   end
