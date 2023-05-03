@@ -55,6 +55,8 @@ function translateErrorMessage(englishError) {
 
   if (englishError === "Year inválido") return "Ano de criação inválido";
 
+  if (englishError === "Company nature inválido") return "Natureza jurídica da empresa inválida";
+
   return englishError;
 }
 
