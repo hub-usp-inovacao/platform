@@ -49,6 +49,37 @@
       </div>
 
       <div class="mt-8 text-h6 font-weight-regular">
+        Código e Descrição da Natureza Jurídica da empresa
+        <v-divider />
+        <v-container>
+          <legend class="body-2 mb-5">
+            Para consultar o código e a natureza jurídica da empresa, cole o CNPJ da empresa no
+            <a
+              href="http://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj"
+              target="_blank"
+              >site da receita</a
+            >. Depois copie o CÓDIGO e a DESCRIÇÃO DA NATUREZA JURÍDICA e cole
+            como resposta nos campos abaixo. Insira apenas o código no formato
+            "000-0" e a descrição no formato de texto. A lista de códigos e naturezas jurídicas
+            pode ser encontrada na
+            <a
+              href="https://concla.ibge.gov.br/estrutura/natjur-estrutura/natureza-juridica-2021"
+              target="_blank"
+              >tabela de naturezas jurídicas do IBGE</a
+            >.
+          </legend>
+          <PairOfNumberAndText
+            :value="companyNature"
+            labelOne="Código"
+            labelTwo="Natureza Jurídica"
+            placeholderOne="000-0"
+            separator=" - "
+            @input="setCompanyNature"
+          />
+        </v-container>
+      </div>
+
+      <div class="mt-8 text-h6 font-weight-regular">
         CNAE (Classificação Nacional de Atividades Econômicas) da empresa
         <v-divider />
         <v-container>
@@ -133,6 +164,7 @@ import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue"
 import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
+import PairOfNumberAndText from "@/components/CompanyForms/inputs/PairOfNumberAndText.vue";
 
 export default {
   components: {
@@ -140,6 +172,7 @@ export default {
     MultipleInputs,
     ShortTextInput,
     Dropdown,
+    PairOfNumberAndText,
   },
   data: () => ({
     allStates: [],
@@ -170,6 +203,7 @@ export default {
       city: "company_forms/city",
       state: "company_forms/state",
       cep: "company_forms/cep",
+      companyNature: "company_forms/companyNature",
     }),
   },
   created() {
@@ -191,6 +225,7 @@ export default {
       setCity: "company_forms/setCity",
       setState: "company_forms/setState",
       setCep: "company_forms/setCep",
+      setCompanyNature: "company_forms/setCompanyNature",
     }),
     async getStates() {
       const response = await fetch(

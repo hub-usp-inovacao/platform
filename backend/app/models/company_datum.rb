@@ -16,6 +16,7 @@ class CompanyDatum
   field :city, type: String
   field :state, type: String
   field :zipcode, type: String
+  field :company_nature, type: String
   field :size, type: String
 
   validates :cnpj, cnpj: true, presence: true
@@ -24,9 +25,17 @@ class CompanyDatum
   validates :emails, emails: true
 
   validate :not_empty_public_name?, :not_empty_corporate_name?, :current_or_past_year?,
-           :valid_zipcode?, :valid_registry_status?, :invalid_size_name?
+           :valid_zipcode?, :valid_registry_status?, :invalid_size_name?, :valid_company_nature?
 
   embedded_in :company_update_request, inverse_of: :company_data
+
+  def valid_company_nature?
+    return if company_nature.blank?
+
+    is_valid = company_nature.match?(/\A\d{3}-\d{1}\s-\s+(?=\S)([A-zÀ-ú0-9_ ()-]+)\Z/)
+
+    errors.add(:company_nature) unless is_valid
+  end
 
   def valid_registry_status?
     return if registry_status.blank?
@@ -88,7 +97,7 @@ class CompanyDatum
       'CEP'
     ] + middle_offset + [
       'Porte',
-      nil,
+      'Natureza Jurídica',
       nil,
       'Situação cadastral'
     ]
@@ -110,7 +119,7 @@ class CompanyDatum
       zipcode
     ] + CompanyDatum.middle_offset + [
       size,
-      nil,
+      company_nature,
       nil,
       registry_status
     ]

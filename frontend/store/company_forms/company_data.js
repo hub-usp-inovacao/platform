@@ -15,6 +15,7 @@ const state = () => ({
     state: "",
     cep: "",
   },
+  company_nature: "",
 });
 
 const getters = {
@@ -33,6 +34,7 @@ const getters = {
   city: (s) => s.address.city,
   state: (s) => s.address.state,
   cep: (s) => s.address.cep,
+  company_nature: (s) => s.company_nature,
 };
 
 const mutations = {
@@ -86,6 +88,8 @@ const actions = {
       key: "address",
       value: { ...getters.address, cep: value },
     }),
+  setCompanyNature: ({ commit }, value) =>
+    commit("setFormField", { key: "company_nature", value }),
 };
 
 const prepareSection = (obj) => ({
@@ -104,6 +108,7 @@ const prepareSection = (obj) => ({
     city: obj.city,
     state: obj.state,
     zipcode: obj.cep,
+    company_nature: obj.company_nature,
   },
 });
 

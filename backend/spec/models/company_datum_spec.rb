@@ -22,11 +22,26 @@ RSpec.describe CompanyDatum, type: :model do
       city: 'fito',
       size: 'MEI',
       state: 'plantae',
-      zipcode: '04331-000'
+      zipcode: '04331-000',
+      company_nature: '000-0 - Indústria de Testes Automatizados'
     }
   end
 
   context 'with validation errors' do
+    it 'on inexistent attribute company nature' do
+      expect(attrs).to include(:company_nature)
+    end
+
+    it 'on invalid company nature' do
+      attrs[:company_nature] = 'foo'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
+    it 'on empty string of company nature' do
+      attrs[:company_nature] = '000-0 - '
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on invalid registry status' do
       attrs[:registry_status] = 'bar'
       expect(described_class.new(attrs)).to be_invalid
@@ -126,6 +141,16 @@ RSpec.describe CompanyDatum, type: :model do
       expect(described_class.new(attrs)).to be_valid
     end
 
+    it 'on missing company_nature' do
+      attrs[:company_nature] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'on company_nature' do
+      attrs[:company_nature] = '123-4 - Automatização'
+      expect(described_class.new(attrs)).to be_valid
+    end
+
     %w[MEI DEMAIS ME EPP].each do |val|
       it 'on company size' do
         attrs[:size] = val
@@ -150,7 +175,7 @@ RSpec.describe CompanyDatum, type: :model do
         attrs[:city],
         attrs[:state],
         attrs[:zipcode]
-      ] + [nil] * 61 + [attrs[:size], nil, nil, attrs[:registry_status]]
+      ] + [nil] * 61 + [attrs[:size], attrs[:company_nature], nil, attrs[:registry_status]]
     end
 
     it 'prepares CSV correctly' do
