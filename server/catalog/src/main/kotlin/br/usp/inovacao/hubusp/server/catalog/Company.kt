@@ -37,7 +37,7 @@ data class Classification(
 @kotlinx.serialization.Serializable
 data class Address(
     val cep: String,
-    val city: Set<String>,
+    val city: String,
     val neighborhood: String,
     val state: String,
     val venue: String

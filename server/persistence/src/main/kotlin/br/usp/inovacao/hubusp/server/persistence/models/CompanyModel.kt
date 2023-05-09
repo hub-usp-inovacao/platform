@@ -40,7 +40,7 @@ data class CompanyClassification(
 @kotlinx.serialization.Serializable
 data class CompanyAddress(
     val cep: String,
-    val city: Set<String>,
+    val city: String,
     val neighborhood: String,
     val state: String,
     val venue: String

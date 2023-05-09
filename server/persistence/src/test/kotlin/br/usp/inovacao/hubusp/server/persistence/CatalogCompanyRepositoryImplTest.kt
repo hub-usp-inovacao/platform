@@ -177,7 +177,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("São Paulo"),
+                city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -207,7 +207,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("Caxias do Sul", "Pelotas"),
+                city = "Caxias do Sul",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -238,7 +238,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("São Paulo"),
+                city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -268,7 +268,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("São Paulo"),
+                city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -296,7 +296,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("São Paulo"),
+                city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -341,7 +341,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("São Paulo"),
+                city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
@@ -371,7 +371,7 @@ class CatalogCompanyRepositoryImplTest() {
         CompanyModel(
             address = CompanyAddress(
                 cep = "05555-020",
-                city = setOf("Rio de Janeiro"),
+                city = "Rio de Janeiro",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"

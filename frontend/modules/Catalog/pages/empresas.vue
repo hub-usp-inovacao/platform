@@ -35,7 +35,7 @@
           <p v-for="email in item.emails" :key="email">{{ email }}</p>
           <p>{{ item.address.venue }}</p>
           <p>{{ item.address.neighborhood }}</p>
-          <p>{{ item.address.city.join(",") }} - {{ item.address.state }}</p>
+          <p>{{ item.address.city }} - {{ item.address.state }}</p>
           <p>{{ item.address.cep }}</p>
         </v-container>
       </template>
