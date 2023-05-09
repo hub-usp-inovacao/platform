@@ -84,7 +84,6 @@ class CatalogCompanyRepositoryImpl(
     override fun getCities(): Set<String> = companyCollection
         .aggregate<City>(
             "[{ \$project: { _id: 0, city: '\$address.city' } }," +
-            "{ \$unwind: { path: '\$city' } }," +
             "{ \$project: { city: { \$ltrim: { input: '\$city', chars: ' ' } } } }," +
             "{ \$group: { _id: 'allCities', name: { \$addToSet: '\$city' } } }," +
             "{ \$project: { _id: 0, name: 1 } }," +

@@ -10,6 +10,8 @@ RUN mkdir catalog curatorship discovery hub-app hub-cli mailer persistence techt
 
 USER gradle
 
+CMD gradle build --continuous
+
 # COPY ALL PROJECTS build.gradle.kts FILES TO THEIR DESTINATIONS
 COPY --chown=gradle:gradle  settings.gradle.kts                                                 ./
 COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  ./
