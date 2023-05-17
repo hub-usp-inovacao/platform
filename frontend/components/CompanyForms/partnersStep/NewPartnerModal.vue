@@ -38,6 +38,11 @@
               label="Com qual instituto, escola ou centro é o vínculo atual ou mais recente?"
               :options="unities"
             />
+            <ShortTextInput
+              v-model="formData.role"
+              class="mt-5"
+              label="Cargo"
+            />
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -81,6 +86,7 @@ export default {
       nusp: "",
       bond: "",
       unity: "",
+      role: "",
     },
     bonds: [
       "Aluno ou ex-aluno (graduação)",
@@ -117,6 +123,7 @@ export default {
             nusp: "",
             bond: "",
             unity: "",
+            role: "",
           };
     },
   },

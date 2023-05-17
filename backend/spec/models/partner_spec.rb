@@ -11,7 +11,8 @@ RSpec.describe Partner, type: :model do
       bond: 'Aluno ou ex-aluno (graduação)',
       unity: 'Instituto de Matemática e Estatística - IME',
       email: 'pedro@mail.com',
-      phone: '(11) 99999-7665'
+      phone: '(11) 99999-7665',
+      role: 'CEO'
     }
   end
 
@@ -69,6 +70,11 @@ RSpec.describe Partner, type: :model do
       attrs[:phone] = ''
       expect(described_class.new(attrs)).to be_valid
     end
+
+    it 'accepts empty role' do
+      attrs[:role] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
   end
 
   context 'with CSV preparation' do
@@ -79,7 +85,8 @@ RSpec.describe Partner, type: :model do
         attrs[:bond],
         attrs[:unity],
         attrs[:email],
-        attrs[:phone]
+        attrs[:phone],
+        attrs[:role]
       ]
     end
 

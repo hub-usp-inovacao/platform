@@ -124,6 +124,7 @@ class CompanyUpdatesController < ApplicationController
         nusp
         bond
         unity
+        role
       ],
       dna_usp_stamp: {},
       company_data: {},

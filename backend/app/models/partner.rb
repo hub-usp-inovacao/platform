@@ -10,6 +10,7 @@ class Partner
   field :unity, type: String
   field :email, type: String
   field :phone, type: String
+  field :role, type: String
 
   embedded_in :company_update_request
 
@@ -50,7 +51,8 @@ class Partner
 
     base + [
       email,
-      phone
+      phone,
+      role
     ]
   end
 
@@ -82,7 +84,7 @@ class Partner
     row_offset + base + [
       'Email',
       'Telefone',
-      nil,
+      'Cargo',
       nil,
       nil
     ] + base * 4
