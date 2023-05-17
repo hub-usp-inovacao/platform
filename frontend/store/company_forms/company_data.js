@@ -5,6 +5,7 @@ const state = () => ({
   size: "",
   cnpj: "",
   cnae: "",
+  logo: null,
   registry_status: "",
   phones: [],
   emails: [],
@@ -25,6 +26,7 @@ const getters = {
   size: (s) => s.size,
   cnpj: (s) => s.cnpj,
   cnae: (s) => s.cnae,
+  logo: (s) => s.logo,
   registry_status: (s) => s.registry_status,
   phones: (s) => s.phones,
   emails: (s) => s.emails,
@@ -40,6 +42,7 @@ const getters = {
 const mutations = {
   setFormField: (s, { key, value }) => (s[key] = value),
   setErrors: (s, errors) => (s.errors = errors),
+  setLogo: (s, logo) => (s.logo = logo),
 };
 
 const actions = {
@@ -55,6 +58,8 @@ const actions = {
     commit("setFormField", { key: "cnpj", value }),
   setCnae: ({ commit }, value) =>
     commit("setFormField", { key: "cnae", value }),
+  setLogo: ({ commit }, value) =>
+    commit("setLogo", value),
   setRegistryStatus: ({ commit }, value) =>
     commit("setFormField", { key: "registry_status", value }),
   setPhones: ({ commit }, value) =>
@@ -100,6 +105,7 @@ const prepareSection = (obj) => ({
     year: obj.year,
     size: obj.size,
     cnae: obj.cnae,
+    logo: obj.logo,
     registry_status: obj.registry_status,
     phones: obj.phones,
     emails: obj.emails,

@@ -12,6 +12,13 @@
             hint="A empresa será listada no Hub USPInovação a partir do nome fantasia da mesma."
             @input="setName"
           />
+          <ImageUploader
+            class="mb-4"
+            label="Logotipo da empresa"
+            :value="logo"
+            hint="Selecione uma imagem em boa qualidade."
+            @input="setLogo"
+          />
           <ShortTextInput
             class="mb-4"
             :value="corporateName"
@@ -165,6 +172,7 @@ import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import PairOfNumberAndText from "@/components/CompanyForms/inputs/PairOfNumberAndText.vue";
+import ImageUploader from "@/components/CompanyForms/inputs/ImageUploader.vue";
 
 export default {
   components: {
@@ -173,6 +181,7 @@ export default {
     ShortTextInput,
     Dropdown,
     PairOfNumberAndText,
+    ImageUploader
   },
   data: () => ({
     allStates: [],
@@ -189,6 +198,7 @@ export default {
   computed: {
     ...mapGetters({
       name: "company_forms/name",
+      logo: "company_forms/logo",
       corporateName: "company_forms/corporateName",
       year: "company_forms/year",
       size: "company_forms/size",
@@ -212,6 +222,7 @@ export default {
   methods: {
     ...mapActions({
       setName: "company_forms/setName",
+      setLogo: "company_forms/setLogo",
       setCorporateName: "company_forms/setCorporateName",
       setYear: "company_forms/setYear",
       setSize: "company_forms/setSize",
