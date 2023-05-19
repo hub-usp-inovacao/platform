@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PDIValidationError(
-    val errors: Iterable<String>,
+    val errors: List<String>,
     val spreadsheetLineNumber: Int,
     val delivered: Boolean = false
 )

@@ -24,14 +24,14 @@ data class PDI(
         fun fromRow(row: List<String?>) = PDI(
             category = row[0],
             name = row[1],
-            campus = row[2],
-            unity = row[3],
-            coordinator = row[4],
-            site = row[5],
-            email = row[6],
-            phone = row[7],
-            description = row[8],
-            keywords = row[9]?.split(";")?.toSet()
+            campus = row[3],
+            unity = row[4],
+            coordinator = row[5],
+            site = row[6],
+            email = row[7],
+            phone = row[8],
+            description = row[11],
+            keywords = row[13]?.split(";")?.toSet()
         )
     }
 
