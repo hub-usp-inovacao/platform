@@ -4,6 +4,7 @@ class AboutCompany
   include Mongoid::Document
 
   field :description, type: String
+  field :logo, type: String
   field :services, type: Array
   field :technologies, type: Array
   field :site, type: String
@@ -42,6 +43,12 @@ class AboutCompany
     errors.add(:odss) unless is_valid
   end
 
+  def save_logo(logo, base_url)
+    return if logo.blank?
+
+    self.logo = save_logo_to_public(logo, base_url)
+  end
+
   def self.csv_headers
     # rubocop:disable Layout/LineLength
     row_offset + [
@@ -53,7 +60,7 @@ class AboutCompany
       nil,
       nil,
       nil,
-      nil,
+      'Logotipo',
       'ODS',
       'Redes Sociais'
     ]
@@ -70,7 +77,7 @@ class AboutCompany
       nil,
       nil,
       nil,
-      nil,
+      logo,
       odss_to_csv,
       social_medias_to_csv
     ]
@@ -107,4 +114,14 @@ class AboutCompany
     [nil] * 13
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
+
+  def save_logo_to_public(logo, base_url)
+    FileUtils.mv(
+      Rails.root.join('tmp', 'uploads', 'logos', logo),
+      Rails.root.join('public', 'uploads', 'logos', logo)
+    )
+
+    "#{base_url}/api/uploads/logos/#{logo}"
+  end
+
 end
