@@ -19,11 +19,24 @@
         Logo
         <v-divider />
         <v-container>
-          <p class="body-2">
-            Caso queira exibir o logo da sua empresa na plataforma, envie-o para
-            o email hubusp.inovacao@usp.br com o assunto "Novo logo da empresa
-            X" (sem aspas), onde X é o nome da sua empresa.
-          </p>
+          <v-alert
+            dense
+            v-if="!isLogoInternal"
+            class="mb-8"
+            type="info"
+            color="primary"
+          >
+            Sua logotipo está hospedada em um link externo que não conseguimos recuperar. Faça o upload
+            novamente, por favor.
+          </v-alert>
+          <ImageUploader
+            class="mb-4"
+            :value="logoFile"
+            ref="logoUploader"
+            label="Logotipo da empresa"
+            hint="Selecione uma imagem em boa qualidade."
+            @input="handleLogoUpload"
+          />
         </v-container>
       </div>
 
@@ -104,6 +117,7 @@ import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue"
 import LongTextInput from "@/components/CompanyForms/inputs/LongTextInput.vue";
 import URLInput from "@/components/CompanyForms/inputs/URLInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
+import ImageUploader from "@/components/CompanyForms/inputs/ImageUploader.vue";
 
 export default {
   components: {
@@ -111,6 +125,7 @@ export default {
     LongTextInput,
     URLInput,
     Dropdown,
+    ImageUploader,
   },
   data: () => ({
     odsList: [
@@ -132,16 +147,24 @@ export default {
       "16 - Paz, Justiça e Instituições Eficazes",
       "17 - Parcerias e Meios de Implementação",
     ],
+    isLogoInternal: true,
+    logoFile: null,
   }),
   computed: {
     ...mapGetters({
+      cnpj: "company_forms/cnpj",
+      name: "company_forms/name",
       descriptionLong: "company_forms/descriptionLong",
       technologies: "company_forms/technologies",
       services: "company_forms/services",
       ods: "company_forms/odss",
       socialMedias: "company_forms/socialMedias",
       url: "company_forms/site",
+      logo: "company_forms/logo",
     }),
+  },
+  created() {
+    this.getExistentLogo();
   },
   methods: {
     ...mapActions({
@@ -151,7 +174,43 @@ export default {
       setOds: "company_forms/setOds",
       setSocialMedias: "company_forms/setSocialMedias",
       setUrl: "company_forms/setSite",
+      setLogo: "company_forms/setLogo",
     }),
+    async getExistentLogo() {
+      if (!this.logo) return;
+      try {
+        const response = await fetch(this.logo);
+        const blob = await response.blob();
+        const type = blob.type.split("/")[1];
+        const file = new File([blob], this.name + "." + type, { type: blob.type });
+
+        this.logoFile = file;
+        this.$refs.logoUploader.handleImage(file);
+      } catch (error) {
+        this.isLogoInternal = false;
+        console.error("Error getting logo", error);
+      }
+    },
+    async handleLogoUpload(logoImage) {
+      if (!logoImage) {
+        this.setLogo(null);
+        return;
+      }
+      const endpointLogo = "/companies/update_request/logo";
+      const formData = new FormData();
+      formData.append("cnpj", this.cnpj);
+      formData.append("logo", logoImage);
+
+      try {
+        await this.$axios.$post(endpointLogo, formData);
+      } catch (error) {
+        console.error("Error uploading logo", error);
+      }
+
+      let cnpj_without_punctuation = this.cnpj.replace(/[^\d]+/g, '');
+      let fileName = cnpj_without_punctuation + '.' + logoImage.name.split(".").pop();
+      this.setLogo(fileName);
+    },
   },
 };
 </script>
