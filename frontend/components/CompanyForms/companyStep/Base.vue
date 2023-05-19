@@ -236,6 +236,6 @@ export default {
         .map(({ nome, sigla }) => `${nome} (${sigla})`)
         .sort();
     },
- },
+  },
 };
 </script>
