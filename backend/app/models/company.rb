@@ -107,6 +107,11 @@ class Company
 
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
+    if new_company.logo.nil?
+      clean_cnpj = self.clear_cnpj(new_company.cnpj)
+      self.remove_logo(clean_cnpj)
+    end
+
     new_company
   end
 
@@ -209,6 +214,8 @@ class Company
   def self.create_image_url(raw)
     return nil if raw.nil? || raw == 'N/D'
 
+    return raw if raw[0..3] == 'http'
+
     "https://drive.google.com/uc?export=view&id=#{raw}"
   end
 
@@ -254,5 +261,21 @@ class Company
       major: major_minor[:major],
       minor: major_minor[:minor]
     }
+  end
+
+  private
+
+  def self.clear_cnpj(cnpj)
+    cnpj.gsub(/\D/, '')
+  end
+
+  def self.remove_logo(cnpj)
+    folders = ['tmp']
+
+    folders.each do |folder|
+      Dir.glob(Rails.root.join(folder, 'uploads', 'logos', "#{cnpj}.*")).each do |file|
+        FileUtils.rm(file)
+      end
+    end
   end
 end
