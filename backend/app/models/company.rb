@@ -108,8 +108,8 @@ class Company
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     if new_company.logo.nil?
-      clean_cnpj = self.clear_cnpj(new_company.cnpj)
-      self.remove_logo(clean_cnpj)
+      clean_cnpj = clear_cnpj(new_company.cnpj)
+      remove_logo(clean_cnpj)
     end
 
     new_company
@@ -262,8 +262,6 @@ class Company
       minor: major_minor[:minor]
     }
   end
-
-  private
 
   def self.clear_cnpj(cnpj)
     cnpj.gsub(/\D/, '')

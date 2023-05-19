@@ -123,5 +123,4 @@ class AboutCompany
 
     "#{base_url}/api/uploads/logos/#{logo}"
   end
-
 end
