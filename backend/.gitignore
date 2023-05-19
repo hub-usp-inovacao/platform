@@ -20,6 +20,16 @@
 !/tmp/pids/
 !/tmp/pids/.keep
 
+# Ignore uploaded logo temp files, but keep the directory.
+/tmp/uploads/logo/*
+!/tmp/uploads/logo/
+!/tmp/uploads/logo/.keep
+
+# Ignore uploaded logo public files, but keep directory.
+/public/uploads/logos/*
+!/public/uploads/logos/
+!/public/uploads/logos/.keep
+
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
