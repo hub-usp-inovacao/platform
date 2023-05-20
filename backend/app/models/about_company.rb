@@ -11,7 +11,7 @@ class AboutCompany
   field :odss, type: Array
   field :social_medias, type: Array
 
-  validates :site, url: true
+  validates :logo, :site, url: true
 
   validate :all_known_odss?
 
