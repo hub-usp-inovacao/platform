@@ -31,6 +31,16 @@ RSpec.describe AboutCompany, type: :model do
       attrs[:site] = ''
       expect(described_class.new(attrs)).to be_valid
     end
+
+    it 'is valid with empty logo url' do
+      attrs[:logo] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'is valid with null logo url' do
+      attrs[:logo] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
   end
 
   context 'with validation errors' do
