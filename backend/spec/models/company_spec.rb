@@ -193,10 +193,10 @@ RSpec.describe Company, type: :model do
       end
 
       it 'does not convert logo link to drive when it is not a drive file id' do
-          attrs = valid_attr.clone
-          attrs[:logo] = 'https://api.automatedtests/url/to/logo.png'
-          company = described_class.new attrs
-          expect(company.logo).to eq 'https://api.automatedtests/url/to/logo.png'
+        attrs = valid_attr.clone
+        attrs[:logo] = 'https://api.automatedtests/url/to/logo.png'
+        company = described_class.new attrs
+        expect(company.logo).to eq 'https://api.automatedtests/url/to/logo.png'
       end
     end
   end
