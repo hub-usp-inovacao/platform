@@ -31,3 +31,17 @@ class Unity : Constraint
 fun <E> Validator<E>.Property<String?>.isUnity() = this.validate(Unity()) {
     it == null || it in Campus.allUnities()
 }
+
+class DisciplineDescription : Constraint
+
+fun <E> Validator<E>.Property<Description?>.hasDescription() = this.validate(DisciplineDescription()) {
+    it == null || isFilledCell(it.short) || isFilledCell(it.long)
+}
+
+class DisciplineCategory : Constraint
+
+fun <E> Validator<E>.Property<Category?>.hasCategory() = this.validate(DisciplineDescription()) {
+    it == null || it.business || it.entrepreneurship || it.innovation || it.intellectual_property
+}
+
+private fun isFilledCell(cell: String?) : Boolean = !cell.isNullOrBlank()
