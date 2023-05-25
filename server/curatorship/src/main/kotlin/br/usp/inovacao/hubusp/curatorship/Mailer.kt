@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship
 
+import br.usp.inovacao.hubusp.configuration.Configuration
 import br.usp.inovacao.hubusp.mailer.Mail
 
 class Mailer(
@@ -13,7 +14,7 @@ class Mailer(
     }
 
     fun notifySpreadsheetError(message: String) {
-        val developersEmail = Configuration.DEVS_EMAIL
+        val developersEmail = Configuration.Email.DEVELOPERS
         mailerImpl.send(
             Mail(
                 to = listOf(developersEmail),

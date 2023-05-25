@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import br.usp.inovacao.hubusp.curatorship.Configuration
+import br.usp.inovacao.hubusp.configuration.Configuration
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -48,33 +48,33 @@ class SpreadsheetReader(
     }
 
     private fun readPDI(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.PDI_SHEET_ID,
-        sheetName = Configuration.PDI_TAB_NAME
+        sheetId = Configuration.GoogleSheets.PDI.ID,
+        sheetName = Configuration.GoogleSheets.PDI.TAB_NAME
     )
 
     private fun readCompany(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.COMPANY_SHEET_ID,
-        sheetName = Configuration.COMPANY_TAB_NAME
+        sheetId = Configuration.GoogleSheets.COMPANY.ID,
+        sheetName = Configuration.GoogleSheets.COMPANY.TAB_NAME
     )
 
     private fun readDiscipline(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.DISCIPLINE_SHEET_ID,
-        sheetName = Configuration.DISCIPLINE_TAB_NAME
+        sheetId = Configuration.GoogleSheets.DISCIPLINE.ID,
+        sheetName = Configuration.GoogleSheets.DISCIPLINE.TAB_NAME
     )
 
     private fun readPatent(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.PATENT_SHEET_ID,
-        sheetName = Configuration.PATENT_TAB_NAME
+        sheetId = Configuration.GoogleSheets.PATENT.ID,
+        sheetName = Configuration.GoogleSheets.PATENT.TAB_NAME
     )
 
     private fun readResearcher(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.RESEARCHER_SHEET_ID,
-        sheetName = Configuration.RESEARCHER_TAB_NAME
+        sheetId = Configuration.GoogleSheets.RESEARCHER.ID,
+        sheetName = Configuration.GoogleSheets.RESEARCHER.TAB_NAME
     )
 
     private fun readInitiative(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.INITIATIVE_SHEET_ID,
-        sheetName = Configuration.INITIATIVE_TAB_NAME
+        sheetId = Configuration.GoogleSheets.INITIATIVE.ID,
+        sheetName = Configuration.GoogleSheets.INITIATIVE.TAB_NAME
     )
 
     private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String?> = try {

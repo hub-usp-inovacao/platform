@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship
 
+import br.usp.inovacao.hubusp.configuration.Configuration
 import br.usp.inovacao.hubusp.curatorship.sheets.Sheets
 import br.usp.inovacao.hubusp.curatorship.sheets.SpreadsheetReader
 
@@ -8,9 +9,9 @@ class CliCommandTest {
     private val mailer: Mailer
 
     init {
-        val apiKey = Configuration.SHEETS_API_KEY
-        val user = Configuration.EMAIL_USERNAME
-        val password = Configuration.EMAIL_PASSWORD
+        val apiKey = Configuration.GoogleSheets.API_KEY
+        val user = Configuration.Email.USERNAME
+        val password = Configuration.Email.PASSWORD
 
         reader = SpreadsheetReader(apiKey)
         mailer = Mailer(user, password)
