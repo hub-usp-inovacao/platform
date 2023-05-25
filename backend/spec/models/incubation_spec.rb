@@ -57,7 +57,7 @@ RSpec.describe Incubation, type: :model do
 
   context 'with CSV preparation' do
     let :handmade do
-      [nil] * 18 + [
+      [nil] * 24 + [
         attrs[:was_incubated],
         attrs[:ecosystem]
       ]
