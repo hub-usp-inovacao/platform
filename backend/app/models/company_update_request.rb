@@ -29,8 +29,7 @@ class CompanyUpdateRequest
       Partner
     ]
 
-    headers = merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers })
-    headers
+    merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers })
   end
 
   def self.to_csv
@@ -47,7 +46,7 @@ class CompanyUpdateRequest
                        cur.revenue.prepare_to_csv,
                        cur.incubation.prepare_to_csv,
                        cur.staff.prepare_to_csv,
-                       partner_data,
+                       partner_data
                      ])
       end
     end
