@@ -1,7 +1,7 @@
 package br.usp.inovacao.hubusp.server.persistence.journey
 
+import br.usp.inovacao.hubusp.configuration.Configuration
 import br.usp.inovacao.hubusp.server.discovery.*
-import br.usp.inovacao.hubusp.server.persistence.Configuration
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeModel
 import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
@@ -90,8 +90,8 @@ class JourneyRepositoryImpl(
     }
 
     private fun findCreate(filter: CreateStepFilter): Set<JourneyRecord> {
-        val sheetId = Configuration.INCUBATOR_ID
-        val tabName = Configuration.INCUBATOR_TAB
+        val sheetId = Configuration.GoogleSheets.INCUBATORS.ID
+        val tabName = Configuration.GoogleSheets.INCUBATORS.TAB_NAME
 
         return readSpreadsheet(sheetId, tabName)
             .filter { row -> this.matchesCreateFilter(filter, row) }
@@ -117,8 +117,8 @@ class JourneyRepositoryImpl(
     }
 
     private fun findFund(filter: FundStepFilter): Set<JourneyRecord> {
-        val sheetId = Configuration.FUNDS_ID
-        val tabName = Configuration.FUNDS_TAB
+        val sheetId = Configuration.GoogleSheets.FUNDS.ID
+        val tabName = Configuration.GoogleSheets.FUNDS.TAB_NAME
 
         return readSpreadsheet(sheetId, tabName)
             .filter { filter.type == null || it[0] == filter.type!! }
@@ -132,7 +132,7 @@ class JourneyRepositoryImpl(
     }
 
     private fun readSpreadsheet(sheetId: String, tabName: String): List<List<String>> = try {
-        val apiKey = Configuration.SHEETS_API_KEY
+        val apiKey = Configuration.GoogleSheets.API_KEY
         runBlocking {
             httpClient
                 .get {
