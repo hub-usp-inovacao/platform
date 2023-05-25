@@ -31,7 +31,7 @@ data class PDI(
             email = row[7],
             phone = row[8],
             description = row[11],
-            keywords = row[13]?.split(";")?.toSet()
+            keywords = row[14]?.split(";")?.toSet()
         )
     }
 
