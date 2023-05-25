@@ -3,13 +3,18 @@ package br.usp.inovacao.hubusp.curatorship.sheets
 fun PDI.toRow(): List<String?> = listOf(
     category,
     name,
+    null,
     campus,
     unity,
     coordinator,
     site,
     email,
     phone,
+    null,
+    null,
     description,
+    null,
+    null,
     keywords?.joinToString(";")
 )
 
@@ -36,17 +41,6 @@ class PDITestHelp {
             return listOf(validRow, invalidRow)
         }
 
-        val validRow: List<String?> = listOf(
-            "CEPID",
-            "Flau flau",
-            "USP Leste",
-            "Escola de Artes, Ciências e Humanidades - EACH",
-            null,
-            null,
-            null,
-            null,
-            "Lorem ipsum",
-            "foo;baz"
-        )
+        val validRow: List<String?> = VALID_RECORD.toRow()
     }
 }
