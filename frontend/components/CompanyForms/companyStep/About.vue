@@ -26,8 +26,8 @@
             type="info"
             color="primary"
           >
-            Sua logotipo está hospedada em um link externo que não conseguimos recuperar. Faça o upload
-            novamente, por favor.
+            A empresa possui uma logotipo, mas ela está hospedada em um link externo que não conseguimos recuperar.
+            Envie novamente, por favor.
           </v-alert>
           <ImageUploader
             class="mb-4"
