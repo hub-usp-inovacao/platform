@@ -5,7 +5,7 @@ FROM gradle:7.4.2-jdk17 AS base
 
 WORKDIR /home/gradle/hub
 
-RUN mkdir catalog curatorship discovery hub-app hub-cli mailer persistence techtransfer \
+RUN mkdir catalog configuration curatorship discovery hub-app hub-cli mailer persistence techtransfer \
     && chown gradle:gradle . -R
 
 USER gradle
@@ -16,6 +16,7 @@ CMD gradle build --continuous
 COPY --chown=gradle:gradle  settings.gradle.kts                                                 ./
 COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  ./
 COPY --chown=gradle:gradle  catalog/build.gradle.kts         catalog/gradle.properties          ./catalog/
+COPY --chown=gradle:gradle  configuration/build.gradle.kts   configuration/gradle.properties    ./configuration/
 COPY --chown=gradle:gradle  curatorship/build.gradle.kts     curatorship/gradle.properties      ./curatorship/
 COPY --chown=gradle:gradle  discovery/build.gradle.kts       discovery/gradle.properties        ./discovery/
 COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.properties          ./hub-app/
