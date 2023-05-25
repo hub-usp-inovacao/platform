@@ -68,7 +68,7 @@ class Investment
 
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
-    [nil] * 65
+    [nil] * 62
   end
 
   # rubocop:enable Lint/IneffectiveAccessModifier

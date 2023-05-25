@@ -8,14 +8,14 @@ class CompanyUpdateRequest
   field :timestamp, type: Time
   field :delivered, type: Boolean, default: false
 
-  embeds_one :company_data
-  embeds_one :about_company
-  embeds_one :incubation
-  embeds_one :dna_usp_stamp
-  embeds_many :partners ## [nil] * 29 + 5 + 5 + 20
-  embeds_one :investment ##   [nil] * 61 + 8
-  embeds_one :revenue ## [nil] * 69 + 1
-  embeds_one :staff ## [nil] * 58 + 3
+  embeds_one :company_data ## [nil] * 1 + 12 + [nil] * 61 + 4
+  embeds_one :about_company ## [nil] * 13 + 11
+  embeds_one :incubation ## [nil] * 24 + 2
+  embeds_one :dna_usp_stamp ## [nil] * 26 + 6
+  embeds_many :partners ## [nil] * 32 + 5 + 5 + 20
+  embeds_one :investment ##   [nil] * 62 + 8
+  embeds_one :revenue ## [nil] * 70 + 1
+  embeds_one :staff ## [nil] * 71 + 3
 
   def self.csv_headers
     subsection_classes = [
@@ -30,7 +30,6 @@ class CompanyUpdateRequest
     ]
 
     headers = merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers })
-    Rails.logger.debug headers
     headers
   end
 
@@ -38,6 +37,7 @@ class CompanyUpdateRequest
     CSV.generate(headers: true) do |csv|
       csv << csv_headers
       all.each do |cur|
+        partner_data = cur.partners.map(&:prepare_to_csv).flatten
         csv << merge([
                        [cur.timestamp],
                        cur.dna_usp_stamp.prepare_to_csv,
@@ -47,14 +47,14 @@ class CompanyUpdateRequest
                        cur.revenue.prepare_to_csv,
                        cur.incubation.prepare_to_csv,
                        cur.staff.prepare_to_csv,
-                       cur.partners.map(&:prepare_to_csv)
+                       partner_data,
                      ])
       end
     end
   end
 
   def self.merge(sections)
-    base = [nil] * 91
+    base = [nil] * 78
     base.each_with_index do |_b, i|
       sections.each do |sec|
         base[i] = base[i] || sec[i]

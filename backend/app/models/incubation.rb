@@ -61,6 +61,6 @@ class Incubation
   end
 
   def self.row_offset
-    [nil] * 18
+    [nil] * 24
   end
 end

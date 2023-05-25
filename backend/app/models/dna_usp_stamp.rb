@@ -63,7 +63,7 @@ class DnaUspStamp
 
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
-    [nil] * 27
+    [nil] * 26
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 
