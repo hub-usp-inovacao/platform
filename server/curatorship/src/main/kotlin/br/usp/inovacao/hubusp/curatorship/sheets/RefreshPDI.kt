@@ -32,6 +32,7 @@ class RefreshPDI(
             // TODO: delete "old" documents, when due
             spreadsheetReader
                 .read(Sheets.PDIs)
+                .drop(1)
                 .mapIndexed(this::validateRow)
                 .forEach(this::persistValidData)
         } catch (e: SheetReadingException) {

@@ -34,11 +34,16 @@ class PDITestHelp {
         )
 
         fun validRowAndInvalidRow(): List<List<String?>> {
+            val header = listOf(
+                "CATEGORIA", "NOME","DESCRICAO", "CAMPUS",
+                "UNIDADE", "COORDENADOR", "SITE", "EMAIL",
+                "TELEFONE", "DESCRICAO","DESCRICAO", "DESCRICAO",
+                "AREA DO CONHECIMENTO","SERVICOS OFERECIDOS","TAGS")
             val validRow = VALID_RECORD.toRow()
             val invalidRow = VALID_RECORD.toRow().toMutableList()
             invalidRow[0] = "Wrong Category"
 
-            return listOf(validRow, invalidRow)
+            return listOf(header, validRow, invalidRow)
         }
 
         val validRow: List<String?> = VALID_RECORD.toRow()
