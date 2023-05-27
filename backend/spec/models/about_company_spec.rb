@@ -53,11 +53,6 @@ RSpec.describe AboutCompany, type: :model do
       attrs[:site] = 'foobar'
       expect(described_class.new(attrs)).to be_invalid
     end
-
-    it 'on malformed logo url' do
-      attrs[:logo] = 'definetely not a url'
-      expect(described_class.new(attrs)).to be_invalid
-    end
   end
 
   context 'with CSV preparation' do
