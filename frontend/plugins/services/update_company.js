@@ -13,16 +13,6 @@ async function updateData(data, logo) {
       body: JSON.stringify(data),
     });
 
-    if (logo) {
-      const body = new FormData();
-      body.append("company_image", logo);
-
-      await fetch(url, {
-        method: "PATCH",
-        body,
-      });
-    }
-
     return resp;
   } catch (error) {
     console.log("error occuried while updating...");
