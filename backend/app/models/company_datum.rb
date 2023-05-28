@@ -8,7 +8,6 @@ class CompanyDatum
   field :corporate_name, type: String
   field :year, type: Integer
   field :cnae, type: String
-  field :logo, type: String
   field :registry_status, type: String
   field :phones, type: Array
   field :emails, type: Array
