@@ -112,8 +112,9 @@ class CompanyUpdatesController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def create_logo
-    cnpj = params[:cnpj]
+    params = create_logo_params
     logo = params[:logo]
+    cnpj = params[:cnpj]
 
     if logo.present?
       store_tmp_logo(logo, cnpj)
@@ -123,6 +124,10 @@ class CompanyUpdatesController < ApplicationController
   end
 
   private
+
+  def create_logo_params
+    params.require(:company).permit(:cnpj, :logo)
+  end
 
   def request_update_params
     params.require(:update_request).permit(:cnpj)

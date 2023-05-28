@@ -198,8 +198,8 @@ export default {
       }
       const endpointLogo = "/companies/update_request/logo";
       const formData = new FormData();
-      formData.append("cnpj", this.cnpj);
-      formData.append("logo", logoImage);
+      formData.append("company[cnpj]", this.cnpj);
+      formData.append("company[logo]", logoImage);
 
       try {
         await this.$axios.$post(endpointLogo, formData);
