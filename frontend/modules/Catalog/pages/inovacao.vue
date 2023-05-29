@@ -8,15 +8,6 @@
         @search="search.term = $event"
         @clear="search.term = ''"
       />
-      <v-alert
-      prominent
-      type="error"
-      color="red"
-      class="text-center"
-      style="font-size: 18px;"
-      >
-        <b> A página está sob manutenção </b>
-      </v-alert>
     </div>
 
     <Background class="absolute" />
@@ -34,6 +25,7 @@
         <p class="body-2 font-italic">{{ item.category }}</p>
         <p class="body-2">{{ item.unity }}</p>
         <p class="body-2">{{ item.campus }}</p>
+        <p class="body-2">{{ item.keywords.join(';') }}</p>
         <p v-if="item.coordinator" class="body-2">
           Coordenador: {{ item.coordinator }}
         </p>
