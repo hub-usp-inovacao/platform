@@ -52,6 +52,7 @@ internal class RefreshPDITest {
         every { mockMailer.notifySpreadsheetError(any()) } returns Unit
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
+        every { mockPDIRepo.clean()} returns Unit
 
         // when
         underTest.refresh()
