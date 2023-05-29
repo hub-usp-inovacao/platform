@@ -30,11 +30,13 @@ class RefreshPDI(
     fun refresh() {
         try {
             // TODO: delete "old" documents, when due
-            spreadsheetReader
+            val data = spreadsheetReader
                 .read(Sheets.PDIs)
                 .drop(1)
                 .mapIndexed(this::validateRow)
-                .forEach(this::persistValidData)
+            if(data.filterIsInstance<PDI>().isNotEmpty()){
+                data.forEach(this::persistValidData)
+            }
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
         }
