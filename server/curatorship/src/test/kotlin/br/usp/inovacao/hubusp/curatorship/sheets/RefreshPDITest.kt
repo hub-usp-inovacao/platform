@@ -60,4 +60,17 @@ internal class RefreshPDITest {
         verify(exactly = 1) { mockPDIRepo.save(any()) }
         verify(exactly = 1) { mockPDIErrorRepo.save(any()) }
     }
+
+    @Test
+    fun `it removes all the data stored in the database`(){
+        // given
+        every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
+        every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIRepo.clean() } returns Unit
+
+        //when
+        mockPDIRepo.clean()
+        //then
+        verify(exactly = 0) { mockPDIRepo.save(any()) }
+    }
 }

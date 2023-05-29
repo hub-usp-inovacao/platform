@@ -5,6 +5,7 @@ import br.usp.inovacao.hubusp.curatorship.sheets.PDIRepository
 import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
 
 class PDIRepositoryImpl(
@@ -33,5 +34,8 @@ class PDIRepositoryImpl(
         )
 
         pdiCollection.insertOne(pdiModel)
+    }
+    override fun clean() {
+        pdiCollection.deleteMany(Filters.empty())
     }
 }
