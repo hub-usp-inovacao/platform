@@ -6,6 +6,7 @@ RSpec.describe AboutCompany, type: :model do
   let :attrs do
     {
       description: 'long text about the company',
+      logo: 'https://automatedtests.dev/url/to/logo.png',
       services: %w[foo bar baz],
       technologies: %w[baz bla foo],
       site: 'https://www.google.com',
@@ -30,6 +31,16 @@ RSpec.describe AboutCompany, type: :model do
       attrs[:site] = ''
       expect(described_class.new(attrs)).to be_valid
     end
+
+    it 'is valid with empty logo url' do
+      attrs[:logo] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'is valid with null logo url' do
+      attrs[:logo] = nil
+      expect(described_class.new(attrs)).to be_valid
+    end
   end
 
   context 'with validation errors' do
@@ -52,7 +63,8 @@ RSpec.describe AboutCompany, type: :model do
         attrs[:technologies].join(';'),
         nil,
         attrs[:site]
-      ] + [nil] * 4 + [
+      ] + [nil] * 3 + [
+        attrs[:logo],
         attrs[:odss].join(';')
       ] + [
         attrs[:social_medias].join(';')

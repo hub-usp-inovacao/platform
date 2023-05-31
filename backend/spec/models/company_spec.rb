@@ -89,6 +89,12 @@ RSpec.describe Company, type: :model do
       expect(company).to be_valid
     end
 
+    it 'is valid with a link to logo' do
+      valid_attr[:logo] = 'https://api.automatedtests/url/to/logo.png'
+      company = described_class.new valid_attr
+      expect(company).to be_valid
+    end
+
     %i[cnpj name year description incubated ecosystems services address
        corporate_name].each do |required|
       it "is invalid without #{required}" do
@@ -184,6 +190,13 @@ RSpec.describe Company, type: :model do
         attrs[:partners][0][:bond] = 'james'
         company = described_class.new attrs
         expect(company).to be_valid
+      end
+
+      it 'does not convert logo link to drive when it is not a drive file id' do
+        attrs = valid_attr.clone
+        attrs[:logo] = 'https://api.automatedtests/url/to/logo.png'
+        company = described_class.new attrs
+        expect(company.logo).to eq 'https://api.automatedtests/url/to/logo.png'
       end
     end
   end

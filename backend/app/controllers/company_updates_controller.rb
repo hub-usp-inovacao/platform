@@ -85,6 +85,8 @@ class CompanyUpdatesController < ApplicationController
     if has_error
       render json: { errors: errors }, status: :bad_request
     else
+      about_company.save_logo(prms[:about_company][:logo], request.base_url)
+
       @comp_update = CompanyUpdateRequest.new
       @comp_update.timestamp = Time.zone.now
 
@@ -109,7 +111,23 @@ class CompanyUpdatesController < ApplicationController
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/PerceivedComplexity
 
+  def create_logo
+    params = create_logo_params
+    logo = params[:logo]
+    cnpj = params[:cnpj]
+
+    if logo.present?
+      store_tmp_logo(logo, cnpj)
+    else
+      render status: :bad_request, json: { message: 'Logo is required' }
+    end
+  end
+
   private
+
+  def create_logo_params
+    params.require(:company).permit(:cnpj, :logo)
+  end
 
   def request_update_params
     params.require(:update_request).permit(:cnpj)
@@ -153,5 +171,18 @@ class CompanyUpdatesController < ApplicationController
     else
       email.gsub(/.{5}@/, '*****@')
     end
+  end
+
+  def store_tmp_logo(logo_file, cnpj)
+    cnpj = cnpj.gsub(/[^0-9]/, '')
+    filename = cnpj + File.extname(logo_file.original_filename)
+
+    logo_path = Rails.root.join('tmp', 'uploads', 'logos', filename)
+
+    File.open(logo_path, 'wb') do |file|
+      file.write(logo_file.read)
+    end
+
+    render status: :ok
   end
 end
