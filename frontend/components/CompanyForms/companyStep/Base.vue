@@ -63,7 +63,7 @@
             "000-0" e a descrição no formato de texto. A lista de códigos e naturezas jurídicas
             pode ser encontrada na
             <a
-              href="https://concla.ibge.gov.br/estrutura/natjur-estrutura/natureza-juridica-2021"
+              href="https://concla.ibge.gov.br/images/concla/documentacao/CONCLA-TNJ2021-EstruturaDetalhada.pdf"
               target="_blank"
               >tabela de naturezas jurídicas do IBGE</a
             >.
