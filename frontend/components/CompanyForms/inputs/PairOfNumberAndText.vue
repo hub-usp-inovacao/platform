@@ -7,6 +7,7 @@
         mask="###-#"
         :label="labelOne"
         v-model="one"
+        @input="$emit('input', inputEvent)"
       />
     </v-col>
     <v-col cols="10">
@@ -15,6 +16,7 @@
         :value="two"
         :label="labelTwo"
         v-model="two"
+        @input="$emit('input', inputEvent)"
       />
     </v-col>
   </v-row>
@@ -71,12 +73,17 @@ export default {
       }
     },
   },
+  methods: {
+    set(field, value) {
+      this[field] = value;
+    },
+  },
   watch: {
     one() {
-      this.$emit("input", this.inputEvent);
+      this.$emit("changeOne", this.one);
     },
     two() {
-      this.$emit("input", this.inputEvent);
+      this.$emit("changeTwo", this.two);
     },
   },
 };

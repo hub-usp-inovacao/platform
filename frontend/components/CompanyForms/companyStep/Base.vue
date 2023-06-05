@@ -69,12 +69,15 @@
             >.
           </legend>
           <PairOfNumberAndText
-            :value="companyNature"
+            :value="company_nature"
             labelOne="Código"
             labelTwo="Natureza Jurídica"
             placeholderOne="000-0"
             separator=" - "
             @input="setCompanyNature"
+            @changeOne="matchCompanyNature('one', $event)"
+            @changeTwo="matchCompanyNature('two', $event)"
+            ref="companyNatureField"
           />
         </v-container>
       </div>
@@ -184,7 +187,7 @@ export default {
       "Nula",
       "Suspensa"
     ],
-    sizeList: ["MEI", "ME", "EPP", "DEMAIS"],
+    sizeList: ["MEI", "ME", "EPP", "DEMAIS"]
   }),
   computed: {
     ...mapGetters({
@@ -203,7 +206,7 @@ export default {
       city: "company_forms/city",
       state: "company_forms/state",
       cep: "company_forms/cep",
-      companyNature: "company_forms/companyNature",
+      company_nature: "company_forms/company_nature",
     }),
   },
   created() {
@@ -235,6 +238,27 @@ export default {
       this.allStates = ufs
         .map(({ nome, sigla }) => `${nome} (${sigla})`)
         .sort();
+    },
+    findReverse(association, value) {
+      const key = Object.keys(association).find(
+        (key) => association[key].localeCompare(value) === 0
+      );
+      return key;
+    },
+    matchCompanyNature(field, value) {
+      const association = this.$company_nature;
+
+      let complement_value = undefined;
+      if (field === "one") {
+        complement_value = association[value];
+      } else {
+        complement_value = this.findReverse(association, value);
+      }
+
+      const reverse_field = field === "one" ? "two" : "one";
+      if (complement_value) {
+        this.$refs.companyNatureField.set(reverse_field, complement_value);
+      }
     },
   },
 };
