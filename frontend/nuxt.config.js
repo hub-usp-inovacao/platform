@@ -85,6 +85,7 @@ export default {
     { src: "~/plugins/knowledge_areas.js" },
     { src: "~/plugins/cnae.js" },
     { src: "~/plugins/company.js" },
+    { src: "~/plugins/company_nature.js" },
     { src: "~/plugins/fuzzySearch.js" },
     { src: "~/plugins/indexer.js" },
     { src: "~/plugins/remove_accent.js" },
