@@ -15,7 +15,8 @@ fun PDI.toRow(): List<String?> = listOf(
     description,
     null,
     null,
-    keywords?.joinToString(";")
+    keywords?.joinToString(";"),
+    timestamp
 )
 
 class PDITestHelp {
@@ -30,7 +31,8 @@ class PDITestHelp {
             email = null,
             description = "lorem ipsum",
             site = null,
-            keywords = setOf("foo", "baz")
+            keywords = setOf("foo", "baz"),
+            timestamp = "2023-06-02T12:16:59.218264743"
         )
 
         fun validRowAndInvalidRow(): List<List<String?>> {

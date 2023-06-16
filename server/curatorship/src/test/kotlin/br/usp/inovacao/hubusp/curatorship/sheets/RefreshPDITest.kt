@@ -70,7 +70,7 @@ internal class RefreshPDITest {
         every { mockPDIRepo.clean() } returns Unit
 
         //when
-        mockPDIRepo.clean()
+        underTest.clean()
         //then
         verify(exactly = 0) { mockPDIRepo.save(any()) }
     }
