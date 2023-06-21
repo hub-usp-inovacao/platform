@@ -116,6 +116,8 @@ class AboutCompany
   # rubocop:enable Lint/IneffectiveAccessModifier
 
   def save_logo_to_public(logo, base_url)
+    return logo if logo.start_with?('http')
+
     FileUtils.mv(
       Rails.root.join('tmp', 'uploads', 'logos', logo),
       Rails.root.join('public', 'uploads', 'logos', logo)
