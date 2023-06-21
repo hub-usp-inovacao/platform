@@ -19,7 +19,7 @@
         pós-graduação na USP, ou então por pesquisadores e docentes da USP.
         Também podem se cadastrar as empresas que sejam resultantes de processos
         de incubação ou de aceleração em alguma das incubadoras associadas à
-        Universidade de São Paulo (CIETEC, ESALQTec, HABITs e Supera).
+        Universidade de São Paulo (Incubadora USP/IPEN, ESALQTec, HABITs e Supera).
       </p>
 
       <p>
@@ -56,7 +56,7 @@
         graduação ou pós-graduação na USP, ou então por pesquisadores e docentes
         da USP. Também são consideradas aquelas empresas que sejam resultantes
         de processos de incubação ou de aceleração em alguma das incubadoras
-        associadas à Universidade de São Paulo (CIETEC, ESALQTec, HABITs e
+        associadas à Universidade de São Paulo (Incubadora USP/IPEN, ESALQTec, HABITs e
         Supera).
       </p>
 

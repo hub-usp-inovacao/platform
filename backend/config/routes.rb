@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/iniciatives', to: 'iniciative#index'
   patch '/companies', to: 'company_updates#create'
   post '/companies/update_request', to: 'company_updates#request_update'
+  post '/companies/update_request/logo', to: 'company_updates#create_logo'
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
   post '/skills/update_request', to: 'skills_updates#request_update'

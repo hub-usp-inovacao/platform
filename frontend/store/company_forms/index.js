@@ -77,7 +77,6 @@ export const actions = {
           commit("setFormField", { key: k, value: message[key] });
         }
       });
-      commit("setFormField", { key: "logo", value: undefined });
     }
   },
 

@@ -5,6 +5,7 @@ const state = () => ({
   site: "",
   odss: [],
   socialMedias: [],
+  logo: "",
 });
 
 const getters = {
@@ -15,6 +16,7 @@ const getters = {
   site: (s) => s.site,
   odss: (s) => s.odss,
   socialMedias: (s) => s.socialMedias,
+  logo: (s) => s.logo,
 };
 
 const mutations = {
@@ -35,6 +37,8 @@ const actions = {
     commit("setFormField", { key: "odss", value }),
   setSocialMedias: ({ commit }, value) =>
     commit("setFormField", { key: "socialMedias", value }),
+  setLogo: ({ commit }, value) =>
+    commit("setFormField", { key: "logo", value }),
 };
 
 const prepareSection = (obj) => ({
@@ -45,6 +49,7 @@ const prepareSection = (obj) => ({
     site: obj.site,
     odss: obj.odss,
     social_medias: obj.socialMedias,
+    logo: obj.logo,
   },
 });
 

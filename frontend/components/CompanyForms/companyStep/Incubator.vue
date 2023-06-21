@@ -53,7 +53,7 @@ export default {
       "Sim. A empresa já está graduada",
     ],
     incubadoras: [
-      "CIETEC - Centro de Inovação, Empreendedorismo e Tecnologia",
+      "Incubadora USP/IPEN",
       "ESALQTec - Incubadora de Empresas Agrozootécnicas de Piracicaba",
       "HABITs - Habitat de Inovação Tecnológica e Social/Incubadora-Escola",
       "ParqTec - Fundação Parque Tecnológico de São Carlos",
