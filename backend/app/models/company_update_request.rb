@@ -17,6 +17,18 @@ class CompanyUpdateRequest
   embeds_one :revenue ## [nil] * 70 + 1
   embeds_one :staff ## [nil] * 71 + 3
 
+  def self.row_offset_partners_count
+    [nil] * 78
+  end
+
+  def self.partners_count_header
+    row_offset_partners_count + ['Quantidade de sócios']
+  end
+
+  def self.partners_count_to_csv(count)
+    row_offset_partners_count + [count]
+  end
+
   def self.csv_headers
     subsection_classes = [
       DnaUspStamp,
@@ -29,14 +41,15 @@ class CompanyUpdateRequest
       Partner
     ]
 
-    merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers })
+    merge([['Carimbo de data']] + subsection_classes.map { |cls| cls.send :csv_headers } + [partners_count_header])
   end
 
   def self.to_csv
     CSV.generate(headers: true) do |csv|
       csv << csv_headers
       all.each do |cur|
-        partner_data = cur.partners.map(&:prepare_to_csv).flatten
+        partners_count_csv = partners_count_to_csv(cur.partners.count)
+        partners_flatten = cur.partners.map(&:prepare_to_csv).flatten
         csv << merge([
                        [cur.timestamp],
                        cur.dna_usp_stamp.prepare_to_csv,
@@ -46,14 +59,15 @@ class CompanyUpdateRequest
                        cur.revenue.prepare_to_csv,
                        cur.incubation.prepare_to_csv,
                        cur.staff.prepare_to_csv,
-                       partner_data
-                     ])
+                       partners_flatten,
+                       partners_count_csv
+        ])
       end
     end
   end
 
   def self.merge(sections)
-    base = [nil] * 78
+    base = [nil] * 79
     base.each_with_index do |_b, i|
       sections.each do |sec|
         base[i] = base[i] || sec[i]
