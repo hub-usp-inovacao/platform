@@ -1,5 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import java.time.LocalDateTime
+
 fun PDI.toRow(): List<String?> = listOf(
     category,
     name,
@@ -16,7 +18,7 @@ fun PDI.toRow(): List<String?> = listOf(
     null,
     null,
     keywords?.joinToString(";"),
-    timestamp
+    timestamp.toString()
 )
 
 class PDITestHelp {
@@ -32,7 +34,7 @@ class PDITestHelp {
             description = "lorem ipsum",
             site = null,
             keywords = setOf("foo", "baz"),
-            timestamp = "2023-06-02T12:16:59.218264743"
+            timestamp = LocalDateTime.now()
         )
 
         fun validRowAndInvalidRow(): List<List<String?>> {
