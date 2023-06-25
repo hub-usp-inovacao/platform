@@ -25,7 +25,7 @@
         <p class="body-2 font-italic">{{ item.category }}</p>
         <p class="body-2">{{ item.unity }}</p>
         <p class="body-2">{{ item.campus }}</p>
-        <p class="body-2">{{ item.keywords.join(';') }}</p>
+        <p class="body-2">{{ item.keywords.join('; ') }}</p>
         <p v-if="item.coordinator" class="body-2">
           Coordenador: {{ item.coordinator }}
         </p>
