@@ -74,6 +74,5 @@ internal class RefreshPDITest {
         underTest.refresh()
         //then
         verify(exactly = 1) { mockPDIRepo.clean() }
-        verify { } {mockPDIRepo.}
     }
 }
