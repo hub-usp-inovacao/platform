@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":configuration"))
     implementation(project(":curatorship"))
     implementation(project(":techtransfer"))
     implementation(project(":persistence"))

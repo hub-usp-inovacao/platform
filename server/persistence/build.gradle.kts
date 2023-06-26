@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
     implementation(project(":catalog"))
+    implementation(project(":configuration"))
     implementation(project(":curatorship"))
     implementation(project(":discovery"))
 

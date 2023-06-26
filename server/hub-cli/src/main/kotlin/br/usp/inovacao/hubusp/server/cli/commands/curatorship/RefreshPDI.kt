@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.cli.commands.curatorship
 
+import br.usp.inovacao.hubusp.configuration.Configuration
 import br.usp.inovacao.hubusp.curatorship.Mailer
 import br.usp.inovacao.hubusp.curatorship.sheets.SpreadsheetReader
 import br.usp.inovacao.hubusp.server.persistence.configureDB
@@ -12,10 +13,16 @@ class RefreshPDI : CliktCommand() {
 
     init {
         // TODO: replace empty strings with configuration
-        val db = configureDB("", "", "", "")
+        val db = configureDB(
+            protocol = Configuration.Persistence.PROTOCOL,
+            host = Configuration.Persistence.HOST,
+            port = Configuration.Persistence.PORT,
+            dbName = Configuration.Persistence.DB_NAME)
         refreshPDI = br.usp.inovacao.hubusp.curatorship.sheets.RefreshPDI(
-            mailer = Mailer("", ""),
-            spreadsheetReader = SpreadsheetReader(""),
+            mailer = Mailer(
+                user = Configuration.Email.USERNAME,
+                password = Configuration.Email.PASSWORD),
+            spreadsheetReader = SpreadsheetReader(Configuration.GoogleSheets.API_KEY),
             pdiRepository = PDIRepositoryImpl(db),
             pdiErrorRepository = PDIErrorRepositoryImpl(db)
         )
