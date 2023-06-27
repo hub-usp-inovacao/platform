@@ -1,4 +1,4 @@
-uhpackage br.usp.inovacao.hubusp.server.persistence.curatorship
+package br.usp.inovacao.hubusp.server.persistence.curatorship
 
 import br.usp.inovacao.hubusp.curatorship.sheets.PDI
 import br.usp.inovacao.hubusp.curatorship.sheets.PDIRepository
