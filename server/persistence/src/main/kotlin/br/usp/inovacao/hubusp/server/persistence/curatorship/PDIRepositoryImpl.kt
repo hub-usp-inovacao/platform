@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.persistence.curatorship
+uhpackage br.usp.inovacao.hubusp.server.persistence.curatorship
 
 import br.usp.inovacao.hubusp.curatorship.sheets.PDI
 import br.usp.inovacao.hubusp.curatorship.sheets.PDIRepository
@@ -40,7 +40,7 @@ class PDIRepositoryImpl(
     override fun clean() {
         val currentTime = LocalDateTime.now()
 
-        val fiveSecondsAgo = currentTime.minusSeconds(5)
+        val fiveSecondsAgo = currentTime.minusSeconds(30)
 
         val filter = Filters.lt("timestamp", fiveSecondsAgo)
 
