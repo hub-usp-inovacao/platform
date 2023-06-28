@@ -11,7 +11,7 @@ import org.litote.kmongo.getCollection
 
 fun PDIModel.toCatalogPDI(): PDI = PDI(
     category, name, campus, unity, coordinator,
-    site, email, phone, description, tags
+    site, email, phone, description, tags, timestamp,
 )
 
 class CatalogPDIRepositoryImpl(

@@ -29,4 +29,13 @@ object Configuration {
 
     val INITIATIVE_SHEET_ID = loader.getString("curatorship.sheets.initiative_id")
     val INITIATIVE_TAB_NAME = loader.getString("curatorship.sheets.initiative_tab")
+
+
+
+    val DATASOURCE_PROTOCOL = loader.getString("curatorship.datasource.protocol")
+    val DATASOURCE_HOST = loader.getString("curatorship.datasource.host")
+    val DATASOURCE_PORT = loader.getString("curatorship.datasource.port")
+    val DATASOURCE_DBNAME = loader.getString("curatorship.datasource.dbName")
+
+
 }

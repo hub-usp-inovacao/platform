@@ -52,6 +52,7 @@ internal class RefreshPDITest {
         every { mockMailer.notifySpreadsheetError(any()) } returns Unit
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
+        every { mockPDIRepo.clean()} returns Unit
 
         // when
         underTest.refresh()
@@ -59,5 +60,19 @@ internal class RefreshPDITest {
         // then
         verify(exactly = 1) { mockPDIRepo.save(any()) }
         verify(exactly = 1) { mockPDIErrorRepo.save(any()) }
+    }
+
+    @Test
+    fun `it cleans old data after storing valid rows`(){
+        // given
+        every { mockPDIErrorRepo.save(any()) } returns Unit
+        every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
+        every { mockPDIRepo.save(any()) } returns Unit
+        every { mockPDIRepo.clean() } returns Unit
+
+        //when
+        underTest.refresh()
+        //then
+        verify(exactly = 1) { mockPDIRepo.clean() }
     }
 }

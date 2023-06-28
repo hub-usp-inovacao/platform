@@ -30,10 +30,17 @@ class RefreshPDI(
     fun refresh() {
         try {
             // TODO: delete "old" documents, when due
-            spreadsheetReader
+            val data = spreadsheetReader
                 .read(Sheets.PDIs)
+                .drop(1)
                 .mapIndexed(this::validateRow)
-                .forEach(this::persistValidData)
+            if(data.filterIsInstance<PDI>().isNotEmpty()){
+                pdiRepository.clean()
+                data.forEach(this::persistValidData)
+            }
+            else{
+                mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")
+            }
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
         }

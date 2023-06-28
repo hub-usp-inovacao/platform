@@ -1,5 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
 class ValidationException(
-    val messages: Iterable<String>
+    val messages: List<String>
 ) : RuntimeException(messages.joinToString("|"))
