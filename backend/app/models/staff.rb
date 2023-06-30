@@ -54,6 +54,6 @@ class Staff
   end
 
   def self.row_offset
-    [nil] * 62
+    [nil] * 71
   end
 end

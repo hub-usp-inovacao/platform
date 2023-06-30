@@ -63,7 +63,7 @@ RSpec.describe DnaUspStamp, type: :model do
 
   context 'with CSV preparation' do
     it 'prepares to CSV correctly' do
-      handmade = [nil] * 27 + [
+      handmade = [nil] * 26 + [
         attrs[:wants],
         attrs[:email],
         attrs[:name],

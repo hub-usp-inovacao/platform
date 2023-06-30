@@ -40,36 +40,31 @@ class Partner
   end
 
   def prepare_to_csv
-    base = offset + [
+    base = [
       name,
       nusp,
       bond,
-      unity_to_csv
+      unity_to_csv,
+      nil
     ]
 
     return base if index > 1
 
-    base + [
+    Partner.row_offset + base + [
       email,
       phone,
-      role
+      role,
+      nil,
+      nil
     ]
   end
 
-  def offset
-    jump = index > 1 ? [nil] * 10 : []
-
-    skip = index > 2 ? [nil] * 5 * (index - 2) : []
-
-    Partner.row_offset + jump + skip
+  def self.row_offset
+    [nil] * 32
   end
 
   def unity_to_csv
     bond.eql?('Nenhum') ? '' : unity
-  end
-
-  def self.row_offset
-    [nil] * 33
   end
 
   def self.csv_headers
