@@ -114,7 +114,7 @@ class Company
         last_year: row[73],
         number_of_CLT_employees: row[62],
         number_of_PJ_colaborators: row[63],
-        number_of_interns: row[64],
+        number_of_interns: row[64]
       }
     )
 
@@ -247,8 +247,8 @@ class Company
   end
 
   def self.received?(received_investment)
-    return false if received_investment == "Não"
-    return true if received_investment == "Sim"
+    return false if received_investment == 'Não'
+    return true if received_investment == 'Sim'
 
     received_investment
   end
@@ -270,7 +270,7 @@ class Company
       venture: row[69],
       equity: row[70],
       pipe: row[71],
-      others: row[72] 
+      others: row[72]
     }
   end
 
