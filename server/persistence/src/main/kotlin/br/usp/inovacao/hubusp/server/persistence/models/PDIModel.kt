@@ -40,5 +40,10 @@ data class PDIModel(
     val phone: String,
     val description: String,
     val tags: Set<String>,
-    @Contextual val timestamp: LocalDateTime,
+    val timestamp: PDITime,
+)
+
+@Serializable
+data class PDITime(
+    @Contextual val time: LocalDateTime,
 )

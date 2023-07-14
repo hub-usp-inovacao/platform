@@ -3,6 +3,7 @@ package br.usp.inovacao.hubusp.server.persistence.curatorship
 import br.usp.inovacao.hubusp.curatorship.sheets.PDI
 import br.usp.inovacao.hubusp.curatorship.sheets.PDIRepository
 import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
+import br.usp.inovacao.hubusp.server.persistence.models.PDITime
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
@@ -32,7 +33,7 @@ class PDIRepositoryImpl(
            phone = pdi.phone ?: "",
            description = pdi.description!!,
            tags = pdi.keywords!!,
-           timestamp = pdi.timestamp
+           timestamp = PDITime(time = pdi.timestamp)
         )
 
         pdiCollection.insertOne(pdiModel)
