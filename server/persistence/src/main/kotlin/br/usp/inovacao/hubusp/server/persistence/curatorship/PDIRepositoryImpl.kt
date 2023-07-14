@@ -33,7 +33,7 @@ class PDIRepositoryImpl(
            phone = pdi.phone ?: "",
            description = pdi.description!!,
            tags = pdi.keywords!!,
-           timestamp = PDITime(time = pdi.timestamp)
+           timestamp = PDITime(time = LocalDateTime.now())
         )
 
         pdiCollection.insertOne(pdiModel)
