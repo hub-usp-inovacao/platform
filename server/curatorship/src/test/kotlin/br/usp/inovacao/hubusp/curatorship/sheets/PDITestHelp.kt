@@ -34,7 +34,7 @@ class PDITestHelp {
             description = "lorem ipsum",
             site = null,
             keywords = setOf("foo", "baz"),
-            timestamp = Time(time = LocalDateTime.now())
+            timestamp = LocalDateTime.now()
         )
 
         fun validRowAndInvalidRow(): List<List<String?>> {
