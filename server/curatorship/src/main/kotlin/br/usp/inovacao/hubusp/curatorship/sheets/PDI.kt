@@ -16,18 +16,18 @@ import org.valiktor.validate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Serializer(forClass = Time::class)
-object TimeSerializer : KSerializer<Time> {
+@Serializer(forClass = LocalDateTimeSerializer::class)
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Time", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Time) {
-        encoder.encodeString(value.time.format(formatter))
+    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+        encoder.encodeString(value.format(formatter))
     }
 
-    override fun deserialize(decoder: Decoder): Time {
-        return Time(LocalDateTime.parse(decoder.decodeString(), formatter))
+    override fun deserialize(decoder: Decoder): LocalDateTime {
+        return LocalDateTime.parse(decoder.decodeString(), formatter)
     }
 }
 
@@ -43,7 +43,8 @@ data class PDI(
     val description: String?,
     val site: String?,
     val keywords: Set<String>?,
-    @Contextual val timestamp: Time
+    @Serializable(LocalDateTimeSerializer::class)
+    val timestamp: LocalDateTime
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
@@ -59,7 +60,7 @@ data class PDI(
             phone = row[8],
             description = row[11],
             keywords = row[14]?.split(";")?.toSet(),
-            timestamp = Time( time = LocalDateTime.now())
+            timestamp = LocalDateTime.now()
         )
     }
 
@@ -108,8 +109,3 @@ data class PDI(
         }
     }
 }
-
-@Serializable
-data class Time(
-    @Contextual val time: LocalDateTime,
-)

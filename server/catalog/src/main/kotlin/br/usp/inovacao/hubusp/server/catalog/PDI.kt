@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.catalog
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
@@ -12,22 +11,24 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Serializer(forClass = Time::class)
-object TimeSerializer : KSerializer<Time> {
+@OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+@Serializer(forClass = LocalDateTimeSerializer::class)
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Time", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Time) {
-        encoder.encodeString(value.time.format(formatter))
+    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+        encoder.encodeString(value.format(formatter))
     }
 
-    override fun deserialize(decoder: Decoder): Time {
-        return Time(LocalDateTime.parse(decoder.decodeString(), formatter))
+    override fun deserialize(decoder: Decoder): LocalDateTime {
+        return LocalDateTime.parse(decoder.decodeString(), formatter)
     }
 }
 
 
+@OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
 @Serializable
 data class PDI(
     val category: String,
@@ -40,12 +41,8 @@ data class PDI(
     val phone: String,
     val description: String,
     val tags: Set<String>,
-    val timestamp: Time,
-)
-
-@Serializable
-data class Time(
-    @Contextual val time: LocalDateTime,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val timestamp: LocalDateTime,
 )
 
 

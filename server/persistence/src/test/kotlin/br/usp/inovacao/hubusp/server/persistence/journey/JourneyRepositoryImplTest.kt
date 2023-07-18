@@ -149,7 +149,7 @@ internal class JourneyRepositoryImplTest {
             phone = "",
             description = "",
             tags = emptySet(),
-            timestamp = PDITime(time = LocalDateTime.now())
+            timestamp = LocalDateTime.now()
         ),
         PDIModel(
             category = "INCT",
@@ -162,7 +162,7 @@ internal class JourneyRepositoryImplTest {
             phone = "",
             description = "",
             tags = emptySet(),
-            timestamp = PDITime(time = LocalDateTime.now())
+            timestamp = LocalDateTime.now()
         )
     )
 
