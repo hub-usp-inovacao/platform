@@ -2,7 +2,6 @@ package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.PDISearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.PDIModel
-import br.usp.inovacao.hubusp.server.persistence.models.PDITime
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
