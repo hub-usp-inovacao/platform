@@ -12,23 +12,7 @@ import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-@Serializer(forClass = LocalDateTime::class)
-object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.format(formatter))
-    }
-
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), formatter)
-    }
-}
 
 @kotlinx.serialization.Serializable
 data class PDI(
@@ -42,7 +26,6 @@ data class PDI(
     val description: String?,
     val site: String?,
     val keywords: Set<String>?,
-    @Contextual val timestamp: LocalDateTime
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
@@ -58,7 +41,6 @@ data class PDI(
             phone = row[8],
             description = row[11],
             keywords = row[14]?.split(";")?.toSet(),
-            timestamp = LocalDateTime.now()
         )
     }
 
