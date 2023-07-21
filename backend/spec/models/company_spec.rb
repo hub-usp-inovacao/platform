@@ -28,6 +28,12 @@ RSpec.describe Company, type: :model do
       },
       active: true,
       url: 'https://techagr.com',
+      odss: [
+        '4 - Educação de Qualidade',
+        '5 - Igualdade de Gênero',
+        '8 - Trabalho Decente e Crescimento Econômico',
+        '10 - Redução das Desigualdades',
+      ],
       technologies: ['foo bar baz'],
       phones: ['(11) 987288877'],
       logo: 'https://drive.google.com/...',
@@ -84,6 +90,17 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Validations' do
+
+    it 'is valid with empty odss list' do
+      valid_attr[:odss] = []
+      expect(described_class.new(valid_attr)).to be_valid
+    end
+
+    it 'on unknown ODS' do
+      valid_attr[:odss] = ['foo']
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
     it 'is valid with valid attributes' do
       company = described_class.new valid_attr
       expect(company).to be_valid

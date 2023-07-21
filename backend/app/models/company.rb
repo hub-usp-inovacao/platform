@@ -8,6 +8,7 @@ class Company
   field :name, type: String
   field :year, type: String
   field :url, type: String
+  field :odss, type: Array
   field :logo, type: String
   field :corporate_name, type: String
   field :cnae, type: String
@@ -45,7 +46,33 @@ class Company
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
+  validate :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?, :all_known_odss?
+
+  def all_known_odss?
+    known = [
+      '1 - Erradicação da Pobreza',
+      '2 - Fome Zero',
+      '3 - Saúde e Bem Estar',
+      '4 - Educação de Qualidade',
+      '5 - Igualdade de Gênero',
+      '6 - Água Potável e Saneamento',
+      '7 - Energia Limpa e Acessível',
+      '8 - Trabalho Decente e Crescimento Econômico',
+      '9 - Indústria, Inovação e Infraestrutura',
+      '10 - Redução das Desigualdades',
+      '11 - Cidades e Comunidades Sustentáveis',
+      '12 - Consumo e Produção Responsáveis',
+      '13 - Ação Contra a Mudança Global do Clima',
+      '14 - Vida na Água',
+      '15 - Vida Terrestre',
+      '16 - Paz, Justiça e Instituições Eficazes',
+      '17 - Parcerias e Meios de Implementação'
+    ]
+
+    is_valid = !odss.nil? && odss.all? { |ods| known.include?(ods) }
+
+    errors.add(:odss) unless is_valid
+  end
 
   def valid_cnpj?
     is_valid = !cnpj.nil? &&
@@ -95,6 +122,7 @@ class Company
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
+        odss: row[22]&.split(', '),
         technologies: row[15]&.split(';'),
         logo: create_image_url(row[16]),
         classification: classification,

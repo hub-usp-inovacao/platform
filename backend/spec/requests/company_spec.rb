@@ -33,6 +33,12 @@ RSpec.describe 'Companies', type: :request do
         },
         active: true,
         url: 'https://techagr.com',
+        odss: [
+          '4 - Educação de Qualidade',
+          '5 - Igualdade de Gênero',
+          '8 - Trabalho Decente e Crescimento Econômico',
+          '10 - Redução das Desigualdades',
+        ],
         technologies: ['foo bar baz'],
         phones: ['(11) 987288877'],
         logo: 'https://drive.google.com/...',
@@ -91,7 +97,7 @@ RSpec.describe 'Companies', type: :request do
 
   def company_keys
     %w[_id name year services incubated emails ecosystems
-       description allowed address active url technologies
+       description allowed address active url odss technologies
        phones logo companySize classification created_at
        partners corporate_name cnae cnpj]
   end
