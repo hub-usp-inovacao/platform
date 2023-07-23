@@ -5,7 +5,15 @@ require 'rails_helper'
 RSpec.describe Investment, type: :model do
   let :attrs do
     {
-      received: true,
+      received_investment: true,
+      investments: [
+        'Investimento próprio',
+        'Investimento-anjo',
+        'Venture capital',
+        'Private equity',
+        'PIPE-FAPESP',
+        'Outro'
+      ],
       own: 'R$ 12.000',
       angel: 'R$ 42',
       venture: 'R$ 4.000.000',
@@ -41,7 +49,7 @@ RSpec.describe Investment, type: :model do
     let :handmade do
       [nil] * 65 + [
         'Sim',
-        nil,
+        attrs[:investments].join(','),
         attrs[:own],
         attrs[:angel],
         attrs[:venture],
