@@ -21,6 +21,7 @@ class Company
 
   field :allowed, type: Boolean
   field :active, type: Boolean
+  field :received_investment, type: Boolean
 
   field :emails, type: Array
   field :ecosystems, type: Array
@@ -29,9 +30,11 @@ class Company
   field :companySize, type: Array
   field :partners, type: Array
   field :services, type: Array
+  field :investments, type: Array
 
   field :classification, type: Hash
   field :address, type: Hash
+  field :investments_values, type: Hash
 
   validates :cnpj,
             :name,
@@ -110,6 +113,9 @@ class Company
         number_of_CLT_employees: row[62],
         number_of_PJ_colaborators: row[63],
         number_of_interns: row[64],
+        received_investment: received_investment?(row[65]),
+        investments: format_investments(row[66]),
+        investments_values: define_investments(row),
         last_year: row[73]
       }
     )
@@ -236,10 +242,25 @@ class Company
     raw
   end
 
+  def self.format_investment(raw)
+    return [] if raw.nil? || raw == 'N/D'
+
+    return raw.split(',')
+
+    raw
+  end
+
   def self.incubated?(incubated)
     return 'Não' unless /\ASim.+\Z/.match?(incubated)
 
     incubated
+  end
+
+  def self.received_investment?(received_investment)
+    return false if received_investment == 'Não'
+    return true if received_investment == 'Sim'
+
+    received_investment
   end
 
   def self.define_address(row)
@@ -249,6 +270,17 @@ class Company
       city: row[10],
       state: row[11],
       cep: row[12]
+    }
+  end
+
+  def self.define_investments(row)
+    {
+      own: row[67],
+      angel: row[68],
+      venture: row[69],
+      equity: row[70],
+      pipe: row[71],
+      others: row[72]
     }
   end
 
