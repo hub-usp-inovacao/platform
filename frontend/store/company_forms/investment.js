@@ -43,7 +43,8 @@ const prepareSection = (obj) => {
 
   return {
     investment: {
-      received: obj.receivedInvestments,
+      received_investment: obj.receivedInvestments,
+      investments: obj.investments,
       own,
       angel,
       venture,
