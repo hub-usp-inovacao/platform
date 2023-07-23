@@ -84,7 +84,11 @@ RSpec.describe 'Companies', type: :request do
             phone: ''
           }
         ],
-        corporate_name: 'razão social'
+        corporate_name: 'razão social',
+        last_year: "R$ 60.000,00",
+        number_of_CLT_employees: 1,
+        number_of_PJ_colaborators: 1,
+        number_of_interns: 0
       }
     ]
   end
@@ -93,7 +97,9 @@ RSpec.describe 'Companies', type: :request do
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
        phones logo companySize classification created_at
-       partners corporate_name cnae cnpj]
+       partners corporate_name cnae cnpj last_year 
+       number_of_CLT_employees number_of_PJ_colaborators
+       number_of_interns]
   end
 
   describe 'get all' do
@@ -114,8 +120,8 @@ RSpec.describe 'Companies', type: :request do
 
       it 'returns a list of all companies with expected format' do
         resp = JSON.parse(response.body)
-        resp.each do |discipline|
-          expect(discipline.keys.difference(company_keys)).to eq([])
+        resp.each do |company|
+          expect(company.keys.difference(company_keys)).to eq([])
         end
       end
     end
