@@ -13,7 +13,6 @@ class Company
   field :cnae, type: String
   field :incubated, type: String
   field :description, type: String
-  field :received_investment, type: String
   field :last_year, type: String
 
   field :number_of_CLT_employees, type: Integer
@@ -33,7 +32,6 @@ class Company
 
   field :classification, type: Hash
   field :address, type: Hash
-  field :investment, type: Hash
 
   validates :cnpj,
             :name,
@@ -109,12 +107,10 @@ class Company
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
         corporate_name: row[3],
-        received_investment: received?(row[65]),
-        investment: define_investment(row),
-        last_year: row[73],
         number_of_CLT_employees: row[62],
         number_of_PJ_colaborators: row[63],
-        number_of_interns: row[64]
+        number_of_interns: row[64],
+        last_year: row[73]
       }
     )
 
@@ -246,13 +242,6 @@ class Company
     incubated
   end
 
-  def self.received?(received_investment)
-    return false if received_investment == 'Não'
-    return true if received_investment == 'Sim'
-
-    received_investment
-  end
-
   def self.define_address(row)
     {
       venue: row[8],
@@ -260,17 +249,6 @@ class Company
       city: row[10],
       state: row[11],
       cep: row[12]
-    }
-  end
-
-  def self.define_investment(row)
-    {
-      own: row[67],
-      angel: row[68],
-      venture: row[69],
-      equity: row[70],
-      pipe: row[71],
-      others: row[72]
     }
   end
 
