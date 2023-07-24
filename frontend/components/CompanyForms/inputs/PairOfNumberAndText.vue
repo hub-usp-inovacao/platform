@@ -11,29 +11,27 @@
       />
     </v-col>
     <v-col cols="10">
-      <ShortTextInputAutocomplete
+      <ShortTextInput
         :placeholder="placeholderTwo"
         :value="two"
         :label="labelTwo"
         v-model="two"
-        :items="items"
         @input="$emit('input', inputEvent)"
-        @change="$emit('input', inputEvent)"
       />
     </v-col>
   </v-row>
 </template>
 
 <script>
-import ShortTextInputAutocomplete from "@/components/CompanyForms/inputs/ShortTextInputAutocomplete.vue";
+import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 
 export default {
   name: "PairOfNumberAndText",
   components: {
-    MaskInput,
-    ShortTextInputAutocomplete
-},
+    ShortTextInput,
+    MaskInput
+  },
   data: () => ({
     one: "",
     two: "",
@@ -61,11 +59,7 @@ export default {
     },
     value: {
       type: String,
-    },
-    items: {
-        type: Array,
-        required: true,
-    },
+    }
   },
   computed: {
     inputEvent() {
@@ -82,7 +76,6 @@ export default {
   methods: {
     set(field, value) {
       this[field] = value;
-      this.$emit("input", this.inputEvent);
     },
   },
   watch: {

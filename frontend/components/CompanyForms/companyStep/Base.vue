@@ -78,7 +78,6 @@
             @changeOne="matchCompanyNature('one', $event)"
             @changeTwo="matchCompanyNature('two', $event)"
             ref="companyNatureField"
-            :items="Object.keys($company_nature).map((key) => $company_nature[key])"
           />
         </v-container>
       </div>
@@ -169,7 +168,6 @@ import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import PairOfNumberAndText from "@/components/CompanyForms/inputs/PairOfNumberAndText.vue";
-import ShortTextInputAutocomplete from "@/components/CompanyForms/inputs/ShortTextInputAutocomplete.vue";
 
 export default {
   components: {
@@ -178,7 +176,6 @@ export default {
     ShortTextInput,
     Dropdown,
     PairOfNumberAndText,
-    ShortTextInputAutocomplete,
   },
   data: () => ({
     allStates: [],
