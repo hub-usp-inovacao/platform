@@ -47,6 +47,9 @@ function translateErrorMessage(englishError) {
 
   if (englishError === "Company nature inválido") return "Natureza jurídica da empresa inválida";
 
+  if (englishError === "Bond inválido. Tente atualizar o seu vínculo.")
+	return "Vínculo com a USP inválido. Verifique os vínculos dos sócios.";
+
   return englishError;
 }
 
