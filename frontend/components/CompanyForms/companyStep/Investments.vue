@@ -18,14 +18,15 @@
       investimento-anjo, venture capital, BNDES, FINEP, PIPE-FAPESP, outros.
     </em>
     <BooleanInput
-      :value="receivedInvestments"
+      :value="received"
       label=""
-      @input="setReceivedInvestments"
+      @input="setReceived"
     />
-    <div v-if="receivedInvestments">
+    <div v-if="received == 'Sim'">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Quais investimentos a empresa recebeu?
       </h2>
+
       <Dropdown
         :value="preDefinedInvestments"
         :options="investimentos"
@@ -111,7 +112,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      receivedInvestments: "company_forms/receivedInvestments",
+      received: "company_forms/received",
       investments: "company_forms/investments",
       investmentsValues: "company_forms/investmentsValues",
     }),
@@ -139,7 +140,7 @@ export default {
       return this.investmentsValues.privateEquity;
     },
     pipeFapespValue() {
-      return this.investmentsValues.pipeFapesp;
+      return this.investmentsValues.pipe;
     },
     otherValue() {
       return this.investmentsValues.other;
@@ -147,7 +148,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setReceivedInvestments: "company_forms/setReceivedInvestments",
+      setReceived: "company_forms/setReceived",
       setInvestments: "company_forms/setInvestments",
       setInvestmentsValues: "company_forms/setInvestmentsValues",
     }),

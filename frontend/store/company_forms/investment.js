@@ -1,5 +1,5 @@
 const state = () => ({
-  receivedInvestments: false,
+  received: "",
   investments: [],
   investmentsValues: {
     own: "R$ 0,00",
@@ -12,7 +12,7 @@ const state = () => ({
 });
 
 const getters = {
-  receivedInvestments: (s) => s.receivedInvestments,
+  received: (s) => s.received,
   investments: (s) => s.investments,
   investmentsValues: (s) => s.investmentsValues,
 };
@@ -23,8 +23,8 @@ const mutations = {
 };
 
 const actions = {
-  setReceivedInvestments: ({ commit }, value) =>
-    commit("setFormField", { key: "receivedInvestments", value }),
+  setReceived: ({ commit }, value) =>
+    commit("setFormField", { key: "received", value }),
   setInvestments: ({ commit }, value) =>
     commit("setFormField", { key: "investments", value }),
   setInvestmentsValues: ({ commit }, value) =>
@@ -43,7 +43,7 @@ const prepareSection = (obj) => {
 
   return {
     investment: {
-      received_investment: obj.receivedInvestments,
+      received: obj.received,
       investments: obj.investments,
       own,
       angel,
