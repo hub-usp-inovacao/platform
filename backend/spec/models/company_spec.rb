@@ -79,7 +79,21 @@ RSpec.describe Company, type: :model do
           phone: ''
         }
       ],
-      corporate_name: 'razão social'
+      corporate_name: 'razão social',
+      last_year: 'R$ 60.000,00',
+      number_of_CLT_employees: 1,
+      number_of_PJ_colaborators: 1,
+      number_of_interns: 0,
+      received: 'Sim',
+      investments: ['Investimento próprio', 'PIPE-FAPESP'],
+      investments_values: {
+        own: 'R$ 12.000',
+        angel: 'R$ 0,00',
+        venture: 'R$ 0,00',
+        equity: 'R$ 0,00',
+        pipe: 'R$ 20.000',
+        others: 'R$ 0,00'
+      }
     }
   end
 

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Investment, type: :model do
   let :attrs do
     {
-      received_investment: true,
+      received: 'Sim',
       investments: [
         'Investimento próprio',
         'Investimento-anjo',

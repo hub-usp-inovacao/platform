@@ -89,7 +89,7 @@ RSpec.describe 'Companies', type: :request do
         number_of_CLT_employees: 1,
         number_of_PJ_colaborators: 1,
         number_of_interns: 0,
-        received_investment: true,
+        received: 'Sim',
         investments: ['Investimento próprio', 'PIPE-FAPESP'],
         investments_values: {
           own: 'R$ 12.000',
@@ -109,8 +109,7 @@ RSpec.describe 'Companies', type: :request do
        phones logo companySize classification created_at
        partners corporate_name cnae cnpj last_year 
        number_of_CLT_employees number_of_PJ_colaborators
-       number_of_interns received_investment investments
-       investments_values]
+       number_of_interns received investments investments_values]
   end
 
   describe 'get all' do
