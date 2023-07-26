@@ -107,7 +107,7 @@ RSpec.describe 'Companies', type: :request do
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
        phones logo companySize classification created_at
-       partners corporate_name cnae cnpj last_year 
+       partners corporate_name cnae cnpj last_year
        number_of_CLT_employees number_of_PJ_colaborators
        number_of_interns received investments investments_values]
   end

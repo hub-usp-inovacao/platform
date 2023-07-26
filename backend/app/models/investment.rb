@@ -17,7 +17,7 @@ class Investment
   validate :types_only_money?, :data_consistent?
 
   def data_consistent?
-    is_valid = (received == "false") || (
+    is_valid = (received == 'Não') || (
       !own.nil? &&
       !angel.nil? &&
       !equity.nil? &&
@@ -83,6 +83,6 @@ class Investment
   # rubocop:enable Lint/IneffectiveAccessModifier
 
   def received_to_csv
-    received == "Sim" ? 'Sim' : 'Não'
+    received == 'Sim' ? 'Sim' : 'Não'
   end
 end

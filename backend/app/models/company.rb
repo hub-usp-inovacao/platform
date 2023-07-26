@@ -246,8 +246,6 @@ class Company
     return [] if raw.nil? || raw == 'N/D'
 
     return raw.split(',')
-
-    raw
   end
 
   def self.incubated?(incubated)
