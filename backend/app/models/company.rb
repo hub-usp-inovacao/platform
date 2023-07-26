@@ -14,6 +14,7 @@ class Company
   field :incubated, type: String
   field :description, type: String
   field :last_year, type: String
+  field :received, type: String
 
   field :number_of_CLT_employees, type: Integer
   field :number_of_PJ_colaborators, type: Integer
@@ -21,7 +22,6 @@ class Company
 
   field :allowed, type: Boolean
   field :active, type: Boolean
-  field :received_investment, type: Boolean
 
   field :emails, type: Array
   field :ecosystems, type: Array
@@ -113,7 +113,7 @@ class Company
         number_of_CLT_employees: row[62],
         number_of_PJ_colaborators: row[63],
         number_of_interns: row[64],
-        received_investment: received_investment?(row[65]),
+        received: received?(row[65]),
         investments: format_investments(row[66]),
         investments_values: define_investments(row),
         last_year: row[73]
@@ -242,7 +242,7 @@ class Company
     raw
   end
 
-  def self.format_investment(raw)
+  def self.format_investments(raw)
     return [] if raw.nil? || raw == 'N/D'
 
     return raw.split(',')
@@ -256,11 +256,10 @@ class Company
     incubated
   end
 
-  def self.received_investment?(received_investment)
-    return false if received_investment == 'Não'
-    return true if received_investment == 'Sim'
+  def self.received?(received)
+    return received unless 'N/D'.match?(received)
 
-    received_investment
+    received
   end
 
   def self.define_address(row)

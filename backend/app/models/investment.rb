@@ -3,7 +3,7 @@
 class Investment
   include Mongoid::Document
 
-  field :received_investment, type: Boolean
+  field :received, type: String
   field :investments, type: Array
   field :own, type: String
   field :angel, type: String
@@ -17,7 +17,7 @@ class Investment
   validate :types_only_money?, :data_consistent?
 
   def data_consistent?
-    is_valid = !received_investment || (
+    is_valid = (received == "false") || (
       !own.nil? &&
       !angel.nil? &&
       !equity.nil? &&
@@ -26,7 +26,7 @@ class Investment
       !others.nil?
     )
 
-    errors.add(:received_investment) unless is_valid
+    errors.add(:received) unless is_valid
   end
 
   def types_only_money?
@@ -54,7 +54,7 @@ class Investment
 
   def prepare_to_csv
     Investment.row_offset + [
-      received_investment_to_csv,
+      received_to_csv,
       investments_to_csv,
       own,
       angel,
@@ -82,7 +82,7 @@ class Investment
 
   # rubocop:enable Lint/IneffectiveAccessModifier
 
-  def received_investment_to_csv
-    received_investment ? 'Sim' : 'Não'
+  def received_to_csv
+    received == "Sim" ? 'Sim' : 'Não'
   end
 end
