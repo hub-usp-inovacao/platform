@@ -91,6 +91,12 @@
           title="Tecnologias"
           :items="item.technologies"
         />
+        <BulletList
+          v-if="item.odss.length > 0"
+          title="Objetivos de Desenvolvimento Sustentável"
+          :items="item.odss"
+        />
+
       </template>
       <template #actions="{ item }">
         <v-btn
