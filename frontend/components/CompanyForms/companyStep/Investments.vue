@@ -17,11 +17,14 @@
       Exemplos: investimento próprio, crowdfunding, equity-crowdfunding,
       investimento-anjo, venture capital, BNDES, FINEP, PIPE-FAPESP, outros.
     </em>
-    <BooleanInput
+    
+    <Dropdown
       :value="received"
+      :options="['Sim', 'Não']"
       label=""
       @input="setReceived"
-    />
+    />  
+
     <div v-if="received == 'Sim'">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Quais investimentos a empresa recebeu?
@@ -88,14 +91,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import BooleanInput from "@/components/CompanyForms/inputs/BooleanInput.vue";
 import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import CurrencyInput from "@/components/CompanyForms/inputs/CurrencyInput.vue";
 
 export default {
   components: {
     Dropdown,
-    BooleanInput,
     MultipleInputs,
     CurrencyInput,
   },
