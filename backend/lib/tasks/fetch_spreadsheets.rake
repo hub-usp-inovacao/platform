@@ -18,7 +18,7 @@ namespace :fetch do
   desc 'Fetch data from spreadsheets without report generation'
   task no_report: :environment do
     log('fetch:no_report', 'task running!')
-    [Discipline].each do |model|
+    [Discipline, Company, Patent, Skill, Iniciative].each do |model|
       GetEntitiesService.run(model, with_report: false)
       log('fetch:no_report', "#{model.name} fetched")
     end
