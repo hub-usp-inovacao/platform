@@ -87,6 +87,7 @@ class Company
     errors.add(:classification, 'inválida devido a inválido cnae') unless is_valid
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def self.create_from(row)
     classification = classify(row[5])
 
@@ -129,6 +130,7 @@ class Company
 
     new_company
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def self.timestamp(raw)
     return 'N/D' if raw.nil? || raw.size.eql?(0)
@@ -245,7 +247,7 @@ class Company
   def self.format_investments(raw)
     return [] if raw.nil? || raw == 'N/D'
 
-    return raw.split(',')
+    raw.split(',')
   end
 
   def self.incubated?(incubated)
