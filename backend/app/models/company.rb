@@ -122,7 +122,7 @@ class Company
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
-        odss: row[22]&.split(', '),
+        odss: row[22]&.split(';'),
         technologies: row[15]&.split(';'),
         logo: create_image_url(row[16]),
         classification: classification,
