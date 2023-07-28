@@ -16,7 +16,8 @@ data class Company(
     val services: Set<String>,
     val technologies: Set<String>,
     val unities: Set<String>,
-    val url: String? = null
+    val url: String? = null,
+    val odss: Set<String>
 ) {
     companion object {
         val INDEXABLE_PROPERTIES = listOf("description", "name", "services", "technologies")

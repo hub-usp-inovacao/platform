@@ -197,6 +197,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = setOf("1 - Erradicação da Pobreza"),
             partners = setOf(
                 Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "fulano@example.com", "(11) 98899-7654"),
@@ -227,6 +228,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = setOf("1 - Erradicação da Pobreza"),
             partners = setOf(
                 Partner("Beltrano", "53726812", "Pesquisador",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "beltrano@example.com", "(11) 98899-7654")
@@ -258,6 +260,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = setOf("10 - Redução das Desigualdades"),
             partners = setOf(
                 Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "foobaz@example.com", "(11) 99999-8888"),
@@ -288,6 +291,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = setOf("1 - Erradicação da Pobreza","2 - Fome Zero"),
             partners = setOf(
                 Partner("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "nome@example.com", "(11) 99444-3535")
@@ -316,6 +320,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = emptySet(),
             partners = setOf(
                 Partner("Pessoa","1029384", "Pesquisador",
                     "Instituto de Física - IF", "pessoa@example.com", "(11) 99595-9494"),
@@ -361,6 +366,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = setOf("1 - Erradicação da Pobreza","2 - Fome Zero"),
             partners = setOf(
                 Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
                     "FEA", "fulano@example.com", "(11) 98899-7654"),
@@ -391,6 +397,7 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
+            odss = emptySet(),
             partners = setOf(
                 Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
                     "FEA", "foobaz@example.com", "(11) 99999-8888"),

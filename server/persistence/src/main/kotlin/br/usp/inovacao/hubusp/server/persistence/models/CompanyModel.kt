@@ -19,7 +19,8 @@ data class CompanyModel(
     val services: Set<String>,
     val technologies: Set<String>,
     val partners: Set<Partner>,
-    val url: String? = null
+    val url: String? = null,
+    val odss: Set<String>
 )
 @Serializable
 data class Partner(
