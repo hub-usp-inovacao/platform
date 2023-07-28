@@ -32,7 +32,7 @@ RSpec.describe Company, type: :model do
         '4 - Educação de Qualidade',
         '5 - Igualdade de Gênero',
         '8 - Trabalho Decente e Crescimento Econômico',
-        '10 - Redução das Desigualdades',
+        '10 - Redução das Desigualdades'
       ],
       technologies: ['foo bar baz'],
       phones: ['(11) 987288877'],
@@ -90,7 +90,6 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Validations' do
-
     it 'is valid with empty odss list' do
       valid_attr[:odss] = []
       expect(described_class.new(valid_attr)).to be_valid

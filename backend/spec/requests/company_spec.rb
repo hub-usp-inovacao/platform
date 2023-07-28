@@ -37,7 +37,7 @@ RSpec.describe 'Companies', type: :request do
           '4 - Educação de Qualidade',
           '5 - Igualdade de Gênero',
           '8 - Trabalho Decente e Crescimento Econômico',
-          '10 - Redução das Desigualdades',
+          '10 - Redução das Desigualdades'
         ],
         technologies: ['foo bar baz'],
         phones: ['(11) 987288877'],
