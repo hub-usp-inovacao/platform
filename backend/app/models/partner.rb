@@ -19,7 +19,12 @@ class Partner
   validates :unity, inclusion: all_unities + ['']
   validates :phone, phones: true
 
-  validate :known_bonds?
+  validate :known_bonds?, :numeric_nusp?
+
+  def numeric_nusp?
+    is_valid = nusp.match?(/\A[0-9]+\z/)
+    errors.add(:nusp) unless is_valid
+  end
 
   def known_bonds?
     bonds = [
