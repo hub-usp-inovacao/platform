@@ -135,16 +135,16 @@ export default {
       return this.investmentsValues.angel;
     },
     ventureCapitalValue() {
-      return this.investmentsValues.ventureCapital;
+      return this.investmentsValues.venture;
     },
     privateEquityValue() {
-      return this.investmentsValues.privateEquity;
+      return this.investmentsValues.equity;
     },
     pipeFapespValue() {
       return this.investmentsValues.pipe;
     },
     otherValue() {
-      return this.investmentsValues.other;
+      return this.investmentsValues.others;
     },
   },
   methods: {
@@ -179,23 +179,23 @@ export default {
     setVentureCapitalValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        ventureCapital: newValue,
+        venture: newValue,
       });
     },
     setPrivateEquityValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        privateEquity: newValue,
+        equity: newValue,
       });
     },
     setPipeFapespValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        pipeFapesp: newValue,
+        pipe: newValue,
       });
     },
     setOtherValue(newValue) {
-      this.setInvestmentsValues({ ...this.investmentsValues, other: newValue });
+      this.setInvestmentsValues({ ...this.investmentsValues, others: newValue });
     },
   },
 };

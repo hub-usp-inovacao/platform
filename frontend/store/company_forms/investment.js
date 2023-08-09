@@ -4,10 +4,10 @@ const state = () => ({
   investmentsValues: {
     own: "R$ 0,00",
     angel: "R$ 0,00",
-    ventureCapital: "R$ 0,00",
-    privateEquity: "R$ 0,00",
-    pipeFapesp: "R$ 0,00",
-    other: "R$ 0,00",
+    venture: "R$ 0,00",
+    equity: "R$ 0,00",
+    pipe: "R$ 0,00",
+    others: "R$ 0,00",
   },
 });
 
@@ -32,25 +32,16 @@ const actions = {
 };
 
 const prepareSection = (obj) => {
-  const {
-    own,
-    angel,
-    ventureCapital: venture,
-    privateEquity: equity,
-    pipeFapesp: pipe,
-    other: others
-  } = obj.investmentsValues
-
   return {
     investment: {
       received: obj.received,
       investments: obj.investments,
-      own,
-      angel,
-      venture,
-      equity,
-      pipe,
-      others,
+      own: obj.investmentsValues.own,
+      angel: obj.investmentsValues.angel,
+      venture: obj.investmentsValues.venture,
+      equity: obj.investmentsValues.equity,
+      pipe: obj.investmentsValues.pipe,
+      others: obj.investmentsValues.others,
     }
   };
 };
