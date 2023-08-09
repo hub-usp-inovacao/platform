@@ -18,11 +18,11 @@ class Investment
 
   def data_consistent?
     is_valid = (received == 'Não') || (
-      !own.nil? &&
-      !angel.nil? &&
-      !equity.nil? &&
-      !venture.nil? &&
-      !pipe.nil? &&
+      !own.nil? ||
+      !angel.nil? ||
+      !equity.nil? ||
+      !venture.nil? ||
+      !pipe.nil? ||
       !others.nil?
     )
 
@@ -30,7 +30,7 @@ class Investment
   end
 
   def types_only_money?
-    rgx = /\A(R\$ )?[\d.,]+\Z/
+    rgx = /\A(R\$ ?)?[\d.,]+\Z/
     %i[own angel venture equity pipe others].each do |type|
       attr = send(type)
       is_valid = attr.nil? || attr.match?(rgx)
