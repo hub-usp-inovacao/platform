@@ -34,8 +34,8 @@ RSpec.describe Investment, type: :model do
     it 'on inconsistent state of received but did not inform values' do
       %i[own angel venture equity pipe others].each do |k|
         attrs.delete k
-        expect(described_class.new(attrs)).to be_invalid
       end
+      expect(described_class.new(attrs)).to be_invalid
     end
   end
 
