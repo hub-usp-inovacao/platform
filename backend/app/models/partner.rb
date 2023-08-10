@@ -22,6 +22,8 @@ class Partner
   validate :known_bonds?, :numeric_nusp?
 
   def numeric_nusp?
+    return if nusp.blank?
+
     is_valid = nusp.match?(/\A[0-9]+\z/)
     errors.add(:nusp) unless is_valid
   end

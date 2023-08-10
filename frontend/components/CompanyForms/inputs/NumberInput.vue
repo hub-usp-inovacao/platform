@@ -1,10 +1,11 @@
 <template>
   <div>
     <v-text-field
-      type="number"
+      type="text"
       :label="label"
       :value="value"
       :hint="hint"
+      :rules="rules"
       @input="$emit('input', $event)"
     />
   </div>
@@ -26,6 +27,11 @@ export default {
       default: () => "",
     },
   },
+  data: () => ({
+      rules: [
+	(v) => /^\d*$/.test(v) || "Esse campo precisa ser um número",
+      ],
+  }),
 };
 </script>
 
@@ -42,3 +48,4 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>
+
