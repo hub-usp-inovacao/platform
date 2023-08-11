@@ -21,6 +21,15 @@ class Partner
 
   validate :known_bonds?
 
+  validate :valid_nusp?
+  validate :known_bonds?
+ 
+  def valid_nusp?
+    is_valid = nusp.match?(/\A\d+\z/) || nusp.empty?
+    errors.add(:nusp, 'deve ser um número válido') unless is_valid
+  end
+
+
   def known_bonds?
     bonds = [
       'Aluno ou ex-aluno (graduação)',
