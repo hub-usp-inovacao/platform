@@ -70,9 +70,9 @@
           </legend>
           <PairOfNumberAndText
             :value="company_nature"
-            labelOne="Código"
-            labelTwo="Natureza Jurídica"
-            placeholderOne="000-0"
+            firstLabel="Código"
+            secondLabel="Natureza Jurídica"
+            firstPlaceholder="000-0"
             separator=" - "
             @input="setCompanyNature"
             @changeFirstField="matchCompanyNature('first', $event)"
