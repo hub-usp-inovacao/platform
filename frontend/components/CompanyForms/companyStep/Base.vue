@@ -75,8 +75,8 @@
             placeholderOne="000-0"
             separator=" - "
             @input="setCompanyNature"
-            @changeOne="matchCompanyNature('one', $event)"
-            @changeTwo="matchCompanyNature('two', $event)"
+            @changeFirstField="matchCompanyNature('first', $event)"
+            @changeSecondField="matchCompanyNature('second', $event)"
             ref="companyNatureField"
           />
         </v-container>
@@ -249,13 +249,13 @@ export default {
       const association = this.$company_nature;
 
       let complement_value = undefined;
-      if (field === "one") {
+      if (field === "first") {
         complement_value = association[value];
       } else {
         complement_value = this.findReverse(association, value);
       }
 
-      const reverse_field = field === "one" ? "two" : "one";
+      const reverse_field = field === "first" ? "second" : "first";
       if (complement_value) {
         this.$refs.companyNatureField.set(reverse_field, complement_value);
       }

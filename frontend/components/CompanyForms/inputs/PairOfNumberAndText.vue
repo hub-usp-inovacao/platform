@@ -2,20 +2,20 @@
   <v-row>
     <v-col>
       <MaskInput
-        :placeholder="placeholderOne"
-        :value="one"
+        :placeholder="firstPlaceholder"
+        :value="first"
         mask="###-#"
-        :label="labelOne"
-        v-model="one"
+        :label="firstLabel"
+        v-model="first"
         @input="$emit('input', inputEvent)"
       />
     </v-col>
     <v-col cols="10">
       <ShortTextInput
-        :placeholder="placeholderTwo"
-        :value="two"
-        :label="labelTwo"
-        v-model="two"
+        :placeholder="secondPlaceholder"
+        :value="second"
+        :label="secondLabel"
+        v-model="second"
         @input="$emit('input', inputEvent)"
       />
     </v-col>
@@ -33,25 +33,25 @@ export default {
     MaskInput
   },
   data: () => ({
-    one: "",
-    two: "",
+    first: "",
+    second: "",
   }),
   props: {
-    placeholderOne: {
+    firstPlaceholder: {
       type: String,
       default: () => "",
     },
-    placeholderTwo: {
+    secondPlaceholder: {
       type: String,
       default: () => "",
     },
-    labelOne: {
+    firstLabel: {
       type: String,
-      default: () => "label one",
+      default: () => "first label",
     },
-    labelTwo: {
+    secondLabel: {
       type: String,
-      default: () => "label two",
+      default: () => "second label",
     },
     separator: {
       type: String,
@@ -63,13 +63,13 @@ export default {
   },
   computed: {
     inputEvent() {
-      return `${this.one}${this.separator}${this.two}`;
+      return `${this.first}${this.separator}${this.second}`;
     },
     splitValues() {
       if (this.value) {
         const split = this.value.split(this.separator);
-        this.one = split[0];
-        this.two = split[1];
+        this.first = split[0];
+        this.second = split[1];
       }
     },
   },
@@ -79,11 +79,11 @@ export default {
     },
   },
   watch: {
-    one() {
-      this.$emit("changeOne", this.one);
+    first() {
+      this.$emit("changeFirstField", this.first);
     },
-    two() {
-      this.$emit("changeTwo", this.two);
+    second() {
+      this.$emit("changeSecondField", this.second);
     },
   },
 };
