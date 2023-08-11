@@ -19,8 +19,6 @@ class Partner
   validates :unity, inclusion: all_unities + ['']
   validates :phone, phones: true
 
-  validate :known_bonds?
-
   validate :valid_nusp?
   validate :known_bonds?
  
