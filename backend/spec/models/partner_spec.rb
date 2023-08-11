@@ -34,6 +34,11 @@ RSpec.describe Partner, type: :model do
       expect(described_class.new(attrs)).to be_invalid
     end
 
+    it 'on non-numeric nusp' do
+      attrs[:nusp] = 'abcd12'
+      expect(described_class.new(attrs)).to be_invalid
+    end
+
     it 'on unknown bond' do
       attrs[:bond] = 'foo'
       expect(described_class.new(attrs)).to be_invalid
@@ -53,6 +58,11 @@ RSpec.describe Partner, type: :model do
   context 'with validation passing' do
     it 'accepts empty nusp' do
       attrs[:nusp] = ''
+      expect(described_class.new(attrs)).to be_valid
+    end
+
+    it 'accepts numeric nusp' do
+      attrs[:nusp] = '1234567'
       expect(described_class.new(attrs)).to be_valid
     end
 
