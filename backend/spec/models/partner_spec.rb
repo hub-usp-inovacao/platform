@@ -24,7 +24,6 @@ RSpec.describe Partner, type: :model do
       end
     end
 
-
     it 'on invalid nusp format' do
       attrs[:nusp] = 'invalid_nusp'
       expect(described_class.new(attrs)).to be_invalid
