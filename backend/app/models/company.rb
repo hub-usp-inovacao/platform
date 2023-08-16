@@ -117,7 +117,7 @@ class Company
         received: received?(row[65]),
         investments: format_investments(row[66]),
         investments_values: define_investments(row),
-        last_year: row[73]
+        last_year: format_currency(row[73])
       }
     )
 
@@ -244,6 +244,12 @@ class Company
     raw
   end
 
+  def self.format_currency(raw)
+    return 'R$ 0,00' if raw == ''
+
+    raw
+  end
+
   def self.format_investments(raw)
     return [] if raw.nil? || raw == 'N/D'
 
@@ -274,12 +280,12 @@ class Company
 
   def self.define_investments(row)
     {
-      own: row[67],
-      angel: row[68],
-      venture: row[69],
-      equity: row[70],
-      pipe: row[71],
-      others: row[72]
+      own: format_currency(row[67]),
+      angel: format_currency(row[68]),
+      venture: format_currency(row[69]),
+      equity: format_currency(row[70]),
+      pipe: format_currency(row[71]),
+      others: format_currency(row[72])
     }
   end
 
