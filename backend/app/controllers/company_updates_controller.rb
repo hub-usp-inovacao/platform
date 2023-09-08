@@ -40,7 +40,7 @@ class CompanyUpdatesController < ApplicationController
     end
 
     about_company = AboutCompany.new(prms[:about_company])
-    about_company.set_logo_path(request.base_url)
+    about_company.format_logo_path(request.base_url)
     unless about_company.valid?
       errors[:about_company] = about_company.errors.full_messages
       has_error = true

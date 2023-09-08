@@ -43,7 +43,7 @@ class AboutCompany
     errors.add(:odss) unless is_valid
   end
 
-  def set_logo_path(base_url)
+  def format_logo_path(base_url)
     logo = self.logo
 
     return if logo.blank?
