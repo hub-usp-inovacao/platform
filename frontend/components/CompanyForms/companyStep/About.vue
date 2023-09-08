@@ -148,7 +148,6 @@ export default {
       "17 - Parcerias e Meios de Implementação",
     ],
     isLogoInternal: true,
-    logoFile: null,
   }),
   computed: {
     ...mapGetters({
@@ -161,6 +160,7 @@ export default {
       socialMedias: "company_forms/socialMedias",
       url: "company_forms/site",
       logo: "company_forms/logo",
+      logoFile: "company_forms/logoFile",
     }),
   },
   created() {
@@ -175,6 +175,7 @@ export default {
       setSocialMedias: "company_forms/setSocialMedias",
       setUrl: "company_forms/setSite",
       setLogo: "company_forms/setLogo",
+      setLogoFile: "company_forms/setLogoFile",
     }),
     async getExistentLogo() {
       if (!this.logo) return;
@@ -184,7 +185,7 @@ export default {
         const type = blob.type.split("/")[1];
         const file = new File([blob], this.name + "." + type, { type: blob.type });
 
-        this.logoFile = file;
+        this.setLogoFile(file);
         this.$refs.logoUploader.handleImage(file);
       } catch (error) {
         this.isLogoInternal = false;
@@ -193,19 +194,11 @@ export default {
     },
     async handleLogoUpload(logoImage) {
       if (!logoImage) {
-        this.setLogo(null);
+        this.setLogoFile(null);
+        this.setLogo("");
         return;
       }
-      const endpointLogo = "/companies/update_request/logo";
-      const formData = new FormData();
-      formData.append("company[cnpj]", this.cnpj);
-      formData.append("company[logo]", logoImage);
-
-      try {
-        await this.$axios.$post(endpointLogo, formData);
-      } catch (error) {
-        console.error("Error uploading logo", error);
-      }
+      this.setLogoFile(logoImage);
 
       let cnpj_without_punctuation = this.cnpj.replace(/[^\d]+/g, '');
       let fileName = cnpj_without_punctuation + '.' + logoImage.name.split(".").pop();
