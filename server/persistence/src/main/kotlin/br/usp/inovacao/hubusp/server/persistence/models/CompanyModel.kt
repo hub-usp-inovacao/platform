@@ -5,10 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CompanyModel(
-    val address: CompanyAddress,
-    val classification: CompanyClassification,
+    val active: Boolean,
+    val address: CompanyAddressModel,
+    val allowed: Boolean,
+    val classification: CompanyClassificationModel,
     val cnae: String,
+    val cnpj: String,
     val companySize: Set<String>,
+    val corporateName: String,
     val description: String,
     val ecosystems: Set<String>,
     val emails: Set<String>,
@@ -18,11 +22,12 @@ data class CompanyModel(
     val phones: Set<String>,
     val services: Set<String>,
     val technologies: Set<String>,
-    val partners: Set<Partner>,
-    val url: String? = null
+    val partners: Set<PartnerModel>,
+    val url: String? = null,
+    val year: String
 )
 @Serializable
-data class Partner(
+data class PartnerModel(
     val name: String,
     val nusp: String,
     val bond: String,
@@ -32,13 +37,13 @@ data class Partner(
 )
 
 @kotlinx.serialization.Serializable
-data class CompanyClassification(
+data class CompanyClassificationModel(
     val major: String,
     val minor: String
 )
 
 @kotlinx.serialization.Serializable
-data class CompanyAddress(
+data class CompanyAddressModel(
     val cep: String,
     val city: String,
     val neighborhood: String,

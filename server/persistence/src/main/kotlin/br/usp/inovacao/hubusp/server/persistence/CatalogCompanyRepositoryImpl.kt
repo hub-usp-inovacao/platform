@@ -1,8 +1,8 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.*
-import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
-import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddressModel
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassificationModel
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
@@ -19,12 +19,12 @@ data class City (
     val name: String
 )
 
-fun CompanyClassification.toCatalogClassification(): Classification = Classification(
+fun CompanyClassificationModel.toCatalogClassification(): Classification = Classification(
     major = this.major,
     minor = this.minor
 )
 
-fun CompanyAddress.toCatalogAddress(): Address = Address(
+fun CompanyAddressModel.toCatalogAddress(): Address = Address(
     cep = this.cep,
     city = this.city,
     neighborhood = this.neighborhood,
