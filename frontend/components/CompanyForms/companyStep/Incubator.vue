@@ -9,7 +9,6 @@
       label=""
       @input="setIncubated"
     />
-    {{ ecosystems }}
     <div v-if="!disabledIncubatorsSelect">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Se sim, em qual incubadora ou Parque Tecnológico? *
@@ -85,15 +84,15 @@ export default {
       return matchingDefaultIncubators;
     },
     otherIncubator() {
-      // let matchingOtherIncubators = [];
+      let matchingOtherIncubators = [];
 
-      // for (let ecosystem of this.ecosystems) {
-      //   if (!this.incubadoras.includes(ecosystem)) {
-      //     matchingOtherIncubators.push(ecosystem);
-      //   }
-      // }
-      console.log("oi");
-      //return matchingOtherIncubators;
+      for (let ecosystem of this.ecosystems) {
+        if (!this.incubadoras.includes(ecosystem)) {
+          matchingOtherIncubators.push(ecosystem);
+        }
+      }
+      
+      return matchingOtherIncubators;
     },
   },
   methods: {
