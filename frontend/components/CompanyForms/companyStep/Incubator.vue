@@ -9,7 +9,7 @@
       label=""
       @input="setIncubated"
     />
-
+    {{ ecosystems }}
     <div v-if="!disabledIncubatorsSelect">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Se sim, em qual incubadora ou Parque Tecnológico? *
@@ -20,6 +20,7 @@
         :disabled="disabledIncubatorsSelect"
         label=""
         @input="setDefaultIncubators"
+        :multipleOption="true"
       />
       <div class="mt-5 text-h6 font-weight-regular">
         Em caso de outros, digite abaixo:
@@ -57,7 +58,7 @@ export default {
       "ESALQTec - Incubadora de Empresas Agrozootécnicas de Piracicaba",
       "HABITs - Habitat de Inovação Tecnológica e Social/Incubadora-Escola",
       "ParqTec - Fundação Parque Tecnológico de São Carlos",
-      "Supera - Parque de Inovação e Tecnologia de Ribeirão Preto",
+      "Supera - Parque de Inovação e Tecnologia de Ribeirão Preto"
     ],
   }),
   computed: {
@@ -73,10 +74,26 @@ export default {
       return false;
     },
     defaultIncubators() {
-      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : "";
+      let matchingDefaultIncubators = [];
+
+      for (let ecosystem of this.ecosystems) {
+        if (this.incubadoras.includes(ecosystem)) {
+          matchingDefaultIncubators.push(ecosystem);
+        }
+      }
+
+      return matchingDefaultIncubators;
     },
     otherIncubator() {
-      return this.incubadoras.includes(this.ecosystems) ? "" : this.ecosystems;
+      // let matchingOtherIncubators = [];
+
+      // for (let ecosystem of this.ecosystems) {
+      //   if (!this.incubadoras.includes(ecosystem)) {
+      //     matchingOtherIncubators.push(ecosystem);
+      //   }
+      // }
+      console.log("oi");
+      //return matchingOtherIncubators;
     },
   },
   methods: {
