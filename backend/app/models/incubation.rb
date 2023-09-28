@@ -4,7 +4,7 @@ class Incubation
   include Mongoid::Document
 
   field :was_incubated, type: String
-  field :ecosystem, type: String
+  field :ecosystems, type: String
 
   embedded_in :company_update_request, inverse_of: :incubation
 
@@ -14,12 +14,12 @@ class Incubation
 
   def both_negative?
     was_incubated.eql?('Não') &&
-      (ecosystem.nil? || ecosystem.eql?('') || ecosystem.eql?('Direto para o Mercado'))
+      (ecosystems.nil? || ecosystems.eql?('') || ecosystems.eql?('Direto para o Mercado'))
   end
 
   def both_positive?
-    !was_incubated.eql?('Não') && !ecosystem.nil? && !ecosystem.eql?('') &&
-      !ecosystem.eql?('Direto para o Mercado')
+    !was_incubated.eql?('Não') && !ecosystems.nil? && !ecosystems.eql?('') &&
+      !ecosystems.eql?('Direto para o Mercado')
   end
 
   def consistent_pair?
@@ -27,7 +27,7 @@ class Incubation
 
     is_valid = both_negative? || both_positive?
 
-    errors.add(:ecosystem) unless is_valid
+    errors.add(:ecosystems) unless is_valid
   end
 
   def expected_was_incubated?
@@ -56,7 +56,7 @@ class Incubation
   def prepare_to_csv
     Incubation.row_offset + [
       was_incubated,
-      ecosystem
+      ecosystems
     ]
   end
 
