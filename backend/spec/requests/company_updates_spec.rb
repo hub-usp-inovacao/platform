@@ -59,7 +59,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
       },
       incubation: {
         was_incubated: 'Não',
-        ecosystem: 'Direto para o Mercado'
+        ecosystems: 'Direto para o Mercado'
       },
       partners: [
         {
