@@ -207,7 +207,7 @@ class CatalogCompanyRepositoryImplTest() {
                 PartnerModel("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
                     "Instituto de Matemática e Estatística - IME", "cliclano@example.com", "(11) 98989-7676")
             ),
-            year = 2019
+            year = "2019"
         ),
         CompanyModel(
             active = true,
@@ -240,7 +240,7 @@ class CatalogCompanyRepositoryImplTest() {
                 PartnerModel("Beltrano", "53726812", "Pesquisador",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "beltrano@example.com", "(11) 98899-7654")
             ),
-            year = 2019
+            year = "2019"
         ),
     )
 
@@ -278,7 +278,7 @@ class CatalogCompanyRepositoryImplTest() {
                 PartnerModel("Bazfoo", "87654321", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Matemática e Estatística - IME", "bazfoo@example.com", "(11) 99111-2121")
             ),
-            year = 2023
+            year = "2023"
 
         ),
         CompanyModel(
@@ -291,7 +291,7 @@ class CatalogCompanyRepositoryImplTest() {
                 venue = "Rua Barão de Itapetininga, 4"
             ),
             allowed = true,
-            classification = CompanyClassification(
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -312,7 +312,7 @@ class CatalogCompanyRepositoryImplTest() {
                 PartnerModel("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "nome@example.com", "(11) 99444-3535")
             ),
-            year = 2020
+            year = "2020"
         ),
         CompanyModel(
             active = true,
@@ -324,7 +324,7 @@ class CatalogCompanyRepositoryImplTest() {
                 venue = "Rua Barão de Itapetininga, 4"
             ),
             allowed = true,
-            classification = CompanyClassification(
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
@@ -349,7 +349,7 @@ class CatalogCompanyRepositoryImplTest() {
                 PartnerModel("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Pesquisa e Tecnologia - IPT", "gente@example.com", "(11) 99080-5070")
             ),
-            year = 2021
+            year = "2021"
         ),
     )
 
@@ -365,6 +365,7 @@ class CatalogCompanyRepositoryImplTest() {
 
     private fun testSeeds() = listOf(
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
@@ -372,12 +373,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "12345678901234",
             companySize = setOf("Microempresa"),
+            corporateName = "Empresa de Vendas",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("InovaLab@POLI"),
             emails = setOf("foo@example.com"),
@@ -392,9 +396,11 @@ class CatalogCompanyRepositoryImplTest() {
                     "FEA", "fulano@example.com", "(11) 98899-7654"),
                 PartnerModel("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
                     "IME", "cliclano@example.com", "(11) 98989-7676")
-            )
+            ),
+            year = "2019"
         ),
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "Rio de Janeiro",
@@ -402,12 +408,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Infraestrutura e Construção",
                 minor = "Construção"
             ),
             cnae = "042.0230-02",
+            cnpj = "11111111111000",
             companySize = setOf("Grande Empresa"),
+            corporateName = "Empresa de Testes Automatizados",
             description = "foo bar baz",
             ecosystems = setOf("Habits"),
             emails = setOf("foo@example.com"),
@@ -420,7 +429,8 @@ class CatalogCompanyRepositoryImplTest() {
             partners = setOf(
                 PartnerModel("Foobaz", "12345678", "Aluno Especial Pós Graduação",
                     "FEA", "foobaz@example.com", "(11) 99999-8888"),
-                )
+            ),
+            year = "2023"
         )
     )
 }
