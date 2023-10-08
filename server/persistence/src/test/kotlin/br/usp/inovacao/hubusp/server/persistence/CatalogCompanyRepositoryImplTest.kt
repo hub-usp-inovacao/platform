@@ -175,6 +175,7 @@ class CatalogCompanyRepositoryImplTest() {
 
     private fun citiesSeeds() = listOf(
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
@@ -182,17 +183,20 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
+            allowed = true,
             classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "12345678901234",
             companySize = setOf("Microempresa"),
+            corporateName = "Foo inc.",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
             incubated = "Sim. A empresa já está graduada",
-            name = "Foo inc.",
+            name = "Foo Softwares",
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
@@ -202,9 +206,11 @@ class CatalogCompanyRepositoryImplTest() {
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "fulano@example.com", "(11) 98899-7654"),
                 PartnerModel("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
                     "Instituto de Matemática e Estatística - IME", "cliclano@example.com", "(11) 98989-7676")
-            )
+            ),
+            year = 2019
         ),
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "Caxias do Sul",
@@ -212,12 +218,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
+            allowed = true,
             classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "11111111111111",
             companySize = setOf("Microempresa"),
+            corporateName = "Baz Databases",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
@@ -230,12 +239,14 @@ class CatalogCompanyRepositoryImplTest() {
             partners = setOf(
                 PartnerModel("Beltrano", "53726812", "Pesquisador",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "beltrano@example.com", "(11) 98899-7654")
-            )
+            ),
+            year = 2019
         ),
     )
 
     private fun ecosystemsSeeds() = listOf(
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
@@ -243,12 +254,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
+            allowed = true,
             classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "00000000000000",
             companySize = setOf("Microempresa"),
+            corporateName = "Empresa de Computação",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
@@ -263,9 +277,12 @@ class CatalogCompanyRepositoryImplTest() {
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "foobaz@example.com", "(11) 99999-8888"),
                 PartnerModel("Bazfoo", "87654321", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Matemática e Estatística - IME", "bazfoo@example.com", "(11) 99111-2121")
-            )
+            ),
+            year = 2023
+
         ),
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
@@ -273,12 +290,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
+            allowed = true,
             classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "00000000000001",
             companySize = setOf("Microempresa"),
+            corporateName = "Software Solutions",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("BCD", "CDE"),
             emails = setOf("foo@example.com"),
@@ -291,9 +311,11 @@ class CatalogCompanyRepositoryImplTest() {
             partners = setOf(
                 PartnerModel("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "nome@example.com", "(11) 99444-3535")
-            )
+            ),
+            year = 2020
         ),
         CompanyModel(
+            active = true,
             address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
@@ -301,12 +323,15 @@ class CatalogCompanyRepositoryImplTest() {
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
+            allowed = true,
             classification = CompanyClassification(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "02020202020202",
             companySize = setOf("Microempresa"),
+            corporateName = "Dois e Zeros",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("CDE", "DEF", "EFG"),
             emails = setOf("foo@example.com"),
@@ -323,7 +348,8 @@ class CatalogCompanyRepositoryImplTest() {
                     "Instituto de Química - IQ", "ser_humano@example.com", "(11) 99234-5678"),
                 PartnerModel("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Pesquisa e Tecnologia - IPT", "gente@example.com", "(11) 99080-5070")
-            )
+            ),
+            year = 2021
         ),
     )
 
