@@ -24,7 +24,6 @@ class CompanyRepositoryImpl(
     override fun save(company: Company) {
         // TODO: test
         // TODO: improve CompanyModel to follow validation structure (avoid parsing null)
-        // TODO-ze: fix this with required fields
 
         val companyClassificationModel = CompanyClassificationModel(
             major = company.classification.major ?: "",

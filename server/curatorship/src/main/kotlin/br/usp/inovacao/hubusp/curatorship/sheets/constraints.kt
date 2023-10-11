@@ -31,3 +31,19 @@ class Unity : Constraint
 fun <E> Validator<E>.Property<String?>.isUnity() = this.validate(Unity()) {
     it == null || it in Campus.allUnities()
 }
+
+object CompanyRegister : Constraint
+
+fun Validator<Company>.Property<String?>.isValidCnpj() = this.validate(CompanyRegister) {
+    it == null || it.matches(Regex("^[0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2}$")) || it.matches(Regex("^Exterior[0-9]*$"))
+}
+
+object CompanyClassificationRegister : Constraint
+
+fun Validator<CompanyClassification>.Property<String?>.isValidMajor() = this.validate(CompanyClassificationRegister) {
+    it == null || CompanyClassificationValues.allMajors().contains(it)
+}
+
+fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: String?) = this.validate(CompanyClassificationRegister) {
+    it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
+}

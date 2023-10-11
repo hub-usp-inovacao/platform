@@ -8,10 +8,13 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import org.valiktor.Constraint
+import org.valiktor.Validator
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
+import java.time.LocalDate
 
 @kotlinx.serialization.Serializable
 data class Partner(
@@ -57,9 +60,28 @@ data class CompanyClassification(
 ) {
     companion object {
         fun classify(cnae: String?): CompanyClassification {
+            val emptyClassification = CompanyClassification(
+              major = "",
+              minor = ""
+            )
+
+            if (cnae == "") {
+                return emptyClassification
+            }
+
+            val regex = Regex("(\\d+)\\.+")
+            val matches = regex.find(cnae ?: "")
+            val code = matches?.groupValues?.get(1)
+
+            if (code == null || code.length > 2) {
+                return emptyClassification
+            }
+
+            val major_minor = CompanyClassificationTranslator.translate(code)
+
             return CompanyClassification(
-              major = cnae, // fix-ze
-              minor = cnae // fix-ze
+              major = major_minor.get("major"),
+              minor = major_minor.get("minor")
             )
         }
     }
@@ -68,10 +90,11 @@ data class CompanyClassification(
         try {
             validate(this) {
                 validate(CompanyClassification::major)
-                    .isNotBlank()
+                    .isValidMajor()
 
                 validate(CompanyClassification::minor)
-                    .isNotBlank()
+                    .isValidMinor(major)
+
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations
@@ -104,19 +127,7 @@ data class CompanyAddress(
     init {
         try {
             validate(this) {
-                validate(CompanyAddress::cep)
-                    .isNotBlank()
-
                 validate(CompanyAddress::city)
-                    .isNotBlank()
-
-                validate(CompanyAddress::neighborhood)
-                    .isNotBlank()
-
-                validate(CompanyAddress::state)
-                    .isNotBlank()
-
-                validate(CompanyAddress::venue)
                     .isNotBlank()
             }
         } catch (cve: ConstraintViolationException) {
@@ -196,12 +207,15 @@ data class Company(
         try {
             validate(this) {
                 validate(Company::cnpj)
+                    .isValidCnpj()
                     .isNotNull()
 
                 validate(Company::name)
                     .isNotNull()
 
-                // add another validations
+                validate(Company::year)
+                    .hasSize(4)
+                    .isLessThanOrEqualTo(LocalDate.now().year.toString())
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations
