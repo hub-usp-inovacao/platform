@@ -44,11 +44,11 @@ class AboutCompany
   end
 
   def format_logo_path(base_url)
-    logo = self.logo
+    image_name = self.logo
 
-    return if logo.blank?
+    return if image_name.blank?
 
-    self.logo = logo_path(logo, base_url)
+    self.logo = logo_path(image_name, base_url)
   end
 
   def self.csv_headers
