@@ -44,7 +44,7 @@ class AboutCompany
   end
 
   def format_logo_path(base_url)
-    image_name = self.logo
+    image_name = logo
 
     return if image_name.blank?
 
