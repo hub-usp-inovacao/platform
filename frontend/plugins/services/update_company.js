@@ -4,6 +4,17 @@ async function updateData(data, logo) {
   try {
     const url = backendURL + "/companies";
 
+    if (logo) {
+      const body = new FormData();
+      body.append("company[logo]", logo);
+      body.append("company[cnpj]", data.company.company_data.cnpj);
+
+      await fetch(url + '/update_request/logo', {
+        method: "POST",
+        body,
+      });
+    }
+
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 

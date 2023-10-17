@@ -43,10 +43,12 @@ class AboutCompany
     errors.add(:odss) unless is_valid
   end
 
-  def save_logo(logo, base_url)
-    return if logo.blank?
+  def format_logo_path(base_url)
+    image_name = logo
 
-    self.logo = save_logo_to_public(logo, base_url)
+    return if image_name.blank?
+
+    self.logo = logo_path(image_name, base_url)
   end
 
   def self.csv_headers
@@ -115,13 +117,8 @@ class AboutCompany
   end
   # rubocop:enable Lint/IneffectiveAccessModifier
 
-  def save_logo_to_public(logo, base_url)
+  def logo_path(logo, base_url)
     return logo if logo.start_with?('http')
-
-    FileUtils.mv(
-      Rails.root.join('tmp', 'uploads', 'logos', logo),
-      Rails.root.join('public', 'uploads', 'logos', logo)
-    )
 
     "#{base_url}/api/uploads/logos/#{logo}"
   end

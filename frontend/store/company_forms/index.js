@@ -103,8 +103,9 @@ export const actions = {
       return false;
     }
 
+    const logo = getters.logoFile;
     const company = prepareCompanyObject(getters);
-    const { errors } = await this.$updateCompanyData(company, getters.logo);
+    const { errors } = await this.$updateCompanyData(company, logo);
 
     if (errors !== undefined) {
       commit("setErrors", errors);

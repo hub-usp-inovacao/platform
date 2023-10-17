@@ -40,6 +40,7 @@ class CompanyUpdatesController < ApplicationController
     end
 
     about_company = AboutCompany.new(prms[:about_company])
+    about_company.format_logo_path(request.base_url)
     unless about_company.valid?
       errors[:about_company] = about_company.errors.full_messages
       has_error = true
@@ -85,8 +86,6 @@ class CompanyUpdatesController < ApplicationController
     if has_error
       render json: { errors: errors }, status: :bad_request
     else
-      about_company.save_logo(prms[:about_company][:logo], request.base_url)
-
       @comp_update = CompanyUpdateRequest.new
       @comp_update.timestamp = Time.zone.now
 
@@ -111,13 +110,13 @@ class CompanyUpdatesController < ApplicationController
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/PerceivedComplexity
 
-  def create_logo
-    params = create_logo_params
+  def upload_logo
+    params = upload_logo_params
     logo = params[:logo]
     cnpj = params[:cnpj]
 
     if logo.present?
-      store_tmp_logo(logo, cnpj)
+      store_logo(logo, cnpj)
     else
       render status: :bad_request, json: { message: 'Logo is required' }
     end
@@ -125,7 +124,7 @@ class CompanyUpdatesController < ApplicationController
 
   private
 
-  def create_logo_params
+  def upload_logo_params
     params.require(:company).permit(:cnpj, :logo)
   end
 
@@ -173,16 +172,16 @@ class CompanyUpdatesController < ApplicationController
     end
   end
 
-  def store_tmp_logo(logo_file, cnpj)
+  def store_logo(logo_file, cnpj)
     cnpj = cnpj.gsub(/[^0-9]/, '')
     filename = cnpj + File.extname(logo_file.original_filename)
 
-    logo_path = Rails.root.join('tmp', 'uploads', 'logos', filename)
+    logo_path = Rails.root.join('public', 'uploads', 'logos', filename)
 
     File.open(logo_path, 'wb') do |file|
       file.write(logo_file.read)
     end
 
-    render status: :ok
+    render status: :ok, json: { message: 'Logo uploaded successfully' }
   end
 end
