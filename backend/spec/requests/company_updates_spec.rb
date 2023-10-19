@@ -52,7 +52,14 @@ RSpec.describe 'CompanyUpdates', type: :request do
         social_medias: ['https://instagram.com/foo-bar']
       },
       investment: {
-        received: false
+        received: 'Não',
+        investments: [],
+        own: 'R$ 0,00',
+        angel: 'R$ 0,00',
+        venture: 'R$ 0,00',
+        equity: 'R$ 0,00',
+        pipe: 'R$ 0,00',
+        others: 'R$ 0,00'
       },
       revenue: {
         last_year: 'R$ 1.200.000'

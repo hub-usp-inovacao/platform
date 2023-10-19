@@ -3,7 +3,8 @@
 class Investment
   include Mongoid::Document
 
-  field :received, type: Boolean
+  field :received, type: String
+  field :investments, type: Array
   field :own, type: String
   field :angel, type: String
   field :venture, type: String
@@ -16,12 +17,12 @@ class Investment
   validate :types_only_money?, :data_consistent?
 
   def data_consistent?
-    is_valid = !received || (
-      !own.nil? &&
-      !angel.nil? &&
-      !equity.nil? &&
-      !venture.nil? &&
-      !pipe.nil? &&
+    is_valid = (received == 'Não') || (
+      !own.nil? ||
+      !angel.nil? ||
+      !equity.nil? ||
+      !venture.nil? ||
+      !pipe.nil? ||
       !others.nil?
     )
 
@@ -29,7 +30,7 @@ class Investment
   end
 
   def types_only_money?
-    rgx = /\A(R\$ )?[\d.,]+\Z/
+    rgx = /\A(R\$ ?)?[\d.,]+\Z/
     %i[own angel venture equity pipe others].each do |type|
       attr = send(type)
       is_valid = attr.nil? || attr.match?(rgx)
@@ -41,7 +42,7 @@ class Investment
   def self.csv_headers
     row_offset + [
       'A empresa recebeu investimento?',
-      nil,
+      'Qual(is) investimento(s) a empresa recebeu?',
       'Valor do Investimento Próprio',
       'Valor do Investimento Anjo',
       'Valor do Venture Capital',
@@ -54,7 +55,7 @@ class Investment
   def prepare_to_csv
     Investment.row_offset + [
       received_to_csv,
-      nil,
+      investments_to_csv,
       own,
       angel,
       venture,
@@ -66,6 +67,14 @@ class Investment
 
   private
 
+  def investments_to_csv
+    nd_or_comma(investments)
+  end
+
+  def nd_or_comma(value)
+    value.empty? ? 'N/D' : value.join(',')
+  end
+
   # rubocop:disable Lint/IneffectiveAccessModifier
   def self.row_offset
     [nil] * 62
@@ -74,6 +83,6 @@ class Investment
   # rubocop:enable Lint/IneffectiveAccessModifier
 
   def received_to_csv
-    received ? 'Sim' : 'Não'
+    received == 'Sim' ? 'Sim' : 'Não'
   end
 end

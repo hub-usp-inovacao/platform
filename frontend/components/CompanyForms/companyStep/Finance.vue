@@ -10,11 +10,11 @@
       Este dado <b>não</b> será publicado
     </v-alert>
     <div class="mt-5 text-h6 font-weight-regular">
-      Qual foi o faturamento da empresa em {{ lastYear() }}?
+      Qual foi o faturamento da empresa em {{ lastDateYear() }}?
       <CurrencyInput
         label="Faturamento"
-        :value="financeValue"
-        @input="setFinanceValue"
+        :value="lastYear"
+        @input="setLastYear"
       />
       <legend class="body-2">
         Se for R$0,00 digite 0.
@@ -33,14 +33,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      financeValue: "company_forms/financeValue",
+      lastYear: "company_forms/lastYear",
     }),
   },
   methods: {
     ...mapActions({
-      setFinanceValue: "company_forms/setFinanceValue",
+      setLastYear: "company_forms/setLastYear",
     }),
-    lastYear() {
+    lastDateYear() {
       const date = new Date();
       return date.getFullYear() - 1;
     },

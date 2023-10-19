@@ -13,6 +13,12 @@ class Company
   field :cnae, type: String
   field :incubated, type: String
   field :description, type: String
+  field :last_year, type: String
+  field :received, type: String
+
+  field :number_of_CLT_employees, type: Integer
+  field :number_of_PJ_colaborators, type: Integer
+  field :number_of_interns, type: Integer
 
   field :allowed, type: Boolean
   field :active, type: Boolean
@@ -24,9 +30,11 @@ class Company
   field :companySize, type: Array
   field :partners, type: Array
   field :services, type: Array
+  field :investments, type: Array
 
   field :classification, type: Hash
   field :address, type: Hash
+  field :investments_values, type: Hash
 
   validates :cnpj,
             :name,
@@ -79,6 +87,7 @@ class Company
     errors.add(:classification, 'inválida devido a inválido cnae') unless is_valid
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def self.create_from(row)
     classification = classify(row[5])
 
@@ -101,7 +110,14 @@ class Company
         cnae: row[5],
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
-        corporate_name: row[3]
+        corporate_name: row[3],
+        number_of_CLT_employees: row[62],
+        number_of_PJ_colaborators: row[63],
+        number_of_interns: row[64],
+        received: received?(row[65]),
+        investments: format_investments(row[66]),
+        investments_values: define_investments(row),
+        last_year: format_currency(row[73])
       }
     )
 
@@ -114,6 +130,7 @@ class Company
 
     new_company
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def self.timestamp(raw)
     return 'N/D' if raw.nil? || raw.size.eql?(0)
@@ -227,10 +244,28 @@ class Company
     raw
   end
 
+  def self.format_currency(raw)
+    return 'R$ 0,00' if raw == ''
+
+    raw
+  end
+
+  def self.format_investments(raw)
+    return [] if raw.nil? || raw == 'N/D'
+
+    raw.split(',')
+  end
+
   def self.incubated?(incubated)
     return 'Não' unless /\ASim.+\Z/.match?(incubated)
 
     incubated
+  end
+
+  def self.received?(received)
+    return received unless 'N/D'.match?(received)
+
+    received
   end
 
   def self.define_address(row)
@@ -240,6 +275,17 @@ class Company
       city: row[10],
       state: row[11],
       cep: row[12]
+    }
+  end
+
+  def self.define_investments(row)
+    {
+      own: format_currency(row[67]),
+      angel: format_currency(row[68]),
+      venture: format_currency(row[69]),
+      equity: format_currency(row[70]),
+      pipe: format_currency(row[71]),
+      others: format_currency(row[72])
     }
   end
 

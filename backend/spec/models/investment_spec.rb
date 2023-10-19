@@ -5,7 +5,15 @@ require 'rails_helper'
 RSpec.describe Investment, type: :model do
   let :attrs do
     {
-      received: true,
+      received: 'Sim',
+      investments: [
+        'Investimento próprio',
+        'Investimento-anjo',
+        'Venture capital',
+        'Private equity',
+        'PIPE-FAPESP',
+        'Outro'
+      ],
       own: 'R$ 12.000',
       angel: 'R$ 42',
       venture: 'R$ 4.000.000',
@@ -26,8 +34,8 @@ RSpec.describe Investment, type: :model do
     it 'on inconsistent state of received but did not inform values' do
       %i[own angel venture equity pipe others].each do |k|
         attrs.delete k
-        expect(described_class.new(attrs)).to be_invalid
       end
+      expect(described_class.new(attrs)).to be_invalid
     end
   end
 
@@ -41,7 +49,7 @@ RSpec.describe Investment, type: :model do
     let :handmade do
       [nil] * 62 + [
         'Sim',
-        nil,
+        attrs[:investments].join(','),
         attrs[:own],
         attrs[:angel],
         attrs[:venture],

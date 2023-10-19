@@ -1,9 +1,9 @@
 const state = () => ({
-  financeValue: "R$ 0,00",
+  lastYear: "R$ 0,00",
 });
 
 const getters = {
-  financeValue: (s) => s.financeValue,
+  lastYear: (s) => s.lastYear,
 };
 
 const mutations = {
@@ -12,13 +12,13 @@ const mutations = {
 }
 
 const actions = {
-  setFinanceValue: ({ commit }, value) =>
-    commit("setFormField", { key: "financeValue", value }),
+  setLastYear: ({ commit }, value) =>
+    commit("setFormField", { key: "lastYear", value }),
 };
 
 const prepareSection = (obj) => ({
   revenue: {
-    last_year: obj.financeValue,
+    last_year: obj.lastYear,
   },
 });
 

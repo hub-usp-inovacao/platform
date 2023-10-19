@@ -17,15 +17,19 @@
       Exemplos: investimento próprio, crowdfunding, equity-crowdfunding,
       investimento-anjo, venture capital, BNDES, FINEP, PIPE-FAPESP, outros.
     </em>
-    <BooleanInput
-      :value="receivedInvestments"
+    
+    <Dropdown
+      :value="received"
+      :options="['Sim', 'Não']"
       label=""
-      @input="setReceivedInvestments"
-    />
-    <div v-if="receivedInvestments">
+      @input="setReceived"
+    />  
+
+    <div v-if="received == 'Sim'">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Quais investimentos a empresa recebeu?
       </h2>
+
       <Dropdown
         :value="preDefinedInvestments"
         :options="investimentos"
@@ -87,14 +91,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import BooleanInput from "@/components/CompanyForms/inputs/BooleanInput.vue";
 import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import CurrencyInput from "@/components/CompanyForms/inputs/CurrencyInput.vue";
 
 export default {
   components: {
     Dropdown,
-    BooleanInput,
     MultipleInputs,
     CurrencyInput,
   },
@@ -111,7 +113,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      receivedInvestments: "company_forms/receivedInvestments",
+      received: "company_forms/received",
       investments: "company_forms/investments",
       investmentsValues: "company_forms/investmentsValues",
     }),
@@ -133,21 +135,21 @@ export default {
       return this.investmentsValues.angel;
     },
     ventureCapitalValue() {
-      return this.investmentsValues.ventureCapital;
+      return this.investmentsValues.venture;
     },
     privateEquityValue() {
-      return this.investmentsValues.privateEquity;
+      return this.investmentsValues.equity;
     },
     pipeFapespValue() {
-      return this.investmentsValues.pipeFapesp;
+      return this.investmentsValues.pipe;
     },
     otherValue() {
-      return this.investmentsValues.other;
+      return this.investmentsValues.others;
     },
   },
   methods: {
     ...mapActions({
-      setReceivedInvestments: "company_forms/setReceivedInvestments",
+      setReceived: "company_forms/setReceived",
       setInvestments: "company_forms/setInvestments",
       setInvestmentsValues: "company_forms/setInvestmentsValues",
     }),
@@ -177,23 +179,23 @@ export default {
     setVentureCapitalValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        ventureCapital: newValue,
+        venture: newValue,
       });
     },
     setPrivateEquityValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        privateEquity: newValue,
+        equity: newValue,
       });
     },
     setPipeFapespValue(newValue) {
       this.setInvestmentsValues({
         ...this.investmentsValues,
-        pipeFapesp: newValue,
+        pipe: newValue,
       });
     },
     setOtherValue(newValue) {
-      this.setInvestmentsValues({ ...this.investmentsValues, other: newValue });
+      this.setInvestmentsValues({ ...this.investmentsValues, others: newValue });
     },
   },
 };

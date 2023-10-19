@@ -1,18 +1,18 @@
 const state = () => ({
-  receivedInvestments: false,
+  received: "",
   investments: [],
   investmentsValues: {
     own: "R$ 0,00",
     angel: "R$ 0,00",
-    ventureCapital: "R$ 0,00",
-    privateEquity: "R$ 0,00",
-    pipeFapesp: "R$ 0,00",
-    other: "R$ 0,00",
+    venture: "R$ 0,00",
+    equity: "R$ 0,00",
+    pipe: "R$ 0,00",
+    others: "R$ 0,00",
   },
 });
 
 const getters = {
-  receivedInvestments: (s) => s.receivedInvestments,
+  received: (s) => s.received,
   investments: (s) => s.investments,
   investmentsValues: (s) => s.investmentsValues,
 };
@@ -23,8 +23,8 @@ const mutations = {
 };
 
 const actions = {
-  setReceivedInvestments: ({ commit }, value) =>
-    commit("setFormField", { key: "receivedInvestments", value }),
+  setReceived: ({ commit }, value) =>
+    commit("setFormField", { key: "received", value }),
   setInvestments: ({ commit }, value) =>
     commit("setFormField", { key: "investments", value }),
   setInvestmentsValues: ({ commit }, value) =>
@@ -32,24 +32,16 @@ const actions = {
 };
 
 const prepareSection = (obj) => {
-  const {
-    own,
-    angel,
-    ventureCapital: venture,
-    privateEquity: equity,
-    pipeFapesp: pipe,
-    other: others
-  } = obj.investmentsValues
-
   return {
     investment: {
-      received: obj.receivedInvestments,
-      own,
-      angel,
-      venture,
-      equity,
-      pipe,
-      others,
+      received: obj.received,
+      investments: obj.investments,
+      own: obj.investmentsValues.own,
+      angel: obj.investmentsValues.angel,
+      venture: obj.investmentsValues.venture,
+      equity: obj.investmentsValues.equity,
+      pipe: obj.investmentsValues.pipe,
+      others: obj.investmentsValues.others,
     }
   };
 };
