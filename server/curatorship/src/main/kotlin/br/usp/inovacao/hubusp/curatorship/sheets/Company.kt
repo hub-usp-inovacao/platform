@@ -116,11 +116,11 @@ data class CompanyAddress(
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) = CompanyAddress(
-            cep = subRow[0],
-            city = subRow[1],
-            neighborhood = subRow[2],
+            venue = subRow[0],
+            neighborhood = subRow[1],
+            city = subRow[2],
             state = subRow[3],
-            venue = subRow[4]
+            cep = subRow[4]
         )
     }
 
