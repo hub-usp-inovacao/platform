@@ -261,7 +261,7 @@ data class Company(
         }
 
         fun splitAndTrim(raw: String?, separator: Char): Set<String>? {
-            return raw?.split(separator)?.map { it.trim() }.toSet()
+            return raw?.split(separator)?.map { it.trim() }?.toSet()
         }
 
         fun fromRow(row: List<String?>): Company {
