@@ -179,28 +179,117 @@ data class Company(
             return partners
         }
 
-        fun fromRow(row: List<String?>) = Company(
-            active = true,
-            address = CompanyAddress.fromRow(row.subList(8, 13)),
-            allowed = true,
-            classification = CompanyClassification.classify(row[5]),
-            cnae = row[5],
-            cnpj = row[1],
-            companySize = setOf("Unicórnio", "Microempresa"), // fix-ze
-            corporateName = row[3],
-            description = row[13],
-            ecosystems = row[19]?.split(";")?.toSet(),
-            emails = row[7]?.split(";")?.toSet(),
-            incubated = row[18], // fix-ze
-            logo = row[16], // fix-ze
-            name = row[2],
-            phones = row[6]?.split(";")?.toSet(), // fix-ze
-            services = row[14]?.split(";")?.toSet(),
-            technologies = row[15]?.split(";")?.toSet(),
-            partners = if (row.size < 62) emptySet() else createPartners(row.subList(33, 62)),
-            url = row[17], // fix-ze
-            year = row[4]
-        )
+        fun calculateSize(employees: String?, unicorn: String?, classification: CompanyClassification): Set<String> {
+            val sizes = if (unicorn == "Unicórnio") setOf(unicorn) else emptySet()
+
+            val employeesInt = if (employees == null) 0 else employees!!.toInt()
+
+            if (employeesInt <= 0) {
+                return sizes.plus("Não Informado")
+            }
+
+            if (classification.major == "Indústria de Transformação") {
+                when (employeesInt) {
+                    in 1..19 -> return sizes.plus("Microempresa")
+                    in 20..99 -> return sizes.plus("Pequena Empresa")
+                    in 100..499 -> return sizes.plus("Média Empresa")
+                    else -> return sizes.plus("Grande Empresa")
+                }
+            } else {
+                when (employeesInt) {
+                    in 1..9 -> return sizes.plus("Microempresa")
+                    in 10..49 -> return sizes.plus("Pequena Empresa")
+                    in 50..99 -> return sizes.plus("Média Empresa")
+                    else -> return sizes.plus("Grande Empresa")
+                }
+            }
+        }
+
+        fun formatIncubated(incubated: String?): String? {
+            if (incubated == null) {
+                return null
+            }
+
+            val regex = Regex("Sim.+")
+            val matches = regex.find(incubated)
+
+            return if (matches != null) "Sim" else "Não"
+        }
+
+        fun formatLogo(raw: String?): String? {
+            if (raw == null || raw == "N/D") {
+                return null
+            }
+
+            if (raw.length > 3 && raw.substring(0..3) == "http") return raw
+
+            return "https://drive.google.com/uc?export=view&id=$raw"
+        }
+
+        fun formatPhones(raw: String?): Set<String>? {
+            if (raw == null || raw == "N/D") {
+                return null
+            }
+
+            val phones = raw.split(";")
+            val formattedPhones = mutableSetOf<String>()
+
+            for (phone in phones) {
+                val numbers = phone.replace(Regex("\\D"), "")
+                when (numbers.length) {
+                    13 -> formattedPhones.add("+${numbers.substring(0..1)} (${numbers.substring(2..3)}) ${numbers.substring(4..8)} - ${numbers.substring(9)}")
+                    12 -> formattedPhones.add("+${numbers.substring(0..1)} (${numbers.substring(2..3)}) ${numbers.substring(4..7)} - ${numbers.substring(8)}")
+                    11 -> formattedPhones.add("(${numbers.substring(0..1)}) ${numbers.substring(2..6)} - ${numbers.substring(7)}")
+                    10 -> formattedPhones.add("(${numbers.substring(0..1)}) ${numbers.substring(2..5)} - ${numbers.substring(6)}")
+                    9 -> formattedPhones.add("${numbers.substring(0..4)} - ${numbers.substring(5)}")
+                    8 -> formattedPhones.add("${numbers.substring(0..3)} - ${numbers.substring(4)}")
+                    else -> formattedPhones.add(numbers)
+                }
+            }
+
+            return formattedPhones
+        }
+
+        fun formatUrl(raw: String?): String? {
+            if (raw == null || raw == "N/D") {
+                return null
+            }
+
+            if (raw.length > 3 && raw.substring(0..3) != "http") return "https://$raw"
+
+            return raw
+        }
+
+        fun splitAndTrim(raw: String?, separator: Char): Set<String>? {
+            return raw?.split(separator)?.map { it.trim() }.toSet()
+        }
+
+        fun fromRow(row: List<String?>): Company {
+            var classification = CompanyClassification.classify(row[5])
+
+            return Company(
+                active = true,
+                address = CompanyAddress.fromRow(row.subList(8, 13)),
+                allowed = true,
+                classification = classification,
+                cnae = row[5],
+                cnpj = row[1],
+                companySize = calculateSize(row[21], row[20], classification),
+                corporateName = row[3],
+                description = row[13],
+                ecosystems = splitAndTrim(row[19], ';'),
+                emails = splitAndTrim(row[7], ';'),
+                incubated = formatIncubated(row[18]),
+                logo = formatLogo(row[16]),
+                name = row[2],
+                phones = formatPhones(row[6]),
+                services = splitAndTrim(row[14], ';'),
+                technologies = splitAndTrim(row[15], ';'),
+                partners = if (row.size < 62) emptySet() else createPartners(row.subList(33, 62)),
+                url = formatUrl(row[17]),
+                year = row[4]
+            )
+        }
     }
 
     init {
