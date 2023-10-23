@@ -298,13 +298,41 @@ data class Company(
                 validate(Company::cnpj)
                     .isValidCnpj()
                     .isNotNull()
+                    .isNotBlank()
 
                 validate(Company::name)
                     .isNotNull()
+                    .isNotBlank()
 
                 validate(Company::year)
                     .hasSize(4)
                     .isLessThanOrEqualTo(LocalDate.now().year.toString())
+
+                validate(Company::description)
+                    .isNotNull()
+                    .isNotBlank()
+
+                validate(Company::incubated)
+                    .isNotNull()
+                    .isNotBlank()
+
+                validate(Company::ecosystems)
+                    .isNotNull()
+                    .isNotEmpty()
+
+                validate(Company::services)
+                    .isNotNull()
+                    .isNotEmpty()
+
+                validate(Company::corporateName)
+                    .isNotNull()
+                    .isNotBlank()
+
+                validate(Company::logo)
+                    .isWebsite()
+
+                validate(Company::url)
+                    .isWebsite()
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations
