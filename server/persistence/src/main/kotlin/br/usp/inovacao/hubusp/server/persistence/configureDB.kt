@@ -5,6 +5,7 @@ import br.usp.inovacao.hubusp.server.catalog.PDI
 import br.usp.inovacao.hubusp.server.catalog.Patent
 import com.mongodb.MongoCommandException
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.IndexOptions
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.createIndex
 import org.litote.kmongo.getCollection
@@ -20,11 +21,8 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         indexQuery = """{"name":"text","description":"text","coordinator":"text","tags":"text"}"""
     )
 
-    createIndexOrNothing(
-        database =db,
-        collectionName = "companies",
-        indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
-    )
+    db.getCollection("companies")
+        .createIndex("""{"cnpj":1}""", indexOptions = IndexOptions().unique(true))
 
     db.getCollection("disciplines")
         .createIndex("""{"name":"text"}""")
