@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.server.persistence.curatorship
 
 import br.usp.inovacao.hubusp.curatorship.sheets.Company
 import br.usp.inovacao.hubusp.curatorship.sheets.CompanyRepository
+import br.usp.inovacao.hubusp.curatorship.sheets.UniquenessException
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
 import br.usp.inovacao.hubusp.server.persistence.models.PartnerModel
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassificationModel
@@ -9,6 +10,7 @@ import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddressModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
+import com.mongodb.MongoWriteException
 import org.litote.kmongo.getCollection
 import java.time.LocalDateTime
 
@@ -72,7 +74,15 @@ class CompanyRepositoryImpl(
            year = company.year ?: ""
         )
 
-        companyCollection.insertOne(companyModel)
+
+        try {
+            companyCollection.insertOne(companyModel)
+        } catch (e: MongoWriteException) {
+            when (e.getCode()) {
+              11000 -> throw UniquenessException("Company with CNPJ ${company.cnpj} already exists")
+              else -> throw e
+            }
+        }
     }
     override fun clean() {
         val currentTime = LocalDateTime.now()

@@ -22,9 +22,13 @@ class RefreshCompany(
     }
 
     private fun persistValidData(data: Any) = when(data) {
-        is Company -> companyRepository.save(data)
+        is Company -> try {
+            companyRepository.save(data)
+        } catch (e: UniquenessException) {
+            companyErrorRepository.save(CompanyUniquenessError(error = e.message))
+        }
         is CompanyValidationError -> companyErrorRepository.save(data)
-        else -> throw RuntimeException("Error while persisting Company: data isn't Company nor CompanyValidationError")
+        else -> throw RuntimeException("Error while persisting Company: data isn't Company nor CompanyValidationError/CompanyUniquenessError")
     }
 
     fun refresh() {
