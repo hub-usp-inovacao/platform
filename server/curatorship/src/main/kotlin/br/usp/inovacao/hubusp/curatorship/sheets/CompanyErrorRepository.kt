@@ -1,5 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
 interface CompanyErrorRepository {
-    fun save(companyError:CompanyValidationError)
+    fun save(companyError:Any)
 }
