@@ -159,13 +159,13 @@ data class Company(
     val phones: Set<String>?,
     val services: Set<String>?,
     val technologies: Set<String>?,
-    val partners: Set<Partner>?,
+    val partners: List<Partner>?,
     val url: String?,
     val year: String?
 ) {
     companion object {
-        fun createPartners(subRow: List<String?>): Set<Partner> {
-            var partners = mutableSetOf<Partner>()
+        fun createPartners(subRow: List<String?>): List<Partner> {
+            var partners = mutableListOf<Partner>()
             val subRowIndexes = listOf(0..6, 10..13, 15..18, 20..23, 25..28)
 
             for (subRowIndex in subRowIndexes) {
@@ -285,7 +285,7 @@ data class Company(
                 phones = formatPhones(row[6]),
                 services = splitAndTrim(row[14], ';'),
                 technologies = splitAndTrim(row[15], ';'),
-                partners = if (row.size < 62) emptySet() else createPartners(row.subList(33, 62)),
+                partners = if (row.size < 62) emptyList() else createPartners(row.subList(33, 62)),
                 url = formatUrl(row[17]),
                 year = row[4]
             )

@@ -22,7 +22,7 @@ data class CompanyModel(
     val phones: Set<String>,
     val services: Set<String>,
     val technologies: Set<String>,
-    val partners: Set<PartnerModel>,
+    val partners: List<PartnerModel>,
     val url: String? = null,
     val year: String
 )

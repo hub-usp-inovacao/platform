@@ -47,7 +47,7 @@ class CompanyRepositoryImpl(
                 email = partner.email ?: "",
                 phone = partner.phone ?: ""
             )
-        }?.toSet()
+        }
 
         val companyModel = CompanyModel(
            active = company.active ?: true,
@@ -67,7 +67,7 @@ class CompanyRepositoryImpl(
            phones = company.phones ?: emptySet(),
            services = company.services ?: emptySet(),
            technologies = company.technologies  ?: emptySet(),
-           partners = partnerModels ?: emptySet(),
+           partners = partnerModels ?: emptyList(),
            url = company.url ?: "",
            year = company.year ?: ""
         )
