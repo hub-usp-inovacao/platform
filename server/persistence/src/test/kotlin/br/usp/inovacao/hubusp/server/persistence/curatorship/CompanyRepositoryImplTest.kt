@@ -4,13 +4,15 @@ import br.usp.inovacao.hubusp.curatorship.sheets.Company
 import br.usp.inovacao.hubusp.curatorship.sheets.CompanyAddress
 import br.usp.inovacao.hubusp.curatorship.sheets.CompanyClassification
 import br.usp.inovacao.hubusp.curatorship.sheets.Partner
+import br.usp.inovacao.hubusp.curatorship.sheets.UniquenessException
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.getCollection
 import org.bson.Document
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertIs
+import kotlin.test.assertFailsWith
 
 class CompanyRepositoryImplTest() {
 
@@ -36,10 +38,30 @@ class CompanyRepositoryImplTest() {
 
         testSeeds().forEach {
             underTest.save(it)
-            companiesSaved.add(it)
-        }
 
-        assertTrue(companiesSaved.isNotEmpty())
+            val savedCompany = searchCompany("""{"cnpj": "${it.cnpj}"}""")
+            assertIs<Company>(savedCompany)
+        }
+    }
+
+    @Test
+    fun `should throw UniquenessException when saving a company with an existing cnpj`() {
+        val company = testSeeds().first()
+
+        assertFailsWith<UniquenessException> {
+            underTest.save(company)
+        }
+    }
+
+    @Test
+    fun `should save company with same name and different cnpj`() {
+        val company = testSeeds().first().copy(cnpj = "11.111.111/1112-00")
+
+        underTest.save(company)
+
+        val savedCompany = searchCompany("""{"cnpj": "11.111.111/1112-00"}""")
+
+        assertIs<Company>(savedCompany)
     }
 
     private fun cleanTestDb() {
@@ -51,6 +73,14 @@ class CompanyRepositoryImplTest() {
     private fun seedTestDb() {
         val companyCollection = testDb.getCollection<Company>("companies")
         companyCollection.insertMany(testSeeds())
+    }
+
+    private fun searchCompany(filter: String): Company? {
+        val companyCollection = testDb.getCollection<Company>("companies")
+
+        val bson = Document.parse(filter)
+
+        return companyCollection.find(bson).first()
     }
 
     private fun testSeeds() = listOf(
