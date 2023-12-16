@@ -4,10 +4,10 @@ import br.usp.inovacao.hubusp.server.catalog.Address
 import br.usp.inovacao.hubusp.server.catalog.Classification
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
-import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddress
-import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassification
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddressModel
+import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassificationModel
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyModel
-import br.usp.inovacao.hubusp.server.persistence.models.Partner
+import br.usp.inovacao.hubusp.server.persistence.models.PartnerModel
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
@@ -175,49 +175,58 @@ class CatalogCompanyRepositoryImplTest() {
 
     private fun citiesSeeds() = listOf(
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "12345678901234",
             companySize = setOf("Microempresa"),
+            corporateName = "Foo inc.",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
             incubated = "Sim. A empresa já está graduada",
-            name = "Foo inc.",
+            name = "Foo Softwares",
             phones = setOf("(11) 98899-7654"),
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
+            partners = listOf(
+                PartnerModel("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "fulano@example.com", "(11) 98899-7654"),
-                Partner("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
+                PartnerModel("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
                     "Instituto de Matemática e Estatística - IME", "cliclano@example.com", "(11) 98989-7676")
-            )
+            ),
+            year = "2019"
         ),
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "Caxias do Sul",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "11111111111111",
             companySize = setOf("Microempresa"),
+            corporateName = "Baz Databases",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
@@ -227,28 +236,33 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Beltrano", "53726812", "Pesquisador",
+            partners = listOf(
+                PartnerModel("Beltrano", "53726812", "Pesquisador",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "beltrano@example.com", "(11) 98899-7654")
-            )
+            ),
+            year = "2019"
         ),
     )
 
     private fun ecosystemsSeeds() = listOf(
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "00000000000000",
             companySize = setOf("Microempresa"),
+            corporateName = "Empresa de Computação",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("ABC"),
             emails = setOf("foo@example.com"),
@@ -258,27 +272,33 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
+            partners = listOf(
+                PartnerModel("Foobaz", "12345678", "Aluno Especial Pós Graduação",
                     "Faculdade de Economia, Administração e Contabilidade - FEA", "foobaz@example.com", "(11) 99999-8888"),
-                Partner("Bazfoo", "87654321", "Aluno ou ex-aluno (pós-graduação)",
+                PartnerModel("Bazfoo", "87654321", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Matemática e Estatística - IME", "bazfoo@example.com", "(11) 99111-2121")
-            )
+            ),
+            year = "2023"
+
         ),
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "00000000000001",
             companySize = setOf("Microempresa"),
+            corporateName = "Software Solutions",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("BCD", "CDE"),
             emails = setOf("foo@example.com"),
@@ -288,25 +308,30 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
+            partners = listOf(
+                PartnerModel("Nome", "9203746", "Aluno ou ex-aluno (graduação)",
                     "Faculdade de Arquitetura e Urbanismo - FAU", "nome@example.com", "(11) 99444-3535")
-            )
+            ),
+            year = "2020"
         ),
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "02020202020202",
             companySize = setOf("Microempresa"),
+            corporateName = "Dois e Zeros",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("CDE", "DEF", "EFG"),
             emails = setOf("foo@example.com"),
@@ -316,14 +341,15 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Pessoa","1029384", "Pesquisador",
+            partners = listOf(
+                PartnerModel("Pessoa","1029384", "Pesquisador",
                     "Instituto de Física - IF", "pessoa@example.com", "(11) 99595-9494"),
-                Partner("Ser humano", "94857632", "Aluno ou ex-aluno (graduação)",
+                PartnerModel("Ser humano", "94857632", "Aluno ou ex-aluno (graduação)",
                     "Instituto de Química - IQ", "ser_humano@example.com", "(11) 99234-5678"),
-                Partner("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
+                PartnerModel("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Pesquisa e Tecnologia - IPT", "gente@example.com", "(11) 99080-5070")
-            )
+            ),
+            year = "2021"
         ),
     )
 
@@ -339,19 +365,23 @@ class CatalogCompanyRepositoryImplTest() {
 
     private fun testSeeds() = listOf(
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "São Paulo",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Comércio e Serviços",
                 minor = "Serviços Domésticos"
             ),
             cnae = "042.0230-02",
+            cnpj = "12345678901234",
             companySize = setOf("Microempresa"),
+            corporateName = "Empresa de Vendas",
             description = "pluralidade foo bar baz",
             ecosystems = setOf("InovaLab@POLI"),
             emails = setOf("foo@example.com"),
@@ -361,27 +391,32 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
+            partners = listOf(
+                PartnerModel("Fulano", "1234567", "Aluno ou ex-aluno (graduação)",
                     "FEA", "fulano@example.com", "(11) 98899-7654"),
-                Partner("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
+                PartnerModel("Ciclano", "98765432", "Aluno ou ex-aluno (graduação)" ,
                     "IME", "cliclano@example.com", "(11) 98989-7676")
-            )
+            ),
+            year = "2019"
         ),
         CompanyModel(
-            address = CompanyAddress(
+            active = true,
+            address = CompanyAddressModel(
                 cep = "05555-020",
                 city = "Rio de Janeiro",
                 neighborhood = "Centro",
                 state = "SP",
                 venue = "Rua Barão de Itapetininga, 4"
             ),
-            classification = CompanyClassification(
+            allowed = true,
+            classification = CompanyClassificationModel(
                 major = "Infraestrutura e Construção",
                 minor = "Construção"
             ),
             cnae = "042.0230-02",
+            cnpj = "11111111111000",
             companySize = setOf("Grande Empresa"),
+            corporateName = "Empresa de Testes Automatizados",
             description = "foo bar baz",
             ecosystems = setOf("Habits"),
             emails = setOf("foo@example.com"),
@@ -391,10 +426,11 @@ class CatalogCompanyRepositoryImplTest() {
             services = emptySet(),
             technologies = emptySet(),
             url = "https://foo-comp.com.br",
-            partners = setOf(
-                Partner("Foobaz", "12345678", "Aluno Especial Pós Graduação",
+            partners = listOf(
+                PartnerModel("Foobaz", "12345678", "Aluno Especial Pós Graduação",
                     "FEA", "foobaz@example.com", "(11) 99999-8888"),
-                )
+            ),
+            year = "2023"
         )
     )
 }
