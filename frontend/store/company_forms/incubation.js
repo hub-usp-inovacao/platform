@@ -1,6 +1,6 @@
 const state = () => ({
   incubated: "",
-  ecosystems: '',
+  ecosystems: [],
 });
 
 const getters = {
@@ -16,8 +16,8 @@ const mutations = {
 const actions = {
   setIncubated: ({ commit }, value) =>
     commit("setFormField", { key: "incubated", value }),
-  setEcosystems: ({ commit }, value) =>
-    commit("setFormField", { key: "ecosystems", value }),
+  setEcosystems: ({ commit }, value) => 
+    commit("setFormField", { key: "ecosystems", value })
 };
 
 const prepareSection = (obj) => ({

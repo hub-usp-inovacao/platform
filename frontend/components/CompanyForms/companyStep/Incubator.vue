@@ -22,10 +22,10 @@
         :multipleOption="true"
       />
       <div class="mt-5 text-h6 font-weight-regular">
-        Em caso de outros, digite abaixo:
+        Em caso de outros, adicione abaixo:
         <v-divider />
         <v-container>
-          <ShortTextInput
+          <MultipleInputs
             :value="otherIncubator"
             input-label="Incubadora/Parque Tecnológico"
             @input="setOtherIncubators"
@@ -40,11 +40,13 @@
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
+import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 
 export default {
   components: {
     Dropdown,
     ShortTextInput,
+    MultipleInputs,
   },
   data: () => ({
     options: [
@@ -73,25 +75,13 @@ export default {
       return false;
     },
     defaultIncubators() {
-      let matchingDefaultIncubators = [];
-
-      for (let ecosystem of this.ecosystems) {
-        if (this.incubadoras.includes(ecosystem)) {
-          matchingDefaultIncubators.push(ecosystem);
-        }
-      }
-
-      return matchingDefaultIncubators;
+      const ecosystems = Array.isArray(this.ecosystems) ? this.ecosystems : [this.ecosystems];
+      const matchingIncubators = ecosystems.filter(ecosystem => this.incubadoras.includes(ecosystem));
+      return matchingIncubators;
     },
     otherIncubator() {
-      let matchingOtherIncubators = [];
-
-      for (let ecosystem of this.ecosystems) {
-        if (!this.incubadoras.includes(ecosystem)) {
-          matchingOtherIncubators.push(ecosystem);
-        }
-      }
-      
+      const ecosystems = Array.isArray(this.ecosystems) ? this.ecosystems : [this.ecosystems];
+      const matchingOtherIncubators = ecosystems.filter(ecosystem => !this.incubadoras.includes(ecosystem));
       return matchingOtherIncubators;
     },
   },
