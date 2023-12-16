@@ -47,7 +47,8 @@ fun CompanyModel.toCatalogCompany(): Company = Company(
     services = this.services,
     technologies = this.technologies,
     unities = this.partners.map { it.unity }.toSet(),
-    url = this.url
+    url = this.url,
+    odss = this.odss
 )
 
 class CatalogCompanyRepositoryImpl(
