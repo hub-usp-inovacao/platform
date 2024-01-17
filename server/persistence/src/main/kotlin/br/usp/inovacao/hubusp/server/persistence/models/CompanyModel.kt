@@ -5,14 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CompanyModel(
-    val active: Boolean,
+    val active: Boolean? = true,
     val address: CompanyAddressModel,
-    val allowed: Boolean,
+    val allowed: Boolean? = true,
     val classification: CompanyClassificationModel,
     val cnae: String,
     val cnpj: String,
     val companySize: Set<String>,
-    val corporateName: String,
+    val corporateName: String? = "",
     val description: String,
     val ecosystems: Set<String>,
     val emails: Set<String>,
