@@ -24,6 +24,11 @@
             "default": "devshubuspinovacao@googlegroups.com"
         },
         {
+            "name": "email_devs_username",
+            "description": "The email to receive a control copy as development",
+            "default": "devshubuspinovacao@googlegroups.com"
+        },
+        {
             "name": "email_conexao_username",
             "description": "The email to receive Conexao-related emails"
         },
