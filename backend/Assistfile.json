@@ -19,7 +19,7 @@
             "description": "The password for access to the email; in case of 2FA accounts, generate an app-password"
         },
         {
-            "name": "email_dev_username",
+            "name": "email_copy_username",
             "description": "The email to receive a control copy",
             "default": "devshubuspinovacao@googlegroups.com"
         },
