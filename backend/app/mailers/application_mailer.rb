@@ -32,7 +32,7 @@ class ApplicationMailer < ActionMailer::Base
     attachments["updated-skills-#{Time.zone.today}.csv"] =
       { mime_type: 'text/csv', content: SkillUpdateRequest.to_csv }
     mail(subject: subject('Novas competências solicitaram atualização dos dados'),
-         cc: ENV['email_devs_username'],ENV['email_copy_username'])
+         cc: [ENV['email_devs_username'],ENV['email_copy_username']])
   end
 
   def conexao
