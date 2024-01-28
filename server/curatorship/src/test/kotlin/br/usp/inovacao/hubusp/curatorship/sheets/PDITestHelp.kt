@@ -18,7 +18,7 @@ fun PDI.toRow(): List<String?> = listOf(
     null,
     null,
     keywords?.joinToString(";"),
-    timestamp.toString()
+    timestamp
 )
 
 class PDITestHelp {
