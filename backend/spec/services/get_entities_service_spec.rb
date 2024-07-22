@@ -74,8 +74,7 @@ RSpec.describe GetEntitiesService, type: :model do
     end
 
     it 'does not parse if cleanup failed' do
-      allow(described_class).to receive(:request).and_return(true)
-      allow(described_class).to receive(:cleanup).and_return(nil)
+      allow(described_class).to receive_messages(request: true, cleanup: nil)
       allow(described_class).to receive(:parse)
       described_class.run mocked_model
 
@@ -83,8 +82,7 @@ RSpec.describe GetEntitiesService, type: :model do
     end
 
     it 'parses even if cleanup returns 0' do
-      allow(described_class).to receive(:request).and_return(true)
-      allow(described_class).to receive(:cleanup).and_return(0)
+      allow(described_class).to receive_messages(request: true, cleanup: 0)
       allow(described_class).to receive(:parse)
       described_class.run mocked_model
 

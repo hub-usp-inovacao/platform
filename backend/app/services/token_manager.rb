@@ -37,7 +37,7 @@ class TokenManager
 
     def expiring_time
       exp = 24.hours.from_now.to_i
-      { exp: exp }
+      { exp: }
     end
 
     def issuer

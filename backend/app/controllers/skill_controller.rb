@@ -19,7 +19,7 @@ class SkillController < ApplicationController
 
     ## caso contrário, token inalterado
     email = payload['email']
-    @skill = Skill.find_by({ email: email })
+    @skill = Skill.find_by({ email: })
     render json: @skill
   end
 
