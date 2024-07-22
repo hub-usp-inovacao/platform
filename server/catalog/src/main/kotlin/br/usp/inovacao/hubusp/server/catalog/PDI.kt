@@ -1,18 +1,18 @@
 package br.usp.inovacao.hubusp.server.catalog
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Serializer(forClass = LocalDateTime::class)
+@OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+@Serializer(forClass = LocalDateTimeSerializer::class)
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
@@ -27,7 +27,9 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     }
 }
 
-@kotlinx.serialization.Serializable
+
+@OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+@Serializable
 data class PDI(
     val category: String,
     val name: String,
@@ -39,5 +41,8 @@ data class PDI(
     val phone: String,
     val description: String,
     val tags: Set<String>,
-    @Contextual val timestamp: LocalDateTime
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val timestamp: LocalDateTime,
 )
+
+
