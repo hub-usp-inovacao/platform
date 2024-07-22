@@ -16,9 +16,8 @@ class GetEntitiesService
     model_name = @@model.name.upcase
     sheets_api_key = ENV['google_sheets_API_key']
     @@sheet_id = ENV["#{model_name}_SHEET_ID"]
-    sheet_name = ENV["#{model_name}_TAB_NAME"]
 
-    url = "#{base_url}/#{@@sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
+    url = "#{base_url}/#{@@sheet_id}/values/'#{base_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
     @@data = JSON.parse(response.body)['values']
   rescue RestClient::ExceptionWithResponse => e
@@ -53,5 +52,9 @@ class GetEntitiesService
 
   def self.base_url
     'https://sheets.googleapis.com/v4/spreadsheets'
+  end
+
+  def self.base_name
+    'Upload'
   end
 end
