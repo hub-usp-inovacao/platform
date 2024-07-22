@@ -24,7 +24,7 @@ end
 desc 'Sends mails with all the errors not yet reported'
 task mail_reports: :environment do
   log('mail_reports', 'mailing reports!')
-  Report.where(delivered: false).each do |report|
+  Report.where(delivered: false).find_each do |report|
     ApplicationMailer.with(warnings: report.warnings, sheet_id: report.sheet_id,
                            entity: report.entity).warnings.deliver_now
     report.update(delivered: true)

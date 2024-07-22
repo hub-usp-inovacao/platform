@@ -96,10 +96,10 @@ class Iniciative
   end
 
   def self.get_contact(person, info)
-    is_empty = (person.nil? || person.size.zero?) && (info.nil? || info.size.zero?)
+    is_empty = person.blank? && info.blank?
     return nil if is_empty
 
-    { person: person, info: info }
+    { person:, info: }
   end
 
   def self.possible_nd(raw)

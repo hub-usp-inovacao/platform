@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 class Skill
   include Mongoid::Document
 
@@ -169,7 +167,7 @@ class Skill
 
     {
       major: Set.new(majors).merge(inferred_majors).to_a,
-      minors: minors
+      minors:
     }
   end
 
