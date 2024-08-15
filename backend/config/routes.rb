@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   get '/disciplines', to: 'discipline#index'
-  get '/companies', to: 'company#index'
   get '/patents', to: 'patent#index'
   get '/skills', to: 'skill#index'
   get '/iniciatives', to: 'iniciative#index'
