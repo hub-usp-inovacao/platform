@@ -47,3 +47,23 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMajor() = this.val
 fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: String?) = this.validate(CompanyClassificationRegister) {
     it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
 }
+
+/*object DisciplineCategoryRegister: Constraint
+
+fun Validator<DisciplineCategory>.isValidCategory() = this.validate(DisciplineCategoryRegister) {
+    it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectualProperty == true
+}*/
+
+object DisciplineRegister : Constraint
+
+fun Validator<Discipline>.Property<String?>.isValidName() = this.validate(DisciplineRegister) {
+    it == null || it.matches(Regex("/\\A(\\w|\\d){2,3}\\d{4} (-|–) .+\\z/"))
+}
+
+fun Validator<Discipline>.Property<String?>.isValidNature() = this.validate(DisciplineRegister) {
+    it == "Graduação" || it == "Pós-Graduação"
+}
+
+fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(DisciplineRegister) {
+    it == "Preciso testar minha ideia!" || it == "Quero aprender!" || it == "Tenho uma ideia, e agora?" || it == "Tópicos avançados em Empreendedorismo"
+}
