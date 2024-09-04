@@ -6,27 +6,27 @@ RSpec.describe Incubation, type: :model do
   let :attrs do
     {
       was_incubated: 'Sim. A empresa já está graduada',
-      ecosystem: 'Porto Digital'
+      ecosystems: 'Porto Digital'
     }
   end
 
   context 'without validation problems' do
     it 'works when was not incubated' do
       attrs[:was_incubated] = 'Não'
-      attrs[:ecosystem] = 'Direto para o Mercado'
+      attrs[:ecosystems] = 'Direto para o Mercado'
 
       expect(described_class.new(attrs)).to be_valid
     end
 
-    it 'works when no ecosystem is provided' do
+    it 'works when no ecosystems is provided' do
       attrs[:was_incubated] = 'Não'
-      attrs.delete :ecosystem
+      attrs.delete :ecosystems
       expect(described_class.new(attrs)).to be_valid
     end
 
-    it 'works when empty ecosystem is provided' do
+    it 'works when empty ecosystems is provided' do
       attrs[:was_incubated] = 'Não'
-      attrs[:ecosystem] = ''
+      attrs[:ecosystems] = ''
       expect(described_class.new(attrs)).to be_valid
     end
   end
@@ -42,15 +42,15 @@ RSpec.describe Incubation, type: :model do
       expect(described_class.new(attrs)).to be_invalid
     end
 
-    it 'on inconsistent ecosystem based on being incubated' do
+    it 'on inconsistent ecosystems based on being incubated' do
       attrs[:was_incubated] = 'Sim. A empresa está incubada'
-      attrs[:ecosystem] = 'Direto para o Mercado'
+      attrs[:ecosystems] = 'Direto para o Mercado'
       expect(described_class.new(attrs)).to be_invalid
     end
 
-    it 'on inconsistent incubated based on ecosystem' do
+    it 'on inconsistent incubated based on ecosystems' do
       attrs[:was_incubated] = 'Não'
-      attrs[:ecosystem] = 'Porto Digital'
+      attrs[:ecosystems] = 'Porto Digital'
       expect(described_class.new(attrs)).to be_invalid
     end
   end
@@ -59,7 +59,7 @@ RSpec.describe Incubation, type: :model do
     let :handmade do
       [nil] * 24 + [
         attrs[:was_incubated],
-        attrs[:ecosystem]
+        attrs[:ecosystems]
       ]
     end
 
