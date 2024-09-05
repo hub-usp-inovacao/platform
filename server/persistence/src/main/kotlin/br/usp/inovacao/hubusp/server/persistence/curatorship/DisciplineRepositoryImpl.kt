@@ -2,12 +2,14 @@ package br.usp.inovacao.hubusp.server.persistence.curatorship
 
 import br.usp.inovacao.hubusp.curatorship.sheets.Discipline
 import br.usp.inovacao.hubusp.curatorship.sheets.DisciplineRepository
+import br.usp.inovacao.hubusp.curatorship.sheets.UniquenessException
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineCategory
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineDescription
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
+import com.mongodb.MongoWriteException
 import org.litote.kmongo.getCollection
 import java.time.LocalDateTime
 
@@ -21,8 +23,6 @@ class DisciplineRepositoryImpl(
     }
 
     override fun save(discipline: Discipline) {
-        // TODO: test
-        // TODO: improve CompanyModel to follow validation structure (avoid parsing null)
 
         val disciplineDescription = DisciplineDescription(
             long = discipline.description.long ?: "",
@@ -50,7 +50,14 @@ class DisciplineRepositoryImpl(
             url = discipline.url ?: ""
         )
 
-        disciplineCollection.insertOne(disciplineModel)
+        try {
+            disciplineCollection.insertOne(disciplineModel)
+        } catch (e: MongoWriteException) {
+            when (e.getCode()) {
+                11000 -> throw UniquenessException("Discipline with name ${discipline.name} already exists")
+                else -> throw e
+            }
+        }
     }
 
         override fun clean() {

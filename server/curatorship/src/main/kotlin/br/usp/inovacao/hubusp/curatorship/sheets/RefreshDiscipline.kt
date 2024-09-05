@@ -21,7 +21,7 @@ class RefreshDiscipline(
         )
     }
 
-    /*private fun persistValidData(data: Any) = when(data) {
+    private fun persistValidData(data: Any) = when(data) {
         is Discipline -> try {
             disciplineRepository.save(data)
         } catch (e: UniquenessException) {
@@ -29,17 +29,10 @@ class RefreshDiscipline(
         }
         is DisciplineValidationError -> disciplineErrorRepository.save(data)
         else -> throw RuntimeException("Error while persisting Discipline: data isn't Discipline nor DisciplineValidationError/DisciplineUniquenessError")
-    }*/
-
-    private fun persistValidData(data: Any) = when(data) {
-        is Discipline -> disciplineRepository.save(data)
-        is DisciplineValidationError -> disciplineErrorRepository.save(data)
-        else -> throw RuntimeException("Error while persisting Discipline: data isn't Discipline nor DisciplineValidationError")
     }
 
     fun refresh() {
         try {
-            // TODO: delete "old" documents, when due
             val data = spreadsheetReader
                 .read(Sheets.Disciplines)
                 .drop(1)

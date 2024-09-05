@@ -34,18 +34,6 @@ data class DisciplineCategory(
             intellectual_property = subRow[12]?.equals("x", ignoreCase = true) ?: false
         )
     }
-
-    /*init{
-        try{
-            validate(this).isValidCategory()
-        } catch (cve: ConstraintViolationException) {
-            val violations: List<String> = cve.constraintViolations
-                .mapToMessage(baseName = "messages")
-                .map { "${it.property}: ${it.message}" }
-
-            throw ValidationException(messages = violations)
-        }
-    }*/
 }
 
 @kotlinx.serialization.Serializable
@@ -91,6 +79,9 @@ data class Discipline(
     val offeringPeriod: String?,
 ){
     companion object{
+
+        val natures = listOf("Graduação", "Pós-graduação")
+        val levels = listOf("Preciso testar minha ideia!", "Quero aprender!", "Tenho uma ideia, e agora?", "Tópicos avançados em Empreendedorismo")
 
         fun createKeywords(subRow: List<String?>) : Set<String>? {
 
@@ -138,6 +129,12 @@ data class Discipline(
                 validate(Discipline::level)
                     .isNotNull()
                     .isValidLevel()
+                validate(Discipline::url)
+                    .isNotNull()
+                    .isNotBlank()
+                validate(Discipline::category)
+                    .isNotNull()
+                    .isValidCategory()
             }
         }
         catch (cve: ConstraintViolationException) {
