@@ -1,6 +1,8 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Discipline
+import br.usp.inovacao.hubusp.server.catalog.Description
+import br.usp.inovacao.hubusp.server.catalog.Category
 import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.*
 import com.mongodb.client.MongoDatabase
