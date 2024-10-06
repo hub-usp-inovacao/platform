@@ -11,16 +11,10 @@ data class DisciplineCategory(
 )
 
 @Serializable
-data class DisciplineDescription(
-    val long: String,
-    val short: String
-)
-
-@Serializable
 data class DisciplineModel(
     val campus: String,
     val category: DisciplineCategory,
-    val description: DisciplineDescription,
+    val description: String,
     val keywords: Set<String>,
     val level: String,
     val name: String,

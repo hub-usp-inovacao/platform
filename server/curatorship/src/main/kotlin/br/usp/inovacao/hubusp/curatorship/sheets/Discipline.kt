@@ -25,42 +25,11 @@ data class DisciplineCategory(
 ){
     companion object{
         fun fromRow(subRow: List<String?>) = DisciplineCategory(
-            // Verify if the value is null, if it is, return false
-            // If it isn't, check if it is "x" (case insensitive)
-            // If it is, return true, if it isn't, return false
             business = subRow[9]?.equals("x", ignoreCase = true) ?: false,
             entrepreneurship = subRow[10]?.equals("x", ignoreCase = true) ?: false,
             innovation = subRow[11]?.equals("x", ignoreCase = true) ?: false,
             intellectual_property = subRow[12]?.equals("x", ignoreCase = true) ?: false
         )
-    }
-}
-
-@kotlinx.serialization.Serializable
-data class DisciplineDescription(
-    val short: String?,
-    val long: String?
-){
-    companion object{
-        fun fromRow(subRow: List<String?>) = DisciplineDescription(
-            short = "",
-            long = subRow[6]
-        )
-    }
-
-    init{
-        try{
-            validate(this){
-                validate(DisciplineDescription::short).isBlank()
-                validate(DisciplineDescription::long).isNotBlank()
-            }
-        } catch (cve: ConstraintViolationException) {
-            val violations: List<String> = cve.constraintViolations
-                .mapToMessage(baseName = "messages")
-                .map { "${it.property}: ${it.message}" }
-
-            throw ValidationException(messages = violations)
-        }
     }
 }
 
@@ -73,7 +42,7 @@ data class Discipline(
     val nature: String?,
     val level: String?,
     val url: String?,
-    val description: DisciplineDescription,
+    val description: String?,
     val category: DisciplineCategory,
     val keywords: Set<String>?,
     val offeringPeriod: String?,
@@ -103,7 +72,7 @@ data class Discipline(
             nature = subRow[0],
             level = subRow[5],
             url = subRow[4],
-            description = DisciplineDescription.fromRow(subRow),
+            description = subRow[6],
             category = DisciplineCategory.fromRow(subRow),
             keywords = createKeywords(subRow),
             offeringPeriod = subRow[13]
@@ -130,6 +99,9 @@ data class Discipline(
                     .isNotNull()
                     .isValidLevel()
                 validate(Discipline::url)
+                    .isNotNull()
+                    .isNotBlank()
+                validate(Discipline::description)
                     .isNotNull()
                     .isNotBlank()
                 validate(Discipline::category)

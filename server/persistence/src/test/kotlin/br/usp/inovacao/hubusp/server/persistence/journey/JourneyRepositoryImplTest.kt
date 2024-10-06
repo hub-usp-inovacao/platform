@@ -215,7 +215,7 @@ internal class JourneyRepositoryImplTest {
         DisciplineModel(
             campus = "Butantã",
             category = DisciplineCategory(true, true, true, true),
-            description = DisciplineDescription("", ""),
+            description = "",
             keywords = setOf("foo", "baz"),
             level = "Preciso testar minha ideia!",
             name = "ABC0123 - Foo de baz bar",
@@ -228,7 +228,7 @@ internal class JourneyRepositoryImplTest {
         DisciplineModel(
             campus = "Butantã",
             category = DisciplineCategory(true, true, true, true),
-            description = DisciplineDescription("", ""),
+            description = "",
             keywords = setOf("foo", "baz"),
             level = "Tópicos avançados em Empreendedorismo",
             name = "BCD1234 - Foo de baz bar",

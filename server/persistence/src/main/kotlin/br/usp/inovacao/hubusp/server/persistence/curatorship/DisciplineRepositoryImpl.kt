@@ -5,7 +5,6 @@ import br.usp.inovacao.hubusp.curatorship.sheets.DisciplineRepository
 import br.usp.inovacao.hubusp.curatorship.sheets.UniquenessException
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineModel
 import br.usp.inovacao.hubusp.server.persistence.models.DisciplineCategory
-import br.usp.inovacao.hubusp.server.persistence.models.DisciplineDescription
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
@@ -24,11 +23,6 @@ class DisciplineRepositoryImpl(
 
     override fun save(discipline: Discipline) {
 
-        val disciplineDescription = DisciplineDescription(
-            long = discipline.description.long ?: "",
-            short = discipline.description.short ?: ""
-        )
-
         val disciplineCategory = DisciplineCategory(
             innovation = discipline.category.innovation ?: false,
             business = discipline.category.business ?: false,
@@ -39,7 +33,7 @@ class DisciplineRepositoryImpl(
         val disciplineModel = DisciplineModel(
             campus = discipline.campus ?: "",
             category = disciplineCategory,
-            description = disciplineDescription,
+            description = discipline.description?: "",
             keywords = discipline.keywords ?: emptySet(),
             level = discipline.level ?: "",
             name = discipline.name ?: "",

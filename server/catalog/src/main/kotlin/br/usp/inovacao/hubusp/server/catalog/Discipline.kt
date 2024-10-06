@@ -9,16 +9,10 @@ data class Category(
 )
 
 @kotlinx.serialization.Serializable
-data class Description(
-    val long: String,
-    val short: String,
-)
-
-@kotlinx.serialization.Serializable
 data class Discipline(
     val name: String,
     val category: Category,
-    val description: Description,
+    val description: String,
     val unity: String,
     val campus: String,
     val level: String,
