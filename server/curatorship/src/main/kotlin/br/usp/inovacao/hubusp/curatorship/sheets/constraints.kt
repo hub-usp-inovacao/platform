@@ -47,3 +47,14 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMajor() = this.val
 fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: String?) = this.validate(CompanyClassificationRegister) {
     it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
 }
+
+
+object ResearcherKnowledgeAreasRegister : Constraint
+
+fun Validator<KnowledgeAreas>.Property<String?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
+    it == null || ResearcherAreaValues.allAreas().contains
+}
+
+fun Validator<KnowledgeAreas>.Property<String?>.isValidSubArea(area: String?) = this.validate(ResearcherKnowledgeAreasRegister) {
+    it == null || ResearcherAreaValues.areaToSubArea(area).contains(it)
+}
