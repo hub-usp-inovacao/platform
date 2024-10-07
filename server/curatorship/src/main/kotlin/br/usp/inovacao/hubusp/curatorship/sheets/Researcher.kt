@@ -45,15 +45,15 @@ data class Researcher(
             photo = subrow[30] ?: "",
             skills = splitUnlessND(subrow[23]),
             services = splitUnlessND(subrow[24]),
-            equipments = splitUnlessND(subrow[25]), //mismatch
+            equipments = splitUnlessND(subrow[25]),
             phone = subrow[31],
-            limitDate = subrow[36],
+            limitDate = subrow[36]?.let { LocalDate.parse(it) }, //transformando pra LocalDate
             bond = subrow[1],
             campus = subrow[6],
             area = KnowledgeAreas.createFrom(subrow)
         )
 
-        fun splitUnlessND(term: String?) : Set<String> {
+        fun splitUnlessND(term: String?) : Set<String>? {
             if(term == "N/D") return emptySet()
             else return term?.split(";")?.toSet() ?: emptySet()
         }
@@ -68,22 +68,19 @@ data class Researcher(
                     .isNotBlank()
 
                 validate(Researcher::email)
+                    .isNotNull()
                     .isEmail()
 
                 validate(Researcher::unities)
                     .isNotNull()
-                    .isUnity()
 
                 validate(Researcher::keywords)
                     .isNotNull()
                     .isNotEmpty()
 
                 validate(Researcher::lattes)
-                    .isWebsite()
-
-                validate(Researcher::Researchers)
                     .isNotNull()
-                    .isNotEmpty()
+                    .isWebsite()
 
                 validate(Researcher::services)
                     .isNotNull()
@@ -93,7 +90,7 @@ data class Researcher(
                     .isNotNull()
                     .isNotEmpty()
 
-                validate(Researcher::phones)
+                validate(Researcher::phone)
                     .isPhone()
 
                 validate(Researcher::limitDate)
@@ -107,11 +104,11 @@ data class Researcher(
                     .isNotNull()
                     .isCampus()
 
-                validate(Researcher::researchers)
+                validate(Researcher::skills)
                     .isNotNull()
             }
         } catch (cve: ConstraintViolationException) {
-            val violations: Set<String> = cve.constraintViolations
+            val violations: List<String> = cve.constraintViolations
                 .mapToMessage(baseName = "messages")
                 .map { "${it.property}: ${it.message}" }
 
@@ -122,13 +119,13 @@ data class Researcher(
 
 @kotlinx.serialization.Serializable
 data class KnowledgeAreas(
-    val area: Set<String>,
-    val subArea: Set<String>
+    val area: Set<String>?,
+    val subArea: Set<String>?
 ) {
     companion object {
-        fun createFrom(subrow:Set<String>) = KnowledgeAreas(
-            area = subrow[26],
-            subArea = subrow[27]
+        fun createFrom(subrow:List<String?>) = KnowledgeAreas(
+            area = subrow[26]?.split(";")?.toSet() ?: emptySet(),
+            subArea = subrow[27]?.split(";")?.toSet() ?: emptySet()
         )
     }
 
@@ -138,13 +135,13 @@ data class KnowledgeAreas(
                 validate(KnowledgeAreas::area)
                     .isNotNull()
                     .isValidArea()
-                
+
                 validate(KnowledgeAreas::subArea)
                     .isNotNull()
-                    .isValidSubArea(area)
+                    .isValidSubArea(this@KnowledgeAreas.area)
             }
         } catch (cve: ConstraintViolationException) {
-            val violations: Set<String> = cve.constraintViolations
+            val violations: List<String> = cve.constraintViolations
                 .mapToMessage(baseName = "messages")
                 .map { "${it.property}: ${it.message}" }
 

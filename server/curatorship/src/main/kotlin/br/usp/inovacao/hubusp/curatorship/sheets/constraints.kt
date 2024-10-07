@@ -51,10 +51,12 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: Strin
 
 object ResearcherKnowledgeAreasRegister : Constraint
 
-fun Validator<KnowledgeAreas>.Property<String?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
-    it == null || ResearcherAreaValues.allAreas().contains
+fun Validator<KnowledgeAreas>.Property<Set<String>?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
+    it == null || it.all { area -> ResearcherAreaValues.allAreas().contains(area) }
 }
 
-fun Validator<KnowledgeAreas>.Property<String?>.isValidSubArea(area: String?) = this.validate(ResearcherKnowledgeAreasRegister) {
-    it == null || ResearcherAreaValues.areaToSubArea(area).contains(it)
+fun Validator<KnowledgeAreas>.Property<Set<String>?>.isValidSubArea(area: Set<String>?) = this.validate(ResearcherKnowledgeAreasRegister) {
+    it == null || area?.let { subAreas -> subAreas.all { subArea -> ResearcherAreaValues.areaToSubArea(subArea).contains(subArea) } } ?: true
 }
+
+
