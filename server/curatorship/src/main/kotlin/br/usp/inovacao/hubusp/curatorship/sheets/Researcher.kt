@@ -47,7 +47,7 @@ data class Researcher(
             services = splitUnlessND(subrow[24]),
             equipments = splitUnlessND(subrow[25]),
             phone = subrow[31],
-            limitDate = subrow[36]?.let { LocalDate.parse(it) }, //transformando pra LocalDate
+            limitDate = subrow[36]?.let { LocalDate.parse(it) },
             bond = subrow[1],
             campus = subrow[6],
             area = KnowledgeAreas.createFrom(subrow)
