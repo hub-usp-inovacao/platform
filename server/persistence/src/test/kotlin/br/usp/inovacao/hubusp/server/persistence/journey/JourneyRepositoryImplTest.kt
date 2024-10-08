@@ -9,7 +9,6 @@ import br.usp.inovacao.hubusp.server.persistence.models.*
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.deleteMany
 import org.litote.kmongo.getCollection
-import java.time.LocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -148,8 +147,7 @@ internal class JourneyRepositoryImplTest {
             email = "",
             phone = "",
             description = "",
-            tags = emptySet(),
-            timestamp = LocalDateTime.now()
+            tags = emptySet()
         ),
         PDIModel(
             category = "INCT",
@@ -161,8 +159,7 @@ internal class JourneyRepositoryImplTest {
             email = "",
             phone = "",
             description = "",
-            tags = emptySet(),
-            timestamp = LocalDateTime.now()
+            tags = emptySet()
         )
     )
 
