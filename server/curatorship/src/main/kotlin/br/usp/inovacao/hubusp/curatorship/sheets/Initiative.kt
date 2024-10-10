@@ -80,7 +80,6 @@ data class Initiative(
 
                 validate(Initiative::tags)
                     .isNotNull()
-                    .isNotBlank()
 
                 validate(Initiative::url)
                     .isNotNull()
@@ -123,7 +122,7 @@ data class Contact(
                 validate(Contact::info)
                     .isNotNull()
                     .isNotBlank()
-                    .isPhoneOrEmail(Contact::info)
+                    .isPhoneOrEmail()
 
                 validate(Contact::person)
                     .isNotNull()
