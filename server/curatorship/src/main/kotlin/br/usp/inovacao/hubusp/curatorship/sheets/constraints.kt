@@ -47,3 +47,23 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMajor() = this.val
 fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: String?) = this.validate(CompanyClassificationRegister) {
     it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
 }
+
+object Iniciative : Constraint
+
+fun Validator<Iniciative>.Property<String?>.isClassification() = this.validate(InitiativeClassificationRegister) {
+    classification -> classification == null || InitiativeClassificationRegister.validClasses.contains(classification)
+}
+
+class Email : Constraint
+
+fun <E> Validator<E>.Property<String?>.isEmail() = this.validate(Email()) {
+    it == null || Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
+}
+
+class PhoneOrEmail : Constraint
+
+fun <E> Validator<E>.Property<String?>.isPhoneOrEmail() = this.validate(PhoneOrEmail()) {
+    (it == null) || it.isPhone() || it.isEmail()
+}
+
+
