@@ -75,14 +75,6 @@
             "description": "Name of the tab in which the data are for Skills"
         },
         {
-            "name": "COMPANY_SHEET_ID",
-            "description": "ID of the spreadsheet with data of Companies"
-        },
-        {
-            "name": "COMPANY_TAB_NAME",
-            "description": "Name of the tab in which the data are for Companies"
-        },
-        {
             "name": "PDI_SHEET_ID",
             "description": "ID of the spreadsheet with data of PDIs"
         },
