@@ -65,3 +65,22 @@ fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(Disci
 fun Validator<Discipline>.Property<DisciplineCategory?>.isValidCategory() = this.validate(DisciplineRegister) {
     it == null || it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectual_property == true
 }
+
+object InitiativeClassificator : Constraint
+
+fun Validator<Initiative>.Property<String?>.isClassification() = this.validate(InitiativeClassificator) { classification ->
+    classification == null || InitiativeClassificationRegister.validClasses.contains(classification)
+}
+
+class Email : Constraint
+
+fun <E> Validator<E>.Property<String?>.isEmail() = this.validate(Email()) {
+    it == null || Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
+}
+
+class PhoneOrEmail : Constraint
+
+fun <E> Validator<E>.Property<String?>.isPhoneOrEmail() = this.validate(PhoneOrEmail()) {
+    (it == null) || it.replace("""\D""".toRegex(), "").matches("""^\d{8,13}$""".toRegex()) ||
+            Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
+}
