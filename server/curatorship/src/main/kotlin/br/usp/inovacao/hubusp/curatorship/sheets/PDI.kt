@@ -1,36 +1,13 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.Serializable
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-@Serializer(forClass = LocalDateTime::class)
-object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.format(formatter))
-    }
-
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), formatter)
-    }
-}
-
-@kotlinx.serialization.Serializable
+@OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+@Serializable
 data class PDI(
     val category: String?,
     val name: String?,
@@ -42,7 +19,6 @@ data class PDI(
     val description: String?,
     val site: String?,
     val keywords: Set<String>?,
-    @Contextual val timestamp: LocalDateTime
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
@@ -58,7 +34,6 @@ data class PDI(
             phone = row[8],
             description = row[11],
             keywords = row[14]?.split(";")?.toSet(),
-            timestamp = LocalDateTime.now()
         )
     }
 

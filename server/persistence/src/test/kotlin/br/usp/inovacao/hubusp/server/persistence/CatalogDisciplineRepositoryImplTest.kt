@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Discipline
+import br.usp.inovacao.hubusp.server.catalog.Category
 import br.usp.inovacao.hubusp.server.catalog.DisciplineSearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.*
 import com.mongodb.client.MongoDatabase
@@ -151,10 +152,7 @@ internal class CatalogDisciplineRepositoryImplTest {
             business = false,
             intellectual_property = true
         ),
-        description = DisciplineDescription(
-            long = "Analisar as contribuições da inovação para o desenvolvimento do setor de serviços, ...",
-            short = ""
-        ),
+        description = "Analisar as contribuições da inovação para o desenvolvimento do setor de serviços, ...",
         keywords = setOf("foo", "baz"),
         level = "Quero aprender!",
         name = "ACH1575",
@@ -188,10 +186,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 business = false,
                 intellectual_property = true
             ),
-            description = DisciplineDescription(
-                long = "",
-                short = ""
-            ),
+            description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "1º sem. 2023",
             start_date = "",
@@ -209,10 +204,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 business = false,
                 intellectual_property = true
             ),
-            description = DisciplineDescription(
-                long = "",
-                short = ""
-            ),
+            description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
@@ -230,10 +222,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 business = false,
                 intellectual_property = true
             ),
-            description = DisciplineDescription(
-                long = "",
-                short = ""
-            ),
+            description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
@@ -251,10 +240,7 @@ internal class CatalogDisciplineRepositoryImplTest {
                 business = true,
                 intellectual_property = true
             ),
-            description = DisciplineDescription(
-                long = "",
-                short = ""
-            ),
+            description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "2º sem. 2022",
             start_date = "",
