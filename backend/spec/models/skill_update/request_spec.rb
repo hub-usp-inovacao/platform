@@ -54,7 +54,7 @@ RSpec.describe SkillUpdate::Request, type: :model do
     {
       confirmation: conf,
       resource: res,
-      bond: bond,
+      bond:,
       personal: pers
     }
   end

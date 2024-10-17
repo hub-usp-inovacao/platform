@@ -1,4 +1,4 @@
-const indexingKeys = ["name", "description.long", "description.short"];
+const indexingKeys = ["name", "description"];
 
 export const state = () => ({
   disciplines: [],

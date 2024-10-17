@@ -33,7 +33,7 @@
         </v-container>
       </template>
       <template #content="{ item }">
-        <p>{{ item.description ? item.description.long : "" }}</p>
+        <p>{{ item.description ? item.description : "" }}</p>
       </template>
       <template #actions="{ item }">
         <v-btn
