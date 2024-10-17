@@ -74,7 +74,7 @@ export default {
       { title: 'AUSPIN', href: 'http://www.inovacao.usp.br/' },
       {
         title: 'Portal do Inventor',
-        href: 'https://patente.inovacao.usp.br/inteumweb/inventorportal/'
+        href: 'https://usp.inteum.com/usp/InventorPortal'
       },
       { title: 'Hub USP Inovação', href: '/' },
     ]
