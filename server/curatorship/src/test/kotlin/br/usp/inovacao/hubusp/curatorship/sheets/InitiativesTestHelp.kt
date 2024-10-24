@@ -1,5 +1,8 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.server.persistence.models.Initiative
+import br.usp.inovacao.hubusp.server.persistence.models.InitiativeContact
+
 fun Initiative.toRow(): List<String?> = listOf(
     classification,
     name,
