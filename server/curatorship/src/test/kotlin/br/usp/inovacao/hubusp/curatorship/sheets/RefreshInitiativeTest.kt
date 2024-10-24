@@ -8,7 +8,7 @@ import io.mockk.verify
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
-internal class RefreshInitiative {
+internal class RefreshInitiativeTest {
 
     @MockK
     private lateinit var mockSSReader: SpreadsheetReader
@@ -27,7 +27,7 @@ internal class RefreshInitiative {
     @BeforeTest
     fun setup() {
         MockKAnnotations.init(this)
-        underTest = RefreshInitiative(mockMailer, mockSSReader, mockPDIRepo, mockPDIErrorRepo)
+        underTest = RefreshInitiative(mockMailer, mockSSReader, mockInitiativesRepo, mockInitiativesErrorRepo)
     }
 
     @Test
