@@ -4,12 +4,12 @@ import br.usp.inovacao.hubusp.curatorship.Configuration
 import br.usp.inovacao.hubusp.curatorship.Mailer
 import br.usp.inovacao.hubusp.curatorship.sheets.SpreadsheetReader
 import br.usp.inovacao.hubusp.server.persistence.configureDB
-import br.usp.inovacao.hubusp.server.persistence.curatorship.CompanyErrorRepositoryImpl
-import br.usp.inovacao.hubusp.server.persistence.curatorship.CompanyRepositoryImpl
+import br.usp.inovacao.hubusp.server.persistence.curatorship.InitiativeErrorRepositoryImpl
+import br.usp.inovacao.hubusp.server.persistence.curatorship.InitiativeRepositoryImpl
 import com.github.ajalt.clikt.core.CliktCommand
 
-class RefreshIniciative : CliktCommand() {
-    private val refreshIniciative : br.usp.inovacao.hubusp.curatorship.sheets.RefreshIniciative
+class RefreshInitiative : CliktCommand() {
+    private val refreshInitiative : br.usp.inovacao.hubusp.curatorship.sheets.RefreshInitiative
 
     init {
         val user = Configuration.EMAIL_USERNAME
@@ -22,15 +22,15 @@ class RefreshIniciative : CliktCommand() {
         val dbName = Configuration.DATASOURCE_DBNAME
 
         val db = configureDB(protocol, host, port, dbName)
-        refreshIniciative = br.usp.inovacao.hubusp.curatorship.sheets.RefreshIniciative(
+        refreshInitiative = br.usp.inovacao.hubusp.curatorship.sheets.RefreshInitiative(
             mailer = Mailer(user, password),
             spreadsheetReader = SpreadsheetReader(apiKey),
-            companyRepository = CompanyRepositoryImpl(db),
-            companyErrorRepository = CompanyErrorRepositoryImpl(db)
+            initiativeRepository = InitiativeRepositoryImpl(db),
+            initiativeErrorRepository = InitiativeErrorRepositoryImpl(db)
         )
     }
 
     override fun run() {
-        refreshIniciative.refresh()
+        refreshInitiative.refresh()
     }
 }
