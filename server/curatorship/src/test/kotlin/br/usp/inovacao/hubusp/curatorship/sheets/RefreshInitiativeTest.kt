@@ -1,5 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.server.persistence.curatorship.InitiativeErrorRepositoryImpl
+import br.usp.inovacao.hubusp.server.persistence.curatorship.InitiativeRepositoryImpl
 import br.usp.inovacao.hubusp.curatorship.Mailer
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -17,10 +19,10 @@ internal class RefreshInitiativeTest {
     private lateinit var mockMailer: Mailer
 
     @MockK
-    private lateinit var mockInitiativesRepo: InitiativesRepository
+    private lateinit var mockInitiativesRepo: InitiativeRepositoryImpl
 
     @MockK
-    private lateinit var mockInitiativesErrorRepo: InitiativesErrorRepository
+    private lateinit var mockInitiativesErrorRepo: InitiativeErrorRepositoryImpl
 
     private lateinit var underTest: RefreshInitiative
 
