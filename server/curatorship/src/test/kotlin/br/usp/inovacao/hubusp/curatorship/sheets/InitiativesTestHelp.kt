@@ -1,47 +1,50 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-fun PDI.toRow(): List<String?> = listOf(
-    category,
+fun Initiative.toRow(): List<String?> = listOf(
+    classification,
     name,
-    null,
-    campus,
-    unity,
-    coordinator,
-    site,
-    email,
-    phone,
-    null,
-    null,
     description,
+    localization,
+    unity,
+    contact.person,
+    url,
+    email,
+    contact.info,
     null,
     null,
-    keywords?.joinToString(";")
+    null,
+    null,
+    null,
+    tags?.joinToString(";")
 )
 
-class PDITestHelp {
+class InitiativesTestHelp {
     companion object {
-        val VALID_RECORD = PDI(
-            category = "CEPID",
-            name = "Flau flau",
-            unity = "Escola de Artes, Ciências e Humanidades - EACH",
-            campus = "USP Leste",
-            coordinator = null,
-            phone = null,
-            email = null,
-            description = "lorem ipsum",
-            site = null,
-            keywords = setOf("foo", "baz")
+        val VALID_RECORD = Initiative(
+            classification = "Pesquisa",
+            name = "Iniciativa Teste",
+            description = "Descrição da iniciativa",
+            localization = "Campus Butantã",
+            unity = "Faculdade de Filosofia, Letras e Ciências Humanas",
+            contact = InitiativeContact(
+                info = "Informações de contato",
+                person = "Pessoa de Contato"
+            ),
+            url = "https://example.com",
+            email = "contato@example.com",
+            tags = setOf("inovação", "tecnologia")
         )
 
         fun validRowAndInvalidRow(): List<List<String?>> {
             val header = listOf(
-                "CATEGORIA", "NOME","DESCRICAO", "CAMPUS",
-                "UNIDADE", "COORDENADOR", "SITE", "EMAIL",
-                "TELEFONE", "DESCRICAO","DESCRICAO", "DESCRICAO",
-                "AREA DO CONHECIMENTO","SERVICOS OFERECIDOS","TAGS")
+                "CLASSIFICAÇÃO", "NOME", "DESCRIÇÃO", "LOCALIZAÇÃO",
+                "UNIDADE", "CONTATO PESSOA", "URL", "EMAIL",
+                "CONTATO INFO", "OUTRO", "OUTRO", "OUTRO",
+                "OUTRO", "OUTRO", "TAGS"
+            )
             val validRow = VALID_RECORD.toRow()
             val invalidRow = VALID_RECORD.toRow().toMutableList()
-            invalidRow[0] = "Wrong Category"
+            invalidRow[0] = "Classificação Errada"
 
             return listOf(header, validRow, invalidRow)
         }
