@@ -25,7 +25,7 @@ data class Initiative(
     var url: String? = null,
     var description: String?,
     var email: String? = null,
-    var contact: Contact
+    var contact: InitiativeContact
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) = Initiative(
@@ -37,7 +37,7 @@ data class Initiative(
             url = possible_ND(subRow[6]),
             description = subRow[7],
             email = possible_ND(subRow[8]),
-            contact = Contact.fromRow(subRow)
+            contact = InitiativeContact.fromRow(subRow)
         )
 
         fun possible_ND(term: String?) : String? {
@@ -105,12 +105,12 @@ data class Initiative(
 }
 
 @kotlinx.serialization.Serializable
-data class Contact(
+data class InitiativeContact(
     val info: String?,
     val person: String?
 ) {
     companion object {
-        fun fromRow(subRow: List<String?>) = Contact(
+        fun fromRow(subRow: List<String?>) = InitiativeContact(
             info = subRow[11],
             person = subRow[12]
         )
@@ -119,12 +119,12 @@ data class Contact(
     init {
         try {
             validate(this) {
-                validate(Contact::info)
+                validate(InitiativeContact::info)
                     .isNotNull()
                     .isNotBlank()
                     .isPhoneOrEmail()
 
-                validate(Contact::person)
+                validate(InitiativeContact::person)
                     .isNotNull()
                     .isNotBlank()
             }
