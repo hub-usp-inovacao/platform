@@ -44,7 +44,7 @@
           v-if="item.logo"
           :key="item.logo"
           :lazy-src="require('@/static/base_company_picture.png')"
-          :src="thumbnailUrl(item.logo)"
+          :src="item.logo"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -231,15 +231,6 @@ export default {
       this.search.term = this.$route.query.q;
   },
   methods: {
-    thumbnailUrl(link) {
-      if (link) {
-        return link.replace(
-          "https://drive.google.com/uc?export=view&id=",
-          "https://drive.google.com/thumbnail?id="
-        );
-      }
-      return null;
-    },
     async runSearch() {
       try {
         this.companies = await this.$CompanyAdapter.filterData(
