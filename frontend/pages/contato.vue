@@ -75,7 +75,6 @@ export default {
     ContactSectionHeaderRow,
   },
   data: () => ({
-    show: false,
     icons: [
       {
         label: "mdi-facebook",
