@@ -28,14 +28,7 @@
             <v-card
               :href="url"
               elevation="0"
-              class="
-                mb-4
-                d-flex
-                flex-column
-                justify-center
-                align-center
-                flex-lg-row
-              "
+              class="mb-4 d-flex flex-column justify-center align-center flex-lg-row"
             >
               <v-icon size="60px" icon dark color="black">{{ label }}</v-icon>
               <v-card-title>{{ description }}</v-card-title>
@@ -49,7 +42,7 @@
           justify="space-around"
           no-gutters
         >
-          <v-col>
+          <v-col v-if="show">
             <v-row class="ma-0" justify="center">
               <v-col cols="12" sm="9">
                 <p class="display-2 font-weight-regular">Créditos</p>
@@ -58,13 +51,18 @@
           </v-col>
           <v-col cols="11" sm="5"></v-col>
         </v-row>
-        <div v-for="{ title, smaller, people, notes } of sections" :key="title">
-          <ContactSectionHeaderRow :section="title"></ContactSectionHeaderRow>
-          <PeopleCardsRow
-            :people="people"
-            :smaller="smaller"
-            :notes="notes"
-          ></PeopleCardsRow>
+        <div v-if="show">
+          <div
+            v-for="{ title, smaller, people, notes } of sections"
+            :key="title"
+          >
+            <ContactSectionHeaderRow :section="title"></ContactSectionHeaderRow>
+            <PeopleCardsRow
+              :people="people"
+              :smaller="smaller"
+              :notes="notes"
+            ></PeopleCardsRow>
+          </div>
         </div>
       </v-container>
     </v-app>
@@ -81,6 +79,7 @@ export default {
     ContactSectionHeaderRow,
   },
   data: () => ({
+    show: false,
     icons: [
       {
         label: "mdi-facebook",
@@ -214,7 +213,7 @@ export default {
             src: "https://drive.google.com/uc?export=view&id=1GyGawNBtoyeLK7B2O5SJF3lp1WfKM94P",
             name: "Clara Yuki",
             role: "Desenvolvedora - CodeLab",
-          }
+          },
         ],
       },
       {
