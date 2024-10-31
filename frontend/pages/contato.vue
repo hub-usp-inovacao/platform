@@ -42,7 +42,7 @@
           justify="space-around"
           no-gutters
         >
-          <v-col v-if="show">
+          <v-col>
             <v-row class="ma-0" justify="center">
               <v-col cols="12" sm="9">
                 <p class="display-2 font-weight-regular">Créditos</p>
@@ -51,18 +51,14 @@
           </v-col>
           <v-col cols="11" sm="5"></v-col>
         </v-row>
-        <div v-if="show">
-          <div
-            v-for="{ title, smaller, people, notes } of sections"
-            :key="title"
-          >
-            <ContactSectionHeaderRow :section="title"></ContactSectionHeaderRow>
-            <PeopleCardsRow
-              :people="people"
-              :smaller="smaller"
-              :notes="notes"
-            ></PeopleCardsRow>
-          </div>
+
+        <div v-for="{ title, smaller, people, notes } of sections" :key="title">
+          <ContactSectionHeaderRow :section="title"></ContactSectionHeaderRow>
+          <PeopleCardsRow
+            :people="people"
+            :smaller="smaller"
+            :notes="notes"
+          ></PeopleCardsRow>
         </div>
       </v-container>
     </v-app>
