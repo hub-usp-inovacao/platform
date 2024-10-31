@@ -44,7 +44,7 @@
           v-if="item.logo"
           :key="item.logo"
           :lazy-src="require('@/static/base_company_picture.png')"
-          :src="item.logo"
+          :src="thumbnailUrl(item.logo)"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -78,7 +78,7 @@
           </p>
         </div>
 
-        <NDText :text="item.description" label="Descrição"/>
+        <NDText :text="item.description" label="Descrição" />
 
         <BulletList
           v-if="item.services.length > 0"
@@ -209,7 +209,7 @@ export default {
     }, 1000),
   },
   mounted() {
-        if (this.$route.query.city !== undefined) {
+    if (this.$route.query.city !== undefined) {
       this.preselect[0] = this.$route.query.city;
     }
     if (this.$route.query.ecosystem !== undefined) {
@@ -231,6 +231,15 @@ export default {
       this.search.term = this.$route.query.q;
   },
   methods: {
+    thumbnailUrl(link) {
+      if (link) {
+        return link.replace(
+          "https://drive.google.com/uc?export=view&id=",
+          "https://drive.google.com/thumbnail?id="
+        );
+      }
+      return null;
+    },
     async runSearch() {
       try {
         this.companies = await this.$CompanyAdapter.filterData(
