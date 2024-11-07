@@ -104,6 +104,7 @@ export default {
     { src: "~/plugins/matching/iniciative.js" },
     { src: "~/plugins/v-mask.js", mode: "client" },
     { src: "~/plugins/services/update_skills.js" },
+    { src: "~/plugins/vuegtag.js"}
   ],
 
   serverMiddleware: [{ path: "/", handler: "~/api/index.js" }],
