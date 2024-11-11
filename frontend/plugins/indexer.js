@@ -14,11 +14,8 @@ export default (ctx, inject) => {
       } else if (name == "disciplines") {
         entity.inspect.name = ctx.$removeAccent(entity["name"]);
         entity.inspect.description = {};
-        entity.inspect.description.long = ctx.$removeAccent(
-          entity.description.long
-        );
-        entity.inspect.description.short = ctx.$removeAccent(
-          entity.description.short
+        entity.inspect.description = ctx.$removeAccent(
+          entity.description
         );
       } else if (name == "patents") {
         entity.inspect.name = ctx.$removeAccent(entity["name"]);

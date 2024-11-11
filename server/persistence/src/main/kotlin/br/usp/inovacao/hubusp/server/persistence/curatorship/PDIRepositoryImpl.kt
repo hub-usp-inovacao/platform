@@ -31,8 +31,7 @@ class PDIRepositoryImpl(
            email = pdi.email ?: "",
            phone = pdi.phone ?: "",
            description = pdi.description!!,
-           tags = pdi.keywords!!,
-           timestamp = pdi.timestamp
+           tags = pdi.keywords!!
         )
 
         pdiCollection.insertOne(pdiModel)

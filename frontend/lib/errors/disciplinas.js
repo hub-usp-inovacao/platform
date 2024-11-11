@@ -18,8 +18,8 @@ export const findErrors = function (objects) {
     if (!object.url.match(/^http(s)?:\/\/uspdigital\.usp\.br\//))
       lineErrors.push("URL fora do domínimo uspdigital");
 
-    if (object.description.long.length == 0)
-      lineErrors.push("Sem descrição longa");
+    if (object.description.length == 0)
+      lineErrors.push("Sem descrição");
 
     if (!Object.values(object.category).some((el) => el === true))
       lineErrors.push("Disciplina não pertence a nenhuma categoria");

@@ -76,3 +76,21 @@ class Date : Constraint
 fun <E> Validator<E>.Property<String?>.isDate() = this.validate(Date()) {
     it == null || it.matches("""^\d{2}/\d{2}/\d{4}$""".toRegex()) || it.matches("""^N/D$""".toRegex())
 }
+
+object DisciplineRegister : Constraint
+
+fun Validator<Discipline>.Property<String?>.isValidName() = this.validate(DisciplineRegister) {
+    it == null || it.matches(Regex("\\A(\\w|\\d){2,3}\\d{4} (-|–) .+\\z"))
+}
+
+fun Validator<Discipline>.Property<String?>.isValidNature() = this.validate(DisciplineRegister) {
+    it == null || Discipline.natures.contains(it)
+}
+
+fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(DisciplineRegister) {
+    it == null || Discipline.levels.contains(it)
+}
+
+fun Validator<Discipline>.Property<DisciplineCategory?>.isValidCategory() = this.validate(DisciplineRegister) {
+    it == null || it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectual_property == true
+}
