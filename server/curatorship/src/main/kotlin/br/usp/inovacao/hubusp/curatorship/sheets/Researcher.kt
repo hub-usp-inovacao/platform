@@ -14,48 +14,65 @@ import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
-import java.time.LocalDate
 
 @kotlinx.serialization.Serializable
-
 data class Researcher(
     val name: String?,
     val email: String?,
     val unities: Set<String>?,
     val keywords: Set<String>?,
     val lattes: String?,
-    val photo: String? = null,
+    val photo: String?,
     val skills: Set<String>?,
     val services: Set<String>?,
     val equipments: Set<String>?,
-    val phone: String? = null,
-    @Contextual val limitDate: LocalDate? = null,
+    val phone: String?,
+    val limitDate: String?,
     val bond: String?,
     val campus: String?,
     val area: KnowledgeAreas
 ) {
 
-    companion object { 
+    companion object {
+
+        val bonds = listOf("Aluno de doutorado",
+            "Docente",
+            "Docente Sênior",
+            "Funcionário",
+            "PART (Programa de Atração e Retenção de Talentos)",
+            "Pesquisador (Pós-doutorando)",
+            "Professor Contratado")
+
         fun createFrom(subrow: List<String?>) = Researcher(
             name = subrow[2],
             email = subrow[3],
-            unities = subrow[5]?.split(";")?.toSet() ?: emptySet(),
-            keywords = subrow[28]?.split(";")?.toSet() ?: emptySet(),
+            unities = readSet(subrow[5]),
+            keywords = readSet(subrow[28]),
             lattes = subrow[29],
             photo = subrow[30] ?: "",
             skills = splitUnlessND(subrow[23]),
             services = splitUnlessND(subrow[24]),
             equipments = splitUnlessND(subrow[25]),
-            phone = subrow[31],
-            limitDate = subrow[36]?.let { LocalDate.parse(it) },
+            phone = read(subrow[31]),
+            limitDate = read(subrow[36]),
             bond = subrow[1],
             campus = subrow[6],
             area = KnowledgeAreas.createFrom(subrow)
         )
 
         fun splitUnlessND(term: String?) : Set<String>? {
-            if(term == "N/D") return emptySet()
-            else return term?.split(";")?.toSet() ?: emptySet()
+            if(term == "N/D" || term == null ) return emptySet()
+            else return term?.split(";")?.map { it.trim() }?.toSet()
+        }
+
+        fun readSet(term: String?) : Set<String>? {
+            if(term == null) return null
+            else return term?.split(";")?.map { it.trim() }?.toSet()
+        }
+
+        fun read(term: String?) : String? {
+            if(term == null) return "N/D"
+            else return term
         }
 
     }
@@ -73,6 +90,7 @@ data class Researcher(
 
                 validate(Researcher::unities)
                     .isNotNull()
+                    .isValidUnities()
 
                 validate(Researcher::keywords)
                     .isNotNull()
@@ -84,21 +102,20 @@ data class Researcher(
 
                 validate(Researcher::services)
                     .isNotNull()
-                    .isNotEmpty()
 
                 validate(Researcher::equipments)
                     .isNotNull()
-                    .isNotEmpty()
 
                 validate(Researcher::phone)
-                    .isPhone()
+                    .isNotNull()
 
                 validate(Researcher::limitDate)
                     .isNotNull()
+                    .isDate()
 
                 validate(Researcher::bond)
                     .isNotNull()
-                    .isNotBlank()
+                    .isValidBond()
 
                 validate(Researcher::campus)
                     .isNotNull()
@@ -124,9 +141,14 @@ data class KnowledgeAreas(
 ) {
     companion object {
         fun createFrom(subrow:List<String?>) = KnowledgeAreas(
-            area = subrow[26]?.split(";")?.toSet() ?: emptySet(),
-            subArea = subrow[27]?.split(";")?.toSet() ?: emptySet()
+            area = readSet(subrow[26]),
+            subArea = readSet(subrow[27])
         )
+
+        fun readSet(term: String?) : Set<String>? {
+            if(term == null) return null
+            else return term?.split(";")?.map { it.trim() }?.toSet()
+        }
     }
 
     init{
@@ -138,7 +160,7 @@ data class KnowledgeAreas(
 
                 validate(KnowledgeAreas::subArea)
                     .isNotNull()
-                    .isValidSubArea(this@KnowledgeAreas.area)
+                    .isValidSubArea(area)
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations

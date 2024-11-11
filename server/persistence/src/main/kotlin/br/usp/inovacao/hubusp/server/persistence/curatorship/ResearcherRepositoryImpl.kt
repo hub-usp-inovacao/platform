@@ -24,12 +24,12 @@ class ResearcherRepositoryImpl(
 
     override fun save(researcher: Researcher) {
 
-        val KnowledgeAreasModel = KnowledgeAreasModel(
+        val knowledgeAreasModel = KnowledgeAreasModel(
             area = researcher.area.area ?: emptySet(),
-            subarea = researcher.area.subarea ?: emptySet(),
+            subArea = researcher.area.subArea ?: emptySet(),
         )
 
-        val ResearcherModel = ResearcherModel(
+        val researcherModel = ResearcherModel(
             name = researcher.name ?: "",
             email = researcher.email ?: "",
             unities = researcher.unities ?: emptySet(),
@@ -40,10 +40,10 @@ class ResearcherRepositoryImpl(
             services = researcher.services ?: emptySet(),
             equipments = researcher.equipments ?: emptySet(),
             phone = researcher.phone ?: "",
-            limitDate = researcher.limitDate ?: LocalDate.now(),
+            limitDate = researcher.limitDate ?: "",
             bond = researcher.bond ?: "",
             campus = researcher.campus ?: "",
-            area = KnowledgeAreasModel
+            area = knowledgeAreasModel
         )
 
         try {
@@ -62,6 +62,6 @@ class ResearcherRepositoryImpl(
 
         val filter = Filters.lt("timestamp", fiveSecondsAgo)
 
-        companyCollection.deleteMany(filter)
+        researcherCollection.deleteMany(filter)
     }
 }

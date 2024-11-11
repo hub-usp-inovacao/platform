@@ -48,15 +48,31 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: Strin
     it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
 }
 
+object ResearcherRegister: Constraint
+
+fun Validator<Researcher>.Property<String?>.isValidBond() = this.validate(ResearcherRegister) {
+    it == null || Researcher.bonds.contains(it)
+}
+
+fun Validator<Researcher>.Property<Iterable<String>?>.isValidUnities() = this.validate(ResearcherRegister) {
+    it == null || it.all { unity -> Campus.allUnities().contains(unity) }
+}
 
 object ResearcherKnowledgeAreasRegister : Constraint
 
-fun Validator<KnowledgeAreas>.Property<Set<String>?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
+fun Validator<KnowledgeAreas>.Property<Iterable<String>?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
     it == null || it.all { area -> ResearcherAreaValues.allAreas().contains(area) }
 }
 
-fun Validator<KnowledgeAreas>.Property<Set<String>?>.isValidSubArea(area: Set<String>?) = this.validate(ResearcherKnowledgeAreasRegister) {
-    it == null || area?.let { subAreas -> subAreas.all { subArea -> ResearcherAreaValues.areaToSubArea(subArea).contains(subArea) } } ?: true
+fun Validator<KnowledgeAreas>.Property<Iterable<String>?>.isValidSubArea(area: Set<String>?) =
+    this.validate(ResearcherKnowledgeAreasRegister) {
+        it == null || it.all { subArea ->
+            area?.any { mainArea -> ResearcherAreaValues.areaToSubArea(mainArea).contains(subArea) } ?: true
+        }
+    }
+
+class Date : Constraint
+
+fun <E> Validator<E>.Property<String?>.isDate() = this.validate(Date()) {
+    it == null || it.matches("""^\d{2}/\d{2}/\d{4}$""".toRegex()) || it.matches("""^N/D$""".toRegex())
 }
-
-

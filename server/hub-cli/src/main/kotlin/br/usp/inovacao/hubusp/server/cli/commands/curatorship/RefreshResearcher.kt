@@ -25,8 +25,8 @@ class RefreshResearcher : CliktCommand() {
         refreshResearcher = br.usp.inovacao.hubusp.curatorship.sheets.RefreshResearcher(
             mailer = Mailer(user, password),
             spreadsheetReader = SpreadsheetReader(apiKey),
-            ResearcherRepository = ResearcherRepositoryImpl(db),
-            ResearcherErrorRepository = ResearcherErrorRepositoryImpl(db)
+            researcherRepository = ResearcherRepositoryImpl(db),
+            researcherErrorRepository = ResearcherErrorRepositoryImpl(db)
         )
     }
 

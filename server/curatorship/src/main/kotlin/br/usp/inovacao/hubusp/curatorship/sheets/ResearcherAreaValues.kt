@@ -39,6 +39,9 @@ enum class ResearcherAreaValues(
             "Medicina",
             "Odontologia",
             "Farmácia",
+            "Enfermagem",
+            "Nutrição",
+            "Saúde Coletiva",
             "Fonoaudiologia",
             "Fisioterapia e Terapia Ocupacional",
             "Educação Física"
@@ -67,7 +70,7 @@ enum class ResearcherAreaValues(
             "Engenharia Mecânica",
             "Engenharia Química",
             "Engenharia Sanitária",
-            "Engenharia Produção",
+            "Engenharia de Produção",
             "Engenharia Nuclear",
             "Engenharia de Transportes",
             "Engenharia Naval e Oceânica",
