@@ -19,6 +19,6 @@ data class Researcher(
 
 @kotlinx.serialization.Serializable
 data class KnowledgeAreas(
-    val major: Set<String>,
-    val minors: Set<String>
+    val area: Set<String>,
+    val subArea: Set<String>
 )
