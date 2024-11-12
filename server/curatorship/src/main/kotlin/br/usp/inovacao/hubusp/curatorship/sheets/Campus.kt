@@ -139,5 +139,10 @@ enum class Campus(
         fun all() = Campus
             .values()
             .map(Campus::toString)
+
+        fun campiNames() = Campus
+            .values()
+            .map(Campus::toString)
+            .plus("Toda a USP")
     }
 }

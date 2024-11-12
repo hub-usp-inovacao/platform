@@ -24,7 +24,7 @@ data class Initiative(
     var tags: Set<String>?,
     var url: String? = null,
     var description: String?,
-    var email: String? = null,
+    var email: Set<String>? = null,
     var contact: InitiativeContact
 ) {
     companion object {
@@ -32,17 +32,22 @@ data class Initiative(
             name = subRow[1],
             classification = subRow[0],
             localization = subRow[3],
-            unity = subRow[4],
+            unity = possible_ND(subRow[4]),
             tags = get_tags(subRow[5]),
             url = possible_ND(subRow[6]),
             description = subRow[7],
-            email = possible_ND(subRow[8]),
+            email = splitUnlessND(subRow[8]),
             contact = InitiativeContact.fromRow(subRow)
         )
 
         fun possible_ND(term: String?) : String? {
-            if(term == "N/D") return null
+            if(term == null) return "N/D"
             else return term
+        }
+
+        fun splitUnlessND(term: String?) : Set<String>? {
+            if(term == "N/D" || term == null ) return emptySet()
+            else return term?.split(";")?.map { it.trim() }?.toSet()
         }
 
         fun get_tags(raw: String?): Set<String> {
@@ -72,11 +77,11 @@ data class Initiative(
                 validate(Initiative::localization)
                     .isNotNull()
                     .isNotBlank()
-                    .isCampus()
+                    .isInitiativeCampus()
 
                 validate(Initiative::unity)
                     .isNotNull()
-                    .isUnity()
+                    .isInitiativeUnity()
 
                 validate(Initiative::tags)
                     .isNotNull()
@@ -111,9 +116,14 @@ data class InitiativeContact(
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) = InitiativeContact(
-            info = subRow[11],
+            info = possible_ND(subRow[11]),
             person = subRow[12]
         )
+
+        fun possible_ND(term : String?) : String? {
+            if(term == null) return "N/D"
+            else return term
+        }
     }
 
     init {
@@ -122,11 +132,9 @@ data class InitiativeContact(
                 validate(InitiativeContact::info)
                     .isNotNull()
                     .isNotBlank()
-                    .isPhoneOrEmail()
 
                 validate(InitiativeContact::person)
-                    .isNotNull()
-                    .isNotBlank()
+                    .isPhone()
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations

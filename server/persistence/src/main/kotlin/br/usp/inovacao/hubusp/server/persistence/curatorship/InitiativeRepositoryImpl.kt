@@ -35,7 +35,7 @@ class InitiativeRepositoryImpl(
             tags = initiative.tags ?: emptySet(),
             url = initiative.url ?: "",
             description = initiative.description ?: "",
-            email = initiative.email ?: "",
+            email = initiative.email ?: emptySet(),
             contact = contactModel
         )
 

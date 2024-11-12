@@ -34,7 +34,7 @@ class CatalogInitiativeRepositoryImpl(
     private val initiativeCollection : MongoCollection<InitiativeModel>
 
     init {
-        initiativeCollection = db.getCollection<InitiativeModel>("iniciatives")
+        initiativeCollection = db.getCollection<InitiativeModel>("initiatives")
     }
 
     override fun filter(params: InitiativeSearchParams): Set<Initiative> {

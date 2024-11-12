@@ -7,7 +7,7 @@ data class InitiativeModel(
     val classification: String,
     val contact: InitiativeContact,
     val description: String,
-    val email: String? = null,
+    val email: Set<String>? = null,
     val localization: String,
     val name: String,
     val tags: Set<String>,

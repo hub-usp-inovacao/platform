@@ -72,15 +72,23 @@ fun Validator<Initiative>.Property<String?>.isClassification() = this.validate(I
     classification == null || InitiativeClassificationRegister.validClasses.contains(classification)
 }
 
+fun Validator<Initiative>.Property<String?>.isInitiativeCampus() = this.validate(InitiativeClassificator) { campus ->
+    campus == null || Campus.campiNames().contains(campus)
+}
+
+fun Validator<Initiative>.Property<String?>.isInitiativeUnity() = this.validate(InitiativeClassificator) { unity ->
+    unity == null || unity == "N/D" || Campus.allUnities().contains(unity)
+}
+
 class Email : Constraint
 
-fun <E> Validator<E>.Property<String?>.isEmail() = this.validate(Email()) {
-    it == null || Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
+fun <E> Validator<E>.Property<Iterable<String>?>.isEmail() = this.validate(Email()) {
+    it == null || it.all { email -> email == "N/D" || Regex("^[\\p{L}0-9+_.-]+@[A-Za-z0-9.-]+$").matches(email) }
 }
 
 class PhoneOrEmail : Constraint
 
 fun <E> Validator<E>.Property<String?>.isPhoneOrEmail() = this.validate(PhoneOrEmail()) {
-    (it == null) || it.replace("""\D""".toRegex(), "").matches("""^\d{8,13}$""".toRegex()) ||
+(it == null) || it.matches(Regex("N/D")) || it.replace("""\D""".toRegex(), "").matches("""^\d{8,13}$""".toRegex()) ||
             Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
 }
