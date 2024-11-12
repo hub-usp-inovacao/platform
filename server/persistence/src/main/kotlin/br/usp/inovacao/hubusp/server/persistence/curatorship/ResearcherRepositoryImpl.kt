@@ -25,8 +25,8 @@ class ResearcherRepositoryImpl(
     override fun save(researcher: Researcher) {
 
         val knowledgeAreasModel = KnowledgeAreasModel(
-            area = researcher.area.area ?: emptySet(),
-            subArea = researcher.area.subArea ?: emptySet(),
+            major = researcher.area.major ?: emptySet(),
+            minors = researcher.area.minors ?: emptySet(),
         )
 
         val researcherModel = ResearcherModel(

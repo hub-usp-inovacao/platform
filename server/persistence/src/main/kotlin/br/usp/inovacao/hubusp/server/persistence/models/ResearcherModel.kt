@@ -23,6 +23,6 @@ data class ResearcherModel(
 
 @Serializable
 data class KnowledgeAreasModel(
-    val area: Set<String>?,
-    val subArea: Set<String>?
+    val major: Set<String>?,
+    val minors: Set<String>?
 )

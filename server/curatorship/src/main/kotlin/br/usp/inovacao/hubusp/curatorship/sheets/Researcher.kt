@@ -136,13 +136,13 @@ data class Researcher(
 
 @kotlinx.serialization.Serializable
 data class KnowledgeAreas(
-    val area: Set<String>?,
-    val subArea: Set<String>?
+    val major: Set<String>?,
+    val minors: Set<String>?
 ) {
     companion object {
         fun createFrom(subrow:List<String?>) = KnowledgeAreas(
-            area = readSet(subrow[26]),
-            subArea = readSet(subrow[27])
+            major = readSet(subrow[26]),
+            minors = readSet(subrow[27])
         )
 
         fun readSet(term: String?) : Set<String>? {
@@ -154,13 +154,13 @@ data class KnowledgeAreas(
     init{
         try{
             validate(this){
-                validate(KnowledgeAreas::area)
+                validate(KnowledgeAreas::major)
                     .isNotNull()
                     .isValidArea()
 
-                validate(KnowledgeAreas::subArea)
+                validate(KnowledgeAreas::minors)
                     .isNotNull()
-                    .isValidSubArea(area)
+                    .isValidSubArea(major)
             }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> = cve.constraintViolations
