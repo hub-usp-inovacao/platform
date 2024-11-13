@@ -28,14 +28,7 @@
             <v-card
               :href="url"
               elevation="0"
-              class="
-                mb-4
-                d-flex
-                flex-column
-                justify-center
-                align-center
-                flex-lg-row
-              "
+              class="mb-4 d-flex flex-column justify-center align-center flex-lg-row"
             >
               <v-icon size="60px" icon dark color="black">{{ label }}</v-icon>
               <v-card-title>{{ description }}</v-card-title>
@@ -58,6 +51,7 @@
           </v-col>
           <v-col cols="11" sm="5"></v-col>
         </v-row>
+
         <div v-for="{ title, smaller, people, notes } of sections" :key="title">
           <ContactSectionHeaderRow :section="title"></ContactSectionHeaderRow>
           <PeopleCardsRow
@@ -214,7 +208,7 @@ export default {
             src: "https://drive.google.com/uc?export=view&id=1GyGawNBtoyeLK7B2O5SJF3lp1WfKM94P",
             name: "Clara Yuki",
             role: "Desenvolvedora - CodeLab",
-          }
+          },
         ],
       },
       {

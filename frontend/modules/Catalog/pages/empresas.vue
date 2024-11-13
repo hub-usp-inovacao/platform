@@ -78,7 +78,7 @@
           </p>
         </div>
 
-        <NDText :text="item.description" label="Descrição"/>
+        <NDText :text="item.description" label="Descrição" />
 
         <BulletList
           v-if="item.services.length > 0"
@@ -209,7 +209,7 @@ export default {
     }, 1000),
   },
   mounted() {
-        if (this.$route.query.city !== undefined) {
+    if (this.$route.query.city !== undefined) {
       this.preselect[0] = this.$route.query.city;
     }
     if (this.$route.query.ecosystem !== undefined) {

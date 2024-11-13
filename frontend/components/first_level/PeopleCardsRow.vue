@@ -20,12 +20,6 @@
           width="60%"
           elevation="0"
         >
-          <v-img
-            style="border-radius: 100%"
-            :src="src"
-            width="85%"
-            aspect-ratio="1"
-          ></v-img>
           <v-card-title class="body-2 font-weight-medium text-center">
             {{ name }}
           </v-card-title>

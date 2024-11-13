@@ -41,7 +41,7 @@ enum class Campus(
         )
     },
 
-    SaoSebastiao("Butantã / São Sebastião") {
+    SaoSebastiao("São Sebastião (Butantã)") {
         override fun unities(): Set<String> = setOf(
             "Centro de Biologia Marinha - CEBIMar"
         )
