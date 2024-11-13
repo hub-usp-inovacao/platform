@@ -111,13 +111,13 @@ data class Initiative(
 
 @kotlinx.serialization.Serializable
 data class InitiativeContact(
-    val info: String?,
-    val person: String?
+    val person: String?,
+    val info: String?
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) = InitiativeContact(
-            info = possible_ND(subRow[11]),
-            person = subRow[12]
+            person = possible_ND(subRow[11]),
+            info = subRow[12]
         )
 
         fun possible_ND(term : String?) : String? {
@@ -129,11 +129,11 @@ data class InitiativeContact(
     init {
         try {
             validate(this) {
-                validate(InitiativeContact::info)
+                validate(InitiativeContact::person)
                     .isNotNull()
                     .isNotBlank()
 
-                validate(InitiativeContact::person)
+                validate(InitiativeContact::info)
                     .isPhone()
             }
         } catch (cve: ConstraintViolationException) {

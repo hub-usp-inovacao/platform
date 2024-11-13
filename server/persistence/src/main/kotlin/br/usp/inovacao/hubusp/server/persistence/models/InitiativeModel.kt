@@ -17,6 +17,6 @@ data class InitiativeModel(
 
 @Serializable
 data class InitiativeContact(
-    val info: String,
-    val person: String
+    val person: String,
+    val info: String
 )

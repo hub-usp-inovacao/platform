@@ -12,8 +12,8 @@ import org.litote.kmongo.find
 import org.litote.kmongo.getCollection
 
 fun InitiativeContact.toCatalogContact(): Contact = Contact(
-    info = this.info,
-    person = this.person
+    person = this.person,
+    info = this.info
 )
 
 fun InitiativeModel.toCatalogInitiative(): Initiative = Initiative(

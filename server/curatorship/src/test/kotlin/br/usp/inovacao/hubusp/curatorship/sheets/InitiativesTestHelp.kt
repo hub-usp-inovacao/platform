@@ -9,7 +9,7 @@ fun Initiative.toRow(): List<String?> = listOf(
     unity,
     contact.person,
     url,
-    email,
+    email?.joinToString(";"),
     contact.info,
     null,
     null,
@@ -32,7 +32,7 @@ class InitiativesTestHelp {
                 person = "Pessoa de Contato"
             ),
             url = "https://example.com",
-            email = "contato@example.com",
+            email = setOf("contato@example.com"),
             tags = setOf("inovação", "tecnologia")
         )
 

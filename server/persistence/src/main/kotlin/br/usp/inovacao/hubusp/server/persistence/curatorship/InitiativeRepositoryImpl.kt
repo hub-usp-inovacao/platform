@@ -23,8 +23,8 @@ class InitiativeRepositoryImpl(
 
     override fun save(initiative: Initiative) {
         val contactModel = InitiativeContact(
-            info = initiative.contact.info ?: "",
-            person = initiative.contact.person ?: ""
+            person = initiative.contact.person ?: "",
+            info = initiative.contact.info ?: ""
         )
 
         val initiativeModel = InitiativeModel(
