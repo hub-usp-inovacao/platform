@@ -143,7 +143,7 @@ internal class CatalogInitiativeRepositoryImplTest {
     private fun testSeeds() = listOf(
         InitiativeModel(
             classification ="Agente Institucional",
-            name = "Agência USP de Inovação (AUSPIN)",
+            name = "Agência USP de Inovação",
             localization = "Toda a USP",
             unity = "N/D",
             tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
@@ -157,7 +157,7 @@ internal class CatalogInitiativeRepositoryImplTest {
         ),
         InitiativeModel(
             classification ="Entidade Estudantil",
-            name = "Agência USP de Inovação (AUSPIN)",
+            name = "(AUSPIN)",
             localization = "Butantã",
             unity = "N/D",
             tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),

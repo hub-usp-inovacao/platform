@@ -34,7 +34,7 @@ data class Initiative(
             localization = subRow[3],
             unity = possible_ND(subRow[4]),
             tags = get_tags(subRow[5]),
-            url = possible_ND(subRow[6]),
+            url = subRow[6],
             description = subRow[7],
             email = splitUnlessND(subRow[8]),
             contact = InitiativeContact.fromRow(subRow)
@@ -87,8 +87,7 @@ data class Initiative(
                     .isNotNull()
 
                 validate(Initiative::url)
-                    .isNotNull()
-                    .isNotBlank()
+                    .isWebsite()
 
                 validate(Initiative::description)
                     .isNotNull()
