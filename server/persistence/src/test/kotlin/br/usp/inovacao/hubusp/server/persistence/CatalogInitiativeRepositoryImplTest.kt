@@ -136,7 +136,7 @@ internal class CatalogInitiativeRepositoryImplTest {
     )
 
     private fun seedTestDb() {
-        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("initiatives")
         initiativeCollection.insertMany(testSeeds())
     }
 
@@ -172,7 +172,7 @@ internal class CatalogInitiativeRepositoryImplTest {
     )
 
     private fun cleanTestDb() {
-        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("initiatives")
         initiativeCollection.deleteMany("{}")
     }
 }
