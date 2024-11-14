@@ -167,7 +167,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
     it 'returns bad request when given an unknown cnpj' do
       params = { update_request: { cnpj: '12.123.123/0001-21' } }
       allow(Company).to receive(:where).and_return([])
-      post '/companies/update_request', params: params
+      post('/companies/update_request', params:)
 
       expect(response).to have_http_status(:bad_request)
     end
@@ -177,7 +177,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
       allow(Company).to receive(:where).and_return([mock])
       allow(TokenManager).to receive(:create_token)
 
-      post '/companies/update_request', params: params
+      post('/companies/update_request', params:)
 
       expect(TokenManager)
         .to have_received(:create_token)
@@ -189,7 +189,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
       allow(Company).to receive(:where).and_return([mock])
       allow(TokenManager).to receive(:create_token).and_return(mock.token)
 
-      post '/companies/update_request', params: params
+      post('/companies/update_request', params:)
 
       expect(ApplicationMailer)
         .to have_received(:company_update_token)

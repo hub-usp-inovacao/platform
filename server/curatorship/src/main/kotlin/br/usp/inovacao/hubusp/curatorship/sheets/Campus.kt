@@ -41,7 +41,7 @@ enum class Campus(
         )
     },
 
-    SaoSebastiao("Butantã / São Sebastião") {
+    SaoSebastiao("São Sebastião (Butantã)") {
         override fun unities(): Set<String> = setOf(
             "Centro de Biologia Marinha - CEBIMar"
         )
@@ -139,5 +139,10 @@ enum class Campus(
         fun all() = Campus
             .values()
             .map(Campus::toString)
+
+        fun campiNames() = Campus
+            .values()
+            .map(Campus::toString)
+            .plus("Toda a USP")
     }
 }

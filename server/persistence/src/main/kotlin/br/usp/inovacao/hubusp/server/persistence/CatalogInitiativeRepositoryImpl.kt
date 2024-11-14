@@ -12,8 +12,8 @@ import org.litote.kmongo.find
 import org.litote.kmongo.getCollection
 
 fun InitiativeContact.toCatalogContact(): Contact = Contact(
-    info = this.info,
-    person = this.person
+    person = this.person,
+    info = this.info
 )
 
 fun InitiativeModel.toCatalogInitiative(): Initiative = Initiative(
@@ -34,7 +34,7 @@ class CatalogInitiativeRepositoryImpl(
     private val initiativeCollection : MongoCollection<InitiativeModel>
 
     init {
-        initiativeCollection = db.getCollection<InitiativeModel>("iniciatives")
+        initiativeCollection = db.getCollection<InitiativeModel>("initiatives")
     }
 
     override fun filter(params: InitiativeSearchParams): Set<Initiative> {

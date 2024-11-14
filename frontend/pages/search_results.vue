@@ -115,7 +115,7 @@ export default {
       return base_disciplines
         .map((d) => ({
           name: d.name,
-          description: d.description.long,
+          description: d.description,
           category: "Educação",
           id: d._id.$oid,
         }))

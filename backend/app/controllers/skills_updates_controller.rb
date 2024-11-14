@@ -5,13 +5,13 @@ class SkillsUpdatesController < ApplicationController
     params = request_update_params
 
     email = params[:email]
-    @skill = Skill.where({ email: email }).first
+    @skill = Skill.where({ email: }).first
     if @skill.nil?
       render json: { error: 'skill not found' }, status: :bad_request
       return
     end
 
-    token = TokenManager.create_token({ email: email })
+    token = TokenManager.create_token({ email: })
     ApplicationMailer.skill_update_token(email, token).deliver_now
     render json: { message: 'ok' }, status: :ok
   end
@@ -21,7 +21,7 @@ class SkillsUpdatesController < ApplicationController
 
     request.save
 
-    render json: { request: request }, status: :created
+    render json: { request: }, status: :created
   end
 
   private

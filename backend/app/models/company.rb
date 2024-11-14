@@ -106,7 +106,7 @@ class Company
         url: format_url(row[17]),
         technologies: row[15]&.split(';'),
         logo: create_image_url(row[16]),
-        classification: classification,
+        classification:,
         cnae: row[5],
         companySize: size(row[21], row[20], classification),
         partners: partners(row),

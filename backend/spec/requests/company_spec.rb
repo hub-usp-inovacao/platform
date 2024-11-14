@@ -8,7 +8,7 @@ RSpec.describe 'Companies', type: :request do
   let(:companies) do
     [
       {
-        cnpj: cnpj,
+        cnpj:,
         name: 'Uber 99',
         year: '2019',
         services: %w[foo bar baz],
@@ -139,7 +139,7 @@ RSpec.describe 'Companies', type: :request do
 
   describe 'GET /companies?cnpj=' do
     it 'does not work anymore' do
-      get '/companies', params: { cnpj: cnpj }
+      get '/companies', params: { cnpj: }
       expect(response).to have_http_status(:bad_request)
     end
   end

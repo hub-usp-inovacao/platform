@@ -27,20 +27,38 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         indexQuery = "{" + Company.INDEXABLE_PROPERTIES.joinToString(",") { """"$it":"text"""" } + "}"
     )
 
+    createIndexOrNothing(
+        database = db,
+        collectionName = "disciplines",
+        indexQuery = """{"name":"text", description:"text"}"""
+    )
+
+    createIndexOrNothing(
+        database = db,
+        collectionName = "skills",
+        indexQuery = """{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}"""
+    )
+
+    createIndexOrNothing(
+        database = db,
+        collectionName = "initiatives",
+        indexQuery = """{"description":"text","name":"text","tags":"text"}"""
+    )
+
     db.getCollection("companies")
         .createIndex("""{"cnpj":1}""", indexOptions = IndexOptions().unique(true))
 
     db.getCollection("disciplines")
-        .createIndex("""{"name":"text"}""")
+        .createIndex("""{"name":1}""", indexOptions = IndexOptions().unique(true))
 
     db.getCollection("skills")
-        .createIndex("""{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}""")
+        .createIndex("""{"name":1}""", indexOptions = IndexOptions().unique(true))
 
     db.getCollection<Patent>("patents")
         .createIndex("""{"name":"text","summary":"text","owners":"text","inventors":"text"}""")
 
-    db.getCollection("iniciatives")
-        .createIndex("""{"description":"text","name":"text","tags":"text"}""")
+    db.getCollection("initiatives")
+        .createIndex("""{"name":1}""", indexOptions = IndexOptions().unique(true))
 
     return db
 }

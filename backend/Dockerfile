@@ -2,7 +2,7 @@
 ## Base Image
 ##########
 
-FROM ruby:2.7.1-alpine as base
+FROM ruby:3.3.4-alpine as base
 
 ENV PORT=3000 \
     APP_PATH=/usr/src/app \

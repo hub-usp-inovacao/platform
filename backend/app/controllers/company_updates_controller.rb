@@ -5,18 +5,18 @@ class CompanyUpdatesController < ApplicationController
     params = request_update_params
 
     cnpj = params[:cnpj]
-    @company = Company.where({ cnpj: cnpj }).first
+    @company = Company.where({ cnpj: }).first
     if @company.nil?
       render json: { error: 'company not found' }, status: :bad_request
       return
     end
 
     email = @company.emails.first
-    token = TokenManager.create_token({ cnpj: cnpj })
+    token = TokenManager.create_token({ cnpj: })
     ApplicationMailer.company_update_token(email, token).deliver_now
     email = format_email(email)
 
-    render json: { message: 'ok', email: email }, status: :ok
+    render json: { message: 'ok', email: }, status: :ok
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -84,7 +84,7 @@ class CompanyUpdatesController < ApplicationController
     end
 
     if has_error
-      render json: { errors: errors }, status: :bad_request
+      render json: { errors: }, status: :bad_request
     else
       @comp_update = CompanyUpdateRequest.new
       @comp_update.timestamp = Time.zone.now
