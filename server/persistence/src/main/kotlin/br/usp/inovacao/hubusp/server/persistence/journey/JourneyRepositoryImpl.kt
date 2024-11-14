@@ -39,7 +39,7 @@ class JourneyRepositoryImpl(
 
     init {
         disciplineCollection = db.getCollection<DisciplineModel>("disciplines")
-        initiativeCollection = db.getCollection<InitiativeModel>("iniciatives")
+        initiativeCollection = db.getCollection<InitiativeModel>("initiatives")
         pdiCollection = db.getCollection<PDIModel>("pdis")
         httpClient = HttpClient(CIO) {
             install(ContentNegotiation) {

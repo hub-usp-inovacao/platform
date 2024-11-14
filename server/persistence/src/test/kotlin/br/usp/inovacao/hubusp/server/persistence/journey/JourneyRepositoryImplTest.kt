@@ -164,12 +164,12 @@ internal class JourneyRepositoryImplTest {
     )
 
     private fun seedTestDbForPracticeStep() {
-        val collection = testDB.getCollection<InitiativeModel>("iniciatives")
+        val collection = testDB.getCollection<InitiativeModel>("initiatives")
         collection.insertMany(practiceSeeds())
     }
 
     private fun cleanTestDbAfterPractice() {
-        val collection = testDB.getCollection<InitiativeModel>("iniciatives")
+        val collection = testDB.getCollection<InitiativeModel>("initiatives")
         collection.deleteMany("{}")
     }
 

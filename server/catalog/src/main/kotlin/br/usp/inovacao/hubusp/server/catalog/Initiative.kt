@@ -5,7 +5,7 @@ data class Initiative(
     val classification: String,
     val contact: Contact,
     val description: String,
-    val email: String? = null,
+    val email: Set<String>? = null,
     val localization: String,
     val name: String,
     val tags: Set<String>,

@@ -128,51 +128,51 @@ internal class CatalogInitiativeRepositoryImplTest {
         tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
         url = null,
         description = "A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
-        email = "auspin@usp.br",
+        email = setOf("auspin@usp.br"),
         contact = InitiativeContact(
-            person = "",
+            person = "N/D",
             info = "(11) 3091-4165"
         )
     )
 
     private fun seedTestDb() {
-        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("initiatives")
         initiativeCollection.insertMany(testSeeds())
     }
 
     private fun testSeeds() = listOf(
         InitiativeModel(
             classification ="Agente Institucional",
-            name = "Agência USP de Inovação (AUSPIN)",
+            name = "Agência USP de Inovação",
             localization = "Toda a USP",
             unity = "N/D",
             tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
             url = "http://www.inovacao.usp.br/",
             description = "superintendencia A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
-            email = "auspin@usp.br",
+            email = setOf("auspin@usp.br"),
             contact = InitiativeContact(
-                person = "",
+                person = "N/D",
                 info = "(11) 3091-4165"
             )
         ),
         InitiativeModel(
             classification ="Entidade Estudantil",
-            name = "Agência USP de Inovação (AUSPIN)",
+            name = "(AUSPIN)",
             localization = "Butantã",
             unity = "N/D",
             tags = setOf("Patentes"," Marcas"," Software"," Empreendedorismo"," Licenciamento"),
             url = "http://www.inovacao.usp.br/",
             description = "A Agência USP de Inovação é o Núcleo de Inovação Tecnológica da USP, r…",
-            email = "auspin@usp.br",
+            email = setOf("auspin@usp.br"),
             contact = InitiativeContact(
-                person = "",
+                person = "N/D",
                 info = "(11) 3091-4165"
             )
         )
     )
 
     private fun cleanTestDb() {
-        val initiativeCollection = testDb.getCollection<InitiativeModel>("iniciatives")
+        val initiativeCollection = testDb.getCollection<InitiativeModel>("initiatives")
         initiativeCollection.deleteMany("{}")
     }
 }

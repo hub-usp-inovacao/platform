@@ -39,6 +39,12 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
         indexQuery = """{"name":"text","skills":"text","equipments":"text","services":"text","keywords":"text"}"""
     )
 
+    createIndexOrNothing(
+        database = db,
+        collectionName = "initiatives",
+        indexQuery = """{"description":"text","name":"text","tags":"text"}"""
+    )
+
     db.getCollection("companies")
         .createIndex("""{"cnpj":1}""", indexOptions = IndexOptions().unique(true))
 
@@ -51,8 +57,8 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     db.getCollection<Patent>("patents")
         .createIndex("""{"name":"text","summary":"text","owners":"text","inventors":"text"}""")
 
-    db.getCollection("iniciatives")
-        .createIndex("""{"description":"text","name":"text","tags":"text"}""")
+    db.getCollection("initiatives")
+        .createIndex("""{"name":1}""", indexOptions = IndexOptions().unique(true))
 
     return db
 }

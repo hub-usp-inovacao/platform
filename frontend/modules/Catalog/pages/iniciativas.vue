@@ -33,8 +33,8 @@
         <NDText classes="body-2" :text="item.unity" />
         <p class="body-2 mb-4">{{ item.localization }}</p>
         <v-row>
-          <v-col v-if="item.email">
-            <p class="body-2 mb-4 mr-8">{{ item.email }}</p>
+          <v-col v-if="item.email && item.email.length > 0">
+            <p class="body-2 mb-4 mr-8">{{ item.email.join("; ") }}</p>
           </v-col>
           <v-col>
             <NDText classes="body-2 mb-4" :text="item.contact.info" />
