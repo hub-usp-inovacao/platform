@@ -33,7 +33,7 @@ data class Initiative(
             classification = subRow[0],
             localization = subRow[3],
             unity = possible_ND(subRow[4]),
-            tags = get_tags(subRow[5]),
+            tags = splitUnlessND(subRow[5]),
             url = subRow[6],
             description = subRow[7],
             email = splitUnlessND(subRow[8]),
@@ -48,16 +48,6 @@ data class Initiative(
         fun splitUnlessND(term: String?) : Set<String>? {
             if(term == "N/D" || term == null ) return emptySet()
             else return term?.split(";")?.map { it.trim() }?.toSet()
-        }
-
-        fun get_tags(raw: String?): Set<String> {
-            val isEmpty = raw.isNullOrEmpty()
-
-            return if (isEmpty) {
-                emptySet()
-            } else {
-                raw!!.split(";").toSet()
-            }
         }
 
     }
