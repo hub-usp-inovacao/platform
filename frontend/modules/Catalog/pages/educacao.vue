@@ -139,6 +139,13 @@ export default {
             }, new Set())
           ),
         },
+        {
+          label: "Sendo Oferecida",
+          items: [
+            "Sim",
+            "Não"
+          ]
+        }
       ];
     },
     searchTerm() {
@@ -149,7 +156,6 @@ export default {
         categories: this.filters?.primary,
         campus: this.filters?.terciary[0],
         unity: this.filters?.terciary[1],
-        level: this.filters?.terciary[2],
         nature: this.filters?.terciary[3],
         offeringPeriod: this.filters?.terciary[4],
         term: this.searchTerm,
