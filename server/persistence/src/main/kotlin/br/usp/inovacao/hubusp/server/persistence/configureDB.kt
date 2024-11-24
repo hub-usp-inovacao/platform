@@ -30,7 +30,7 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     createIndexOrNothing(
         database = db,
         collectionName = "disciplines",
-        indexQuery = """{"name":"text", description:"text"}"""
+        indexQuery = """{"name":"text", "description":"text"}"""
     )
 
     createIndexOrNothing(

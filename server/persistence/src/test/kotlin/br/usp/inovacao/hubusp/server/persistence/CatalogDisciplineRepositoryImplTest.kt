@@ -190,7 +190,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "1º sem. 2023",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = true
         ),
         DisciplineModel(
             name = "ABC0004",
@@ -208,7 +209,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = false
         ),
         DisciplineModel(
             name = "ABC0002",
@@ -226,7 +228,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = true
         ),
         DisciplineModel(
             name = "ABC0003 utilidade",
@@ -244,7 +247,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "2º sem. 2022",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = false
         )
     )
 }

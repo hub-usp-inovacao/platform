@@ -46,6 +46,7 @@ data class Discipline(
     val category: DisciplineCategory,
     val keywords: Set<String>?,
     val offeringPeriod: String?,
+    val beingOffered: Boolean
 ){
     companion object{
 
@@ -75,8 +76,14 @@ data class Discipline(
             description = subRow[6],
             category = DisciplineCategory.fromRow(subRow),
             keywords = createKeywords(subRow),
-            offeringPeriod = subRow[13]
+            offeringPeriod = subRow[13],
+            beingOffered = checkIfOffering()
         )
+
+        fun checkIfOffering() : Boolean {
+            // TO DO
+            return false;
+        }
     }
 
     init{
