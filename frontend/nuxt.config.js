@@ -13,6 +13,7 @@ export default {
     OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
     BETA_VERSION: process.env.BETA_VERSION,
     NEW_JOURNEY: process.env.NEW_JOURNEY,
+    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID
   },
   ssr: true,
   target: "server",
@@ -64,6 +65,26 @@ export default {
         color: "#5bbad5",
       },
     ],
+    script: [
+      {
+        src: `https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_ID}`,
+        async: true,
+      },
+      {
+        hid: "gtag-init",
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.GOOGLE_ANALYTICS_ID}');
+        `,
+        type: "text/javascript",
+        charset: "utf-8",
+      },
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      "gtag-init": ["innerHTML"],
+    },
   },
   /*
    ** Customize the progress-bar color
