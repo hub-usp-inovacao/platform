@@ -158,6 +158,7 @@ export default {
         unity: this.filters?.terciary[1],
         nature: this.filters?.terciary[3],
         offeringPeriod: this.filters?.terciary[4],
+        beingOffered: this.filters?.terciary[5],
         term: this.searchTerm,
       };
     },

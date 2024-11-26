@@ -9,7 +9,17 @@ import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
+fun String.toBooleanPTBR(): Boolean {
+    val decoded = URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
+    return when (decoded) {
+        "sim", "Sim", "SIM", "s", "S" -> true
+        "não", "Não", "NÃO", "n", "N", "ñ", "Ñ" -> false
+        else -> throw IllegalArgumentException("Invalid boolean value in PT-BR: $decoded (decoded from $this)")
+    }
+}
 
 fun Parameters.toPDISearchParams() = PDISearchParams(
     categories = this["categories"]?.split(",")?.toSet() ?: emptySet(),
@@ -56,7 +66,7 @@ fun Parameters.toDisciplineSearchParams() = DisciplineSearchParams(
     level = this["level"],
     nature = this["nature"],
     offeringPeriod = this["offeringPeriod"],
-    beingOffered = this["beingOffered"]?.toBoolean(),
+    beingOffered = this["beingOffered"]?.toBooleanPTBR(),
     term = this["term"],
 )
 
