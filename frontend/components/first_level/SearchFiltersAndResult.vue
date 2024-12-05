@@ -55,7 +55,7 @@ export default {
       "Iniciativas",
       "P&D&I",
       "Patentes",
-      "Empresas",
+      "Empresas DNA USP",
       "Competências",
     ],
     selected: [],
