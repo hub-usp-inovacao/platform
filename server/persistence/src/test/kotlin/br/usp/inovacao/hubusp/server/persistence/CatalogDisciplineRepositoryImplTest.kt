@@ -160,7 +160,8 @@ internal class CatalogDisciplineRepositoryImplTest {
         offeringPeriod = "N/D",
         start_date = "",
         unity = "Escola de Artes, Ciências e Humanidades - EACH",
-        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis="
+        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis=",
+        beingOffered = true
     )
 
     private fun seedTestDb() {
