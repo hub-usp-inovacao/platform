@@ -15,6 +15,8 @@ import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
 import java.time.LocalDate
+import it.skrape.core.*
+import it.skrape.fetcher.*
 
 @kotlinx.serialization.Serializable
 data class DisciplineCategory(
@@ -77,12 +79,29 @@ data class Discipline(
             category = DisciplineCategory.fromRow(subRow),
             keywords = createKeywords(subRow),
             offeringPeriod = subRow[13],
-            beingOffered = checkIfOffering()
+            beingOffered = checkIfOffering(subRow[1])
         )
 
-        fun checkIfOffering() : Boolean {
-            // TO DO
-            return false;
+        fun checkIfOffering(name : String?) : Boolean {
+            val disciplineUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${name?.split(" - ")?.get(0)}"
+            var scrap = false
+            skrape(HttpFetcher){
+                request{
+                    url = disciplineUrl
+                }
+                response{
+                    htmlDocument {
+                        val text = findFirst("div#my_web_cabecalho").text
+                        if(text == "Disciplinas oferecidas"){
+                            scrap = true
+                        }
+                        else {
+                            scrap = false
+                        }
+                    }
+                }
+            }
+            return scrap
         }
     }
 
