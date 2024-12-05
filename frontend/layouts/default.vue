@@ -112,7 +112,7 @@ export default {
           to: "/educacao",
         },
         {
-          title: "Empresas",
+          title: "Empresas DNA USP",
           to: "/empresas",
         },
         {

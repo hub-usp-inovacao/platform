@@ -2,7 +2,9 @@
   <v-container>
     <v-row class="hidden-sm-and-down">
       <v-col cols="3" offset="1">
+        <a href="https://hubusp.inovacao.usp.br/empresas" target="_self">
         <img :src="require('@/vectors/dnausp.svg')" alt="DNA USP" />
+          <a/>
       </v-col>
       <v-col cols="6" offset="1">
         <p class="title font-weight-light">
@@ -16,7 +18,9 @@
     </v-row>
     <v-row class="hidden-md-and-up">
       <v-col cols="12">
+        <a href="https://hubusp.inovacao.usp.br/empresas" target="_self">
         <img :src="require('@/vectors/dnausp.svg')" alt="DNA USP" />
+          </a>
       </v-col>
     </v-row>
     <v-row class="hidden-md-and-up">
