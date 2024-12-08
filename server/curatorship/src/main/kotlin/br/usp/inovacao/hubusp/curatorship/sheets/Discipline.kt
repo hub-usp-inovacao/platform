@@ -17,6 +17,7 @@ import org.valiktor.validate
 import java.time.LocalDate
 import it.skrape.core.*
 import it.skrape.fetcher.*
+import it.skrape.selects.html5.*
 
 @kotlinx.serialization.Serializable
 data class DisciplineCategory(
@@ -79,24 +80,49 @@ data class Discipline(
             category = DisciplineCategory.fromRow(subRow),
             keywords = createKeywords(subRow),
             offeringPeriod = subRow[13],
-            beingOffered = checkIfOffering(subRow[1])
+            beingOffered = checkIfOffering(subRow[1], subRow[0])
         )
 
-        fun checkIfOffering(name : String?) : Boolean {
-            val disciplineUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${name?.split(" - ")?.get(0)}"
+        fun checkIfOffering(name : String?, nature: String?) : Boolean {
+            val code = name?.split(" - ")?.get(0)
+            val jupiterUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${code}"
+            val janusUrl = "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${code}"
             var scrap = false
-            skrape(HttpFetcher){
-                request{
-                    url = disciplineUrl
-                }
-                response{
-                    htmlDocument {
-                        val text = findFirst("div#my_web_cabecalho").text
-                        if(text == "Disciplinas oferecidas"){
-                            scrap = true
+            if(nature == "Graduação"){
+                skrape(HttpFetcher) {
+                    request {
+                        url = jupiterUrl
+                    }
+                    response {
+                        htmlDocument {
+                            val text = findFirst("div#my_web_cabecalho").text
+                            if (text == "Disciplinas oferecidas") {
+                                scrap = true
+                            }
                         }
-                        else {
-                            scrap = false
+                    }
+                }
+            }
+            else if(nature == "Pós-graduação"){
+                skrape(HttpFetcher){
+                    request {
+                        url = janusUrl
+                    }
+                    response {
+                        htmlDocument {
+                            try{
+                                val found = td {
+                                    findFirst {
+                                        b {
+                                            findFirst {
+                                                text
+                                            }
+                                        }
+                                    }
+                                }
+                                scrap = true
+                            }catch (_: Exception){
+                            }
                         }
                     }
                 }
