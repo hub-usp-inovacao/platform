@@ -11,12 +11,12 @@
         second-call="Atualize seu cadastro aqui"
         third-url="/DNA_manual.pdf"
         third-call="Manual de uso da marca DNA USP"
+        :counter="this.companiesRegistered"
         @search="search.term = $event"
         @clear="search.term = ''"
       />
       <USPDNA />
     </div>
-
     <Background class="absolute" />
 
     <MultipleFilters
@@ -135,6 +135,7 @@ export default {
     filters: undefined,
     search: { term: "" },
     companies: [],
+    companiesRegistered: 0,
     ecosystems: [],
     cities: [],
     unities: [],
@@ -224,6 +225,11 @@ export default {
   },
   async beforeMount() {
     this.companies = await this.$CompanyAdapter.requestData();
+
+    if (this.companies !== []) {
+      this.companiesRegistered = this.companies.length
+    }
+
     this.ecosystems = await this.$CompanyAdapter.getEcosystems();
     this.cities = await this.$CompanyAdapter.getCities();
     this.unities = await this.$CompanyAdapter.getUnities();
