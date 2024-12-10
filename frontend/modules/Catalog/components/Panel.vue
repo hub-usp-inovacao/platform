@@ -7,6 +7,9 @@
         <p class="title font-weight-light" style="line-height: normal">
           {{ description }}
         </p>
+        <p v-if="counter !== 0" class="title font-weight-light" style="line-height: normal">
+          Quantidade atual de {{ title }} cadastradas: <b>{{ counter }}</b>
+        </p>
 
         <p v-for="{ cURL, text } of callsToAction" :key="cURL">
           <v-btn
@@ -105,6 +108,11 @@ export default {
       required: false,
       default: false,
     },
+    counter: {
+      type: Number,
+      requered: false,
+      default: 0
+    }
   },
   computed: {
     ...mapGetters({
