@@ -4,9 +4,9 @@ set :output, 'log/whenever.log'
 set :environment, ENV['RAILS_ENV']
 env :PATH, ENV['PATH']
 
-every :monday, at: '9 am' do
-  rake 'fetch'
-end
+#every :monday, at: '9 am' do
+#  rake 'fetch'
+#end
 
 every :monday, at: '09:30 am' do
   rake 'mail_reports'
