@@ -18,5 +18,6 @@ data class Discipline(
     val level: String,
     val nature: String,
     val url: String,
-    val offeringPeriod: String
+    val offeringPeriod: String,
+    val beingOffered: Boolean
 )
