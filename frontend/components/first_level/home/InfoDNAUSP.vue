@@ -4,12 +4,12 @@
       <v-row justify="center" align-content="space-around" class="mx-0">
         <v-col cols="12" md="5">
           <v-row justify="center">
-            <a href="https://hubusp.inovacao.usp.br/empresas" target="_self">
+            <nuxt-link :to="/empresas">
             <img
               :src="require('@/vectors/home_dna_usp.svg')"
               style="max-width: 100%; max-height: 100%; object-fit: contain"
             />
-              </a>
+            </nuxt-link>
           </v-row>
         </v-col>
 
