@@ -23,4 +23,5 @@ data class DisciplineModel(
     val start_date: String,
     val unity: String,
     val url: String,
+    val beingOffered: Boolean
 )

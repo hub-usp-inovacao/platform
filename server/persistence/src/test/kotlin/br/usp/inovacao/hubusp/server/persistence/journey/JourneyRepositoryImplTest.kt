@@ -220,7 +220,8 @@ internal class JourneyRepositoryImplTest {
             offeringPeriod = "2022.2",
             start_date = "N/D",
             unity = "IME",
-            url = "https://uspdigital.usp.br/jupiterweb"
+            url = "https://uspdigital.usp.br/jupiterweb",
+            beingOffered = true
         ),
         DisciplineModel(
             campus = "Butantã",
@@ -233,7 +234,8 @@ internal class JourneyRepositoryImplTest {
             offeringPeriod = "2022.2",
             start_date = "N/D",
             unity = "IME",
-            url = "https://uspdigital.usp.br/jupiterweb"
+            url = "https://uspdigital.usp.br/jupiterweb",
+            beingOffered = false
         ),
     )
 }

@@ -133,6 +133,18 @@ internal class CatalogDisciplineRepositoryImplTest {
     }
 
     @Test
+    fun `it filters by offering status`() {
+        // given
+        val params = DisciplineSearchParams(beingOffered = true)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.all { it.beingOffered } }
+    }
+
+    @Test
     fun `it converts DisciplineModel into Discipline`() {
         // given
         val discipline = getDisciplineModel()
@@ -160,7 +172,8 @@ internal class CatalogDisciplineRepositoryImplTest {
         offeringPeriod = "N/D",
         start_date = "",
         unity = "Escola de Artes, Ciências e Humanidades - EACH",
-        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis="
+        url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis=",
+        beingOffered = true
     )
 
     private fun seedTestDb() {
@@ -190,7 +203,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "1º sem. 2023",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = true
         ),
         DisciplineModel(
             name = "ABC0004",
@@ -208,7 +222,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = false
         ),
         DisciplineModel(
             name = "ABC0002",
@@ -226,7 +241,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = true
         ),
         DisciplineModel(
             name = "ABC0003 utilidade",
@@ -244,7 +260,8 @@ internal class CatalogDisciplineRepositoryImplTest {
             keywords = setOf("foo", "baz"),
             offeringPeriod = "2º sem. 2022",
             start_date = "",
-            url = ""
+            url = "",
+            beingOffered = false
         )
     )
 }

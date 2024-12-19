@@ -41,7 +41,8 @@ class DisciplineRepositoryImpl(
             offeringPeriod = discipline.offeringPeriod ?: "",
             start_date = discipline.start_date ?: "",
             unity = discipline.unity ?: "",
-            url = discipline.url ?: ""
+            url = discipline.url ?: "",
+            beingOffered = discipline.beingOffered ?: false
         )
 
         try {

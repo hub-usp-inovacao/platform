@@ -33,6 +33,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("com.typesafe:config:$typesafe_config_version")
+    implementation("it.skrape:skrapeit:1.3.0-alpha.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.mockk:mockk:$mockk_version")
 }
