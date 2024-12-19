@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="hidden-sm-and-down">
       <v-col cols="3" offset="1">
-        <nuxt-link :to="/empresas">
+        <nuxt-link to="/empresas">
         <img :src="require('@/vectors/dnausp.svg')" alt="DNA USP" />
         </nuxt-link>
       </v-col>
@@ -18,7 +18,7 @@
     </v-row>
     <v-row class="hidden-md-and-up">
       <v-col cols="12">
-        <nuxt-link :to="/empresas">
+        <nuxt-link to="/empresas">
         <img :src="require('@/vectors/dnausp.svg')" alt="DNA USP" />
         </nuxt-link>
       </v-col>
