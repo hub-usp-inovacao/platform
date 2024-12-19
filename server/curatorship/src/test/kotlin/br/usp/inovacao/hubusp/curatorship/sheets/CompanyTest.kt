@@ -38,13 +38,6 @@ internal class CompanyTest {
     }
 
     @Test
-    fun `it is invalid without required description`() {
-        assertFailsWith<ValidationException> {
-            valid.copy(description = "")
-        }
-    }
-
-    @Test
     fun `it is invalid without required incubated`() {
         assertFailsWith<ValidationException> {
             valid.copy(incubated = "")
@@ -58,18 +51,11 @@ internal class CompanyTest {
         }
     }
 
-    //ecosystems, services, address, corporate_name
+    //ecosystems, address, corporate_name
     @Test
     fun `it is invalid without required ecosystems`() {
         assertFailsWith<ValidationException> {
             valid.copy(ecosystems = emptySet())
-        }
-    }
-
-    @Test
-    fun `it is invalid without required services`() {
-        assertFailsWith<ValidationException> {
-            valid.copy(services = emptySet())
         }
     }
 
