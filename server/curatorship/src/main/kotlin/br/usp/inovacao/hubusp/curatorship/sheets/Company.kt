@@ -299,13 +299,9 @@ data class Company(
                         .hasSize(4)
                         .isLessThanOrEqualTo(LocalDate.now().year.toString())
 
-                validate(Company::description).isNotNull().isNotBlank()
-
                 validate(Company::incubated).isNotNull().isNotBlank()
 
                 validate(Company::ecosystems).isNotNull().isNotEmpty()
-
-                validate(Company::services).isNotNull().isNotEmpty()
 
                 validate(Company::corporateName).isNotNull().isNotBlank()
 
