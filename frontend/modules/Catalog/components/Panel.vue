@@ -85,6 +85,14 @@ export default {
       type: String,
       default: "",
     },
+    fourthUrl: {
+      type: String,
+      default: "",
+    },
+    fourthCall: {
+      type: String,
+      default: "",
+    },
     loading: {
       type: Boolean,
       default: false,
@@ -143,6 +151,9 @@ export default {
     hasThirdCallToAction() {
       return this.thirdUrl !== "" && this.thirdCall != "";
     },
+    hasFourthCallToAction() {
+      return this.thirdUrl !== "" && this.thirdCall != "";
+    },
     callToActionWidth() {
       return this.$breakpoint.smAndDown ? "100%" : "60%";
     },
@@ -167,6 +178,13 @@ export default {
         base.push({
           cURL: this.thirdUrl,
           text: this.thirdCall,
+        });
+      }
+
+      if (this.hasFourthCallToAction) {
+        base.push({
+          cURL: this.fourthUrl,
+          text: this.fourthCall,
         });
       }
 
