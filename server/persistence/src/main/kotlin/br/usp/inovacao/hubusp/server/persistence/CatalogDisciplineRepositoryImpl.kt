@@ -26,7 +26,8 @@ fun DisciplineModel.toCatalogDiscipline(): Discipline = Discipline(
     level = this.level,
     nature = this.nature,
     url = this.url,
-    offeringPeriod = this.offeringPeriod
+    offeringPeriod = this.offeringPeriod,
+    beingOffered = this.beingOffered
 )
 
 class CatalogDisciplineRepositoryImpl(
