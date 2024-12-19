@@ -133,6 +133,18 @@ internal class CatalogDisciplineRepositoryImplTest {
     }
 
     @Test
+    fun `it filters by offering status`() {
+        // given
+        val params = DisciplineSearchParams(beingOffered = true)
+
+        // when
+        val result = underTest.filter(params)
+
+        // then
+        assertTrue { result.all { it.beingOffered } }
+    }
+
+    @Test
     fun `it converts DisciplineModel into Discipline`() {
         // given
         val discipline = getDisciplineModel()
