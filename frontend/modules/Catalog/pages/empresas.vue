@@ -3,7 +3,7 @@
     <div class="background">
       <Panel
         v-model="search.term"
-        title="Empresas"
+        title="Empresas DNA USP"
         description="As Empresas DNA USP estão organizadas nesta plataforma por: CNAEs (Classificação Nacional de Atividades Econômicas), cidade, habitats de inovação e porte."
         url="https://leginf.usp.br/?portaria=portaria-gr-no-7679-de-29-de-novembro-de-2021" 
         forms-call="Verique o regulamento de cadastro"
@@ -18,7 +18,6 @@
       />
       <USPDNA />
     </div>
-
     <Background class="absolute" />
 
     <MultipleFilters
@@ -137,6 +136,7 @@ export default {
     filters: undefined,
     search: { term: "" },
     companies: [],
+    companiesRegistered: 0,
     ecosystems: [],
     cities: [],
     unities: [],
@@ -226,6 +226,11 @@ export default {
   },
   async beforeMount() {
     this.companies = await this.$CompanyAdapter.requestData();
+
+    if (this.companies !== []) {
+      this.companiesRegistered = this.companies.length
+    }
+
     this.ecosystems = await this.$CompanyAdapter.getEcosystems();
     this.cities = await this.$CompanyAdapter.getCities();
     this.unities = await this.$CompanyAdapter.getUnities();
