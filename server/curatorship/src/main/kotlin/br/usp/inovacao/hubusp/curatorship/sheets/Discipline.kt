@@ -87,8 +87,8 @@ data class Discipline(
             val code = name?.split(" - ")?.get(0)
             val jupiterUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${code}"
             val janusUrl = "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${code}"
-            val toleranceTime = 10000
-            val delayBetweenFetches = 1000L
+            val toleranceTime = 20000
+            val delayBetweenFetches = 2000L
             var scrap = false
             if(nature == "Graduação"){
                 skrape(HttpFetcher) {
