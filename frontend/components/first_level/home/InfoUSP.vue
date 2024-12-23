@@ -80,7 +80,7 @@ export default {
         dest: "patentes",
       },
       {
-        title: "Empresas",
+        title: "Empresas DNA USP",
         description:
           "Conheça as empresas com DNA USP, criadas por iniciativas de alunos, ex-alunos e projetos ligados à Universidade",
         iconSrc: "home_partnership_icon.svg",
