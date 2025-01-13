@@ -13,6 +13,7 @@
         third-call="Atualize seu cadastro aqui"
         fourth-url="/DNA_manual.pdf"
         fourth-call="Manual de uso da marca DNA USP"
+        :counter="this.companiesRegistered"
         @search="search.term = $event"
         @clear="search.term = ''"
       />
