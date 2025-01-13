@@ -32,16 +32,17 @@ const actions = {
 };
 
 const prepareSection = (obj) => {
+  const investmentsValues = obj.investmentsValues || {};
   return {
     investment: {
       received: obj.received,
       investments: obj.investments,
-      own: obj.investmentsValues.own,
-      angel: obj.investmentsValues.angel,
-      venture: obj.investmentsValues.venture,
-      equity: obj.investmentsValues.equity,
-      pipe: obj.investmentsValues.pipe,
-      others: obj.investmentsValues.others,
+      own: investmentsValues.own,
+      angel: investmentsValues.angel,
+      venture: investmentsValues.venture,
+      equity: investmentsValues.equity,
+      pipe: investmentsValues.pipe,
+      others: investmentsValues.others,
     }
   };
 };
