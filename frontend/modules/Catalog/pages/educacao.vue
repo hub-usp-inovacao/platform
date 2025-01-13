@@ -28,7 +28,6 @@
         <v-container>
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
-          <NDText :text="item.offeringPeriod" label=""/>
           <p class="body-2">{{ item.nature }}</p>
         </v-container>
       </template>
