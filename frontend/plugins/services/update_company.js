@@ -33,6 +33,18 @@ async function updateData(data, logo) {
 }
 
 function translateErrorMessage(englishError) {
+  if (englishError === "Name is too short (minimum 1 character)")
+    return "Nome de sócio muito curto";
+
+  if (englishError === "Zipcode inválido")
+    return "CEP inválido";
+
+  if (englishError === "Last year inválido")
+    return "Faturamento inválido";
+
+  if (englishError === "Received inválido")
+    return "Investimento inválido";
+
   if (englishError === "Wants inválido")
     return "Pedido de DNA USP inválido - necessário informar nome e email";
 
