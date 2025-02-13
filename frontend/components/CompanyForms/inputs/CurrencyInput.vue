@@ -70,7 +70,8 @@ export default {
       return `R$ ${formattedValue}`;
     },
     updateCurrencyValue(newNumber) {
-      const allDigits = this.value
+      const value = this.value || "R$ 0,00";
+      const allDigits = value
         .split("")
         .filter((val) => "R$ .,".split("").every((elem) => elem !== val))
         .concat(newNumber);
