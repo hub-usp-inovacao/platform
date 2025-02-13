@@ -119,32 +119,32 @@ export default {
     }),
 
     preDefinedInvestments() {
-      return this.investments.filter((inv) =>
+      return (this.investments || []).filter((inv) =>
         this.investimentos.find((i) => i == inv)
       );
     },
     otherInvestments() {
-      return this.investments.filter(
+      return (this.investments || []).filter(
         (inv) => !this.investimentos.find((i) => i == inv)
       );
     },
     ownValue() {
-      return this.investmentsValues.own;
+      return (this.investmentsValues || {}).own;
     },
     angelValue() {
-      return this.investmentsValues.angel;
+      return (this.investmentsValues || {}).angel;
     },
     ventureCapitalValue() {
-      return this.investmentsValues.venture;
+      return (this.investmentsValues || {}).venture;
     },
     privateEquityValue() {
-      return this.investmentsValues.equity;
+      return (this.investmentsValues || {}).equity;
     },
     pipeFapespValue() {
-      return this.investmentsValues.pipe;
+      return (this.investmentsValues || {}).pipe;
     },
     otherValue() {
-      return this.investmentsValues.others;
+      return (this.investmentsValues || {}).others;
     },
   },
   methods: {
