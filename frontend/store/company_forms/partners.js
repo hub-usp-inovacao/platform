@@ -3,8 +3,9 @@ const state = () => ({
 });
 
 const getters = {
-  partners: (s) => s.partners,
+  partners: (s) => s.partners.filter((partner) => partner?.name),
 };
+
 
 const mutations = {
   setFormField: (s, { key, value }) => (s[key] = value),
