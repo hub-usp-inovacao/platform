@@ -30,7 +30,7 @@
             label="CNPJ *"
             mask="##.###.###/####-##"
             @input="setCnpj"
-            :disabled="true"
+            :disabled="hasCNPJ"
           />
           <Dropdown
             :value="registry_status"
@@ -208,6 +208,9 @@ export default {
       cep: "company_forms/cep",
       company_nature: "company_forms/company_nature",
     }),
+    hasCNPJ() {
+      return this.cnpj !== "";
+    },
   },
   created() {
     this.getStates();
