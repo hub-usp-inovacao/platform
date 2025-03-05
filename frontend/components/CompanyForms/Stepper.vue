@@ -85,7 +85,7 @@ export default {
     },
     errors: {
       type: Object,
-      default: undefined,
+      default: () => ({}),
     },
   },
   data: () => ({
@@ -93,7 +93,7 @@ export default {
   }),
   computed: {
     partnersHasErrors() {
-      return Object.keys(this.errors).includes("partners");
+      return this.errors && Object.keys(this.errors).includes("partners");
     },
     companyHasErrors() {
       return [
@@ -103,10 +103,10 @@ export default {
         "revenue",
         "incubation",
         "colaborators",
-      ].some((el) => Object.keys(this.errors).includes(el));
+      ].some((el) => this.errors && Object.keys(this.errors).includes(el));
     },
     DNAHasErrors() {
-      return Object.keys(this.errors).includes("dna_usp_stamp");
+      return this.errors && Object.keys(this.errors).includes("dna_usp_stamp");
     },
     hasErrors() {
       return (
