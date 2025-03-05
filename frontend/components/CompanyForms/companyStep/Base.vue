@@ -30,7 +30,7 @@
             label="CNPJ *"
             mask="##.###.###/####-##"
             @input="setCnpj"
-            :disabled="hasCNPJ"
+            :disabled="isUpdating"
           />
           <Dropdown
             :value="registry_status"
@@ -44,6 +44,26 @@
             label="Porte da empresa"
             hint="Escolha de acordo com o Comprovante de Inscrição e de Situação Cadastral"
             @input="setSize"
+          />
+        </v-container>
+      </div>
+
+      <div v-if="!isUpdating" class="mt-8 text-h6 font-weight-regular">
+        Vínculo com a Universidade de São Paulo (USP)
+        <v-divider />
+        <v-container>
+          <legend class="body-2 mb-5">
+            Para ser uma empresa DNA USP, a mesma deve se enquadrar nos requisitos estabelecidos na
+            <a href="https://leginf.usp.br/?portaria=portaria-gr-no-7679-de-29-de-novembro-de-2021"
+            target="_blank"
+            >
+              Portaria GR Nº 7679</a>. Dessa forma, pedimos que selecione uma das opções abaixo.
+          </legend>
+          <Dropdown
+            :value="category"
+            label="Categoria DNA USP"
+            :options="allCategories"
+            @input="setCategory"
           />
         </v-container>
       </div>
@@ -168,9 +188,11 @@ import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import PairOfNumberAndText from "@/components/CompanyForms/inputs/PairOfNumberAndText.vue";
+import BetaVersionModal from "../../layout/BetaVersionModal.vue";
 
 export default {
   components: {
+    BetaVersionModal,
     MaskInput,
     MultipleInputs,
     ShortTextInput,
@@ -187,7 +209,17 @@ export default {
       "Nula",
       "Suspensa"
     ],
-    sizeList: ["MEI", "ME", "EPP", "DEMAIS"]
+    sizeList: ["MEI", "ME", "EPP", "DEMAIS"],
+    isUpdating: false,
+    allCategories: [
+      "Fundada por aluno ou ex-aluno de graduação da USP",
+      "Fundada por aluno ou ex-aluno de pós-graduação da USP",
+      "Fundada por aluno ou ex-aluno de pós-doutorado da USP",
+      "Fundada por aluno ou ex-aluno do IPEN (Instituto de Pesquisas Energéticas e Nucleares)",
+      "Fundada por um docente ou Professor Sênior da USP",
+      "Fundada por um servidor técnico e administrativo (ou ex-servidor) da USP",
+      "Empresa incubada ou graduada em uma das incubadoras ligadas à USP (Incubadora USP/IPEN, ESALQTEC, HABITS, SUPERA e ParqTec)"
+    ],
   }),
   computed: {
     ...mapGetters({
@@ -208,9 +240,9 @@ export default {
       cep: "company_forms/cep",
       company_nature: "company_forms/company_nature",
     }),
-    hasCNPJ() {
-      return this.cnpj !== "";
-    },
+  },
+  mounted() {
+    this.isUpdating = this.cnpj !== "";
   },
   created() {
     this.getStates();
