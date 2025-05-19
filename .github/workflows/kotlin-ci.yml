@@ -1,8 +1,12 @@
 name: kotlin-CI
 on:
   pull_request:
+    paths:
+      - 'server/**'
   push:
     branches: [master]
+    paths:
+      - 'server/**'
 
 jobs:
 
