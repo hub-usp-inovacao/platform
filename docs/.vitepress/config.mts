@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Hub USPInovação",
   description: "Documentação da plataforma Hub USP Inovação desenvolvida pelo USPCodeLab",
+  base: '/platform/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
