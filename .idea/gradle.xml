@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/server" />
+        <option name="gradleJvm" value="ms-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/server" />
+            <option value="$PROJECT_DIR$/server/catalog" />
+            <option value="$PROJECT_DIR$/server/curatorship" />
+            <option value="$PROJECT_DIR$/server/discovery" />
+            <option value="$PROJECT_DIR$/server/hub-app" />
+            <option value="$PROJECT_DIR$/server/hub-cli" />
+            <option value="$PROJECT_DIR$/server/mailer" />
+            <option value="$PROJECT_DIR$/server/persistence" />
+            <option value="$PROJECT_DIR$/server/techtransfer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
