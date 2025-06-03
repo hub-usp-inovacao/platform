@@ -25,8 +25,7 @@
     "nuxt": "^2.13.3",
     "v-mask": "^2.2.4",
     "vue-fuse": "^2.2.1",
-    "vue-typer": "^1.2.0",
-    "vuepress-theme-default-prefers-color-scheme": "^2.0.0"
+    "vue-typer": "^1.2.0"
   },
   "devDependencies": {
     "aos": "^3.0.0-beta.6",
@@ -39,7 +38,6 @@
     "eslint-plugin-vue": "^6.2.2",
     "husky": "^7.0.4",
     "prettier": "^2.0.5",
-    "sass-loader": "^8.0.0",
-    "vuepress": "^1.8.2"
+    "sass-loader": "^8.0.0"
   }
 }
