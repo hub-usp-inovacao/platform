@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="br.usp.inovacao.hubusp.server" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.catalog" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.catalog.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.catalog.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.curatorship" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.curatorship.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.curatorship.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.discovery" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.discovery.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.discovery.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-app" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-app.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-app.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-cli" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-cli.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.hub-cli.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.mailer" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.mailer.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.mailer.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.persistence" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.persistence.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.persistence.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.techtransfer" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.techtransfer.main" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.techtransfer.test" target="17" />
+      <module name="br.usp.inovacao.hubusp.server.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

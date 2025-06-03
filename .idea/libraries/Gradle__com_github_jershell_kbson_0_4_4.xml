@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.jershell:kbson:0.4.4" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.github.jershell" artifactId="kbson" version="0.4.4" baseVersion="0.4.4" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jershell/kbson/0.4.4/c436521271be5a7eb60f84c81eef18f633465a52/kbson-0.4.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.litote.kmongo:kmongo-data:4.5.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.litote.kmongo" artifactId="kmongo-data" version="4.5.0" baseVersion="4.5.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.litote.kmongo/kmongo-data/4.5.0/3f968179f45d4458a2c06633bb12ab6cb22741e9/kmongo-data-4.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

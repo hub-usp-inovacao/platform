@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.valiktor:valiktor-core:0.12.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.valiktor" artifactId="valiktor-core" version="0.12.0" baseVersion="0.12.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.valiktor/valiktor-core/0.12.0/e66b11c05df0fe93617b1fc6f96db5f8f410b126/valiktor-core-0.12.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

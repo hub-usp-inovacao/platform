@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.brotli:dec:0.1.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.brotli" artifactId="dec" version="0.1.2" baseVersion="0.1.2" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.brotli/dec/0.1.2/c26a897ae0d524809eef1c786cc6183b4ddcc3b/dec-0.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
