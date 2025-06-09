@@ -4,6 +4,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### heap dump ###
+*.hprof
+
 ### STS ###
 .apt_generated
 .classpath
