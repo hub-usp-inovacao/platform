@@ -84,9 +84,6 @@ dist
 # Serverless directories
 .serverless
 
-# IDE / Editor
-.editorconfig
-
 # Service worker
 sw.*
 
