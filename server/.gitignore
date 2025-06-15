@@ -1,10 +1,11 @@
-.env
-
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### heap dump ###
+*.hprof
 
 ### STS ###
 .apt_generated
@@ -19,7 +20,6 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
@@ -34,5 +34,5 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+### Kotlin Language Server ###
+kls_database.db
