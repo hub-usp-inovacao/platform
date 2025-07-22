@@ -57,6 +57,8 @@ class JourneyRepositoryImpl(
     }
 
     private fun findLearn(filter: LearnStepFilters): Set<JourneyRecord> {
+        println("filter: " + filter.toCollectionFilter())
+        println("db: " + disciplineCollection.find(filter.toCollectionFilter()).toList())
         return disciplineCollection
             .find(filter.toCollectionFilter())
             .map {
@@ -69,6 +71,8 @@ class JourneyRepositoryImpl(
     }
 
     private fun findPractice(filter: PracticeStepFilter): Set<JourneyRecord> {
+        println("filter: " + filter.toCollectionFilter())
+        println("db: " + initiativeCollection.find(filter.toCollectionFilter()).toList())
         return initiativeCollection
             .find(filter.toCollectionFilter())
             .map {
@@ -93,6 +97,8 @@ class JourneyRepositoryImpl(
         val sheetId = Configuration.INCUBATOR_ID
         val tabName = Configuration.INCUBATOR_TAB
 
+        println("findCreate sheetId: $sheetId tabName: $tabName")
+
         return readSpreadsheet(sheetId, tabName)
             .filter { row -> this.matchesCreateFilter(filter, row) }
             .map {
@@ -105,6 +111,8 @@ class JourneyRepositoryImpl(
     }
 
     private fun findImprove(filter: ImproveStepFilter): Set<JourneyRecord> {
+        println("filter: " + filter.toCollectionFilter())
+        println("db: " + pdiCollection.find(filter.toCollectionFilter()).toList())
         return pdiCollection
             .find(filter.toCollectionFilter())
             .map {
@@ -120,6 +128,8 @@ class JourneyRepositoryImpl(
         val sheetId = Configuration.FUNDS_ID
         val tabName = Configuration.FUNDS_TAB
 
+        println("findFund sheetId: $sheetId tabName: $tabName")
+
         return readSpreadsheet(sheetId, tabName)
             .filter { filter.type == null || it[0] == filter.type!! }
             .map {
@@ -133,6 +143,7 @@ class JourneyRepositoryImpl(
 
     private fun readSpreadsheet(sheetId: String, tabName: String): List<List<String>> = try {
         val apiKey = Configuration.SHEETS_API_KEY
+        println("readSpreadsheet apiKey: $apiKey")
         runBlocking {
             httpClient
                 .get {
