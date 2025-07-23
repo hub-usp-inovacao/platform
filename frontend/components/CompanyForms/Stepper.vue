@@ -7,10 +7,10 @@
       <v-stepper-header>
         <template v-for="{ id, title, hasError } in steps">
           <v-stepper-step
-            :key="`header_${id}`"
-            editable
-            :step="id"
-            :color="hasError ? 'error' : 'success'"
+              :key="`header_${id}`"
+              editable
+              :step="id"
+              :color="hasError ? 'error' : 'success'"
           >
             <v-flex justify-center>
               <template v-if="hasError">
@@ -21,17 +21,17 @@
           </v-stepper-step>
 
           <v-divider
-            v-if="id < numberOfSteps"
-            :key="`divider_${id}`"
+              v-if="id < numberOfSteps"
+              :key="`divider_${id}`"
           ></v-divider>
         </template>
       </v-stepper-header>
 
       <v-stepper-items>
         <v-stepper-content
-          v-for="({ id, component }, index) in steps"
-          :key="id"
-          :step="id"
+            v-for="({ id, component }, index) in steps"
+            :key="id"
+            :step="id"
         >
           <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
             <v-alert type="error"><strong>Erros de validação</strong></v-alert>
@@ -40,20 +40,25 @@
             </li>
           </ul>
           <component
-            :is="component"
-            :is-update="update"
-            class="component-border mb-12"
+              :is="component"
+              :is-update="update"
+              class="component-border mb-12"
           ></component>
 
           <v-row class="mr-4" justify="end">
             <v-btn
-              class="mr-4"
-              color="secondary"
-              :disabled="!index"
-              @click="previousStep(id)"
-              >Voltar</v-btn
+                class="mr-4"
+                color="secondary"
+                :disabled="!index || isLoading"
+                @click="previousStep(id)"
+            >Voltar</v-btn
             >
-            <v-btn color="secondary" @click="nextStep(id)">
+            <v-btn
+                color="secondary"
+                @click="nextStep(id)"
+                :loading="isLoading && id === numberOfSteps"
+                :disabled="isLoading"
+            >
               {{ nextStepBtnText(id) }}
             </v-btn>
           </v-row>
@@ -88,6 +93,7 @@ export default {
   },
   data: () => ({
     e1: 1,
+    isLoading: false
   }),
   computed: {
     partnersHasErrors() {
@@ -108,7 +114,7 @@ export default {
     },
     hasErrors() {
       return (
-        this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
+          this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
       );
     },
     steps() {
@@ -212,9 +218,56 @@ export default {
         this.sendData();
       }
     },
-    sendData() {
-      this.$emit("finish");
+    async sendData() {
+      try {
+        this.isLoading = true;
+
+        const allFormData = this.collectAllFormData();
+
+        const response = await fetch('/api/finalize_company', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(allFormData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.statusText}`);
+        }
+
+        this.$store.dispatch('snackbar/showMessage', {
+          message: 'E-mail enviado com sucesso!',
+          color: 'success'
+        });
+
+        this.$emit("finish");
+
+      } catch (error) {
+        console.error('Erro ao enviar formulário:', error);
+
+        this.$store.dispatch('snackbar/showMessage', {
+          message: 'Erro ao enviar o formulário. Tente novamente.',
+          color: 'error'
+        });
+      } finally {
+        this.isLoading = false;
+      }
     },
+
+    collectAllFormData() {
+
+      return {
+        aboutCompany: this.$store.state.company?.aboutCompany || {},
+        companyData: this.$store.state.company?.companyData || {},
+        investment: this.$store.state.company?.investment || {},
+        revenue: this.$store.state.company?.revenue || {},
+        incubation: this.$store.state.company?.incubation || {},
+        dnaUsp: this.$store.state.company?.dnaUsp || {},
+        staff: this.$store.state.company?.staff || {},
+        partners: this.$store.state.company?.partners || {}
+      };
+    }
   },
 };
 </script>
