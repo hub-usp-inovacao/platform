@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.app
 
 // TODO: Rename modules -> routes (or something similar/better)
+import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.modules.catalog
 import br.usp.inovacao.hubusp.server.app.modules.configureCompaniesRoute
 import br.usp.inovacao.hubusp.server.app.modules.discovery
@@ -29,5 +30,12 @@ fun Application.module() {
     // TODO: Give these modules better names (configurePathRoute)
     catalog(db)
     discovery(db)
-    configureCompaniesRoute()
+
+    configureCompaniesRoute(
+        Mailer(
+            environment.config.property("email.username").getString(),
+            environment.config.property("email.password").getString(),
+        ),
+        listOf(environment.config.property("email.devs").getString()),
+    )
 }
