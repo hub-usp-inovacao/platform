@@ -7,17 +7,14 @@ import javax.mail.Session
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
-class Mailer(
-    private val user: String,
-    private val password: String
-) {
+class Mailer(private val user: String, private val password: String) {
     private val protocol = "smtp"
     private val host = "smtp.gmail.com"
 
-    private val auth = object : Authenticator() {
-        override fun getPasswordAuthentication() =
-            PasswordAuthentication(user, password)
-    }
+    private val auth =
+        object : Authenticator() {
+            override fun getPasswordAuthentication() = PasswordAuthentication(user, password)
+        }
 
     private val config = Properties()
 
@@ -35,8 +32,12 @@ class Mailer(
         val message = MimeMessage(session)
         with(message) {
             setFrom(user)
-            mail.to.forEach { addRecipient(javax.mail.Message.RecipientType.TO, InternetAddress(it)) }
-            mail.ccs.forEach { addRecipient(javax.mail.Message.RecipientType.BCC, InternetAddress(it)) }
+            mail.to.forEach {
+                addRecipient(javax.mail.Message.RecipientType.TO, InternetAddress(it))
+            }
+            mail.ccs.forEach {
+                addRecipient(javax.mail.Message.RecipientType.BCC, InternetAddress(it))
+            }
             subject = mail.subject
             setText(mail.body)
         }
