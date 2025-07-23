@@ -2,12 +2,17 @@ package br.usp.inovacao.hubusp.server.app.modules
 
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
+import br.usp.inovacao.hubusp.curatorship.register.sendCompanyCsvEmail
+
 import com.mongodb.client.MongoDatabase
 import io.ktor.http.*
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
+import io.ktor.server.request.receive
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -181,6 +186,18 @@ fun Application.catalog(db: MongoDatabase) {
                 HttpStatusCode.OK,
                 mapOf("initiatives" to initiatives)
             )
+        }
+        post("/api/finalize_company") {
+            try {
+                val companyData = call.receive<Map<String, Any>>()
+                sendCompanyCsvEmail(companyData)
+                call.respondText("E-mail enviado com sucesso", status = HttpStatusCode.OK)
+            } catch (e: Exception) {
+                call.respondText(
+                    "Erro ao processar solicitação: ${e.message}",
+                    status = HttpStatusCode.InternalServerError
+                )
+            }
         }
     }
 }
