@@ -12,11 +12,16 @@ fun Application.configureHttp() {
 
     val corsHosts = environment.config.property("ktor.deployment.allowedHosts").getString()
 
+    // TODO: Fix this sh*t
+    // - It rejects requests from Origins different from the server's
+    // - It allowed POST even though it was not explicitely allowed
+    // - It allows any Origin that ends with a slash (fixed in 3.0.0)
     install(CORS) {
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Put)
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
+        allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.Authorization)
         allowHeader("MyCustomHeader")
 
