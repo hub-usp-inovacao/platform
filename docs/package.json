@@ -1,0 +1,17 @@
+{
+  "name": "hub_documentation",
+  "version": "1.0.0",
+  "description": "Documentação da plataforma Hub USP Inovação desenvolvida pelo USPCodeLab",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "3.5.3",
+    "vitepress": "1.6.3"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "prod": "vitepress build && vitepress preview",
+    "format": "prettier . --write"
+  }
+}
