@@ -1,0 +1,7 @@
+.env
+.env.prod
+.env.dev
+
+# Code editors
+.idea
+.vscode
