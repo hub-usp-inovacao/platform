@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <v-alert dense type="error" class="text-center" v-if="hasErrors">
-      Etapas marcadas com <code>(!)</code> contém erros de validação
-    </v-alert>
     <v-stepper v-model="e1" alt-labels non-linear>
       <v-stepper-header>
         <template v-for="{ id, title, hasError } in steps">
@@ -10,14 +7,9 @@
               :key="`header_${id}`"
               editable
               :step="id"
-              :color="hasError ? 'error' : 'success'"
+              color="success"
           >
-            <v-flex justify-center>
-              <template v-if="hasError">
-                <v-icon color="error">mdi-alert-circle</v-icon>
-              </template>
-              {{ title }}
-            </v-flex>
+            {{ title }}
           </v-stepper-step>
 
           <v-divider
@@ -29,19 +21,13 @@
 
       <v-stepper-items>
         <v-stepper-content
-            v-for="({ id, component }, index) in steps"
+            v-for="({ id, title }, index) in steps"
             :key="id"
             :step="id"
         >
-          <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
-            <v-alert type="error"><strong>Erros de validação</strong></v-alert>
-            <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
-              <strong>{{ errMsg }}</strong>
-            </li>
-          </ul>
           <component
-              :is="component"
-              :is-update="update"
+              :is="getComponentForStep(id)"
+              @updateData="updateFormData"
               class="component-border mb-12"
           ></component>
 
@@ -49,15 +35,14 @@
             <v-btn
                 class="mr-4"
                 color="secondary"
-                :disabled="!index || isLoading"
+                :disabled="!index"
                 @click="previousStep(id)"
-            >Voltar</v-btn
             >
+              Voltar
+            </v-btn>
             <v-btn
                 color="secondary"
                 @click="nextStep(id)"
-                :loading="isLoading && id === numberOfSteps"
-                :disabled="isLoading"
             >
               {{ nextStepBtnText(id) }}
             </v-btn>
@@ -69,141 +54,51 @@
 </template>
 
 <script>
-import CompanyStep from "@/components/CompanyForms/CompanyStep.vue";
-import PartnersStep from "@/components/CompanyForms/PartnersStep.vue";
-import IntroStep from "@/components/CompanyForms/IntroStep.vue";
-import DNAUSPStep from "@/components/CompanyForms/DNAUSPStep.vue";
+import Base from "@/components/CompanyForms/companyStep/Base.vue";
+import About from "@/components/CompanyForms/companyStep/About.vue";
+import Staff from "@/components/CompanyForms/companyStep/Staff.vue";
+import Incubator from "@/components/CompanyForms/companyStep/Incubator.vue";
+import Finance from "@/components/CompanyForms/companyStep/Finance.vue";
+import Investments from "@/components/CompanyForms/companyStep/Investments.vue";
 
 export default {
   components: {
-    PartnersStep,
-    CompanyStep,
-    IntroStep,
-    DNAUSPStep,
-  },
-  props: {
-    update: {
-      type: Boolean,
-      default: true,
-    },
-    errors: {
-      type: Object,
-      default: () => ({}),
-    },
+    Base,
+    About,
+    Staff,
+    Investments,
+    Finance,
+    Incubator
   },
   data: () => ({
     e1: 1,
-    isLoading: false
+    formData: {},
+    steps: [
+      { id: 1, title: "Dados da empresa", component: "Base" },
+      { id: 2, title: "Sobre a empresa", component: "About" },
+      { id: 3, title: "Incubação", component: "Incubator" },
+      { id: 4, title: "Colaboradores", component: "Staff" },
+      { id: 5, title: "Faturamento", component: "Finance" },
+      { id: 6, title: "Investimentos", component: "Investments" },
+    ],
   }),
   computed: {
-    partnersHasErrors() {
-      return this.errors && Object.keys(this.errors).includes("partners");
-    },
-    companyHasErrors() {
-      return [
-        "company_data",
-        "about_company",
-        "investment",
-        "revenue",
-        "incubation",
-        "colaborators",
-      ].some((el) => this.errors && Object.keys(this.errors).includes(el));
-    },
-    DNAHasErrors() {
-      return this.errors && Object.keys(this.errors).includes("dna_usp_stamp");
-    },
-    hasErrors() {
-      return (
-          this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
-      );
-    },
-    steps() {
-      return [
-        { id: 1, title: "Introdução", component: IntroStep, hasError: false },
-        {
-          id: 2,
-          title: "Sócios",
-          component: PartnersStep,
-          hasError: this.partnersHasErrors,
-        },
-        {
-          id: 3,
-          title: "Empresa",
-          component: CompanyStep,
-          hasError: this.companyHasErrors,
-        },
-        {
-          id: 4,
-          title: "Encerramento",
-          component: DNAUSPStep,
-          hasError: this.DNAHasErrors,
-        },
-      ];
-    },
     numberOfSteps() {
       return this.steps.length;
     },
   },
-
-  watch: {
-    errors() {
-      console.log("errors");
-      console.log(this.errors);
-    },
-  },
-
   methods: {
-    errorsOfStep(id) {
-      let companyErrors = [];
-
-      if (this.errors.company_data) {
-        companyErrors = companyErrors.concat(this.errors.company_data);
-      }
-
-      if (this.errors.about_company) {
-        companyErrors = companyErrors.concat(this.errors.about_company);
-      }
-
-      if (this.errors.investment) {
-        companyErrors = companyErrors.concat(this.errors.investment);
-      }
-
-      if (this.errors.incubation) {
-        companyErrors = companyErrors.concat(this.errors.incubation);
-      }
-
-      if (this.errors.colaborators) {
-        companyErrors = companyErrors.concat(this.errors.colaborators);
-      }
-
-      if (this.errors.revenue) {
-        companyErrors = companyErrors.concat(this.errors.revenue);
-      }
-
-      switch (id) {
-        case 2:
-          return this.errors.partners;
-        case 3:
-          return companyErrors;
-        case 4:
-          return this.errors.dna_usp_stamp;
-      }
+    getComponentForStep(id) {
+      const step = this.steps.find(s => s.id === id);
+      return step ? step.component : null;
     },
     nextStepBtnText(id) {
       const length = this.numberOfSteps;
       const lastId = this.steps[length - 1].id;
-
-      const nextStepIndex = this.steps.findIndex((step) => step.id === id) + 1;
-      const nextStepName = this.steps[nextStepIndex]?.title;
-
-      return id < lastId ? `Seguir para passo "${nextStepName}"` : "Finalizar";
-    },
-    isStepCompleted(number) {
-      return this.e1 > number;
+      return id < lastId ? "Seguir" : "Finalizar";
     },
     previousStep(id) {
       const firstId = this.steps[0].id;
-
       if (id > firstId) {
         this.e1 = id - 1;
       }
@@ -218,56 +113,13 @@ export default {
         this.sendData();
       }
     },
-    async sendData() {
-      try {
-        this.isLoading = true;
-
-        const allFormData = this.collectAllFormData();
-
-        const response = await fetch('/api/finalize_company', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(allFormData)
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.statusText}`);
-        }
-
-        this.$store.dispatch('snackbar/showMessage', {
-          message: 'E-mail enviado com sucesso!',
-          color: 'success'
-        });
-
-        this.$emit("finish");
-
-      } catch (error) {
-        console.error('Erro ao enviar formulário:', error);
-
-        this.$store.dispatch('snackbar/showMessage', {
-          message: 'Erro ao enviar o formulário. Tente novamente.',
-          color: 'error'
-        });
-      } finally {
-        this.isLoading = false;
-      }
+    updateFormData(stepData) {
+      this.formData = { ...this.formData, ...stepData };
+      this.$emit('updateCompanyData', this.formData);
     },
-
-    collectAllFormData() {
-
-      return {
-        aboutCompany: this.$store.state.company?.aboutCompany || {},
-        companyData: this.$store.state.company?.companyData || {},
-        investment: this.$store.state.company?.investment || {},
-        revenue: this.$store.state.company?.revenue || {},
-        incubation: this.$store.state.company?.incubation || {},
-        dnaUsp: this.$store.state.company?.dnaUsp || {},
-        staff: this.$store.state.company?.staff || {},
-        partners: this.$store.state.company?.partners || {}
-      };
-    }
+    sendData() {
+      this.$emit("finish");
+    },
   },
 };
 </script>

@@ -7,19 +7,23 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
-        <component :is="item.content"></component>
+        <component :is="item.content" @updateData="updateFormData"></component>
       </v-tab-item>
     </v-tabs-items>
     <div class="ma-4 d-flex justify-space-between">
       <v-btn
-        class="mr-4"
-        color="primary"
-        :disabled="disableBackButton"
-        @click="previousTab"
+          class="mr-4"
+          color="primary"
+          :disabled="disableBackButton"
+          @click="previousTab"
       >
         {{ backButtonName }}
       </v-btn>
-      <v-btn color="primary" :disabled="disableNextButton" @click="nextTab">
+      <v-btn
+          v-if="!disableNextButton"
+          color="primary"
+          @click="nextTab"
+      >
         {{ nextButtonName }}
       </v-btn>
     </div>
@@ -33,7 +37,6 @@ import Staff from "@/components/CompanyForms/companyStep/Staff.vue";
 import Incubator from "@/components/CompanyForms/companyStep/Incubator.vue";
 import Finance from "@/components/CompanyForms/companyStep/Finance.vue";
 import Investments from "@/components/CompanyForms/companyStep/Investments.vue";
-import Patents from "@/components/CompanyForms/companyStep/Patents.vue";
 
 export default {
   components: {
@@ -42,16 +45,18 @@ export default {
     Staff,
     Investments,
     Finance,
+    Incubator
   },
   data: () => ({
     tab: 0,
+    formData: {},
     items: [
-      { tab: "Dados da empresa", content: Base },
-      { tab: "Sobre a empresa", content: About },
-      { tab: "Incubação", content: Incubator },
-      { tab: "Colaboradores", content: Staff },
-      { tab: "Faturamento", content: Finance },
-      { tab: "Investimentos", content: Investments },
+      { tab: "Dados da empresa", content: "Base" },
+      { tab: "Sobre a empresa", content: "About" },
+      { tab: "Incubação", content: "Incubator" },
+      { tab: "Colaboradores", content: "Staff" },
+      { tab: "Faturamento", content: "Finance" },
+      { tab: "Investimentos", content: "Investments" },
     ],
   }),
   computed: {
@@ -79,12 +84,19 @@ export default {
     previousTab() {
       this.tab = this.tab - 1;
     },
+    updateFormData(stepData) {
+      this.formData = { ...this.formData, ...stepData };
+      this.$emit('updateCompanyData', this.formData);
+    }
   },
 };
 </script>
 
-<style>
+<style scoped>
 .tab-container {
-  padding: 0;
+  background-color: white;
+  width: 900px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
 </style>

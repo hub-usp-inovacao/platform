@@ -36,6 +36,9 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":curatorship"))
+    implementation(project(":mailer"))
+    implementation("com.opencsv:opencsv:5.7.1")
     implementation(project(":catalog"))
     implementation(project(":discovery"))
     implementation(project(":techtransfer"))

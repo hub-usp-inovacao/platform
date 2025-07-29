@@ -187,7 +187,8 @@ fun Application.catalog(db: MongoDatabase) {
                 mapOf("initiatives" to initiatives)
             )
         }
-        post("/api/finalize_company") {
+        post("/finalizecompany") {
+            println("Sua mensagem aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
             try {
                 val companyData = call.receive<Map<String, Any>>()
                 sendCompanyCsvEmail(companyData)
