@@ -1,10 +1,9 @@
 package br.usp.inovacao.hubusp.server.app
 
-// TODO: Rename modules -> routes (or something similar/better)
 import br.usp.inovacao.hubusp.mailer.Mailer
-import br.usp.inovacao.hubusp.server.app.modules.catalog
-import br.usp.inovacao.hubusp.server.app.modules.configureCompaniesRoute
-import br.usp.inovacao.hubusp.server.app.modules.discovery
+import br.usp.inovacao.hubusp.server.app.routing.configureCatalogRoute
+import br.usp.inovacao.hubusp.server.app.routing.configureCompaniesRoute
+import br.usp.inovacao.hubusp.server.app.routing.configureJourneyRoute
 import br.usp.inovacao.hubusp.server.persistence.configureDB
 import io.ktor.server.application.Application
 import io.ktor.server.netty.EngineMain
@@ -27,10 +26,10 @@ fun Application.module() {
             dbName = environment.config.property("datasource.dbName").getString(),
         )
 
-    // TODO: Give these modules better names (configurePathRoute)
-    catalog(db)
-    discovery(db)
-
+    // TODO: Prepend /catalog to avoid conflicts
+    // (this would require updating Caddy to not strip /catalog)
+    configureCatalogRoute(db)
+    configureJourneyRoute(db)
     configureCompaniesRoute(
         Mailer(
             environment.config.property("email.username").getString(),

@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.modules
+package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
