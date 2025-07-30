@@ -1,9 +1,6 @@
-package br.usp.inovacao.hubusp.server.app
+package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.mailer.Mailer
-import br.usp.inovacao.hubusp.server.app.routing.configureCatalogRoute
-import br.usp.inovacao.hubusp.server.app.routing.configureCompaniesRoute
-import br.usp.inovacao.hubusp.server.app.routing.configureJourneyRoute
 import com.mongodb.client.MongoDatabase
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
