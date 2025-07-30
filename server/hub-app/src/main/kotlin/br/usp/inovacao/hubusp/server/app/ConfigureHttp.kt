@@ -19,7 +19,6 @@ fun Application.configureHttp() {
         allowMethod(HttpMethod.Patch)
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
 
         if (corsHosts == anyHostSymbol) anyHost()
         else corsHosts
