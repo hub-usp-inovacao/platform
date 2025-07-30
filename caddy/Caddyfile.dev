@@ -10,6 +10,10 @@ handle /api/journey/* {
   reverse_proxy catalogapp:8080
 }
 
+handle_path /api/v2/* {
+  reverse_proxy catalogapp:8080
+}
+
 handle_path /api/* {
   uri strip_prefix /api
   reverse_proxy backdev:3000
