@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app
 
+import br.usp.inovacao.hubusp.server.app.routing.configureRouting
 import br.usp.inovacao.hubusp.server.persistence.configureDB
 import io.ktor.server.application.Application
 import io.ktor.server.netty.EngineMain
