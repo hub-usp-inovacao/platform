@@ -15,6 +15,7 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
     configureCallLogging()
+    configureMetrics()
 
     val db = configureDB(
         protocol = environment.config.property("datasource.protocol").getString(),

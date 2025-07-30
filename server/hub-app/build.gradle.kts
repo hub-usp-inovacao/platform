@@ -3,6 +3,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val mockk_version: String by project
 val kmongo_version: String by project
+val prometheus_version: String by project
 
 plugins {
     application
@@ -41,6 +42,8 @@ dependencies {
     implementation(project(":techtransfer"))
     implementation(project(":persistence"))
 
+    implementation("io.ktor:ktor-server-metrics-micrometer:$ktor_version")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometheus_version")
     implementation("org.litote.kmongo:kmongo-serialization:$kmongo_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")

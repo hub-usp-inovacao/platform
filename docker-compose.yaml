@@ -177,3 +177,30 @@ services:
     profiles:
       - if
 
+
+
+
+  prom:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prom/prometheus.yml:/etc/prometheus/prometheus.yml
+    profiles:
+      - monitoring
+
+  mongoexporter:
+    image: percona/mongodb_exporter:0.20
+    command: ["--mongodb.uri=mongodb://mongo:27017"]
+    ports:
+      - 9216:9216
+      - 17001:17001
+    profiles:
+    - monitoring
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 7890:3000
+    profiles:
+      - monitoring
