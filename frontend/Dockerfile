@@ -36,12 +36,12 @@ CMD yarn dev
 
 FROM base AS production
 
+ENV NODE_ENV=production
+
 RUN yarn install
 
 COPY . ./
 
 RUN yarn build
-
-ENV NODE_ENV=production
 
 CMD yarn start
