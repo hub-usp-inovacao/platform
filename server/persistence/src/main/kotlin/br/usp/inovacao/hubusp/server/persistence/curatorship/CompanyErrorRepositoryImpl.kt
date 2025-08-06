@@ -7,6 +7,7 @@ import br.usp.inovacao.hubusp.server.persistence.models.CompanyValidationErrorMo
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyUniquenessErrorModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
 
 class CompanyErrorRepositoryImpl(
@@ -40,5 +41,10 @@ class CompanyErrorRepositoryImpl(
             is CompanyUniquenessError -> companyUniquenessErrorCollection.insertOne(companyErrorModel as CompanyUniquenessErrorModel)
             else -> throw IllegalArgumentException("Invalid company error type")
         }
+    }
+
+    override fun clean() {
+        companyValidationErrorCollection.deleteMany(Filters.empty())
+        companyUniquenessErrorCollection.deleteMany(Filters.empty())
     }
 }

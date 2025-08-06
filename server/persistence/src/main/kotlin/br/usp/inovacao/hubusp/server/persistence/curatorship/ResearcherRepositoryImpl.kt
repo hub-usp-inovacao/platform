@@ -56,12 +56,6 @@ class ResearcherRepositoryImpl(
         }
     }
     override fun clean() {
-        val currentTime = LocalDateTime.now()
-
-        val fiveSecondsAgo = currentTime.minusSeconds(30)
-
-        val filter = Filters.lt("timestamp", fiveSecondsAgo)
-
-        researcherCollection.deleteMany(filter)
+        researcherCollection.deleteMany(Filters.empty())
     }
 }

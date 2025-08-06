@@ -50,9 +50,6 @@ class InitiativeRepositoryImpl(
     }
 
     override fun clean() {
-        val currentTime = LocalDateTime.now()
-        val thirtySecondsAgo = currentTime.minusSeconds(30)
-        val filter = Filters.lt("timestamp", thirtySecondsAgo)
-        initiativeCollection.deleteMany(filter)
+        initiativeCollection.deleteMany(Filters.empty())
     }
 }

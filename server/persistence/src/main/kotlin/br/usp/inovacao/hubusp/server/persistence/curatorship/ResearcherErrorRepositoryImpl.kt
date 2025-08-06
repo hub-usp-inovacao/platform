@@ -7,6 +7,7 @@ import br.usp.inovacao.hubusp.server.persistence.models.ResearcherValidationErro
 import br.usp.inovacao.hubusp.server.persistence.models.ResearcherUniquenessErrorModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
 import java.time.LocalDate
 
@@ -40,5 +41,10 @@ class ResearcherErrorRepositoryImpl(
             is ResearcherUniquenessError -> researcherUniquenessErrorCollection.insertOne(researcherErrorModel as ResearcherUniquenessErrorModel)
             else -> throw IllegalArgumentException("Invalid researcher error type")
         }
+    }
+
+    override fun clean() {
+        researcherValidationErrorCollection.deleteMany(Filters.empty())
+        researcherUniquenessErrorCollection.deleteMany(Filters.empty())
     }
 }
