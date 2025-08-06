@@ -10,7 +10,6 @@ import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.MongoWriteException
 import org.litote.kmongo.getCollection
-import java.time.LocalDateTime
 
 class DisciplineRepositoryImpl(
     db: MongoDatabase
@@ -56,12 +55,6 @@ class DisciplineRepositoryImpl(
     }
 
         override fun clean() {
-            val currentTime = LocalDateTime.now()
-
-            val fiveSecondsAgo = currentTime.minusSeconds(30)
-
-            val filter = Filters.lt("timestamp", fiveSecondsAgo)
-
-            disciplineCollection.deleteMany(filter)
+            disciplineCollection.deleteMany(Filters.empty())
         }
     }

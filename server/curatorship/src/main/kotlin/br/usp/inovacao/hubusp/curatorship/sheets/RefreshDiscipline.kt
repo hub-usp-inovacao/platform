@@ -39,6 +39,7 @@ class RefreshDiscipline(
                 .mapIndexed(this::validateRow)
             if(data.filterIsInstance<Discipline>().isNotEmpty()){
                 disciplineRepository.clean()
+                disciplineErrorRepository.clean()
                 data.forEach(this::persistValidData)
             }
             else{
