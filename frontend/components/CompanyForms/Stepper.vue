@@ -7,10 +7,10 @@
       <v-stepper-header>
         <template v-for="{ id, title, hasError } in steps">
           <v-stepper-step
-            :key="`header_${id}`"
-            editable
-            :step="id"
-            :color="hasError ? 'error' : 'success'"
+              :key="`header_${id}`"
+              editable
+              :step="id"
+              :color="hasError ? 'error' : 'success'"
           >
             <v-flex justify-center>
               <template v-if="hasError">
@@ -21,17 +21,17 @@
           </v-stepper-step>
 
           <v-divider
-            v-if="id < numberOfSteps"
-            :key="`divider_${id}`"
+              v-if="id < numberOfSteps"
+              :key="`divider_${id}`"
           ></v-divider>
         </template>
       </v-stepper-header>
 
       <v-stepper-items>
         <v-stepper-content
-          v-for="({ id, component }, index) in steps"
-          :key="id"
-          :step="id"
+            v-for="({ id, component }, index) in steps"
+            :key="id"
+            :step="id"
         >
           <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
             <v-alert type="error"><strong>Erros de validação</strong></v-alert>
@@ -40,18 +40,18 @@
             </li>
           </ul>
           <component
-            :is="component"
-            :is-update="update"
-            class="component-border mb-12"
+              :is="component"
+              :is-update="update"
+              class="component-border mb-12"
           ></component>
 
           <v-row class="mr-4" justify="end">
             <v-btn
-              class="mr-4"
-              color="secondary"
-              :disabled="!index"
-              @click="previousStep(id)"
-              >Voltar</v-btn
+                class="mr-4"
+                color="secondary"
+                :disabled="!index"
+                @click="previousStep(id)"
+            >Voltar</v-btn
             >
             <v-btn color="secondary" @click="nextStep(id)">
               {{ nextStepBtnText(id) }}
@@ -60,6 +60,18 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+
+    <!-- Adicionando um diálogo para mostrar o resultado do envio -->
+    <v-dialog v-model="showResult" max-width="500">
+      <v-card>
+        <v-card-title>{{ resultTitle }}</v-card-title>
+        <v-card-text>{{ resultMessage }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="showResult = false">Fechar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -88,6 +100,10 @@ export default {
   },
   data: () => ({
     e1: 1,
+    showResult: false,
+    resultTitle: "",
+    resultMessage: "",
+    isLoading: false
   }),
   computed: {
     partnersHasErrors() {
@@ -108,7 +124,7 @@ export default {
     },
     hasErrors() {
       return (
-        this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
+          this.partnersHasErrors || this.DNAHasErrors || this.companyHasErrors
       );
     },
     steps() {
@@ -212,9 +228,71 @@ export default {
         this.sendData();
       }
     },
-    sendData() {
-      this.$emit("finish");
-    },
+    async sendData() {
+      this.isLoading = true;
+
+      try {
+        const formData = {
+          name: this.$store.state.company.name,
+          corporateName: this.$store.state.company.corporateName,
+          cnpj: this.$store.state.company.cnpj,
+          year: this.$store.state.company.year,
+          cnae: this.$store.state.company.cnae,
+          address: {
+            venue: this.$store.state.company.address.venue,
+            neighborhood: this.$store.state.company.address.neighborhood,
+            city: this.$store.state.company.address.city,
+            state: this.$store.state.company.address.state,
+            cep: this.$store.state.company.address.cep
+          },
+          phones: this.$store.state.company.phones,
+          emails: this.$store.state.company.emails,
+          description: this.$store.state.company.description,
+          services: this.$store.state.company.services,
+          technologies: this.$store.state.company.technologies,
+          logo: this.$store.state.company.logo,
+          url: this.$store.state.company.url,
+          incubated: this.$store.state.company.incubated,
+          ecosystems: this.$store.state.company.ecosystems,
+          companySize: this.$store.state.company.companySize,
+          partners: this.$store.state.partners.map(p => ({
+            name: p.name,
+            nusp: p.nusp || null,
+            bond: p.bond || null,
+            unity: p.unity || null,
+            email: p.email || null,
+            phone: p.phone || null
+          }))
+        };
+
+        // Corrigindo a URL para incluir o host correto
+        const response = await fetch("http://localhost:8080/company/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.status === "enviado") {
+          this.resultTitle = "Sucesso!";
+          this.resultMessage = "Seu formulário foi enviado com sucesso!";
+        } else {
+          this.resultTitle = "Erro";
+          this.resultMessage = `Ocorreu um erro: ${result.mensagem}`;
+        }
+
+      } catch (error) {
+        this.resultTitle = "Erro";
+        this.resultMessage = `Ocorreu um erro: ${error.message}`;
+      } finally {
+        this.isLoading = false;
+        this.showResult = true;
+        this.$emit("finish");
+      }
+    }
   },
 };
 </script>
