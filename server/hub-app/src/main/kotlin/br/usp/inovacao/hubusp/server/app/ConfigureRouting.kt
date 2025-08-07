@@ -10,7 +10,7 @@ import io.ktor.server.routing.routing
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respond("app root okk")
+            call.respond("app root ok")
         }
 
         authenticate {

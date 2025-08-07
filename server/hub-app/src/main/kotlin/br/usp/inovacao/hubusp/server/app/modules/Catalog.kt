@@ -172,17 +172,6 @@ fun Application.catalog(db: MongoDatabase) {
             )
         }
 
-        get("/teste") {
-            val params = call.request.queryParameters
-
-            val companies = searchCompanies.search(params.toCompanySearchParams())
-
-            call.respond(
-                HttpStatusCode.OK,
-                mapOf("companies" to companies)
-            )
-        }
-
         get("/patents") {
             val params = call.request.queryParameters
 
