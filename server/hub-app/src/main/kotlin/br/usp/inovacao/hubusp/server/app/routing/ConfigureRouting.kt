@@ -14,7 +14,7 @@ fun Application.configureRouting(db: MongoDatabase) {
     // (this would require updating Caddy to not strip /catalog)
     configureCatalogRoute(db)
     configureJourneyRoute(db)
-    configureCompaniesRoute(
+    configureCompanyRoute(
         Mailer(
             environment.config.property("email.username").getString(),
             environment.config.property("email.password").getString(),
