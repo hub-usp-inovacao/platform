@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence.models
 
-import br.usp.inovacao.hubusp.server.catalog.Classification
 import kotlinx.serialization.Serializable
 
 @Serializable

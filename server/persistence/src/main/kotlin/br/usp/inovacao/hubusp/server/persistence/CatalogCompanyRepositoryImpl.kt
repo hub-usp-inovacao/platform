@@ -16,11 +16,11 @@ data class Ecosystem(
 
 @Serializable data class City(val name: String)
 
-fun CompanyClassificationModel.toCatalogClassification(): Classification =
-        Classification(major = this.major, minor = this.minor)
+fun CompanyClassificationModel.toCatalogClassification(): CompanyClassification =
+        CompanyClassification(major = this.major, minor = this.minor)
 
-fun CompanyAddressModel.toCatalogAddress(): Address =
-        Address(
+fun CompanyAddressModel.toCatalogAddress(): CompanyAddress =
+        CompanyAddress(
                 cep = this.cep,
                 city = this.city,
                 neighborhood = this.neighborhood,
@@ -30,10 +30,14 @@ fun CompanyAddressModel.toCatalogAddress(): Address =
 
 fun CompanyModel.toCatalogCompany(): Company =
         Company(
+                active = this.active ?: true,
                 address = this.address.toCatalogAddress(),
+                allowed = this.allowed ?: true,
                 classification = this.classification.toCatalogClassification(),
                 cnae = this.cnae,
+                cnpj = this.cnpj,
                 companySize = this.companySize,
+                corporateName = this.corporateName ?: "",
                 description = this.description,
                 ecosystems = this.ecosystems,
                 emails = this.emails,
@@ -43,8 +47,18 @@ fun CompanyModel.toCatalogCompany(): Company =
                 phones = this.phones,
                 services = this.services,
                 technologies = this.technologies,
-                unities = this.partners.map { it.unity }.toSet(),
-                url = this.url
+                partners = this.partners.map {
+                    Partner(
+                        name = it.name,
+                        nusp = it.nusp,
+                        bond = it.bond,
+                        unity = it.unity,
+                        email = it.email,
+                        phone = it.phone
+                    )
+                },
+                url = this.url,
+                year = this.year
         )
 
 class CatalogCompanyRepositoryImpl(db: MongoDatabase) : CompanyRepository {

@@ -20,7 +20,20 @@ data class CompanyForm(
     val incubated: String,
     val ecosystems: List<String>,
     val companySize: List<String>,
-    val partners: List<PartnerForm>? = null
+    val partners: List<PartnerForm>? = null,
+    val odss: List<String>? = null,
+    val socialMedias: List<String> = emptyList(),
+    val dnaUspInfo: DnaUspInfoForm = DnaUspInfoForm(),
+    val employeeInfo: EmployeeInfoForm = EmployeeInfoForm(),
+    val investmentInfo: InvestmentInfoForm = InvestmentInfoForm(),
+    val companyType: String? = null,
+    val operationalStatus: String? = null,
+    val totalPartners: Int? = null,
+    val hasUspPartners: Boolean? = null,
+    val wantsToAddMorePartners: Boolean? = null,
+    val incubatorName: String? = null,
+    val isUnicorn: Boolean? = null,
+    val agreements: List<String> = emptyList()
 )
 
 @Serializable
@@ -39,5 +52,38 @@ data class PartnerForm(
     val bond: String? = null,
     val unity: String? = null,
     val email: String? = null,
-    val phone: String? = null
+    val phone: String? = null,
+    val position: String? = null
+)
+
+@Serializable
+data class DnaUspInfoForm(
+    val wantsSeal: Boolean = false,
+    val contactEmail: String? = null,
+    val contactName: String? = null,
+    val contactAgreements: Set<String> = emptySet(),
+    val category: String? = null,
+    val confirmationStatus: String? = null
+)
+
+@Serializable
+data class EmployeeInfoForm(
+    val cltEmployees: Int = 0,
+    val pjCollaborators: Int = 0,
+    val internsScholars: Int = 0,
+    val totalEmployees: Int = 0
+)
+
+@Serializable
+data class InvestmentInfoForm(
+    val hasInvestment: Boolean = false,
+    val investmentTypes: Set<String> = emptySet(),
+    val ownInvestmentAmount: String? = null,
+    val angelInvestmentAmount: String? = null,
+    val ventureCapitalAmount: String? = null,
+    val privateEquityAmount: String? = null,
+    val pipeAmount: String? = null,
+    val otherInvestmentsAmount: String? = null,
+    val revenue: String? = null,
+    val companySize: String? = null
 )
