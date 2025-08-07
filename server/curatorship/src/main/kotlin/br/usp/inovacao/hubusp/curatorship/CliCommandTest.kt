@@ -8,11 +8,10 @@ class CliCommandTest {
     private val mailer: Mailer
 
     init {
-        val apiKey = Configuration.SHEETS_API_KEY
         val user = Configuration.EMAIL_USERNAME
         val password = Configuration.EMAIL_PASSWORD
 
-        reader = SpreadsheetReader(apiKey)
+        reader = SpreadsheetReader()
         mailer = Mailer(user, password)
     }
 

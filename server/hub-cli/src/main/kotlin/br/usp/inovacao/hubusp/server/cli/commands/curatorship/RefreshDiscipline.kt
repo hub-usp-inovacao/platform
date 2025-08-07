@@ -14,7 +14,6 @@ class RefreshDiscipline : CliktCommand() {
     init {
         val user = Configuration.EMAIL_USERNAME
         val password = Configuration.EMAIL_PASSWORD
-        val apiKey = Configuration.SHEETS_API_KEY
 
         val protocol = Configuration.DATASOURCE_PROTOCOL
         val host = Configuration.DATASOURCE_HOST
@@ -24,7 +23,7 @@ class RefreshDiscipline : CliktCommand() {
         val db = configureDB(protocol, host, port, dbName)
         refreshDiscipline = br.usp.inovacao.hubusp.curatorship.sheets.RefreshDiscipline(
             mailer = Mailer(user, password),
-            spreadsheetReader = SpreadsheetReader(apiKey),
+            spreadsheetReader = SpreadsheetReader(),
             disciplineRepository = DisciplineRepositoryImpl(db),
             disciplineErrorRepository = DisciplineErrorRepositoryImpl(db)
         )
