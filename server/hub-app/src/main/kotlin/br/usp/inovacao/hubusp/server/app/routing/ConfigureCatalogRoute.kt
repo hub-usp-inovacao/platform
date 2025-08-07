@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.modules
+package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
@@ -71,7 +71,7 @@ fun Parameters.toDisciplineSearchParams() = DisciplineSearchParams(
 )
 
 
-fun Application.catalog(db: MongoDatabase) {
+fun Application.configureCatalogRoute(db: MongoDatabase) {
     val searchDisciplines = CatalogDisciplineRepositoryImpl(db)
         .let { SearchDisciplines(it) }
 

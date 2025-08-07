@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.modules
+package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.server.discovery.*
 import br.usp.inovacao.hubusp.server.persistence.journey.JourneyRepositoryImpl
@@ -29,7 +29,7 @@ fun Parameters.toFundStepParams() = FundStepFilter(
     type = this["type"]
 )
 
-fun Application.discovery(db: MongoDatabase) {
+fun Application.configureJourneyRoute(db: MongoDatabase) {
     val journey = JourneyRepositoryImpl(db)
         .let { Journey(it) }
 

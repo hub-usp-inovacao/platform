@@ -5,6 +5,10 @@ handle_path /catalog/* {
   reverse_proxy catalogapp:8080
 }
 
+handle_path /v2/* {
+  reverse_proxy catalogapp:8080
+}
+
 handle_path /* {
   reverse_proxy backend:3000
 }
