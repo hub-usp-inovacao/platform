@@ -61,7 +61,6 @@
       </v-stepper-items>
     </v-stepper>
 
-    <!-- Adicionando um diálogo para mostrar o resultado do envio -->
     <v-dialog v-model="showResult" max-width="500">
       <v-card>
         <v-card-title>{{ resultTitle }}</v-card-title>
@@ -265,7 +264,7 @@ export default {
           }))
         };
 
-        // Corrigindo a URL para incluir o host correto
+
         const response = await fetch("http://localhost:8080/company/register", {
           method: "POST",
           headers: {
