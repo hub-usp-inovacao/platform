@@ -8,6 +8,7 @@ import br.usp.inovacao.hubusp.server.persistence.models.DisciplineUniquenessErro
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.getCollection
+import com.mongodb.client.model.Filters
 
 class DisciplineErrorRepositoryImpl(
     db : MongoDatabase
@@ -39,5 +40,10 @@ class DisciplineErrorRepositoryImpl(
             is DisciplineUniquenessError -> disciplineUniquenessErrorCollection.insertOne(disciplineErrorModel as DisciplineUniquenessErrorModel)
             else -> throw IllegalArgumentException("Invalid discipline error type")
         }
+    }
+
+    override fun clean() {
+        disciplineValidationErrorCollection.deleteMany(Filters.empty())
+        disciplineUniquenessErrorCollection.deleteMany(Filters.empty())
     }
 }

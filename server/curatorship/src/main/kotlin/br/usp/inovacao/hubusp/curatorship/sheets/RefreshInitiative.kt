@@ -40,6 +40,7 @@ class RefreshInitiative(
                 .mapIndexed(this::validateRow)
             if(data.filterIsInstance<Initiative>().isNotEmpty()){
                 initiativeRepository.clean()
+                initiativeErrorRepository.clean()
                 data.forEach(this::persistValidData)
             }
             else{

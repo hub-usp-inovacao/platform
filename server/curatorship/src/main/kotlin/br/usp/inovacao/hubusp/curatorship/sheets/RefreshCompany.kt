@@ -40,6 +40,7 @@ class RefreshCompany(
                 .mapIndexed(this::validateRow)
             if(data.filterIsInstance<Company>().isNotEmpty()){
                 companyRepository.clean()
+                companyErrorRepository.clean()
                 data.forEach(this::persistValidData)
             }
             else{

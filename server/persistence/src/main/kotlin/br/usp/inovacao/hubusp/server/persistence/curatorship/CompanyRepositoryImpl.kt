@@ -85,12 +85,6 @@ class CompanyRepositoryImpl(
         }
     }
     override fun clean() {
-        val currentTime = LocalDateTime.now()
-
-        val fiveSecondsAgo = currentTime.minusSeconds(30)
-
-        val filter = Filters.lt("timestamp", fiveSecondsAgo)
-
-        companyCollection.deleteMany(filter)
+        companyCollection.deleteMany(Filters.empty())
     }
 }

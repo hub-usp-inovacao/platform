@@ -53,6 +53,7 @@ internal class RefreshPDITest {
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
         every { mockPDIRepo.clean()} returns Unit
+        every { mockPDIErrorRepo.clean() } returns Unit
 
         // when
         underTest.refresh()
@@ -66,6 +67,7 @@ internal class RefreshPDITest {
     fun `it cleans old data after storing valid rows`(){
         // given
         every { mockPDIErrorRepo.save(any()) } returns Unit
+        every { mockPDIErrorRepo.clean() } returns Unit
         every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIRepo.clean() } returns Unit
@@ -74,5 +76,6 @@ internal class RefreshPDITest {
         underTest.refresh()
         //then
         verify(exactly = 1) { mockPDIRepo.clean() }
+        verify(exactly = 1) { mockPDIErrorRepo.clean() }
     }
 }

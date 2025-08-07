@@ -37,12 +37,6 @@ class PDIRepositoryImpl(
         pdiCollection.insertOne(pdiModel)
     }
     override fun clean() {
-        val currentTime = LocalDateTime.now()
-
-        val fiveSecondsAgo = currentTime.minusSeconds(30)
-
-        val filter = Filters.lt("timestamp", fiveSecondsAgo)
-
-        pdiCollection.deleteMany(filter)
+        pdiCollection.deleteMany(Filters.empty())
     }
 }

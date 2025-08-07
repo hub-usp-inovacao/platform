@@ -39,6 +39,7 @@ class RefreshResearcher(
                 .mapIndexed(this::validateRow)
             if(data.filterIsInstance<Researcher>().isNotEmpty()){
                 researcherRepository.clean()
+                researcherErrorRepository.clean()
                 data.forEach(this::persistValidData)
             }
             else{

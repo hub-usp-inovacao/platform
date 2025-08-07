@@ -5,6 +5,7 @@ import br.usp.inovacao.hubusp.curatorship.sheets.PDIValidationError
 import br.usp.inovacao.hubusp.server.persistence.models.PDIValidationErrorModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
 
 class PDIErrorRepositoryImpl(
@@ -25,5 +26,9 @@ class PDIErrorRepositoryImpl(
         )
 
         pdiErrorCollection.insertOne(pdiErrorModel)
+    }
+
+    override fun clean(){
+        pdiErrorCollection.deleteMany(Filters.empty())
     }
 }

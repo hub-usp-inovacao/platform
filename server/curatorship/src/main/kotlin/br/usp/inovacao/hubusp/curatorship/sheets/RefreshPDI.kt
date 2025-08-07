@@ -36,6 +36,7 @@ class RefreshPDI(
                 .mapIndexed(this::validateRow)
             if(data.filterIsInstance<PDI>().isNotEmpty()){
                 pdiRepository.clean()
+                pdiErrorRepository.clean()
                 data.forEach(this::persistValidData)
             }
             else{
