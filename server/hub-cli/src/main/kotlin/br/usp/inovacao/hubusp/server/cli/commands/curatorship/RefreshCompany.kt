@@ -14,7 +14,6 @@ class RefreshCompany : CliktCommand() {
     init {
         val user = Configuration.EMAIL_USERNAME
         val password = Configuration.EMAIL_PASSWORD
-        val apiKey = Configuration.SHEETS_API_KEY
 
         val protocol = Configuration.DATASOURCE_PROTOCOL
         val host = Configuration.DATASOURCE_HOST
@@ -24,7 +23,7 @@ class RefreshCompany : CliktCommand() {
         val db = configureDB(protocol, host, port, dbName)
         refreshCompany = br.usp.inovacao.hubusp.curatorship.sheets.RefreshCompany(
             mailer = Mailer(user, password),
-            spreadsheetReader = SpreadsheetReader(apiKey),
+            spreadsheetReader = SpreadsheetReader(),
             companyRepository = CompanyRepositoryImpl(db),
             companyErrorRepository = CompanyErrorRepositoryImpl(db)
         )
