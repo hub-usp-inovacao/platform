@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":discovery"))
     implementation(project(":techtransfer"))
     implementation(project(":persistence"))
+    implementation(project(":mailer"))
 
     implementation("org.litote.kmongo:kmongo-serialization:$kmongo_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
