@@ -80,6 +80,23 @@ export const actions = {
     }
   },
 
+  registerCompanyForm: async function ({ commit, getters }) {
+    // TODO: Generic "update/register company form" function that both
+    // 'register' and 'update' can use
+
+    const logo = getters.logoFile;
+    const company = prepareCompanyObject(getters);
+    const { errors } = await this.$registerCompanyData(company, logo);
+
+    if (errors !== undefined) {
+      commit("setErrors", errors);
+      return false;
+    }
+
+    commit("setErrors", {});
+    return true;
+  },
+
   updateCompanyForm: async function ({ commit, getters }) {
     if (getters.partners.length === 0) {
       commit("setErrors", {

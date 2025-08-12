@@ -11,6 +11,7 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue .",
     "lintfix": "eslint --fix --ext .js,.vue .",
+    "lint:file": "eslint",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "prepare": "husky install"
