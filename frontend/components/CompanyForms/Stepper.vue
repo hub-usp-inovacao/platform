@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-alert dense type="error" class="text-center" v-if="hasErrors">
+    <v-alert v-if="hasErrors" dense type="error" class="text-center">
       Etapas marcadas com <code>(!)</code> contém erros de validação
     </v-alert>
     <v-stepper v-model="e1" alt-labels non-linear>
@@ -33,12 +33,14 @@
           :key="id"
           :step="id"
         >
-          <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
+          <v-container v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
             <v-alert type="error"><strong>Erros de validação</strong></v-alert>
-            <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
-              <strong>{{ errMsg }}</strong>
-            </li>
-          </ul>
+            <ul>
+              <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
+                <strong>{{ errMsg }}</strong>
+              </li>
+            </ul>
+          </v-container>
           <component
             :is="component"
             :is-update="update"
