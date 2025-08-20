@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
     implementation(project(":mailer"))
+    implementation(project(":catalog"))
 
     implementation("org.valiktor:valiktor-core:$valiktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
