@@ -3,7 +3,7 @@
     <div class="background">
       <Panel :title="title" :description="description" no-search />
     </div>
-    <Stepper :update="false" @finish="onStepperFinish" />
+    <Stepper :errors="errors" :update="false" @finish="onStepperFinish" />
     <ResultDialog
       :show="dialog.show"
       :title="dialog.title"
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import ResultDialog from "@/components/CompanyForms/ResultDialog.vue";
 import Stepper from "@/components/CompanyForms/Stepper.vue";
 import Panel from "@/components/first_level/Panel.vue";
@@ -38,6 +38,12 @@ export default {
     },
   }),
 
+  computed: {
+    ...mapGetters({
+      errors: "company_forms/errors",
+    }),
+  },
+
   methods: {
     ...mapActions({
       registerCompanyForm: "company_forms/registerCompanyForm",
@@ -56,12 +62,12 @@ export default {
             "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
         };
       } else {
-        // TODO: Show erros from server
         this.dialog = {
           show: true,
           latestRequestSucceeded: requestStatus,
           title: "Erro ao registrar dados",
-          message: "Verifique o formulário e tente novamente.",
+          message:
+            this.errors.server || "Verifique o formulário e tente novamente.",
         };
       }
     },
