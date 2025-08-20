@@ -7,7 +7,6 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
-import java.time.LocalDateTime
 
 class PDIRepositoryImpl(
     db: MongoDatabase
