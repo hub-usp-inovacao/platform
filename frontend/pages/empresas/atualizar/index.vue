@@ -11,22 +11,12 @@
       <v-container>
         <v-row v-if="ok">
           <Stepper :errors="errors" @finish="updateCompany" />
-          <v-dialog v-model="dialog.show" persistent max-width="500">
-            <v-card>
-              <v-card-title class="text-h5">
-                {{ dialog.title }}
-              </v-card-title>
-              <v-card-text>
-                {{ dialog.message }}
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="handleOkClick">
-                  Ok!
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <ResultDialog
+            :show="dialog.show"
+            :title="dialog.title"
+            :message="dialog.message"
+            @ok-click="handleOkClick"
+          />
         </v-row>
         <v-row v-else>
           <v-col cols="10">
@@ -66,12 +56,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Panel from "@/components/first_level/Panel.vue";
+import ResultDialog from "@/components/CompanyForms/ResultDialog.vue";
 import Stepper from "@/components/CompanyForms/Stepper.vue";
 
 export default {
   components: {
     Panel,
     Stepper,
+    ResultDialog,
   },
   data: () => ({
     title: "Atualização de Empresas DNAUSP",
