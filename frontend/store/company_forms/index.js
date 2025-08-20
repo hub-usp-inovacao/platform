@@ -80,7 +80,16 @@ export const actions = {
     }
   },
 
+  registerCompanyForm: async function ({ commit, getters }) {
+    return sendCompanyData({commit, getters}, this.$apiPostCompany)
+  },
+
   updateCompanyForm: async function ({ commit, getters }) {
+    return sendCompanyData({commit, getters}, this.$updateCompanyData)
+  },
+};
+
+async function sendCompanyData({commit, getters}, request) {
     if (getters.partners.length === 0) {
       commit("setErrors", {
         partners: ["É necessário informar pelo menos um sócio da empresa"],
@@ -105,7 +114,7 @@ export const actions = {
 
     const logo = getters.logoFile;
     const company = prepareCompanyObject(getters);
-    const { errors } = await this.$updateCompanyData(company, logo);
+    const { errors } = await request(company, logo);
 
     if (errors !== undefined) {
       commit("setErrors", errors);
@@ -114,8 +123,7 @@ export const actions = {
 
     commit("setErrors", {});
     return true;
-  },
-};
+}
 
 const snakeToCamelCase = (key) => {
   return key
