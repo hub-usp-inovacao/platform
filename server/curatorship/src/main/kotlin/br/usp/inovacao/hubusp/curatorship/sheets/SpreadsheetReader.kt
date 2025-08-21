@@ -1,19 +1,13 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
 import br.usp.inovacao.hubusp.curatorship.Configuration
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import java.net.SocketException
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.sheets.v4.Sheets as GoogleSheetsService
+import com.google.api.services.sheets.v4.SheetsScopes
+import com.google.auth.http.HttpCredentialsAdapter
+import com.google.auth.oauth2.GoogleCredentials
+import java.io.IOException
 
 enum class Sheets {
     PDIs, Disciplines, Companies,
@@ -22,19 +16,31 @@ enum class Sheets {
 
 typealias Matrix<T> = List<List<T>>
 
-@Serializable
-private data class ValueRange(
-    val range: String,
-    val majorDimension: String,
-    val values: Matrix<String>
-)
+class SpreadsheetReader {
+    private val sheetsService: GoogleSheetsService
 
-class SpreadsheetReader(
-    private val apiKey: String,
-) {
-    private val httpClient: HttpClient = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json()
+    companion object {
+        private const val CREDENTIALS_FILE_PATH = "/credentials.json"
+        private const val APPLICATION_NAME = "HubUSP"
+    }
+
+    init {
+        sheetsService = try {
+            val credentialsStream = SpreadsheetReader::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+                ?: throw IOException("Credentials file not found at $CREDENTIALS_FILE_PATH")
+
+            val credentials = GoogleCredentials.fromStream(credentialsStream)
+                .createScoped(listOf(SheetsScopes.SPREADSHEETS_READONLY))
+
+            GoogleSheetsService.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(),
+                GsonFactory.getDefaultInstance(),
+                HttpCredentialsAdapter(credentials)
+            )
+                .setApplicationName(APPLICATION_NAME)
+                .build()
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to initialize Google Sheets service", e)
         }
     }
 
@@ -77,34 +83,30 @@ class SpreadsheetReader(
         sheetName = Configuration.INITIATIVE_TAB_NAME
     )
 
-    private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String?> = try {
-        val values = runBlocking {
-            httpClient
-                .get {
-                    url {
-                        protocol = URLProtocol.HTTPS
-                        host = "sheets.googleapis.com"
-                        appendPathSegments("v4", "spreadsheets", sheetId, "values", "'$sheetName'")
-                        parameters.append("key", apiKey)
-                    }
+    private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String?> {
+        try {
+            val range = "'$sheetName'"
+
+            val response = sheetsService.spreadsheets().values()
+                .get(sheetId, range)
+                .execute()
+
+            val values = response.getValues() as? Matrix<String> ?: emptyList()
+
+            if (values.isEmpty()) {
+                throw SheetReadingException(sheetName, sheetId, message = "Spreadsheet is empty")
+            }
+
+            return values.map { row ->
+                row.map { cell ->
+                    if (cell.isBlankCell()) null else cell
                 }
-                .bodyAsText()
-                .let { Json.decodeFromString<ValueRange>(it) }
-                .values
-                .map { row ->
-                    row.map { cell ->
-                        if (cell.isBlankCell()) null else cell
-                    }
-                }
+            }
+        } catch (_: IOException) {
+            throw SheetReadingException(sheetName, sheetId, message = "Failed to connect to spreadsheet")
+        } catch (_: Exception) {
+            throw SheetReadingException(sheetName, sheetId, message = "Unexpected response from spreadsheet")
         }
-
-        if (values.isEmpty()) throw SheetReadingException(sheetName, sheetId, message = "Spreadsheet is empty")
-
-        values
-    } catch (_: SocketException) {
-        throw SheetReadingException(sheetName, sheetId, message = "Failed to connect to spreadsheet")
-    } catch (_: SerializationException) {
-        throw SheetReadingException(sheetName, sheetId, message = "Unexpected response from spreadsheet")
     }
 }
 

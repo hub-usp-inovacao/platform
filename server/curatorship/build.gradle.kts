@@ -34,6 +34,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("com.typesafe:config:$typesafe_config_version")
     implementation("it.skrape:skrapeit:1.3.0-alpha.1")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.37.1")
+    implementation("com.google.api-client:google-api-client:2.7.2")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20250211-2.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.mockk:mockk:$mockk_version")
 }
