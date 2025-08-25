@@ -22,7 +22,7 @@ data class CompanyForm(
     val companySize: List<String>,
     val partners: List<PartnerForm>? = null,
     val odss: List<String>? = null,
-    val socialMedias: List<String> = emptyList(),
+    val socialMedias: List<String> = emptyList(), // Mudança: aceita List<String> como no JSON
     val dnaUspInfo: DnaUspInfoForm = DnaUspInfoForm(),
     val employeeInfo: EmployeeInfoForm = EmployeeInfoForm(),
     val investmentInfo: InvestmentInfoForm = InvestmentInfoForm(),
@@ -61,7 +61,7 @@ data class DnaUspInfoForm(
     val wantsSeal: Boolean = false,
     val contactEmail: String? = null,
     val contactName: String? = null,
-    val contactAgreements: Set<String> = emptySet(),
+    val contactAgreements: List<String> = emptyList(), // Mudança: aceita List<String> como no JSON
     val category: String? = null,
     val confirmationStatus: String? = null
 )
@@ -77,7 +77,7 @@ data class EmployeeInfoForm(
 @Serializable
 data class InvestmentInfoForm(
     val hasInvestment: Boolean = false,
-    val investmentTypes: Set<String> = emptySet(),
+    val investmentTypes: List<String> = emptyList(), // Mudança: aceita List<String> como no JSON
     val ownInvestmentAmount: String? = null,
     val angelInvestmentAmount: String? = null,
     val ventureCapitalAmount: String? = null,
@@ -87,3 +87,20 @@ data class InvestmentInfoForm(
     val revenue: String? = null,
     val companySize: String? = null
 )
+
+@Serializable
+data class SocialMediasForm(
+    val linkedin: String? = null,
+    val instagram: String? = null,
+    val youtube: String? = null,
+    val facebook: String? = null
+) {
+    fun toList(): List<String> {
+        return listOfNotNull(
+            linkedin?.takeIf { it.isNotBlank() },
+            instagram?.takeIf { it.isNotBlank() },
+            youtube?.takeIf { it.isNotBlank() },
+            facebook?.takeIf { it.isNotBlank() }
+        )
+    }
+}
