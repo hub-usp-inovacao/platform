@@ -99,12 +99,76 @@
         Redes sociais
         <v-divider />
         <v-container>
-          <MultipleInputs
-            :value="socialMedias"
-            input-label="Rede social"
-            component="URLInput"
-            @input="setSocialMedias"
-          />
+          <div class="social-media-inputs">
+            <!-- LinkedIn -->
+            <div class="social-media-field mb-4">
+              <div class="d-flex align-center mb-2">
+                <v-icon color="#0077B5" class="mr-2">mdi-linkedin</v-icon>
+                <span class="font-weight-medium">LinkedIn</span>
+              </div>
+              <URLInput
+                :value="linkedin"
+                label="URL do perfil LinkedIn"
+                placeholder="https://www.linkedin.com/company/sua-empresa"
+                hint="Cole aqui o link completo do perfil da empresa no LinkedIn"
+                @input="handleLinkedinChange"
+              />
+              <v-alert
+                v-if="linkedinError"
+                type="error"
+                dense
+                class="mt-2"
+              >
+                {{ linkedinError }}
+              </v-alert>
+            </div>
+
+            <!-- Instagram -->
+            <div class="social-media-field mb-4">
+              <div class="d-flex align-center mb-2">
+                <v-icon color="#E4405F" class="mr-2">mdi-instagram</v-icon>
+                <span class="font-weight-medium">Instagram</span>
+              </div>
+              <URLInput
+                :value="instagram"
+                label="URL do perfil Instagram"
+                placeholder="https://www.instagram.com/sua-empresa"
+                hint="Cole aqui o link completo do perfil da empresa no Instagram"
+                @input="handleInstagramChange"
+              />
+              <v-alert
+                v-if="instagramError"
+                type="error"
+                dense
+                class="mt-2"
+              >
+                {{ instagramError }}
+              </v-alert>
+            </div>
+
+            <!-- Facebook -->
+            <div class="social-media-field mb-4">
+              <div class="d-flex align-center mb-2">
+                <v-icon color="#1877F2" class="mr-2">mdi-facebook</v-icon>
+                <span class="font-weight-medium">Facebook</span>
+              </div>
+              <URLInput
+                :value="facebook"
+                label="URL da página Facebook"
+                placeholder="https://www.facebook.com/sua-empresa"
+                hint="Cole aqui o link completo da página da empresa no Facebook"
+                @input="handleFacebookChange"
+              />
+              <v-alert
+                v-if="facebookError"
+                type="error"
+                dense
+                class="mt-2"
+              >
+                {{ facebookError }}
+              </v-alert>
+            </div>
+          </div>
         </v-container>
       </div>
     </v-form>
@@ -148,6 +212,9 @@ export default {
       "17 - Parcerias e Meios de Implementação",
     ],
     isLogoInternal: true,
+    linkedinError: '',
+    instagramError: '',
+    facebookError: '',
   }),
   computed: {
     ...mapGetters({
@@ -161,6 +228,9 @@ export default {
       url: "company_forms/site",
       logo: "company_forms/logo",
       logoFile: "company_forms/logoFile",
+      linkedin: "company_forms/linkedin",
+      instagram: "company_forms/instagram",
+      facebook: "company_forms/facebook",
     }),
   },
   created() {
@@ -176,6 +246,9 @@ export default {
       setUrl: "company_forms/setSite",
       setLogo: "company_forms/setLogo",
       setLogoFile: "company_forms/setLogoFile",
+      setLinkedin: "company_forms/setLinkedin",
+      setInstagram: "company_forms/setInstagram",
+      setFacebook: "company_forms/setFacebook",
     }),
     async getExistentLogo() {
       if (!this.logo) return;
@@ -203,6 +276,79 @@ export default {
       let cnpj_without_punctuation = this.cnpj.replace(/[^\d]+/g, '');
       let fileName = cnpj_without_punctuation + '.' + logoImage.name.split(".").pop();
       this.setLogo(fileName);
+    },
+    async validateUrl(url) {
+      if (!url || url.trim() === '') return true;
+
+      try {
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    },
+    isValidLinkedinUrl(url) {
+      if (!url || url.trim() === '') return true;
+      const linkedinPattern = /^https:\/\/(www\.)?linkedin\.com\/(company|in)\/[a-zA-Z0-9-]+\/?$/;
+      return linkedinPattern.test(url);
+    },
+    isValidInstagramUrl(url) {
+      if (!url || url.trim() === '') return true;
+      const instagramPattern = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._]+\/?$/;
+      return instagramPattern.test(url);
+    },
+    isValidFacebookUrl(url) {
+      if (!url || url.trim() === '') return true;
+      const facebookPattern = /^https:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?$/;
+      return facebookPattern.test(url);
+    },
+    async handleLinkedinChange(value) {
+      this.linkedinError = '';
+      this.setLinkedin(value);
+
+      if (value && value.trim() !== '') {
+        if (!this.isValidLinkedinUrl(value)) {
+          this.linkedinError = 'URL do LinkedIn inválida. Use o formato: https://www.linkedin.com/company/sua-empresa';
+          return;
+        }
+
+        const isValid = await this.validateUrl(value);
+        if (!isValid) {
+          this.linkedinError = 'URL n��o encontrada. Verifique se o link está correto e acessível.';
+        }
+      }
+    },
+    async handleInstagramChange(value) {
+      this.instagramError = '';
+      this.setInstagram(value);
+
+      if (value && value.trim() !== '') {
+        if (!this.isValidInstagramUrl(value)) {
+          this.instagramError = 'URL do Instagram inválida. Use o formato: https://www.instagram.com/sua-empresa';
+          return;
+        }
+
+        const isValid = await this.validateUrl(value);
+        if (!isValid) {
+          this.instagramError = 'URL não encontrada. Verifique se o link está correto e acessível.';
+        }
+      }
+    },
+    async handleFacebookChange(value) {
+      this.facebookError = '';
+      this.setFacebook(value);
+
+      if (value && value.trim() !== '') {
+        if (!this.isValidFacebookUrl(value)) {
+          this.facebookError = 'URL do Facebook inválida. Use o formato: https://www.facebook.com/sua-empresa';
+          return;
+        }
+
+        const isValid = await this.validateUrl(value);
+        if (!isValid) {
+          this.facebookError = 'URL não encontrada. Verifique se o link está correto e acessível.';
+        }
+      }
     },
   },
 };

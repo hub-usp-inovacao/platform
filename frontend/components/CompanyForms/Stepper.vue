@@ -231,37 +231,79 @@ export default {
       this.isLoading = true;
 
       try {
+        // Acessando dados do store corretamente
+        const store = this.$store.state.company_forms;
+
         const formData = {
-          name: this.$store.state.company.name,
-          corporateName: this.$store.state.company.corporateName,
-          cnpj: this.$store.state.company.cnpj,
-          year: this.$store.state.company.year,
-          cnae: this.$store.state.company.cnae,
+          name: store.name,
+          corporateName: store.corporateName,
+          cnpj: store.cnpj,
+          year: store.year,
+          cnae: store.cnae,
           address: {
-            venue: this.$store.state.company.address.venue,
-            neighborhood: this.$store.state.company.address.neighborhood,
-            city: this.$store.state.company.address.city,
-            state: this.$store.state.company.address.state,
-            cep: this.$store.state.company.address.cep
+            venue: store.address.venue,
+            neighborhood: store.address.neighborhood,
+            city: store.address.city,
+            state: store.address.state,
+            cep: store.address.cep
           },
-          phones: this.$store.state.company.phones,
-          emails: this.$store.state.company.emails,
-          description: this.$store.state.company.description,
-          services: this.$store.state.company.services,
-          technologies: this.$store.state.company.technologies,
-          logo: this.$store.state.company.logo,
-          url: this.$store.state.company.url,
-          incubated: this.$store.state.company.incubated,
-          ecosystems: this.$store.state.company.ecosystems,
-          companySize: this.$store.state.company.companySize,
-          partners: this.$store.state.partners.map(p => ({
+          phones: store.phones,
+          emails: store.emails,
+          description: store.description,
+          services: store.services,
+          technologies: store.technologies,
+          logo: store.logo,
+          url: store.site,
+          incubated: store.incubated,
+          ecosystems: store.ecosystems ? [store.ecosystems] : [],
+          companySize: store.size ? [store.size] : [],
+          partners: store.partners.map(p => ({
             name: p.name,
             nusp: p.nusp || null,
             bond: p.bond || null,
             unity: p.unity || null,
             email: p.email || null,
-            phone: p.phone || null
-          }))
+            phone: p.phone || null,
+            position: p.role || null
+          })),
+          odss: store.odss || [],
+          linkedin: store.linkedin || null,
+          instagram: store.instagram || null,
+          facebook: store.facebook || null,
+          dnaUspInfo: {
+            wantsSeal: store.wantsDna,
+            contactEmail: store.wantsDna ? store.dnaContactEmail : null,
+            contactName: store.wantsDna ? store.dnaContactName : null,
+            contactAgreements: store.permissions || [],
+            category: store.category || null,
+            confirmationStatus: "Pendente"
+          },
+          employeeInfo: {
+            cltEmployees: parseInt(store.numberOfCLTEmployees) || 0,
+            pjCollaborators: parseInt(store.numberOfPJColaborators) || 0,
+            internsScholars: parseInt(store.numberOfInterns) || 0,
+            totalEmployees: (parseInt(store.numberOfCLTEmployees) || 0) + (parseInt(store.numberOfPJColaborators) || 0) + (parseInt(store.numberOfInterns) || 0)
+          },
+          investmentInfo: {
+            hasInvestment: store.received === "Sim",
+            investmentTypes: store.investments || [],
+            ownInvestmentAmount: store.investmentsValues?.own || null,
+            angelInvestmentAmount: store.investmentsValues?.angel || null,
+            ventureCapitalAmount: store.investmentsValues?.venture || null,
+            privateEquityAmount: store.investmentsValues?.equity || null,
+            pipeAmount: store.investmentsValues?.pipe || null,
+            otherInvestmentsAmount: store.investmentsValues?.others || null,
+            revenue: store.lastYear || null,
+            companySize: store.size || null
+          },
+          companyType: store.companyType || null,
+          operationalStatus: store.registry_status || "Ativa",
+          totalPartners: store.partners?.length || 0,
+          hasUspPartners: store.partners?.some(p => p.nusp) || false,
+          wantsToAddMorePartners: false,
+          incubatorName: store.ecosystems || null,
+          isUnicorn: false,
+          agreements: store.permissions || []
         };
 
 

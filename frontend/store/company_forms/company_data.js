@@ -16,6 +16,10 @@ const state = () => ({
     cep: "",
   },
   company_nature: "",
+  category: "",
+  companyType: "",
+  ecosystems: "",
+  incubated: "",
 });
 
 const getters = {
@@ -35,6 +39,10 @@ const getters = {
   state: (s) => s.address.state,
   cep: (s) => s.address.cep,
   company_nature: (s) => s.company_nature,
+  category: (s) => s.category,
+  companyType: (s) => s.companyType,
+  ecosystems: (s) => s.ecosystems,
+  incubated: (s) => s.incubated,
 };
 
 const mutations = {
@@ -90,6 +98,14 @@ const actions = {
     }),
   setCompanyNature: ({ commit }, value) =>
     commit("setFormField", { key: "company_nature", value }),
+  setCategory: ({ commit }, value) =>
+    commit("setFormField", { key: "category", value }),
+  setCompanyType: ({ commit }, value) =>
+    commit("setFormField", { key: "companyType", value }),
+  setEcosystems: ({ commit }, value) =>
+    commit("setFormField", { key: "ecosystems", value }),
+  setIncubated: ({ commit }, value) =>
+    commit("setFormField", { key: "incubated", value }),
 };
 
 const prepareSection = (obj) => ({
@@ -109,6 +125,10 @@ const prepareSection = (obj) => ({
     state: obj.state,
     zipcode: obj.cep,
     company_nature: obj.company_nature,
+    category: obj.category,
+    companyType: obj.companyType,
+    ecosystems: obj.ecosystems,
+    incubated: obj.incubated,
   },
 });
 

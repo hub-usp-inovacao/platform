@@ -7,6 +7,9 @@ const state = () => ({
   socialMedias: [],
   logo: "",
   logoFile: null,
+  linkedin: "",
+  instagram: "",
+  facebook: "",
 });
 
 const getters = {
@@ -19,6 +22,9 @@ const getters = {
   socialMedias: (s) => s.socialMedias,
   logo: (s) => s.logo,
   logoFile: (s) => s.logoFile,
+  linkedin: (s) => s.linkedin,
+  instagram: (s) => s.instagram,
+  facebook: (s) => s.facebook,
 };
 
 const mutations = {
@@ -43,6 +49,12 @@ const actions = {
     commit("setFormField", { key: "logo", value }),
   setLogoFile: ({ commit }, value) =>
     commit("setFormField", { key: "logoFile", value }),
+  setLinkedin: ({ commit }, value) =>
+    commit("setFormField", { key: "linkedin", value }),
+  setInstagram: ({ commit }, value) =>
+    commit("setFormField", { key: "instagram", value }),
+  setFacebook: ({ commit }, value) =>
+    commit("setFormField", { key: "facebook", value }),
 };
 
 const prepareSection = (obj) => ({

@@ -239,6 +239,7 @@ export default {
       state: "company_forms/state",
       cep: "company_forms/cep",
       company_nature: "company_forms/company_nature",
+      category: "company_forms/category",
     }),
   },
   mounted() {
@@ -264,6 +265,7 @@ export default {
       setState: "company_forms/setState",
       setCep: "company_forms/setCep",
       setCompanyNature: "company_forms/setCompanyNature",
+      setCategory: "company_forms/setCategory",
     }),
     async getStates() {
       const response = await fetch(
