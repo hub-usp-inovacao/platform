@@ -36,3 +36,6 @@ out/
 
 ### Kotlin Language Server ###
 kls_database.db
+
+### Google Service Account ###
+credentials.json
