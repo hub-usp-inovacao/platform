@@ -58,7 +58,10 @@ fun CompanyModel.toCatalogCompany(): Company =
                     )
                 },
                 url = this.url,
-                year = this.year
+                year = this.year,
+                linkedin = this.linkedin,
+                instagram = this.instagram,
+                facebook = this.facebook
         )
 
 class CatalogCompanyRepositoryImpl(db: MongoDatabase) : CompanyRepository {

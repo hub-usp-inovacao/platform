@@ -23,7 +23,10 @@ data class CompanyModel(
     val technologies: Set<String>,
     val partners: List<PartnerModel>,
     val url: String? = null,
-    val year: String
+    val year: String,
+    val linkedin: String? = null,
+    val instagram: String? = null,
+    val facebook: String? = null
 )
 @Serializable
 data class PartnerModel(
@@ -35,13 +38,13 @@ data class PartnerModel(
     val phone: String,
 )
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class CompanyClassificationModel(
     val major: String,
     val minor: String
 )
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class CompanyAddressModel(
     val cep: String,
     val city: String,

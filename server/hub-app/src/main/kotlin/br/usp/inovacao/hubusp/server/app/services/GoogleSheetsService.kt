@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.services
 
-import br.usp.inovacao.hubusp.server.app.models.CompanyForm
+import br.usp.inovacao.hubusp.server.app.modules.CompanyForm
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -77,13 +77,10 @@ class GoogleSheetsService {
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val responseBody = response.bodyAsText()
-
-                    // Tentar parse como JSON
                     return try {
                         val scriptResponse = Json.decodeFromString(GoogleScriptResponse.serializer(), responseBody)
                         scriptResponse.status == "success"
-                    } catch (e: Exception) {
-                        // Se não for JSON, verificar se a resposta indica sucesso
+                    } catch (_: Exception) {
                         responseBody.contains("success", ignoreCase = true) ||
                         responseBody.contains("adicionado", ignoreCase = true) ||
                         responseBody.contains("inserido", ignoreCase = true)
@@ -104,7 +101,7 @@ class GoogleSheetsService {
             "endereco", "bairro", "cidade", "estado", "cep",
             "telefones", "emails", "descricao", "servicos",
             "tecnologias", "site", "incubada", "ecossistemas",
-            "tamanho_empresa", "odss", "redes_sociais",
+            "tamanho_empresa", "odss", "linkedin", "instagram", "facebook",
             "quer_selo_dna", "email_contato_dna", "nome_contato_dna", "acordos_dna",
             "categoria_dna", "status_confirmacao_dna", "funcionarios_clt",
             "colaboradores_pj", "estagiarios_bolsistas", "total_funcionarios",
@@ -153,7 +150,9 @@ class GoogleSheetsService {
             companyForm.ecosystems.joinToString(";"),
             companyForm.companySize.joinToString(";"),
             companyForm.odss?.joinToString(";") ?: "",
-            companyForm.socialMedias.joinToString(";"),
+            companyForm.linkedin ?: "",
+            companyForm.instagram ?: "",
+            companyForm.facebook ?: "",
             if (companyForm.dnaUspInfo.wantsSeal) "TRUE" else "FALSE",
             companyForm.dnaUspInfo.contactEmail ?: "",
             companyForm.dnaUspInfo.contactName ?: "",

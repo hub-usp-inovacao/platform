@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
-import br.usp.inovacao.hubusp.server.app.models.CompanyForm
 import br.usp.inovacao.hubusp.server.app.services.GoogleSheetsService
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
