@@ -96,105 +96,119 @@ class GoogleSheetsService {
     }
 
     private fun createHeaders(companyForm: CompanyForm): List<String> {
-        val mainHeaders = listOf(
-            "nome", "razao_social", "cnpj", "ano_fundacao", "cnae",
-            "endereco", "bairro", "cidade", "estado", "cep",
-            "telefones", "emails", "descricao", "servicos",
-            "tecnologias", "site", "incubada", "ecossistemas",
-            "tamanho_empresa", "odss", "linkedin", "instagram", "facebook",
-            "quer_selo_dna", "email_contato_dna", "nome_contato_dna", "acordos_dna",
-            "categoria_dna", "status_confirmacao_dna", "funcionarios_clt",
-            "colaboradores_pj", "estagiarios_bolsistas", "total_funcionarios",
-            "tem_investimento", "tipos_investimento", "valor_proprio",
-            "valor_anjo", "valor_venture", "valor_private_equity",
-            "valor_pipe", "outros_investimentos", "faturamento",
-            "porte_rfb", "tipo_empresa", "status_operacional",
-            "total_socios", "tem_socios_usp", "nome_incubadora",
-            "eh_unicornio", "acordos_empresa", "status_confirmacao"
+        return listOf(
+            "cnpj", "nome_fantasia", "razao_social", "ano_fundacao", "cnae",
+            "telefone_comercial", "email_institucional", "endereco", "bairro",
+            "cidade", "estado", "cep", "descricao", "produtos_servicos",
+            "tecnologias", "logotipo", "site", "incubadora_parque",
+            "qual_incubadora", "unicornio", "total_colaboradores", "ods",
+            "linkedin", "instagram", "youtube", "facebook", "quer_selo_dna",
+            "email_contato_dna", "nome_responsavel_dna", "contrato_dna",
+            "informacoes_verdadeiras", "acordos_empresa", "nomes_socios",
+            "nusps_socios", "vinculos_socios", "unidades_socios", "cargos_socios",
+            "emails_socios", "telefones_socios", "total_socios",
+            "tem_socios_usp", "adicionar_mais_socios", "funcionarios_clt",
+            "colaboradores_pj", "estagiarios_bolsistas", "recebeu_investimento",
+            "tipos_investimento", "valor_proprio", "valor_anjo",
+            "valor_venture_capital", "valor_private_equity", "valor_pipe",
+            "outros_investimentos", "faturamento_2022", "porte_rfb",
+            "somatorio_colaboradores", "tipo_empresa", "status_operacional",
+            "indice", "vinculo_incubadora", "confirmacao_vinculo_usp",
+            "categoria_dna_usp", "confirmacao_vinculo_empresa"
         )
-
-        val partnerHeaders = companyForm.partners?.withIndex()?.flatMap { (index, _) ->
-            listOf(
-                "socio_${index + 1}_nome",
-                "socio_${index + 1}_nusp",
-                "socio_${index + 1}_vinculo",
-                "socio_${index + 1}_unidade",
-                "socio_${index + 1}_email",
-                "socio_${index + 1}_telefone",
-                "socio_${index + 1}_cargo"
-            )
-        } ?: emptyList()
-
-        return mainHeaders + partnerHeaders
     }
 
     private fun createCompanyRow(companyForm: CompanyForm): List<String> {
-        val mainValues = listOf(
+        val names: List<String>
+        val nusps: List<String>
+        val bonds: List<String>
+        val unities: List<String>
+        val positions: List<String>
+        val emails: List<String>
+        val phones: List<String>
+
+        if (companyForm.partners != null && companyForm.partners.isNotEmpty()) {
+            names = companyForm.partners.map { it.name }
+            nusps = companyForm.partners.map { it.nusp ?: "" }
+            bonds = companyForm.partners.map { it.bond ?: "" }
+            unities = companyForm.partners.map { it.unity ?: "" }
+            positions = companyForm.partners.map { it.position ?: "" }
+            emails = companyForm.partners.map { it.email ?: "" }
+            phones = companyForm.partners.map { it.phone ?: "" }
+        } else {
+            names = companyForm.partnerNames
+            nusps = companyForm.partnerNusps
+            bonds = companyForm.partnerBonds
+            unities = companyForm.partnerUnities
+            positions = companyForm.partnerPositions
+            emails = companyForm.partnerEmails
+            phones = companyForm.partnerPhones
+        }
+
+        return listOf(
+            companyForm.cnpj,
             companyForm.name,
             companyForm.corporateName,
-            companyForm.cnpj,
             companyForm.year,
             companyForm.cnae,
+            companyForm.phones.joinToString(";"),
+            companyForm.emails.joinToString(";"),
             companyForm.address.venue,
             companyForm.address.neighborhood,
             companyForm.address.city,
             companyForm.address.state,
             companyForm.address.cep,
-            companyForm.phones.joinToString(";"),
-            companyForm.emails.joinToString(";"),
             companyForm.description,
             companyForm.services.joinToString(";"),
             companyForm.technologies.joinToString(";"),
+            companyForm.logo ?: "",
             companyForm.url ?: "",
             companyForm.incubated,
             companyForm.ecosystems.joinToString(";"),
-            companyForm.companySize.joinToString(";"),
+            if (companyForm.isUnicorn == true) "Sim" else "Não",
+            companyForm.totalCollaborators?.toString() ?: "",
             companyForm.odss?.joinToString(";") ?: "",
             companyForm.linkedin ?: "",
             companyForm.instagram ?: "",
+            companyForm.youtube ?: "",
             companyForm.facebook ?: "",
-            if (companyForm.dnaUspInfo.wantsSeal) "TRUE" else "FALSE",
-            companyForm.dnaUspInfo.contactEmail ?: "",
-            companyForm.dnaUspInfo.contactName ?: "",
-            companyForm.dnaUspInfo.contactAgreements.joinToString(";"),
-            companyForm.dnaUspInfo.category ?: "",
-            companyForm.dnaUspInfo.confirmationStatus ?: "",
-            companyForm.employeeInfo.cltEmployees.toString(),
-            companyForm.employeeInfo.pjCollaborators.toString(),
-            companyForm.employeeInfo.internsScholars.toString(),
-            companyForm.employeeInfo.totalEmployees.toString(),
-            if (companyForm.investmentInfo.hasInvestment) "TRUE" else "FALSE",
-            companyForm.investmentInfo.investmentTypes.joinToString(";"),
-            companyForm.investmentInfo.ownInvestmentAmount ?: "",
-            companyForm.investmentInfo.angelInvestmentAmount ?: "",
-            companyForm.investmentInfo.ventureCapitalAmount ?: "",
-            companyForm.investmentInfo.privateEquityAmount ?: "",
-            companyForm.investmentInfo.pipeAmount ?: "",
-            companyForm.investmentInfo.otherInvestmentsAmount ?: "",
-            companyForm.investmentInfo.revenue ?: "",
-            companyForm.investmentInfo.companySize ?: "",
+            if (companyForm.dnaUspWanted) "Sim" else "Não",
+            companyForm.dnaUspContactEmail ?: "",
+            companyForm.dnaUspContactName ?: "",
+            companyForm.dnaUspContract ?: "",
+            if (companyForm.truthfulInformation) "Sim" else "Não",
+            companyForm.agreementOptions.joinToString(";"),
+            names.mapIndexed { index: Int, name: String -> "Sócio ${index + 1}: $name" }.joinToString(";"),
+            nusps.mapIndexed { index: Int, nusp: String -> "NUSP Sócio ${index + 1}: $nusp" }.joinToString(";"),
+            bonds.mapIndexed { index: Int, bond: String -> "Vínculo Sócio ${index + 1}: $bond" }.joinToString(";"),
+            unities.mapIndexed { index: Int, unity: String -> "Unidade Sócio ${index + 1}: $unity" }.joinToString(";"),
+            positions.mapIndexed { index: Int, position: String -> "Cargo Sócio ${index + 1}: $position" }.joinToString(";"),
+            emails.mapIndexed { index: Int, email: String -> "Email Sócio ${index + 1}: $email" }.joinToString(";"),
+            phones.mapIndexed { index: Int, phone: String -> "Telefone Sócio ${index + 1}: $phone" }.joinToString(";"),
+            companyForm.totalPartners?.toString() ?: names.size.toString(),
+            if (companyForm.hasUspPartners == true || nusps.any { it.isNotEmpty() }) "Sim" else "Não",
+            if (companyForm.wantsToAddMorePartners == true) "Sim" else "Não",
+            companyForm.cltEmployees.toString(),
+            companyForm.pjCollaborators.toString(),
+            companyForm.internsScholars.toString(),
+            if (companyForm.hasInvestment) "Sim" else "Não",
+            companyForm.investmentTypes.joinToString(";"),
+            companyForm.ownInvestmentAmount ?: "",
+            companyForm.angelInvestmentAmount ?: "",
+            companyForm.ventureCapitalAmount ?: "",
+            companyForm.privateEquityAmount ?: "",
+            companyForm.pipeAmount ?: "",
+            companyForm.otherInvestmentsAmount ?: "",
+            companyForm.revenue2022 ?: "",
+            companyForm.rfbSize ?: "",
+            companyForm.totalSum?.toString() ?: "",
             companyForm.companyType ?: "",
             companyForm.operationalStatus ?: "",
-            companyForm.totalPartners?.toString() ?: "",
-            if (companyForm.hasUspPartners == true) "TRUE" else "FALSE",
-            companyForm.incubatorName ?: "",
-            if (companyForm.isUnicorn == true) "TRUE" else "FALSE",
-            companyForm.agreements.joinToString(";"),
-            "Pendente"
+            companyForm.index ?: "",
+            companyForm.incubatorBond ?: "",
+            companyForm.uspBondConfirmation ?: "",
+            companyForm.uspDnaCategory ?: "",
+            companyForm.companyBondConfirmation ?: ""
         )
-
-        val partnerValues = companyForm.partners?.flatMap { partner ->
-            listOf(
-                partner.name,
-                partner.nusp ?: "",
-                partner.bond ?: "",
-                partner.unity ?: "",
-                partner.email ?: "",
-                partner.phone ?: "",
-                partner.position ?: ""
-            )
-        } ?: emptyList()
-
-        return mainValues + partnerValues
     }
 }
