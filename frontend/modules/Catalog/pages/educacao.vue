@@ -127,24 +127,9 @@ export default {
           items: ["Graduação", "Pós-graduação"],
         },
         {
-          label: "Período de Oferecimento",
-          items: Array.from(
-            this.disciplines.reduce((acc, discipline) => {
-              const offeringPeriod = discipline.offeringPeriod;
-              const hasPeriod = offeringPeriod && !acc.has(offeringPeriod) && offeringPeriod != "N/D"
-              if (hasPeriod)
-                acc.add(offeringPeriod);
-              return acc;
-            }, new Set())
-          ),
-        },
-        {
           label: "Sendo Oferecida",
-          items: [
-            "Sim",
-            "Não"
-          ]
-        }
+          items: ["Sim", "Não"],
+        },
       ];
     },
     searchTerm() {
@@ -156,8 +141,7 @@ export default {
         campus: this.filters?.terciary[0],
         unity: this.filters?.terciary[1],
         nature: this.filters?.terciary[3],
-        offeringPeriod: this.filters?.terciary[4],
-        beingOffered: this.filters?.terciary[5],
+        beingOffered: this.filters?.terciary[4],
         term: this.searchTerm,
       };
     },
