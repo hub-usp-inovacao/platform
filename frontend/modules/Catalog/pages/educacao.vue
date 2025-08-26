@@ -59,7 +59,6 @@ import Background from "../components/Background.vue";
 import Panel from "../components/Panel.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import DisplayData from "../components/DisplayData.vue";
-import NDText from "../components/NDText.vue";
 
 import { debounce } from "debounce";
 
@@ -69,7 +68,6 @@ export default {
     Background,
     MultipleFilters,
     DisplayData,
-    NDText,
   },
   data: () => ({
     search: { term: "" },
