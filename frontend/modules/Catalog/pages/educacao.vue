@@ -29,6 +29,13 @@
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
           <p class="body-2">{{ item.nature }}</p>
+          <p class="body-2">
+            {{
+              item.beingOffered
+                ? "Sendo oferecida"
+                : "Não está sendo oferecida no momento"
+            }}
+          </p>
         </v-container>
       </template>
       <template #content="{ item }">
