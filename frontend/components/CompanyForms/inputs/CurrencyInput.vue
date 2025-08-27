@@ -1,103 +1,116 @@
 <template>
   <v-text-field
+    :value="formattedValue"
     :label="label"
-    :value="value"
     :hint="hint"
+    :error="hasError"
+    :error-messages="errorMessage"
+    :required="required"
+    :rules="validationRules"
+    @input="handleInput"
+    @blur="handleBlur"
+    placeholder="R$ 0,00"
     persistent-hint
-    @keydown="handleKeyDown"
-    @click="moveCursorToTheEnd"
   />
 </template>
 
 <script>
 export default {
-  components: {},
   props: {
     value: {
-      type: String,
-      required: false,
-      default: "R$ 0,00",
+      type: [String, Number],
+      default: '',
     },
     label: {
       type: String,
-      required: true,
+      default: 'Valor',
     },
     hint: {
       type: String,
-      required: false,
-      default: () => "",
+      default: 'Digite um valor em reais',
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      hasError: false,
+      errorMessage: '',
+    };
+  },
+  computed: {
+    formattedValue() {
+      return this.formatCurrency(this.value);
+    },
+    validationRules() {
+      return this.required ? [this.validateCurrency] : [];
     },
   },
   methods: {
-    handleKeyDown(e) {
-      const TAB = 9;
-      const BACKSPACE = 8;
-      const NUMBERS =
-        (e.keyCode >= 48 && e.keyCode <= 57) ||
-        (e.keyCode >= 96 && e.keyCode <= 105);
+    formatCurrency(value) {
+      if (!value) return '';
 
-      if (e.keyCode !== TAB) {
-        e.preventDefault();
-        this.moveCursorToTheEnd(e);
-      }
+      const numbers = value.toString().replace(/\D/g, '');
 
-      if (e.keyCode === BACKSPACE) {
-        this.removeLastDigit();
-      }
+      if (!numbers) return '';
 
-      if (NUMBERS) {
-        this.updateCurrencyValue(e.key);
-      }
+      const cents = parseInt(numbers);
+
+      const formatted = (cents / 100).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+
+      return formatted;
     },
-    formatCurrency(digits) {
-      const length = digits.length;
-      const digitsBeforeComma = digits.slice(0, length - 2);
-      const lastTwoDigits = digits.slice(length - 2);
-      const formattedValue = digitsBeforeComma
-        .reverse()
-        .reduce(
-          (acc, digit, index) =>
-            index % 3 === 0 && index !== 0
-              ? acc.concat([".", digit])
-              : acc.concat(digit),
-          []
-        )
-        .reverse()
-        .concat(",")
-        .concat(lastTwoDigits)
-        .join("");
 
-      return `R$ ${formattedValue}`;
+    handleInput(value) {
+      const cleanValue = value.replace(/[^\d,.\s]/g, '');
+      const numbers = cleanValue.replace(/\D/g, '');
+
+      const sanitizedNumbers = numbers || '0';
+
+      this.$emit('input', sanitizedNumbers);
+      this.validateInput(sanitizedNumbers);
     },
-    updateCurrencyValue(newNumber) {
-      const value = this.value || "R$ 0,00";
-      const allDigits = value
-        .split("")
-        .filter((val) => "R$ .,".split("").every((elem) => elem !== val))
-        .concat(newNumber);
 
-      if (allDigits[0] === "0") {
-        allDigits.shift();
+    handleBlur() {
+      const finalValue = this.value || '0';
+      this.validateInput(finalValue);
+    },
+
+    validateInput(value) {
+      const numericValue = value || '0';
+
+      if (this.required && (numericValue === '0' || numericValue === '')) {
+        this.hasError = true;
+        this.errorMessage = 'Campo obrigatório';
+        return false;
       }
 
-      this.$emit("input", this.formatCurrency(allDigits));
-    },
-    removeLastDigit() {
-      const allDigits = this.value
-        .split("")
-        .filter((val) => "R$ .,".split("").every((elem) => elem !== val));
-
-      if (allDigits.length <= 3) {
-        allDigits.unshift("0");
+      if (isNaN(parseInt(numericValue))) {
+        this.hasError = true;
+        this.errorMessage = 'Valor inválido';
+        return false;
       }
 
-      allDigits.pop();
-      this.$emit("input", this.formatCurrency(allDigits));
+      this.hasError = false;
+      this.errorMessage = '';
+      return true;
     },
-    moveCursorToTheEnd(event) {
-      const input = event.target;
-      const length = input.value.length;
-      input.setSelectionRange(length, length);
+
+    validateCurrency(value) {
+      if (this.required && (!value || value === '0')) {
+        return 'Campo obrigatório';
+      }
+
+      return true;
+    },
+
+    isValid() {
+      return this.validateInput(this.value);
     },
   },
 };

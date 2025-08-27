@@ -18,8 +18,7 @@ const state = () => ({
   company_nature: "",
   category: "",
   companyType: "",
-  ecosystems: "",
-  incubated: "",
+  isUnicorn: false,
 });
 
 const getters = {
@@ -41,8 +40,7 @@ const getters = {
   company_nature: (s) => s.company_nature,
   category: (s) => s.category,
   companyType: (s) => s.companyType,
-  ecosystems: (s) => s.ecosystems,
-  incubated: (s) => s.incubated,
+  isUnicorn: (s) => s.isUnicorn,
 };
 
 const mutations = {
@@ -102,10 +100,8 @@ const actions = {
     commit("setFormField", { key: "category", value }),
   setCompanyType: ({ commit }, value) =>
     commit("setFormField", { key: "companyType", value }),
-  setEcosystems: ({ commit }, value) =>
-    commit("setFormField", { key: "ecosystems", value }),
-  setIncubated: ({ commit }, value) =>
-    commit("setFormField", { key: "incubated", value }),
+  setIsUnicorn: ({ commit }, value) =>
+    commit("setFormField", { key: "isUnicorn", value }),
 };
 
 const prepareSection = (obj) => ({
@@ -120,15 +116,14 @@ const prepareSection = (obj) => ({
     phones: obj.phones,
     emails: obj.emails,
     street: obj.address.venue,
-    neighborhood: obj.neighborhood,
-    city: obj.city,
-    state: obj.state,
-    zipcode: obj.cep,
+    neighborhood: obj.address.neighborhood,
+    city: obj.address.city,
+    state: obj.address.state,
+    zipcode: obj.address.cep,
     company_nature: obj.company_nature,
     category: obj.category,
     companyType: obj.companyType,
-    ecosystems: obj.ecosystems,
-    incubated: obj.incubated,
+    isUnicorn: obj.isUnicorn,
   },
 });
 

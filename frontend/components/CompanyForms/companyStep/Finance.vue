@@ -44,6 +44,14 @@ export default {
       const date = new Date();
       return date.getFullYear() - 1;
     },
+    validateStep() {
+      const errors = [];
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors,
+      };
+    },
   },
 };
 </script>

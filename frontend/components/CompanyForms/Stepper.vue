@@ -1,16 +1,31 @@
 <template>
   <v-container>
     <v-alert dense type="error" class="text-center" v-if="hasErrors">
-      Etapas marcadas com <code>(!)</code> contém erros de validação
+      Etapas marcadas com <code>(!)</code> contêm erros de validação
     </v-alert>
-    <v-stepper v-model="e1" alt-labels non-linear>
+
+    <v-alert
+      v-if="validationErrors.length > 0"
+      type="error"
+      dismissible
+      class="ma-4"
+      @input="clearValidationErrors"
+    >
+      <strong>Corrija os seguintes erros antes de continuar:</strong>
+      <ul class="mt-2">
+        <li v-for="error in validationErrors" :key="error">{{ error }}</li>
+      </ul>
+    </v-alert>
+
+    <v-stepper v-model="e1" alt-labels>
       <v-stepper-header>
         <template v-for="{ id, title, hasError } in steps">
           <v-stepper-step
               :key="`header_${id}`"
-              editable
               :step="id"
               :color="hasError ? 'error' : 'success'"
+              :complete="isStepCompleted(id)"
+              :rules="[() => isStepAccessible(id)]"
           >
             <v-flex justify-center>
               <template v-if="hasError">
@@ -43,6 +58,7 @@
               :is="component"
               :is-update="update"
               class="component-border mb-12"
+              :ref="`step${id}`"
           ></component>
 
           <v-row class="mr-4" justify="end">
@@ -102,7 +118,9 @@ export default {
     showResult: false,
     resultTitle: "",
     resultMessage: "",
-    isLoading: false
+    isLoading: false,
+    validationErrors: [],
+    completedSteps: new Set([1])
   }),
   computed: {
     partnersHasErrors() {
@@ -221,113 +239,67 @@ export default {
       const length = this.numberOfSteps;
       const lastId = this.steps[length - 1].id;
 
+      if (!this.validateCurrentStep(id)) {
+        return;
+      }
+
+      this.completedSteps.add(id);
+
       if (id < lastId) {
         this.e1 = id + 1;
+        this.completedSteps.add(id + 1);
       } else {
         this.sendData();
       }
+    },
+    isStepAccessible(stepId) {
+      return this.completedSteps.has(stepId);
+    },
+    validateCurrentStep(stepId) {
+      const currentStepComponent = this.getCurrentStepComponent(stepId);
+
+      if (currentStepComponent && typeof currentStepComponent.validateStep === 'function') {
+        const validation = currentStepComponent.validateStep();
+
+        if (!validation.isValid) {
+          this.validationErrors = validation.errors;
+          this.$vuetify.goTo(0);
+          return false;
+        }
+      }
+
+      this.validationErrors = [];
+      return true;
+    },
+    getCurrentStepComponent(stepId) {
+      const stepRef = this.$refs[`step${stepId}`];
+      return Array.isArray(stepRef) ? stepRef[0] : stepRef;
+    },
+    clearValidationErrors() {
+      this.validationErrors = [];
     },
     async sendData() {
       this.isLoading = true;
 
       try {
-        // Acessando dados do store corretamente
-        const store = this.$store.state.company_forms;
+        const result = await this.$store.dispatch('company_forms/updateCompanyForm');
 
-        const formData = {
-          name: store.name,
-          corporateName: store.corporateName,
-          cnpj: store.cnpj,
-          year: store.year,
-          cnae: store.cnae,
-          address: {
-            venue: store.address.venue,
-            neighborhood: store.address.neighborhood,
-            city: store.address.city,
-            state: store.address.state,
-            cep: store.address.cep
-          },
-          phones: store.phones,
-          emails: store.emails,
-          description: store.description,
-          services: store.services,
-          technologies: store.technologies,
-          logo: store.logo,
-          url: store.site,
-          incubated: store.incubated,
-          ecosystems: store.ecosystems ? [store.ecosystems] : [],
-          companySize: store.size ? [store.size] : [],
-          partners: store.partners.map(p => ({
-            name: p.name,
-            nusp: p.nusp || null,
-            bond: p.bond || null,
-            unity: p.unity || null,
-            email: p.email || null,
-            phone: p.phone || null,
-            position: p.role || null
-          })),
-          odss: store.odss || [],
-          linkedin: store.linkedin || null,
-          instagram: store.instagram || null,
-          facebook: store.facebook || null,
-          dnaUspInfo: {
-            wantsSeal: store.wantsDna,
-            contactEmail: store.wantsDna ? store.dnaContactEmail : null,
-            contactName: store.wantsDna ? store.dnaContactName : null,
-            contactAgreements: store.permissions || [],
-            category: store.category || null,
-            confirmationStatus: "Pendente"
-          },
-          employeeInfo: {
-            cltEmployees: parseInt(store.numberOfCLTEmployees) || 0,
-            pjCollaborators: parseInt(store.numberOfPJColaborators) || 0,
-            internsScholars: parseInt(store.numberOfInterns) || 0,
-            totalEmployees: (parseInt(store.numberOfCLTEmployees) || 0) + (parseInt(store.numberOfPJColaborators) || 0) + (parseInt(store.numberOfInterns) || 0)
-          },
-          investmentInfo: {
-            hasInvestment: store.received === "Sim",
-            investmentTypes: store.investments || [],
-            ownInvestmentAmount: store.investmentsValues?.own || null,
-            angelInvestmentAmount: store.investmentsValues?.angel || null,
-            ventureCapitalAmount: store.investmentsValues?.venture || null,
-            privateEquityAmount: store.investmentsValues?.equity || null,
-            pipeAmount: store.investmentsValues?.pipe || null,
-            otherInvestmentsAmount: store.investmentsValues?.others || null,
-            revenue: store.lastYear || null,
-            companySize: store.size || null
-          },
-          companyType: store.companyType || null,
-          operationalStatus: store.registry_status || "Ativa",
-          totalPartners: store.partners?.length || 0,
-          hasUspPartners: store.partners?.some(p => p.nusp) || false,
-          wantsToAddMorePartners: false,
-          incubatorName: store.ecosystems || null,
-          isUnicorn: false,
-          agreements: store.permissions || []
-        };
-
-
-        const response = await fetch("http://localhost:8080/company/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (result.status === "enviado") {
+        if (result) {
           this.resultTitle = "Sucesso!";
           this.resultMessage = "Seu formulário foi enviado com sucesso!";
+
+          setTimeout(() => {
+            this.$router.push('/');
+          }, 3000);
         } else {
           this.resultTitle = "Erro";
-          this.resultMessage = `Ocorreu um erro: ${result.mensagem}`;
+          this.resultMessage = "Ocorreu um erro ao validar os dados. Verifique se todos os campos obrigatórios foram preenchidos corretamente.";
         }
 
       } catch (error) {
+        console.error('Erro ao enviar formulário:', error);
         this.resultTitle = "Erro";
-        this.resultMessage = `Ocorreu um erro: ${error.message}`;
+        this.resultMessage = `Ocorreu um erro: ${error.message || 'Erro interno'}`;
       } finally {
         this.isLoading = false;
         this.showResult = true;

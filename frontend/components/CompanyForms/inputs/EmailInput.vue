@@ -9,8 +9,9 @@
     :rules="validationRules"
     @input="handleInput"
     @blur="handleBlur"
-    @keypress="onKeyPress"
+    placeholder="exemplo@dominio.com"
     persistent-hint
+    type="email"
   />
 </template>
 
@@ -23,23 +24,15 @@ export default {
     },
     label: {
       type: String,
-      default: 'Texto',
+      default: 'Email',
     },
     hint: {
       type: String,
-      default: '',
+      default: 'Digite um email válido',
     },
     required: {
       type: Boolean,
       default: false,
-    },
-    minLength: {
-      type: Number,
-      default: 0,
-    },
-    maxLength: {
-      type: Number,
-      default: null,
     },
   },
   data() {
@@ -50,26 +43,13 @@ export default {
   },
   computed: {
     validationRules() {
-      return this.required ? [this.validateText] : [];
+      return this.required ? [this.validateEmail] : [];
     },
   },
   methods: {
-    onKeyPress(event) {
-      if (this.maxLength && this.value && this.value.length >= this.maxLength) {
-        event.preventDefault();
-        return;
-      }
-    },
-
     handleInput(value) {
-      let processedValue = value;
-
-      if (this.maxLength && value.length > this.maxLength) {
-        processedValue = value.slice(0, this.maxLength);
-      }
-
-      this.$emit('input', processedValue);
-      this.validateInput(processedValue);
+      this.$emit('input', value.toLowerCase().trim());
+      this.validateInput(value);
     },
 
     handleBlur() {
@@ -77,15 +57,15 @@ export default {
     },
 
     validateInput(value) {
-      if (this.required && (!value || value.trim() === '')) {
+      if (this.required && !value.trim()) {
         this.hasError = true;
         this.errorMessage = 'Campo obrigatório';
         return false;
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
+      if (value && !this.isValidEmail(value)) {
         this.hasError = true;
-        this.errorMessage = `Mínimo ${this.minLength} caracteres`;
+        this.errorMessage = 'Email inválido';
         return false;
       }
 
@@ -94,16 +74,21 @@ export default {
       return true;
     },
 
-    validateText(value) {
-      if (this.required && (!value || value.trim() === '')) {
+    validateEmail(value) {
+      if (this.required && !value.trim()) {
         return 'Campo obrigatório';
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
-        return `Mínimo ${this.minLength} caracteres`;
+      if (value && !this.isValidEmail(value)) {
+        return 'Email inválido';
       }
 
       return true;
+    },
+
+    isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
     },
 
     isValid() {

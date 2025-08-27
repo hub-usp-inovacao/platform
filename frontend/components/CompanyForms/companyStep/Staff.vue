@@ -50,6 +50,14 @@ export default {
       setNumberOfPJColaborators: "company_forms/setNumberOfPJColaborators",
       setNumberOfInterns: "company_forms/setNumberOfInterns",
     }),
+    validateStep() {
+      const errors = [];
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors,
+      };
+    },
   },
 };
 </script>

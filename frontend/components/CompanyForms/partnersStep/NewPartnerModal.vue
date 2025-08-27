@@ -12,36 +12,67 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <ShortTextInput v-model="formData.name" label="Nome completo" />
-            <ShortTextInput
-              v-model="formData.email"
-              label="Email"
-              hint="Este dado não será publicado."
+            <v-alert
+              v-if="validationErrors.length > 0"
+              type="error"
+              dismissible
+              class="mb-4"
+              @input="clearValidationErrors"
+            >
+              <strong>Corrija os seguintes erros:</strong>
+              <ul class="mt-2">
+                <li v-for="error in validationErrors" :key="error">{{ error }}</li>
+              </ul>
+            </v-alert>
+
+            <TextInputFormatted
+              v-model="formData.name"
+              label="Nome completo *"
+              capitalization="title"
+              :required="true"
+              :min-length="3"
+              ref="nameInput"
             />
-            <ShortTextInput
+            <EmailInput
+              v-model="formData.email"
+              label="Email *"
+              hint="Este dado não será publicado."
+              :required="true"
+              ref="emailInput"
+            />
+            <PhoneInput
               v-model="formData.phone"
               class="mt-5"
-              label="Telefone"
+              label="Telefone *"
+              :required="true"
+              ref="phoneInput"
             />
-            <NumberInput
+            <NUSPInput
               v-model="formData.nusp"
               label="Qual o número USP?"
               hint="Insira o seu Nº USP, caso se recorde do mesmo. Se não possui um Nº USP, deixe o campo em branco."
+              ref="nuspInput"
             />
             <Dropdown
               v-model="formData.bond"
-              label="Qual tipo de vínculo já possuiu ou ainda mantém com a USP?"
+              label="Qual tipo de vínculo já possuiu ou ainda mantém com a USP? *"
               :options="bonds"
+              :required="true"
+              ref="bondInput"
             />
             <Dropdown
               v-model="formData.unity"
               label="Com qual instituto, escola ou centro é o vínculo atual ou mais recente?"
               :options="unities"
+              ref="unityInput"
             />
-            <ShortTextInput
+            <TextInputFormatted
               v-model="formData.role"
               class="mt-5"
-              label="Cargo"
+              label="Cargo *"
+              capitalization="title"
+              :required="true"
+              ref="roleInput"
             />
           </v-container>
         </v-card-text>
@@ -60,12 +91,20 @@
 </template>
 
 <script>
-import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
-import NumberInput from "@/components/CompanyForms/inputs/NumberInput.vue";
+import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
+import EmailInput from "@/components/CompanyForms/inputs/EmailInput.vue";
+import PhoneInput from "@/components/CompanyForms/inputs/PhoneInput.vue";
+import NUSPInput from "@/components/CompanyForms/inputs/NUSPInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 
 export default {
-  components: { ShortTextInput, NumberInput, Dropdown },
+  components: {
+    TextInputFormatted,
+    EmailInput,
+    PhoneInput,
+    NUSPInput,
+    Dropdown
+  },
   props: {
     value: {
       type: Boolean,
@@ -88,6 +127,7 @@ export default {
       unity: "",
       role: "",
     },
+    validationErrors: [],
     bonds: [
       "Aluno ou ex-aluno (graduação)",
       "Aluno ou ex-aluno (pós-graduação)",
@@ -128,7 +168,48 @@ export default {
     },
   },
   methods: {
+    validateForm() {
+      const errors = [];
+
+      if (this.$refs.nameInput && !this.$refs.nameInput.isValid()) {
+        errors.push('Nome é obrigatório (mínimo 3 caracteres)');
+      }
+
+      if (this.$refs.emailInput && !this.$refs.emailInput.isValid()) {
+        errors.push('Email inválido ou não preenchido');
+      }
+
+      if (this.$refs.phoneInput && !this.$refs.phoneInput.isValid()) {
+        errors.push('Telefone inválido ou não preenchido');
+      }
+
+      if (this.$refs.roleInput && !this.$refs.roleInput.isValid()) {
+        errors.push('Cargo é obrigatório');
+      }
+
+      if (!this.formData.bond) {
+        errors.push('Vínculo com a USP é obrigatório');
+      }
+
+      if (this.$refs.nuspInput && this.formData.nusp && !this.$refs.nuspInput.isValid()) {
+        errors.push('NUSP inválido');
+      }
+
+      this.validationErrors = errors;
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+
     savePartnerPipeline() {
+      const validation = this.validateForm();
+
+      if (!validation.isValid) {
+        return;
+      }
+
       if (this.updatedPartner) {
         this.update();
       } else {
@@ -151,7 +232,11 @@ export default {
       Object.keys(this.formData).forEach((key) => (this.formData[key] = ""));
     },
     closeDialog() {
+      this.clearValidationErrors();
       this.$emit("close");
+    },
+    clearValidationErrors() {
+      this.validationErrors = [];
     },
   },
 };

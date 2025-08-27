@@ -37,15 +37,40 @@
         @input="setPreDefinedInvestments"
       />
       <div class="mt-5 text-h6 font-weight-regular">
-        Outros
+        Outros investimentos - Valores
         <v-divider />
         <v-container>
-          <MultipleInputs
-            :value="otherInvestments"
-            input-label="Investimento"
-            @items="outros = $event"
-            @input="setOtherInvestments"
-          />
+          <div
+            v-for="(value, index) in localOtherInvestmentValues"
+            :key="`investment-value-${index}`"
+            class="d-flex align-center mb-2"
+          >
+            <CurrencyInput
+              :value="value"
+              :label="`Valor do investimento ${index + 1}`"
+              @input="updateOtherInvestmentValue(index, $event)"
+              class="mr-2"
+            />
+            <v-btn
+              icon
+              small
+              color="error"
+              @click="removeOtherInvestment(index)"
+              :disabled="localOtherInvestmentValues.length <= 1"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <v-btn
+            small
+            color="primary"
+            @click="addOtherInvestment"
+            :disabled="localOtherInvestmentValues.length >= 10"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Adicionar investimento
+          </v-btn>
         </v-container>
       </div>
       <CurrencyInput
@@ -91,14 +116,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import CurrencyInput from "@/components/CompanyForms/inputs/CurrencyInput.vue";
+import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
 
 export default {
   components: {
     Dropdown,
-    MultipleInputs,
     CurrencyInput,
+    TextInputFormatted,
   },
   data: () => ({
     investimentos: [
@@ -110,6 +135,7 @@ export default {
       "PIPE-FAPESP",
       "BNDES e/ou FINEP",
     ],
+    localOtherInvestmentValues: [''],
   }),
   computed: {
     ...mapGetters({
@@ -165,10 +191,12 @@ export default {
       );
     },
     setPreDefinedInvestments(preDefinedInvestments) {
-      this.setInvestments(preDefinedInvestments.concat(this.otherInvestments));
+      const currentOtherInvestments = this.otherInvestments || [];
+      this.setInvestments(preDefinedInvestments.concat(currentOtherInvestments));
     },
     setOtherInvestments(otherInvestments) {
-      this.setInvestments(this.preDefinedInvestments.concat(otherInvestments));
+      const currentPreDefinedInvestments = this.preDefinedInvestments || [];
+      this.setInvestments(currentPreDefinedInvestments.concat(otherInvestments));
     },
     setOwnValue(newValue) {
       this.setInvestmentsValues({ ...this.investmentsValues, own: newValue });
@@ -196,6 +224,65 @@ export default {
     },
     setOtherValue(newValue) {
       this.setInvestmentsValues({ ...this.investmentsValues, others: newValue });
+    },
+    validateStep() {
+      const errors = [];
+
+      if (!this.received) {
+        errors.push('É obrigatório informar se a empresa recebeu investimento');
+      }
+
+      if (this.received === 'Sim') {
+        const hasAnyInvestment = this.preDefinedInvestments.length > 0 ||
+                               this.localOtherInvestmentValues.some(value => value && value.trim() !== '' && value !== '0');
+
+        if (!hasAnyInvestment) {
+          errors.push('É necessário selecionar pelo menos um tipo de investimento ou informar valores de outros investimentos');
+        }
+
+        if (this.hasInvestmentTypeSelected('Investimento próprio') && (!this.ownValue || this.ownValue === '0')) {
+          errors.push('É necessário informar o valor do investimento próprio');
+        }
+        if (this.hasInvestmentTypeSelected('Investimento-anjo') && (!this.angelValue || this.angelValue === '0')) {
+          errors.push('É necessário informar o valor do investimento-anjo');
+        }
+        if (this.hasInvestmentTypeSelected('Venture capital') && (!this.ventureCapitalValue || this.ventureCapitalValue === '0')) {
+          errors.push('É necessário informar o valor do Venture Capital');
+        }
+        if (this.hasInvestmentTypeSelected('Private equity') && (!this.privateEquityValue || this.privateEquityValue === '0')) {
+          errors.push('É necessário informar o valor do Private Equity');
+        }
+        if (this.hasInvestmentTypeSelected('PIPE-FAPESP') && (!this.pipeFapespValue || this.pipeFapespValue === '0')) {
+          errors.push('É necessário informar o valor do PIPE-FAPESP');
+        }
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+    updateOtherInvestmentValue(index, value) {
+      const sanitizedValue = value ? value.toString().trim() : '';
+      this.localOtherInvestmentValues[index] = sanitizedValue;
+      this.saveOtherInvestments();
+    },
+    addOtherInvestment() {
+      if (this.localOtherInvestmentValues.length < 10) {
+        this.localOtherInvestmentValues.push('');
+      }
+    },
+    removeOtherInvestment(index) {
+      if (this.localOtherInvestmentValues.length > 1) {
+        this.localOtherInvestmentValues.splice(index, 1);
+        this.saveOtherInvestments();
+      }
+    },
+    saveOtherInvestments() {
+      const filteredInvestments = this.localOtherInvestmentValues
+        .filter(value => value && value.toString().trim() !== '' && value !== '0')
+        .map((value, index) => `Outros investimentos ${index + 1}`);
+      this.setOtherInvestments(filteredInvestments);
     },
   },
 };

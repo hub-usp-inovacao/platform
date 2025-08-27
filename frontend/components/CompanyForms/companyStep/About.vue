@@ -29,13 +29,12 @@
             A empresa possui uma logotipo, mas ela está hospedada em um link externo que não conseguimos recuperar.
             Envie novamente, por favor.
           </v-alert>
-          <ImageUploader
+          <URLInput
             class="mb-4"
-            :value="logoFile"
-            ref="logoUploader"
-            label="Logotipo da empresa"
-            hint="Selecione uma imagem em boa qualidade."
-            @input="handleLogoUpload"
+            :value="logo"
+            label="URL do logotipo da empresa"
+            hint="Cole aqui o link direto para o logotipo da empresa (ex: https://exemplo.com/logo.png)"
+            @input="setLogo"
           />
         </v-container>
       </div>
@@ -49,22 +48,70 @@
             as 5 principais. Não indique tecnologias utilizadas, apenas aquelas
             desenvolvidas internamente.
           </p>
-          <MultipleInputs
-            :value="technologies"
-            input-label="Tecnologia"
-            @input="setTechnologies"
-          />
+
+          <!-- Campos de Tecnologia -->
+          <div v-for="(tech, index) in localTechnologies" :key="`tech-${index}`" class="d-flex align-center mb-2">
+            <TextInputFormatted
+              :value="tech"
+              :label="`Tecnologia ${index + 1}`"
+              @input="updateTechnology(index, $event)"
+              class="flex-grow-1 mr-2"
+            />
+            <v-btn
+              icon
+              small
+              color="error"
+              @click="removeTechnology(index)"
+              :disabled="localTechnologies.length <= 1"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <v-btn
+            small
+            color="primary"
+            @click="addTechnology"
+            :disabled="localTechnologies.length >= 10"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Adicionar tecnologia
+          </v-btn>
         </v-container>
       </div>
+
       <div class="mt-5 text-h6 font-weight-regular">
         Produtos/serviços
         <v-divider />
         <v-container>
-          <MultipleInputs
-            :value="services"
-            input-label="Produto/Serviço"
-            @input="setServices"
-          />
+          <!-- Campos de Produtos/Serviços -->
+          <div v-for="(service, index) in localServices" :key="`service-${index}`" class="d-flex align-center mb-2">
+            <TextInputFormatted
+              :value="service"
+              :label="`Produto/Serviço ${index + 1}`"
+              @input="updateService(index, $event)"
+              class="flex-grow-1 mr-2"
+            />
+            <v-btn
+              icon
+              small
+              color="error"
+              @click="removeService(index)"
+              :disabled="localServices.length <= 1"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <v-btn
+            small
+            color="primary"
+            @click="addService"
+            :disabled="localServices.length >= 10"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Adicionar produto/serviço
+          </v-btn>
         </v-container>
       </div>
 
@@ -106,21 +153,15 @@
                 <v-icon color="#0077B5" class="mr-2">mdi-linkedin</v-icon>
                 <span class="font-weight-medium">LinkedIn</span>
               </div>
-              <URLInput
+              <URLInputValidated
+                ref="linkedinInput"
                 :value="linkedin"
                 label="URL do perfil LinkedIn"
                 placeholder="https://www.linkedin.com/company/sua-empresa"
                 hint="Cole aqui o link completo do perfil da empresa no LinkedIn"
-                @input="handleLinkedinChange"
+                url-type="linkedin"
+                @input="setLinkedin"
               />
-              <v-alert
-                v-if="linkedinError"
-                type="error"
-                dense
-                class="mt-2"
-              >
-                {{ linkedinError }}
-              </v-alert>
             </div>
 
             <!-- Instagram -->
@@ -129,21 +170,15 @@
                 <v-icon color="#E4405F" class="mr-2">mdi-instagram</v-icon>
                 <span class="font-weight-medium">Instagram</span>
               </div>
-              <URLInput
+              <URLInputValidated
+                ref="instagramInput"
                 :value="instagram"
                 label="URL do perfil Instagram"
                 placeholder="https://www.instagram.com/sua-empresa"
                 hint="Cole aqui o link completo do perfil da empresa no Instagram"
-                @input="handleInstagramChange"
+                url-type="instagram"
+                @input="setInstagram"
               />
-              <v-alert
-                v-if="instagramError"
-                type="error"
-                dense
-                class="mt-2"
-              >
-                {{ instagramError }}
-              </v-alert>
             </div>
 
             <!-- Facebook -->
@@ -152,21 +187,32 @@
                 <v-icon color="#1877F2" class="mr-2">mdi-facebook</v-icon>
                 <span class="font-weight-medium">Facebook</span>
               </div>
-              <URLInput
+              <URLInputValidated
+                ref="facebookInput"
                 :value="facebook"
                 label="URL da página Facebook"
                 placeholder="https://www.facebook.com/sua-empresa"
                 hint="Cole aqui o link completo da página da empresa no Facebook"
-                @input="handleFacebookChange"
+                url-type="facebook"
+                @input="setFacebook"
               />
-              <v-alert
-                v-if="facebookError"
-                type="error"
-                dense
-                class="mt-2"
-              >
-                {{ facebookError }}
-              </v-alert>
+            </div>
+
+            <!-- YouTube -->
+            <div class="social-media-field mb-4">
+              <div class="d-flex align-center mb-2">
+                <v-icon color="#FF0000" class="mr-2">mdi-youtube</v-icon>
+                <span class="font-weight-medium">YouTube</span>
+              </div>
+              <URLInputValidated
+                ref="youtubeInput"
+                :value="youtube"
+                label="URL do canal YouTube"
+                placeholder="https://www.youtube.com/c/sua-empresa"
+                hint="Cole aqui o link completo do canal da empresa no YouTube"
+                url-type="youtube"
+                @input="setYoutube"
+              />
             </div>
           </div>
         </v-container>
@@ -177,19 +223,19 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import LongTextInput from "@/components/CompanyForms/inputs/LongTextInput.vue";
 import URLInput from "@/components/CompanyForms/inputs/URLInput.vue";
+import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import ImageUploader from "@/components/CompanyForms/inputs/ImageUploader.vue";
+import URLInputValidated from "@/components/CompanyForms/inputs/URLInputValidated.vue";
 
 export default {
   components: {
-    MultipleInputs,
     LongTextInput,
     URLInput,
+    TextInputFormatted,
     Dropdown,
-    ImageUploader,
+    URLInputValidated,
   },
   data: () => ({
     odsList: [
@@ -212,9 +258,8 @@ export default {
       "17 - Parcerias e Meios de Implementação",
     ],
     isLogoInternal: true,
-    linkedinError: '',
-    instagramError: '',
-    facebookError: '',
+    localTechnologies: [''],
+    localServices: [''],
   }),
   computed: {
     ...mapGetters({
@@ -231,17 +276,37 @@ export default {
       linkedin: "company_forms/linkedin",
       instagram: "company_forms/instagram",
       facebook: "company_forms/facebook",
+      youtube: "company_forms/youtube",
     }),
   },
-  created() {
-    this.getExistentLogo();
+  watch: {
+    technologies: {
+      handler(newValue) {
+        if (Array.isArray(newValue) && newValue.length > 0) {
+          this.localTechnologies = [...newValue];
+        } else {
+          this.localTechnologies = [''];
+        }
+      },
+      immediate: true
+    },
+    services: {
+      handler(newValue) {
+        if (Array.isArray(newValue) && newValue.length > 0) {
+          this.localServices = [...newValue];
+        } else {
+          this.localServices = [''];
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapActions({
       setDescriptionLong: "company_forms/setDescriptionLong",
       setTechnologies: "company_forms/setTechnologies",
       setServices: "company_forms/setServices",
-      setOds: "company_forms/setOds",
+      setOds: "company_forms/setOdss",
       setSocialMedias: "company_forms/setSocialMedias",
       setUrl: "company_forms/setSite",
       setLogo: "company_forms/setLogo",
@@ -249,106 +314,80 @@ export default {
       setLinkedin: "company_forms/setLinkedin",
       setInstagram: "company_forms/setInstagram",
       setFacebook: "company_forms/setFacebook",
+      setYoutube: "company_forms/setYoutube",
     }),
-    async getExistentLogo() {
-      if (!this.logo) return;
-      try {
-        const response = await fetch(this.logo);
-        const blob = await response.blob();
-        const type = blob.type.split("/")[1];
-        const file = new File([blob], this.name + "." + type, { type: blob.type });
 
-        this.setLogoFile(file);
-        this.$refs.logoUploader.handleImage(file);
-      } catch (error) {
-        this.isLogoInternal = false;
-        console.error("Error getting logo", error);
+    updateTechnology(index, value) {
+      this.localTechnologies[index] = value;
+      this.saveTechnologies();
+    },
+
+    addTechnology() {
+      if (this.localTechnologies.length < 10) {
+        this.localTechnologies.push('');
       }
     },
-    async handleLogoUpload(logoImage) {
-      if (!logoImage) {
-        this.setLogoFile(null);
-        this.setLogo("");
-        return;
-      }
-      this.setLogoFile(logoImage);
 
-      let cnpj_without_punctuation = this.cnpj.replace(/[^\d]+/g, '');
-      let fileName = cnpj_without_punctuation + '.' + logoImage.name.split(".").pop();
-      this.setLogo(fileName);
-    },
-    async validateUrl(url) {
-      if (!url || url.trim() === '') return true;
-
-      try {
-        const response = await fetch(url, { method: 'HEAD' });
-        return response.ok;
-      } catch (error) {
-        return false;
+    removeTechnology(index) {
+      if (this.localTechnologies.length > 1) {
+        this.localTechnologies.splice(index, 1);
+        this.saveTechnologies();
       }
     },
-    isValidLinkedinUrl(url) {
-      if (!url || url.trim() === '') return true;
-      const linkedinPattern = /^https:\/\/(www\.)?linkedin\.com\/(company|in)\/[a-zA-Z0-9-]+\/?$/;
-      return linkedinPattern.test(url);
-    },
-    isValidInstagramUrl(url) {
-      if (!url || url.trim() === '') return true;
-      const instagramPattern = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._]+\/?$/;
-      return instagramPattern.test(url);
-    },
-    isValidFacebookUrl(url) {
-      if (!url || url.trim() === '') return true;
-      const facebookPattern = /^https:\/\/(www\.)?facebook\.com\/[a-zA-Z0-9.]+\/?$/;
-      return facebookPattern.test(url);
-    },
-    async handleLinkedinChange(value) {
-      this.linkedinError = '';
-      this.setLinkedin(value);
 
-      if (value && value.trim() !== '') {
-        if (!this.isValidLinkedinUrl(value)) {
-          this.linkedinError = 'URL do LinkedIn inválida. Use o formato: https://www.linkedin.com/company/sua-empresa';
-          return;
-        }
+    saveTechnologies() {
+      const filteredTechnologies = this.localTechnologies
+        .filter(tech => tech && tech.toString().trim() !== '')
+        .map(tech => tech.toString().trim());
+      this.setTechnologies(filteredTechnologies);
+    },
 
-        const isValid = await this.validateUrl(value);
-        if (!isValid) {
-          this.linkedinError = 'URL n��o encontrada. Verifique se o link está correto e acessível.';
-        }
+    updateService(index, value) {
+      const sanitizedValue = value ? value.toString().trim() : '';
+      this.localServices[index] = sanitizedValue;
+      this.saveServices();
+    },
+
+    addService() {
+      if (this.localServices.length < 10) {
+        this.localServices.push('');
       }
     },
-    async handleInstagramChange(value) {
-      this.instagramError = '';
-      this.setInstagram(value);
 
-      if (value && value.trim() !== '') {
-        if (!this.isValidInstagramUrl(value)) {
-          this.instagramError = 'URL do Instagram inválida. Use o formato: https://www.instagram.com/sua-empresa';
-          return;
-        }
-
-        const isValid = await this.validateUrl(value);
-        if (!isValid) {
-          this.instagramError = 'URL não encontrada. Verifique se o link está correto e acessível.';
-        }
+    removeService(index) {
+      if (this.localServices.length > 1) {
+        this.localServices.splice(index, 1);
+        this.saveServices();
       }
     },
-    async handleFacebookChange(value) {
-      this.facebookError = '';
-      this.setFacebook(value);
 
-      if (value && value.trim() !== '') {
-        if (!this.isValidFacebookUrl(value)) {
-          this.facebookError = 'URL do Facebook inválida. Use o formato: https://www.facebook.com/sua-empresa';
-          return;
-        }
+    saveServices() {
+      const filteredServices = this.localServices
+        .filter(service => service && service.toString().trim() !== '')
+        .map(service => service.toString().trim());
+      this.setServices(filteredServices);
+    },
 
-        const isValid = await this.validateUrl(value);
-        if (!isValid) {
-          this.facebookError = 'URL não encontrada. Verifique se o link está correto e acessível.';
-        }
+    validateStep() {
+      const errors = [];
+
+      if (this.$refs.linkedinInput && !this.$refs.linkedinInput.validate()) {
+        errors.push('LinkedIn: URL inválida');
       }
+      if (this.$refs.instagramInput && !this.$refs.instagramInput.validate()) {
+        errors.push('Instagram: URL inválida');
+      }
+      if (this.$refs.facebookInput && !this.$refs.facebookInput.validate()) {
+        errors.push('Facebook: URL inválida');
+      }
+      if (this.$refs.youtubeInput && !this.$refs.youtubeInput.validate()) {
+        errors.push('YouTube: URL inválida');
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
     },
   },
 };

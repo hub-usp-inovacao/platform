@@ -1,15 +1,34 @@
 <template>
   <v-container class="tab-container">
     <v-tabs v-model="tab" fixed-tabs>
-      <v-tab v-for="item in items" :key="item.tab">
+      <v-tab
+        v-for="(item, index) in items"
+        :key="item.tab"
+        :disabled="!isTabAccessible(index)"
+        @click="handleTabClick(index)"
+      >
         {{ item.tab }}
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="item in items" :key="item.tab">
-        <component :is="item.content"></component>
+        <component :is="item.content" :ref="item.ref"></component>
       </v-tab-item>
     </v-tabs-items>
+
+    <v-alert
+      v-if="validationErrors.length > 0"
+      type="error"
+      dismissible
+      class="ma-4"
+      @input="clearValidationErrors"
+    >
+      <strong>Corrija os seguintes erros antes de continuar:</strong>
+      <ul class="mt-2">
+        <li v-for="error in validationErrors" :key="error">{{ error }}</li>
+      </ul>
+    </v-alert>
+
     <div class="ma-4 d-flex justify-space-between">
       <v-btn
         class="mr-4"
@@ -33,7 +52,7 @@ import Staff from "@/components/CompanyForms/companyStep/Staff.vue";
 import Incubator from "@/components/CompanyForms/companyStep/Incubator.vue";
 import Finance from "@/components/CompanyForms/companyStep/Finance.vue";
 import Investments from "@/components/CompanyForms/companyStep/Investments.vue";
-import Patents from "@/components/CompanyForms/companyStep/Patents.vue";
+import AdditionalInfo from "@/components/CompanyForms/companyStep/AdditionalInfo.vue";
 
 export default {
   components: {
@@ -42,16 +61,21 @@ export default {
     Staff,
     Investments,
     Finance,
+    AdditionalInfo,
   },
   data: () => ({
     tab: 0,
+    validationErrors: [],
+    completedTabs: new Set([0]),
+    validatedTabs: new Set(), // Remover a inicialização com [0]
     items: [
-      { tab: "Dados da empresa", content: Base },
-      { tab: "Sobre a empresa", content: About },
-      { tab: "Incubação", content: Incubator },
-      { tab: "Colaboradores", content: Staff },
-      { tab: "Faturamento", content: Finance },
-      { tab: "Investimentos", content: Investments },
+      { tab: "Dados da empresa", content: Base, ref: "baseStep" },
+      { tab: "Sobre a empresa", content: About, ref: "aboutStep" },
+      { tab: "Incubação", content: Incubator, ref: "incubatorStep" },
+      { tab: "Colaboradores", content: Staff, ref: "staffStep" },
+      { tab: "Receita", content: Finance, ref: "financeStep" },
+      { tab: "Investimentos", content: Investments, ref: "investmentsStep" },
+      { tab: "Informações Adicionais", content: AdditionalInfo, ref: "additionalInfoStep" },
     ],
   }),
   computed: {
@@ -71,13 +95,123 @@ export default {
     disableNextButton() {
       return this.tab === this.items.length - 1;
     },
+    currentStepRef() {
+      return this.items[this.tab].ref;
+    },
   },
   methods: {
-    nextTab() {
-      this.tab = this.tab + 1;
+    validateCurrentStep() {
+      this.clearValidationErrors();
+
+      const currentStepComponent = this.$refs[this.currentStepRef];
+
+      if (currentStepComponent && currentStepComponent[0] && typeof currentStepComponent[0].validateStep === 'function') {
+        const validation = currentStepComponent[0].validateStep();
+
+        if (!validation.isValid) {
+          this.validationErrors = validation.errors;
+          return false;
+        }
+      }
+
+      return true;
     },
+
+    clearValidationErrors() {
+      this.validationErrors = [];
+    },
+
+    validateSpecificStep(stepIndex) {
+      const stepRef = this.items[stepIndex].ref;
+      const stepComponent = this.$refs[stepRef];
+
+      if (stepComponent && stepComponent[0] && typeof stepComponent[0].validateStep === 'function') {
+        const validation = stepComponent[0].validateStep();
+        return validation.isValid;
+      }
+
+      return true;
+    },
+
+    nextTab() {
+      if (this.validateCurrentStep()) {
+        this.completedTabs.add(this.tab);
+        this.validatedTabs.add(this.tab); // Marca como validada
+        this.tab = this.tab + 1;
+        this.completedTabs.add(this.tab);
+      } else {
+        this.$vuetify.goTo(0);
+      }
+    },
+
     previousTab() {
+      this.clearValidationErrors();
       this.tab = this.tab - 1;
+    },
+
+    validateStep() {
+      const errors = [];
+
+      if (this.tab !== this.items.length - 1) {
+        errors.push('É necessário completar todas as subetapas da empresa antes de prosseguir');
+      }
+
+      for (let i = 0; i < this.items.length; i++) {
+        const stepRef = this.items[i].ref;
+        const stepComponent = this.$refs[stepRef];
+
+        if (stepComponent && stepComponent[0] && typeof stepComponent[0].validateStep === 'function') {
+          const validation = stepComponent[0].validateStep();
+          if (!validation.isValid) {
+            errors.push(...validation.errors.map(error => `${this.items[i].tab}: ${error}`));
+          }
+        }
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+    isTabAccessible(index) {
+      if (index === 0) return true;
+
+      for (let i = 0; i < index; i++) {
+        if (!this.validatedTabs.has(i)) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    handleTabClick(index) {
+      if (index === this.tab) {
+        this.clearValidationErrors();
+        return;
+      }
+
+      if (index < this.tab) {
+        this.clearValidationErrors();
+        this.tab = index;
+        return;
+      }
+
+      if (!this.validateCurrentStep()) {
+        this.$vuetify.goTo(0);
+        return;
+      }
+
+      this.validatedTabs.add(this.tab);
+
+      if (index === this.tab + 1) {
+        this.clearValidationErrors();
+        this.tab = index;
+        this.completedTabs.add(index);
+      } else {
+        const nextStepName = this.items[this.tab + 1].tab;
+        this.validationErrors = [`Você deve prosseguir para a próxima etapa: "${nextStepName}"`];
+        this.$vuetify.goTo(0);
+      }
     },
   },
 };

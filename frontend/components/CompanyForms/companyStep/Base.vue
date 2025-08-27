@@ -1,42 +1,57 @@
 <template>
   <v-container>
-    <v-form>
+    <v-form ref="baseForm">
       <div class="mt-5 text-h6 font-weight-regular">
         Dados básicos
         <v-divider />
         <v-container>
-          <ShortTextInput
+          <TextInputFormatted
             class="mb-8"
             :value="name"
             label="Nome fantasia da empresa *"
             hint="A empresa será listada no Hub USPInovação a partir do nome fantasia da mesma."
+            capitalization="title"
+            :required="true"
+            :min-length="3"
             @input="setName"
+            ref="nameInput"
           />
-          <ShortTextInput
+          <TextInputFormatted
             class="mb-4"
             :value="corporateName"
             label="Razão social da empresa *"
+            capitalization="title"
+            :required="true"
+            :min-length="3"
             @input="setCorporateName"
+            ref="corporateNameInput"
           />
-          <MaskInput
+          <NumberInput
             class="mb-4"
             :value="year"
-            mask="####"
             label="Ano de fundação *"
+            hint="Digite o ano de fundação da empresa"
+            :required="true"
+            :max-length="4"
+            :min-value="1900"
+            :max-value="2025"
             @input="setYear"
+            ref="yearInput"
           />
-          <MaskInput
+          <CnpjInput
             :value="cnpj"
             label="CNPJ *"
-            mask="##.###.###/####-##"
+            :required="true"
             @input="setCnpj"
             :disabled="isUpdating"
+            ref="cnpjInput"
           />
           <Dropdown
             :value="registry_status"
             label="Situação cadastral"
             :options="allRegistryStatus"
             @input="setRegistryStatus"
+            ref="registryStatusInput"
           />
           <Dropdown
             :value="size"
@@ -44,6 +59,7 @@
             label="Porte da empresa"
             hint="Escolha de acordo com o Comprovante de Inscrição e de Situação Cadastral"
             @input="setSize"
+            ref="sizeInput"
           />
         </v-container>
       </div>
@@ -123,6 +139,7 @@
             mask="##.##-#-##"
             :rule="/^\d{2}\.\d{2}-\d(-\d{2})?$/"
             @input="setCnae"
+            ref="cnaeInput"
           />
         </v-container>
       </div>
@@ -132,33 +149,84 @@
         <v-divider />
         <v-container>
           <p class="body-2">Telefones comerciais</p>
-          <MultipleInputs
-            :value="phones"
-            input-label="Telefone comercial"
-            component="MaskInput"
-            mask="(##) #########"
-            @input="setPhones"
-          />
+
+          <!-- Campos de Telefone -->
+          <div v-for="(phone, index) in localPhones" :key="`phone-${index}`" class="d-flex align-center mb-2">
+            <PhoneInput
+              :value="phone"
+              :label="`Telefone comercial ${index + 1}`"
+              @input="updatePhone(index, $event)"
+              class="flex-grow-1 mr-2"
+            />
+            <v-btn
+              icon
+              small
+              color="error"
+              @click="removePhone(index)"
+              :disabled="localPhones.length <= 1"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <v-btn
+            small
+            color="primary"
+            @click="addPhone"
+            :disabled="localPhones.length >= 3"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Adicionar telefone
+          </v-btn>
+
           <p class="body-2 mt-5">Emails</p>
-          <MultipleInputs
-            :value="emails"
-            input-label="Email"
-            @input="setEmails"
-          />
-          <ShortTextInput
+
+          <!-- Campos de Email -->
+          <div v-for="(email, index) in localEmails" :key="`email-${index}`" class="d-flex align-center mb-2">
+            <EmailInput
+              :value="email"
+              :label="`Email ${index + 1}`"
+              @input="updateEmail(index, $event)"
+              class="flex-grow-1 mr-2"
+            />
+            <v-btn
+              icon
+              small
+              color="error"
+              @click="removeEmail(index)"
+              :disabled="localEmails.length <= 1"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <v-btn
+            small
+            color="primary"
+            @click="addEmail"
+            :disabled="localEmails.length >= 3"
+          >
+            <v-icon left>mdi-plus</v-icon>
+            Adicionar email
+          </v-btn>
+
+          <TextInputFormatted
             class="mt-8"
             :value="venue"
             label="Endereço"
+            capitalization="title"
             @input="setVenue"
           />
-          <ShortTextInput
+          <TextInputFormatted
             :value="neighborhood"
             label="Bairro"
+            capitalization="title"
             @input="setNeighborhood"
           />
-          <ShortTextInput
+          <TextInputFormatted
             :value="city"
             label="Cidade sede"
+            capitalization="title"
             @input="setCity"
           />
           <Dropdown
@@ -174,6 +242,7 @@
             mask="#####-###"
             :rule="/\d{5}-\d{3}/"
             @input="setCep"
+            ref="cepInput"
           />
         </v-container>
       </div>
@@ -185,7 +254,11 @@
 import { mapGetters, mapActions } from "vuex";
 import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
-import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
+import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
+import NumberInput from "@/components/CompanyForms/inputs/NumberInput.vue";
+import PhoneInput from "@/components/CompanyForms/inputs/PhoneInput.vue";
+import EmailInput from "@/components/CompanyForms/inputs/EmailInput.vue";
+import CnpjInput from "@/components/CompanyForms/inputs/CnpjInput.vue";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import PairOfNumberAndText from "@/components/CompanyForms/inputs/PairOfNumberAndText.vue";
 import BetaVersionModal from "../../layout/BetaVersionModal.vue";
@@ -195,7 +268,11 @@ export default {
     BetaVersionModal,
     MaskInput,
     MultipleInputs,
-    ShortTextInput,
+    TextInputFormatted,
+    NumberInput,
+    PhoneInput,
+    EmailInput,
+    CnpjInput,
     Dropdown,
     PairOfNumberAndText,
   },
@@ -220,6 +297,8 @@ export default {
       "Fundada por um servidor técnico e administrativo (ou ex-servidor) da USP",
       "Empresa incubada ou graduada em uma das incubadoras ligadas à USP (Incubadora USP/IPEN, ESALQTEC, HABITS, SUPERA e ParqTec)"
     ],
+    localPhones: [''],
+    localEmails: [''],
   }),
   computed: {
     ...mapGetters({
@@ -241,6 +320,28 @@ export default {
       company_nature: "company_forms/company_nature",
       category: "company_forms/category",
     }),
+  },
+  watch: {
+    phones: {
+      handler(newValue) {
+        if (Array.isArray(newValue) && newValue.length > 0) {
+          this.localPhones = [...newValue];
+        } else {
+          this.localPhones = [''];
+        }
+      },
+      immediate: true
+    },
+    emails: {
+      handler(newValue) {
+        if (Array.isArray(newValue) && newValue.length > 0) {
+          this.localEmails = [...newValue];
+        } else {
+          this.localEmails = [''];
+        }
+      },
+      immediate: true
+    }
   },
   mounted() {
     this.isUpdating = this.cnpj !== "";
@@ -297,6 +398,83 @@ export default {
         this.$refs.companyNatureField.set(reverse_field, complement_value);
       }
     },
+
+    validateStep() {
+      const errors = [];
+
+      if (!this.name || this.name.trim().length < 3) {
+        errors.push('Nome fantasia é obrigatório (mínimo 3 caracteres)');
+      }
+
+      if (!this.corporateName || this.corporateName.trim().length < 3) {
+        errors.push('Razão social é obrigatória (mínimo 3 caracteres)');
+      }
+
+      if (!this.year || this.year < 1900 || this.year > 2025) {
+        errors.push('Ano de fundação é obrigatório e deve estar entre 1900 e 2025');
+      }
+
+      if (this.$refs.cnpjInput && !this.$refs.cnpjInput.isValid()) {
+        errors.push('CNPJ inválido ou não preenchido');
+      }
+
+      if (this.$refs.cnaeInput && !this.$refs.cnaeInput.isValid()) {
+        errors.push('CNAE inválido ou não preenchido');
+      }
+
+      if (this.$refs.cepInput && !this.$refs.cepInput.isValid()) {
+        errors.push('CEP inválido ou não preenchido');
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+    addPhone() {
+      if (this.localPhones.length < 3) {
+        this.localPhones.push('');
+      }
+    },
+    addEmail() {
+      if (this.localEmails.length < 3) {
+        this.localEmails.push('');
+      }
+    },
+    savePhones() {
+      const filteredPhones = this.localPhones
+        .filter(phone => phone && phone.toString().trim() !== '')
+        .map(phone => phone.toString().trim());
+      this.setPhones(filteredPhones);
+    },
+    saveEmails() {
+      const filteredEmails = this.localEmails
+        .filter(email => email && email.toString().trim() !== '')
+        .map(email => email.toString().trim().toLowerCase());
+      this.setEmails(filteredEmails);
+    },
+    updatePhone(index, value) {
+      const sanitizedValue = value ? value.toString().trim() : '';
+      this.localPhones[index] = sanitizedValue;
+      this.savePhones();
+    },
+    removePhone(index) {
+      if (this.localPhones.length > 1) {
+        this.localPhones.splice(index, 1);
+        this.savePhones();
+      }
+    },
+    updateEmail(index, value) {
+      const sanitizedValue = value ? value.toString().trim().toLowerCase() : '';
+      this.localEmails[index] = sanitizedValue;
+      this.saveEmails();
+    },
+    removeEmail(index) {
+      if (this.localEmails.length > 1) {
+        this.localEmails.splice(index, 1);
+        this.saveEmails();
+      }
+    }
   },
 };
 </script>

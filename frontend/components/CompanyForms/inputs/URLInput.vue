@@ -1,55 +1,100 @@
 <template>
   <v-text-field
-    :label="label"
     :value="value"
-    :rules="[rules.url]"
+    :label="label"
     :hint="hint"
-    persistent-hint
-    clearable
+    :error="hasError"
+    :error-messages="errorMessage"
+    :required="required"
+    :rules="validationRules"
     @input="handleInput"
-  >
-  </v-text-field>
+    @blur="handleBlur"
+    persistent-hint
+  />
 </template>
 
 <script>
-function validURL(str) {
-  const pattern = /((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|N\/D)/g;
-  return !str?.includes(" ") && pattern.test(str);
-}
-
 export default {
-  components: {},
   props: {
-    label: {
-      type: String,
-      required: true,
-    },
     value: {
       type: String,
-      required: false,
-      default: undefined,
+      default: '',
+    },
+    label: {
+      type: String,
+      default: 'URL',
     },
     hint: {
       type: String,
-      required: false,
-      default: () => "",
+      default: 'Digite uma URL válida',
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   },
-  data: () => ({
-    isValid: false,
-    rules: {
-      url: (value) => validURL(value) || "URL inválida.",
+  data() {
+    return {
+      hasError: false,
+      errorMessage: '',
+    };
+  },
+  computed: {
+    validationRules() {
+      return this.required ? [this.validateUrl] : [];
     },
-  }),
+  },
   methods: {
-    handleInput(url) {
-      if (validURL(url)) {
-        this.isValid = true;
-        this.$emit("input", url);
-      } else if (this.isValid) {
-        this.isValid = false;
-        this.$emit("input", undefined);
+    handleInput(value) {
+      this.$emit('input', value);
+      this.validateInput(value);
+    },
+
+    handleBlur() {
+      this.validateInput(this.value);
+    },
+
+    validateInput(value) {
+      if (this.required && (!value || value.trim() === '')) {
+        this.hasError = true;
+        this.errorMessage = 'Campo obrigatório';
+        return false;
       }
+
+      if (value && !this.isValidUrl(value)) {
+        this.hasError = true;
+        this.errorMessage = 'URL inválida';
+        return false;
+      }
+
+      this.hasError = false;
+      this.errorMessage = '';
+      return true;
+    },
+
+    validateUrl(value) {
+      if (this.required && (!value || value.trim() === '')) {
+        return 'Campo obrigatório';
+      }
+
+      if (value && !this.isValidUrl(value)) {
+        return 'URL inválida';
+      }
+
+      return true;
+    },
+
+    isValidUrl(url) {
+      try {
+        new URL(url);
+        return url.startsWith('http://') || url.startsWith('https://');
+      } catch {
+        return false;
+      }
+    },
+
+    isValid() {
+      return this.validateInput(this.value);
     },
   },
 };

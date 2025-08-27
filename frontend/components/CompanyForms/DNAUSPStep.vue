@@ -126,6 +126,28 @@ export default {
         this.setPermission([...this.permission, item]);
       }
     },
+    validateStep() {
+      const errors = [];
+
+      if (!this.truthfulInformations) {
+        errors.push('É obrigatório concordar com a declaração de veracidade das informações');
+      }
+
+      if (this.wantsDna) {
+        if (!this.dnaContactEmail || this.dnaContactEmail.trim() === '') {
+          errors.push('Email de contato para DNA USP é obrigatório quando solicitado o selo');
+        }
+
+        if (!this.dnaContactName || this.dnaContactName.trim() === '') {
+          errors.push('Nome do responsável é obrigatório quando solicitado o selo DNA USP');
+        }
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
   },
 };
 </script>

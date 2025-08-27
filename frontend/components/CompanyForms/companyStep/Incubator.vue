@@ -8,6 +8,8 @@
       :options="options"
       label=""
       @input="setIncubated"
+      :required="true"
+      ref="incubatedInput"
     />
 
     <div v-if="!disabledIncubatorsSelect">
@@ -15,20 +17,25 @@
         Se sim, em qual incubadora ou Parque Tecnológico? *
       </h2>
       <Dropdown
-        :value="defaultIncubators"
-        :options="incubadoras"
+        :value="selectedIncubator"
+        :options="incubadorasWithOther"
         :disabled="disabledIncubatorsSelect"
         label=""
-        @input="setDefaultIncubators"
+        @input="handleIncubatorSelection"
+        :required="true"
+        ref="incubatorInput"
       />
-      <div class="mt-5 text-h6 font-weight-regular">
-        Em caso de outros, digite abaixo:
+      <div v-if="selectedIncubator === 'Outros'" class="mt-5 text-h6 font-weight-regular">
+        Especifique a incubadora/parque:
         <v-divider />
         <v-container>
-          <ShortTextInput
+          <TextInputFormatted
             :value="otherIncubator"
-            input-label="Incubadora/Parque Tecnológico"
-            @input="setOtherIncubators"
+            label="Incubadora/Parque Tecnológico *"
+            capitalization="title"
+            :required="true"
+            @input="handleOtherIncubatorInput"
+            ref="otherIncubatorInput"
           />
         </v-container>
       </div>
@@ -39,12 +46,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
+import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
 
 export default {
   components: {
     Dropdown,
-    ShortTextInput,
+    TextInputFormatted,
   },
   data: () => ({
     options: [
@@ -67,16 +74,36 @@ export default {
     }),
     disabledIncubatorsSelect() {
       if (this.incubated === "Não") {
-        this.setEcosystems("");
+        this.setEcosystems([]);
         return true;
       }
       return false;
     },
-    defaultIncubators() {
-      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : "";
+    incubadorasWithOther() {
+      return [...this.incubadoras, "Outros"];
+    },
+    selectedIncubator() {
+      if (!this.ecosystems || this.ecosystems.length === 0) {
+        return "";
+      }
+
+      const ecosystem = this.ecosystems[0];
+      if (this.incubadoras.includes(ecosystem)) {
+        return ecosystem;
+      } else {
+        return "Outros";
+      }
     },
     otherIncubator() {
-      return this.incubadoras.includes(this.ecosystems) ? "" : this.ecosystems;
+      if (!this.ecosystems || this.ecosystems.length === 0) {
+        return "";
+      }
+
+      const ecosystem = this.ecosystems[0];
+      if (!this.incubadoras.includes(ecosystem)) {
+        return ecosystem;
+      }
+      return "";
     },
   },
   methods: {
@@ -84,11 +111,45 @@ export default {
       setIncubated: "company_forms/setIncubated",
       setEcosystems: "company_forms/setEcosystems",
     }),
-    setDefaultIncubators(incubator) {
-      this.setEcosystems(incubator);
+
+    handleIncubatorSelection(incubator) {
+      if (incubator && incubator !== "Outros") {
+        this.setEcosystems([incubator]);
+      } else if (incubator === "Outros") {
+        const currentOther = this.otherIncubator;
+        if (currentOther) {
+          this.setEcosystems([currentOther]);
+        } else {
+          this.setEcosystems([]);
+        }
+      }
     },
-    setOtherIncubators(other) {
-      this.setEcosystems(other);
+
+    handleOtherIncubatorInput(value) {
+      if (this.selectedIncubator === "Outros") {
+        this.setEcosystems(value ? [value] : []);
+      }
+    },
+
+    validateStep() {
+      const errors = [];
+
+      if (!this.incubated) {
+        errors.push('É obrigatório informar se a empresa está/esteve em incubadora');
+      }
+
+      if (this.incubated && this.incubated !== "Não") {
+        if (!this.selectedIncubator) {
+          errors.push('É obrigatório especificar qual incubadora/parque tecnológico');
+        } else if (this.selectedIncubator === "Outros" && (!this.otherIncubator || this.otherIncubator.trim() === "")) {
+          errors.push('É obrigatório especificar o nome da incubadora/parque quando selecionado "Outros"');
+        }
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
     },
   },
 };
