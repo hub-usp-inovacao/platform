@@ -16,11 +16,11 @@ data class Ecosystem(
 
 @Serializable data class City(val name: String)
 
-fun CompanyClassificationModel.toCatalogClassification(): Classification =
-        Classification(major = this.major, minor = this.minor)
+fun CompanyClassificationModel.toCatalogClassification(): CompanyClassification =
+        CompanyClassification(major = this.major, minor = this.minor)
 
-fun CompanyAddressModel.toCatalogAddress(): Address =
-        Address(
+fun CompanyAddressModel.toCatalogAddress(): CompanyAddress =
+        CompanyAddress(
                 cep = this.cep,
                 city = this.city,
                 neighborhood = this.neighborhood,
@@ -30,10 +30,14 @@ fun CompanyAddressModel.toCatalogAddress(): Address =
 
 fun CompanyModel.toCatalogCompany(): Company =
         Company(
+                active = this.active ?: true,
                 address = this.address.toCatalogAddress(),
+                allowed = this.allowed ?: true,
                 classification = this.classification.toCatalogClassification(),
                 cnae = this.cnae,
+                cnpj = this.cnpj,
                 companySize = this.companySize,
+                corporateName = this.corporateName ?: "",
                 description = this.description,
                 ecosystems = this.ecosystems,
                 emails = this.emails,
@@ -43,8 +47,63 @@ fun CompanyModel.toCatalogCompany(): Company =
                 phones = this.phones,
                 services = this.services,
                 technologies = this.technologies,
-                unities = this.partners.map { it.unity }.toSet(),
-                url = this.url
+                partners = this.partners.map {
+                    Partner(
+                        name = it.name,
+                        nusp = it.nusp,
+                        bond = it.bond,
+                        unity = it.unity,
+                        email = it.email,
+                        phone = it.phone,
+                        position = it.position
+                    )
+                },
+                url = this.url,
+                year = this.year,
+                odss = this.odss,
+                linkedin = this.linkedin,
+                instagram = this.instagram,
+                youtube = this.youtube,
+                facebook = this.facebook,
+                isUnicorn = this.isUnicorn,
+                totalCollaborators = this.totalCollaborators,
+                dnaUspWanted = this.dnaUspWanted,
+                dnaUspContactEmail = this.dnaUspContactEmail,
+                dnaUspContactName = this.dnaUspContactName,
+                dnaUspContract = this.dnaUspContract,
+                truthfulInformation = this.truthfulInformation,
+                agreementOptions = this.agreementOptions ?: emptySet(),
+                partnerNames = this.partnerNames ?: emptyList(),
+                partnerNusps = this.partnerNusps ?: emptyList(),
+                partnerBonds = this.partnerBonds ?: emptyList(),
+                partnerUnities = this.partnerUnities ?: emptyList(),
+                partnerPositions = this.partnerPositions ?: emptyList(),
+                partnerEmails = this.partnerEmails ?: emptyList(),
+                partnerPhones = this.partnerPhones ?: emptyList(),
+                totalPartners = this.totalPartners,
+                hasUspPartners = this.hasUspPartners,
+                wantsToAddMorePartners = this.wantsToAddMorePartners,
+                cltEmployees = this.cltEmployees ?: 0,
+                pjCollaborators = this.pjCollaborators ?: 0,
+                internsScholars = this.internsScholars ?: 0,
+                hasInvestment = this.hasInvestment ?: false,
+                investmentTypes = this.investmentTypes ?: emptySet(),
+                ownInvestmentAmount = this.ownInvestmentAmount,
+                angelInvestmentAmount = this.angelInvestmentAmount,
+                ventureCapitalAmount = this.ventureCapitalAmount,
+                privateEquityAmount = this.privateEquityAmount,
+                pipeAmount = this.pipeAmount,
+                otherInvestmentsAmount = this.otherInvestmentsAmount,
+                revenue2022 = this.revenue2022,
+                rfbSize = this.rfbSize,
+                totalSum = this.totalSum,
+                companyType = this.companyType,
+                operationalStatus = this.operationalStatus,
+                index = this.index,
+                incubatorBond = this.incubatorBond,
+                uspBondConfirmation = this.uspBondConfirmation,
+                uspDnaCategory = this.uspDnaCategory,
+                companyBondConfirmation = this.companyBondConfirmation
         )
 
 class CatalogCompanyRepositoryImpl(db: MongoDatabase) : CompanyRepository {

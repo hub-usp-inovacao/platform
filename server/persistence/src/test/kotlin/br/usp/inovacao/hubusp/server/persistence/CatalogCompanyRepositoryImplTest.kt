@@ -1,8 +1,5 @@
 package br.usp.inovacao.hubusp.server.persistence
 
-import br.usp.inovacao.hubusp.server.catalog.Address
-import br.usp.inovacao.hubusp.server.catalog.Classification
-import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyAddressModel
 import br.usp.inovacao.hubusp.server.persistence.models.CompanyClassificationModel
@@ -86,7 +83,7 @@ class CatalogCompanyRepositoryImplTest() {
 
         // then
         assertTrue { result.isNotEmpty() }
-        assertTrue { result.all { ecosystem in it.ecosystems } }
+        assertTrue { result.all { it.ecosystems?.contains(ecosystem) == true } }
     }
 
     @Test
@@ -114,7 +111,9 @@ class CatalogCompanyRepositoryImplTest() {
 
         // then
         assertTrue { result.isNotEmpty() }
-        assertTrue { result.all { unity in it.unities } }
+        assertTrue { result.all { company ->
+            company.partners.any { partner -> partner.unity?.contains(unity) == true }
+        } }
     }
 
     @Test
@@ -344,7 +343,7 @@ class CatalogCompanyRepositoryImplTest() {
             partners = listOf(
                 PartnerModel("Pessoa","1029384", "Pesquisador",
                     "Instituto de Física - IF", "pessoa@example.com", "(11) 99595-9494"),
-                PartnerModel("Ser humano", "94857632", "Aluno ou ex-aluno (graduação)",
+                PartnerModel("Ser humano", "94857632", "Aluno ou ex-aluno (gradua��ão)",
                     "Instituto de Química - IQ", "ser_humano@example.com", "(11) 99234-5678"),
                 PartnerModel("Gente", "10293846", "Aluno ou ex-aluno (pós-graduação)",
                     "Instituto de Pesquisa e Tecnologia - IPT", "gente@example.com", "(11) 99080-5070")
