@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.modules
+package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.configureDB
@@ -138,7 +138,7 @@ class CatalogTest {
                 port = environment.config.property("datasource.port").getString(),
                 dbName = environment.config.property("datasource.dbName").getString()
             )
-            catalog(db)
+            configureCatalogRoute(db)
         }
 
         block()
