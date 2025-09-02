@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.register.step
 
-import br.usp.inovacao.hubusp.curatorship.register.CompanyFormTestHelp
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -15,5 +14,14 @@ class AboutCompanyStepTest {
         assertFailsWith<StepValidationException> { validStep.copy(description = "").validate() }
     }
 
-    private val validStep = CompanyFormTestHelp.VALID_ABOUT.copy()
+    private val validStep =
+        AboutCompanyStep(
+            description = "Empresa para testes",
+            logo = "https://www.logodofulanodetal.com",
+            services = setOf("Website", "Blog"),
+            technologies = setOf("Aplicativos", "Biomateriais"),
+            site = "https://www.fulanodetal.com",
+            odss = setOf("1 - Erradicação da Pobreza"),
+            socialMedias = setOf("https://www.fulanodetal.com"),
+        )
 }
