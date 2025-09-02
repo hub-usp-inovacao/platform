@@ -14,7 +14,13 @@ fun DisciplineSearchParams.toCollectionFilter(): String {
     if (offeringPeriod != null) inner.add("\"offeringPeriod\":\"$offeringPeriod\"")
     if (beingOffered != null) inner.add("\"beingOffered\":$beingOffered")
 
-    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+    term?.let {
+        val searchQuery = if (it.startsWith("\"") && it.endsWith("\"")) {
+            "\\\"${it.removeSurrounding("\"")}\\\""
+        } else it
+
+        inner.add("\"\$text\":{\"\$search\":\"$searchQuery\"}")
+    }
 
     return "{" + inner.joinToString(",") + "}"
 }

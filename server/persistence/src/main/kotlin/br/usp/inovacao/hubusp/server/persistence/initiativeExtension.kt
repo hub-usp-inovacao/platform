@@ -12,7 +12,13 @@ fun InitiativeSearchParams.toCollectionFilter(): String {
 
     if (campus != null) inner.add("\"localization\":\"$campus\"")
 
-    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+    term?.let {
+        val searchQuery = if (it.startsWith("\"") && it.endsWith("\"")) {
+            "\\\"${it.removeSurrounding("\"")}\\\""
+        } else it
+
+        inner.add("\"\$text\":{\"\$search\":\"$searchQuery\"}")
+    }
 
     return "{" + inner.joinToString(",") + "}"
 }

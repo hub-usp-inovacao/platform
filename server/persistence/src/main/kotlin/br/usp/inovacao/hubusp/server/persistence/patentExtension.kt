@@ -21,7 +21,13 @@ fun PatentSearchParams.toCollectionFilter(): String {
 
     if (status != null) inner.add("\"status\":\"$status\"")
 
-    if (term != null) inner.add("\"\$text\":{\"\$search\":\"$term\"}")
+    term?.let {
+        val searchQuery = if (it.startsWith("\"") && it.endsWith("\"")) {
+            "\\\"${it.removeSurrounding("\"")}\\\""
+        } else it
+
+        inner.add("\"\$text\":{\"\$search\":\"$searchQuery\"}")
+    }
 
     return "{" + inner.joinToString(",") + "}"
 }
