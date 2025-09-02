@@ -6,6 +6,7 @@ import kotlin.test.assertFailsWith
 class RevenueStepTest {
     companion object {
         val VALID_STEP = RevenueStep(lastYearRevenue = "R$ 1.234.567,89")
+        val INVALID_STEP = RevenueStep(lastYearRevenue = "hello world")
     }
 
     private val validStep = VALID_STEP

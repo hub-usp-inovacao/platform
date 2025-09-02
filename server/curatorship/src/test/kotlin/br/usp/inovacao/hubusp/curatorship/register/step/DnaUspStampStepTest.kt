@@ -18,20 +18,24 @@ class DnaUspStampStepTest {
                 email = "fulano@mail.com",
                 name = "fulano de tal",
             )
+        val INVALID_STEP =
+            DnaUspStampStep(
+                wantsStamp = true,
+                truthfulInformations = true,
+                permissions =
+                    setOf(
+                        "",
+                    ),
+                email = "hello world",
+                name = "",
+            )
     }
 
     private val validStep = VALID_STEP
 
     private val validStepWithoutStamp =
-        DnaUspStampStep(
+        VALID_STEP.copy(
             wantsStamp = false,
-            truthfulInformations = true,
-            permissions =
-                setOf(
-                    "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP",
-                ),
             email = "",
             name = "",
         )

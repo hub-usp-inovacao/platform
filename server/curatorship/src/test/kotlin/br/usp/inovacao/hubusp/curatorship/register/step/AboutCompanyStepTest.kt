@@ -15,6 +15,16 @@ class AboutCompanyStepTest {
                 odss = setOf("1 - Erradicação da Pobreza"),
                 socialMedias = setOf("https://www.fulanodetal.com"),
             )
+        val INVALID_STEP =
+            AboutCompanyStep(
+                description = "",
+                logo = "hello world",
+                services = setOf(),
+                technologies = setOf(),
+                site = "hello world",
+                odss = setOf("some ivalid value"),
+                socialMedias = setOf("hello world"),
+            )
     }
 
     private val validStep = VALID_STEP
@@ -28,4 +38,6 @@ class AboutCompanyStepTest {
     fun `it throws an error when AboutCompanyStep description is empty`() {
         assertFailsWith<StepValidationException> { validStep.copy(description = "").validate() }
     }
+
+    // TODO: Test the other members
 }

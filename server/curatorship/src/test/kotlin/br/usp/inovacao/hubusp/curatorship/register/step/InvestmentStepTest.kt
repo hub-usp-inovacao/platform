@@ -16,6 +16,17 @@ class InvestmentStepTest {
                 pipe = "R$ 0,00",
                 others = "R$ 0,00",
             )
+        val INVALID_STEP =
+            InvestmentStep(
+                received = "Sim",
+                investmentsReceived = emptyList(),
+                own = "",
+                angel = "",
+                venture = "",
+                equity = "",
+                pipe = "",
+                others = "",
+            )
     }
 
     private val validStep = VALID_STEP.copy()

@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.register.step
 
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class CompanyDataStepTest {
     companion object {
@@ -22,6 +23,24 @@ class CompanyDataStepTest {
                 zipcode = "00000-000",
                 companyNature = "000-0 - Automated Tests",
             )
+        val INVALID_STEP =
+            CompanyDataStep(
+                cnpj = "",
+                publicName = "",
+                corporateName = "",
+                year = "9000",
+                size = "",
+                cnae = "hello world",
+                registryStatus = "hello world",
+                phones = setOf("hello world"),
+                emails = setOf("hello world"),
+                street = "",
+                neighborhood = "",
+                city = "",
+                state = "",
+                zipcode = "hello world",
+                companyNature = "hello world",
+            )
     }
 
     private val validStep = VALID_STEP
@@ -29,6 +48,11 @@ class CompanyDataStepTest {
     @Test
     fun `it does not throws an error when CompanyDataStep is valid`() {
         validStep.validate()
+    }
+
+    @Test
+    fun `it throws an error when company data has blank cnpj`() {
+        assertFailsWith<StepValidationException> { validStep.copy(cnpj = "").validate() }
     }
 
     // TODO: Check each validation error
