@@ -4,6 +4,14 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class IncubationStepTest {
+    companion object {
+        val VALID_STEP = IncubationStep(wasIncubated = "Sim. Something", ecosystem = "Something")
+    }
+
+    private val validIncubated = VALID_STEP
+
+    private val validNonIncubated = IncubationStep(wasIncubated = "Não", ecosystem = null)
+
     @Test
     fun `it does not throws an error when IncubationStep is valid`() {
         validIncubated.validate()
@@ -22,9 +30,4 @@ class IncubationStepTest {
             validIncubated.copy(ecosystem = null).validate()
         }
     }
-
-    private val validIncubated =
-        IncubationStep(wasIncubated = "Sim. Something", ecosystem = "Something")
-
-    private val validNonIncubated = IncubationStep(wasIncubated = "Não", ecosystem = null)
 }

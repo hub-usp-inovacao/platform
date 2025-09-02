@@ -4,6 +4,24 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class PartnerStepTest {
+    companion object {
+        val VALID_PARTNER =
+            Partner(
+                name = "Some partner",
+                nusp = "1234567",
+                bond = "Some bond",
+                unit = "Some unit",
+                email = "test@example.com",
+                phone = "(11) 99999-9999",
+                role = "Some role",
+            )
+
+        val VALID_STEP = listOf(VALID_PARTNER)
+    }
+
+    private val validStep = VALID_STEP
+    private val validPartner = VALID_PARTNER
+
     @Test
     fun `it does not throws an error when PartnerStep is valid`() {
         validStep.validate()
@@ -53,17 +71,4 @@ class PartnerStepTest {
             validPartner.copy(phone = "hello world").validate()
         }
     }
-
-    private val validPartner =
-        Partner(
-            name = "Some partner",
-            nusp = "1234567",
-            bond = "Some bond",
-            unit = "Some unit",
-            email = "test@example.com",
-            phone = "(11) 99999-9999",
-            role = "Some role",
-        )
-
-    private val validStep = listOf(validPartner)
 }
