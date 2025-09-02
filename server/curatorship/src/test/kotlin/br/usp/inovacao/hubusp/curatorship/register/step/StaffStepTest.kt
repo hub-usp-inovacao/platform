@@ -4,6 +4,14 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class StaffStepTest {
+    companion object {
+        val VALID_STEP =
+            StaffStep(
+                numberOfCltEmployees = "00", numberOfPjColaborators = "00", numberOfInterns = "00")
+    }
+
+    private val validStep = VALID_STEP
+
     @Test
     fun `it does not throws an error when StaffStep is valid`() {
         validStep.validate()
@@ -50,8 +58,4 @@ class StaffStepTest {
             validStep.copy(numberOfInterns = "hello1world").validate()
         }
     }
-
-    private val validStep =
-        StaffStep(
-            numberOfCltEmployees = "00", numberOfPjColaborators = "00", numberOfInterns = "00")
 }

@@ -4,6 +4,38 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class DnaUspStampStepTest {
+    companion object {
+        val VALID_STEP =
+            DnaUspStampStep(
+                wantsStamp = true,
+                truthfulInformations = true,
+                permissions =
+                    setOf(
+                        "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa",
+                        "Permito a divulgação das informações públicas na plataforma Hub USPInovação",
+                        "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP",
+                    ),
+                email = "fulano@mail.com",
+                name = "fulano de tal",
+            )
+    }
+
+    private val validStep = VALID_STEP
+
+    private val validStepWithoutStamp =
+        DnaUspStampStep(
+            wantsStamp = false,
+            truthfulInformations = true,
+            permissions =
+                setOf(
+                    "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa",
+                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação",
+                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP",
+                ),
+            email = "",
+            name = "",
+        )
+
     @Test
     fun `it does not throws an error when DnaUspStampStep is valid`() {
         validStep.validate()
@@ -42,32 +74,4 @@ class DnaUspStampStepTest {
         validStepWithoutStamp.copy(name = null).validate()
         validStepWithoutStamp.copy(email = null).validate()
     }
-
-    private val validStep =
-        DnaUspStampStep(
-            wantsStamp = true,
-            truthfulInformations = true,
-            permissions =
-                setOf(
-                    "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP",
-                ),
-            email = "fulano@mail.com",
-            name = "fulano de tal",
-        )
-
-    private val validStepWithoutStamp =
-        DnaUspStampStep(
-            wantsStamp = false,
-            truthfulInformations = true,
-            permissions =
-                setOf(
-                    "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação",
-                    "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também para unidades da USP",
-                ),
-            email = "",
-            name = "",
-        )
 }

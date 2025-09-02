@@ -4,6 +4,12 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class RevenueStepTest {
+    companion object {
+        val VALID_STEP = RevenueStep(lastYearRevenue = "R$ 1.234.567,89")
+    }
+
+    private val validStep = VALID_STEP
+
     @Test
     fun `it does not throws an error when RevenueStep is valid`() {
         validStep.validate()
@@ -27,6 +33,4 @@ class RevenueStepTest {
     fun `it does not throws an error when last year's revenue doesn't start with 'R$ '`() {
         validStep.copy(lastYearRevenue = "1234.567,89").validate()
     }
-
-    private val validStep = RevenueStep(lastYearRevenue = "R$ 1.234.567,89")
 }

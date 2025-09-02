@@ -4,6 +4,22 @@ import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class InvestmentStepTest {
+    companion object {
+        val VALID_STEP =
+            InvestmentStep(
+                received = "Sim",
+                investmentsReceived = listOf("Investmento próprio"),
+                own = "R$ 1,00",
+                angel = "R$ 0,00",
+                venture = "R$ 0,00",
+                equity = "R$ 0,00",
+                pipe = "R$ 0,00",
+                others = "R$ 0,00",
+            )
+    }
+
+    private val validStep = VALID_STEP.copy()
+
     @Test
     fun `it does not throws an error when InvestmentStep is valid`() {
         validStep.validate()
@@ -81,16 +97,4 @@ class InvestmentStepTest {
     fun `it does not throw an error when received is set to false and investments received is empty`() {
         validStep.copy(received = "Não", investmentsReceived = emptyList()).validate()
     }
-
-    private val validStep =
-        InvestmentStep(
-            received = "Sim",
-            investmentsReceived = listOf("Investmento próprio"),
-            own = "R$ 1,00",
-            angel = "R$ 0,00",
-            venture = "R$ 0,00",
-            equity = "R$ 0,00",
-            pipe = "R$ 0,00",
-            others = "R$ 0,00",
-        )
 }
