@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.register.step
 
-import br.usp.inovacao.hubusp.curatorship.register.CompanyFormTestHelp
 import kotlin.test.Test
 
 class CompanyDataStepTest {
@@ -11,5 +10,22 @@ class CompanyDataStepTest {
 
     // TODO: Check each validation error
 
-    private val validStep = CompanyFormTestHelp.VALID_COMPANY_DATA.copy()
+    private val validStep =
+        CompanyDataStep(
+            cnpj = "00.000.000/0001-00",
+            publicName = "Some public name",
+            corporateName = "Some corporate name",
+            year = "2025",
+            size = "MEI",
+            cnae = "00.00-0-00",
+            registryStatus = "Ativa",
+            phones = setOf("(11) 99999-4433"),
+            emails = setOf("test@example.com"),
+            street = "Rua tal",
+            neighborhood = "Vila tal",
+            city = "Cidade tal",
+            state = "Estado tal",
+            zipcode = "00000-000",
+            companyNature = "000-0 - Automated Tests",
+        )
 }
