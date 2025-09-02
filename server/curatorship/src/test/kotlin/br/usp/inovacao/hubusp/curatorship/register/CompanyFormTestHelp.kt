@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.register
 
 import br.usp.inovacao.hubusp.curatorship.register.step.AboutCompanyStep
+import br.usp.inovacao.hubusp.curatorship.register.step.CompanyDataStep
 
 // TODO: toJSON
 
@@ -39,6 +40,25 @@ class CompanyFormTestHelp {
                 site = "https://www.fulanodetal.com",
                 odss = setOf("1 - Erradicação da Pobreza"),
                 socialMedias = setOf("https://www.fulanodetal.com"),
+            )
+
+        val VALID_COMPANY_DATA =
+            CompanyDataStep(
+                cnpj = "00.000.000/0001-00",
+                publicName = "Some public name",
+                corporateName = "Some corporate name",
+                year = "2025",
+                size = "MEI",
+                cnae = "00.00-0-00",
+                registryStatus = "Ativa",
+                phones = setOf("(11) 99999-4433"),
+                emails = setOf("test@example.com"),
+                street = "Rua tal",
+                neighborhood = "Vila tal",
+                city = "Cidade tal",
+                state = "Estado tal",
+                zipcode = "00000-000",
+                companyNature = "000-0 - Automated Tests",
             )
 
         val VALID_REGISTER_RECORD = CompanyForm(about = VALID_ABOUT)
