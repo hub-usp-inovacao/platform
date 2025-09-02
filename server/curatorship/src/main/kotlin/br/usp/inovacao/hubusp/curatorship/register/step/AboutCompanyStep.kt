@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.curatorship.register.step
 
 import br.usp.inovacao.hubusp.curatorship.register.isIn
 import br.usp.inovacao.hubusp.curatorship.register.isWebsite
+import java.util.Locale
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.valiktor.ConstraintViolationException
@@ -56,11 +57,10 @@ data class AboutCompanyStep(
                 validate(AboutCompanyStep::socialMedias).isWebsite()
             }
         } catch (cve: ConstraintViolationException) {
-            // TODO: Set locale to pt_BR
             val violations: List<String> =
-                cve.constraintViolations.mapToMessage(baseName = "messages").map {
-                    "${it.property}: ${it.message}"
-                }
+                cve.constraintViolations
+                    .mapToMessage(baseName = "messages", locale = Locale("pt", "BR"))
+                    .map { "${it.property}: ${it.message}" }
             throw StepValidationException(messages = violations)
         }
 }
