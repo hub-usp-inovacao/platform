@@ -1,47 +1,37 @@
 package br.usp.inovacao.hubusp.curatorship.register
 
+import br.usp.inovacao.hubusp.curatorship.register.step.AboutCompanyStep
+import br.usp.inovacao.hubusp.curatorship.register.step.Step
+import br.usp.inovacao.hubusp.curatorship.register.step.StepValidationException
 import kotlinx.serialization.Serializable
-import org.valiktor.ConstraintViolationException
-import org.valiktor.functions.isNotBlank
-import org.valiktor.functions.isNotNull
-import org.valiktor.i18n.mapToMessage
+import org.valiktor.functions.validate
 import org.valiktor.validate
 
 @Serializable
 data class CompanyStep(
-    // TO DO
-    //val data: CompanyDataStep,
-    //val investment: InvestmentStep,
-    //val revenue: RevenueStep,
-    //val incubation: IncubationStep,
-    //val dnaUsp: dnaUspStampStep,
-    //val staff: StaffStep,
-    //val partners: PartnerStep
+    // TODO
+    // val partners: PartnerStep
+    //
+    // val data: CompanyDataStep,
     val about: AboutCompanyStep,
-)
-
-@Serializable
-data class AboutCompanyStep(
-    val description: String,
-    val logo: String,
-    val services: Set<String>,
-    val technologies: Set<String>,
-    val site: String,
-    val odss: Set<String>,
-    val socialMedia: Set<String>
+    // val incubation: IncubationStep,
+    // val staff: StaffStep,
+    // val revenue: RevenueStep,
+    // val investment: InvestmentStep,
+    //
+    // val dnaUsp: dnaUspStampStep,
 ) {
     init {
+        val errorMap: MutableMap<Step, List<String>> = mutableMapOf()
+
         try {
-            validate(this) {
-                validate(AboutCompanyStep::description)
-                    .isNotNull()
-                    .isNotBlank()
-            }
+            this.about.validate()
+        } catch (e: StepValidationException) {
+            errorMap.put(Step.AboutCompany, e.messages)
         }
-        catch (cve: ConstraintViolationException) {
-            val violations: List<String> = cve.constraintViolations
-                .mapToMessage(baseName = "ErrorMessages")
-                .map { "${it.property} : ${it.message}" }
+
+        if (errorMap.isNotEmpty()) {
+            throw CompanyStepValidationException(errorMap)
         }
     }
 }
