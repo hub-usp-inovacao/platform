@@ -15,7 +15,7 @@ fun AboutCompanyStep.toRow(): List<String?> =
         socialMedias.joinToString(";"),
     )
 
-fun CompanyStep.toRow(): List<String?> =
+fun CompanyForm.toRow(): List<String?> =
     listOf(
         about.description,
         about.logo,
@@ -26,7 +26,7 @@ fun CompanyStep.toRow(): List<String?> =
         about.socialMedias.joinToString(";"),
     )
 
-class CompanyStepTestHelp {
+class CompanyFormTestHelp {
 
     companion object {
 
@@ -41,7 +41,7 @@ class CompanyStepTestHelp {
                 socialMedias = setOf("https://www.fulanodetal.com"),
             )
 
-        val VALID_REGISTER_RECORD = CompanyStep(about = VALID_ABOUT)
+        val VALID_REGISTER_RECORD = CompanyForm(about = VALID_ABOUT)
 
         fun validRegisterAndInvalidRegister(): List<List<String?>> {
             val validRegister = VALID_REGISTER_RECORD.toRow()

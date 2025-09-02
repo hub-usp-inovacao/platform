@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import br.usp.inovacao.hubusp.curatorship.register.step.StepValidationException
 
 // TODO: Separate tests for each step
-class CompanyStepTest {
+class CompanyFormTest {
     @Test
     fun `it does not throws an error when AboutCompanyStep is valid`() {
         validAbout.validate()
@@ -19,5 +19,5 @@ class CompanyStepTest {
         }
     }
 
-    private val validAbout = CompanyStepTestHelp.VALID_ABOUT.copy()
+    private val validAbout = CompanyFormTestHelp.VALID_ABOUT.copy()
 }
