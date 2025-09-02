@@ -1,0 +1,87 @@
+package br.usp.inovacao.hubusp.curatorship.register
+
+import br.usp.inovacao.hubusp.curatorship.register.step.AboutCompanyStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.CompanyDataStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.DnaUspStampStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.IncubationStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.InvestmentStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.PartnerStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.RevenueStepTest
+import br.usp.inovacao.hubusp.curatorship.register.step.StaffStepTest
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
+
+class CompanyFormTest {
+    private fun createValidCompanyForm() =
+        CompanyForm(
+            partners = PartnerStepTest.VALID_STEP,
+            data = CompanyDataStepTest.VALID_STEP,
+            about = AboutCompanyStepTest.VALID_STEP,
+            incubation = IncubationStepTest.VALID_STEP,
+            staff = StaffStepTest.VALID_STEP,
+            revenue = RevenueStepTest.VALID_STEP,
+            investment = InvestmentStepTest.VALID_STEP,
+            dnaUspStamp = DnaUspStampStepTest.VALID_STEP,
+        )
+
+    @Test
+    fun `it does not throws an error when company form is valid`() {
+        createValidCompanyForm()
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid partner step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(partners = PartnerStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid company data step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(data = CompanyDataStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid about company step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(about = AboutCompanyStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid incubation step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(incubation = IncubationStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid staff step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(staff = StaffStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid revenue step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(revenue = RevenueStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid investment step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(investment = InvestmentStepTest.INVALID_STEP)
+        }
+    }
+
+    @Test
+    fun `it throws an error when company form has invalid dna usp stamp step`() {
+        assertFailsWith<CompanyFormValidationException> {
+            createValidCompanyForm().copy(dnaUspStamp = DnaUspStampStepTest.INVALID_STEP)
+        }
+    }
+}

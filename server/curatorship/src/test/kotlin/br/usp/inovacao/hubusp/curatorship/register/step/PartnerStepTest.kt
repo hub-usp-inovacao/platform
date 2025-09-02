@@ -17,6 +17,19 @@ class PartnerStepTest {
             )
 
         val VALID_STEP = listOf(VALID_PARTNER)
+
+        val INVALID_STEP =
+            listOf(
+                Partner(
+                    name = "",
+                    nusp = null,
+                    bond = "",
+                    unit = "",
+                    email = "",
+                    phone = "",
+                    role = "",
+                ),
+            )
     }
 
     private val validStep = VALID_STEP

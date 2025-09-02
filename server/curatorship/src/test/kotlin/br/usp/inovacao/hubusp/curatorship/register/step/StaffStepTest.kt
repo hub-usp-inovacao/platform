@@ -8,6 +8,11 @@ class StaffStepTest {
         val VALID_STEP =
             StaffStep(
                 numberOfCltEmployees = "00", numberOfPjColaborators = "00", numberOfInterns = "00")
+        val INVALID_STEP =
+            StaffStep(
+                numberOfCltEmployees = "hello",
+                numberOfPjColaborators = "foo",
+                numberOfInterns = "bar")
     }
 
     private val validStep = VALID_STEP

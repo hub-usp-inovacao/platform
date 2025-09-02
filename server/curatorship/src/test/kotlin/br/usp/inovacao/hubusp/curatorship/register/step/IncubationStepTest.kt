@@ -6,6 +6,7 @@ import kotlin.test.assertFailsWith
 class IncubationStepTest {
     companion object {
         val VALID_STEP = IncubationStep(wasIncubated = "Sim. Something", ecosystem = "Something")
+        val INVALID_STEP = IncubationStep(wasIncubated = "Sim", ecosystem = "")
     }
 
     private val validIncubated = VALID_STEP
