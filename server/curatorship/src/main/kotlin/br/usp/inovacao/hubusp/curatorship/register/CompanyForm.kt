@@ -8,7 +8,7 @@ import org.valiktor.functions.validate
 import org.valiktor.validate
 
 @Serializable
-data class CompanyStep(
+data class CompanyForm(
     // TODO
     // val partners: PartnerStep
     //
@@ -31,7 +31,7 @@ data class CompanyStep(
         }
 
         if (errorMap.isNotEmpty()) {
-            throw CompanyStepValidationException(errorMap)
+            throw CompanyFormValidationException(errorMap)
         }
     }
 }
