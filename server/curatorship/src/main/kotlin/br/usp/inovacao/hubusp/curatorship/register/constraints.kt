@@ -69,3 +69,9 @@ class Number : Constraint
 /** Validates if the [String] property is a valid Number */
 fun <E> Validator<E>.Property<String?>.isNumber() =
     this.validate(Number()) { it == null || it.matches(Regex("^[0-9]+$")) }
+
+class Money : Constraint
+
+/** Validates if the [String] property is a valid BRL (R$ 1.000.000,00) */
+fun <E> Validator<E>.Property<String?>.isBrl() =
+    this.validate(Money()) { it == null || it.matches(Regex("^(R\\$ )?[0-9.,]+$")) }
