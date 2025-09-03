@@ -68,20 +68,31 @@ data class Discipline(
             return keywords.toSet()
         }
 
-        fun fromRow(subRow: List<String?>) = Discipline(
-            name = subRow[1],
-            campus = subRow[2],
-            unity = subRow[3],
-            start_date = subRow[8],
-            nature = subRow[0],
-            level = subRow[5],
-            url = subRow[4],
-            description = subRow[6],
-            category = DisciplineCategory.fromRow(subRow),
-            keywords = createKeywords(subRow),
-            offeringPeriod = subRow[13],
-            beingOffered = checkIfOffering(subRow[1], subRow[0])
-        )
+        /**
+         * Removes the query parameter 'verdis' from Jupiter URLs, otherwise it goes to an outdated
+         * page.
+         */
+        fun fixJupiterUrl(url: String?) = url?.replace(Regex("&?verdis=[^&]+"), "")
+
+        fun fromRow(subRow: List<String?>) =
+            Discipline(
+                name = subRow[1],
+                campus = subRow[2],
+                unity = subRow[3],
+                start_date = subRow[8],
+                nature = subRow[0],
+                level = subRow[5],
+                url = fixJupiterUrl(subRow[4]),
+                description = subRow[6],
+                category = DisciplineCategory.fromRow(subRow),
+                keywords = createKeywords(subRow),
+                offeringPeriod = subRow[13],
+                beingOffered =
+                    checkIfOffering(
+                        subRow[1],
+                        subRow[0],
+                    ),
+            )
 
         fun checkIfOffering(name : String?, nature: String?) : Boolean {
             val code = name?.split(" - ")?.get(0)
