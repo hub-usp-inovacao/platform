@@ -72,7 +72,6 @@ export const actions = {
       Object.keys(message).forEach((key) => {
         const k = snakeToCamelCase(key);
 
-        // eslint-disable-next-line no-prototype-builtins
         if (getters.hasOwnProperty(k)) {
           commit("setFormField", { key: k, value: message[key] });
         }
@@ -103,12 +102,13 @@ export const actions = {
       return false;
     }
 
-    const logo = getters.logoFile;
     const company = prepareCompanyObject(getters);
-    const { errors } = await this.$updateCompanyData(company, logo);
+    const result = await this.$registerCompany(company);
 
-    if (errors !== undefined) {
-      commit("setErrors", errors);
+    if (!result.success) {
+      commit("setErrors", {
+        general: [result.error]
+      });
       return false;
     }
 
@@ -132,15 +132,72 @@ const snakeToCamelCase = (key) => {
     .join("");
 };
 
-const prepareCompanyObject = (obj) => ({
-  company: {
-    ...companyData.prepareSection(obj),
-    ...dnaUspStamp.prepareSection(obj),
-    ...about.prepareSection(obj),
-    ...investment.prepareSection(obj),
-    ...revenue.prepareSection(obj),
-    ...incubation.prepareSection(obj),
-    ...staff.prepareSection(obj),
-    ...partners.prepareSection(obj),
-  },
-});
+const prepareCompanyObject = (obj) => {
+  return {
+    name: obj.name,
+    corporateName: obj.corporateName,
+    cnpj: obj.cnpj,
+    year: obj.year ? obj.year.toString() : "",
+    cnae: obj.cnae,
+    address: {
+      venue: obj.venue || obj.address?.venue || "",
+      neighborhood: obj.neighborhood || obj.address?.neighborhood || "",
+      city: obj.city || obj.address?.city || "",
+      state: obj.state || obj.address?.state || "",
+      cep: obj.cep || obj.address?.cep || ""
+    },
+    phones: Array.isArray(obj.phones) ? obj.phones : [],
+    emails: Array.isArray(obj.emails) ? obj.emails : [],
+    description: obj.descriptionLong || obj.description || "",
+    services: Array.isArray(obj.services) ? obj.services : [],
+    technologies: Array.isArray(obj.technologies) ? obj.technologies : [],
+    logo: obj.logo || null,
+    url: obj.site || null,
+    incubated: obj.incubated || "",
+    ecosystems: Array.isArray(obj.ecosystems) ? obj.ecosystems : [],
+    isUnicorn: Boolean(obj.isUnicorn),
+    totalCollaborators: (parseInt(obj.numberOfCLTEmployees) || 0) + (parseInt(obj.numberOfPJColaborators) || 0) + (parseInt(obj.numberOfInterns) || 0),
+    odss: Array.isArray(obj.odss) ? obj.odss : [],
+    linkedin: obj.linkedin || null,
+    instagram: obj.instagram || null,
+    youtube: obj.youtube || null,
+    facebook: obj.facebook || null,
+    dnaUspWanted: Boolean(obj.wantsDna),
+    dnaUspContactEmail: obj.dnaContactEmail || null,
+    dnaUspContactName: obj.dnaContactName || null,
+    dnaUspContract: obj.dnaUspContract || null,
+    truthfulInformation: Boolean(obj.truthfulInformations),
+    agreementOptions: Array.isArray(obj.permissions) ? obj.permissions : [],
+    partnerNames: Array.isArray(obj.partners) ? obj.partners.map(p => p.name || "") : [],
+    partnerNusps: Array.isArray(obj.partners) ? obj.partners.map(p => p.nusp || "") : [],
+    partnerBonds: Array.isArray(obj.partners) ? obj.partners.map(p => p.bond || "") : [],
+    partnerUnities: Array.isArray(obj.partners) ? obj.partners.map(p => p.unity || "") : [],
+    partnerPositions: Array.isArray(obj.partners) ? obj.partners.map(p => p.position || "") : [],
+    partnerEmails: Array.isArray(obj.partners) ? obj.partners.map(p => p.email || "") : [],
+    partnerPhones: Array.isArray(obj.partners) ? obj.partners.map(p => p.phone || "") : [],
+    totalPartners: Array.isArray(obj.partners) ? obj.partners.length : 0,
+    hasUspPartners: Array.isArray(obj.partners) ? obj.partners.some(p => p.nusp && p.nusp.trim() !== "") : false,
+    wantsToAddMorePartners: Boolean(obj.wantsToAddMorePartners),
+    cltEmployees: parseInt(obj.numberOfCLTEmployees) || 0,
+    pjCollaborators: parseInt(obj.numberOfPJColaborators) || 0,
+    internsScholars: parseInt(obj.numberOfInterns) || 0,
+    hasInvestment: obj.received === "Sim",
+    investmentTypes: Array.isArray(obj.investments) ? obj.investments : [],
+    ownInvestmentAmount: obj.investmentsValues?.own || null,
+    angelInvestmentAmount: obj.investmentsValues?.angel || null,
+    ventureCapitalAmount: obj.investmentsValues?.venture || null,
+    privateEquityAmount: obj.investmentsValues?.equity || null,
+    pipeAmount: obj.investmentsValues?.pipe || null,
+    otherInvestmentsAmount: obj.investmentsValues?.others || null,
+    revenue2022: obj.lastYear || null,
+    rfbSize: obj.size || null,
+    totalSum: (parseInt(obj.numberOfCLTEmployees) || 0) + (parseInt(obj.numberOfPJColaborators) || 0) + (parseInt(obj.numberOfInterns) || 0),
+    companyType: obj.companyType || null,
+    operationalStatus: obj.operationalStatus || "Ativa",
+    index: obj.index || null,
+    incubatorBond: obj.incubatorBond || null,
+    uspBondConfirmation: obj.uspBondConfirmation || null,
+    uspDnaCategory: obj.category || null,
+    companyBondConfirmation: obj.companyBondConfirmation || null
+  };
+};

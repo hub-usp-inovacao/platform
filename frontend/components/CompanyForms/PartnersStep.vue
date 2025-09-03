@@ -79,6 +79,43 @@ export default {
       const tail = this.partners.slice(index + 1, end);
       this.setPartners(head.concat(tail));
     },
+    validateStep() {
+      const errors = [];
+
+
+      if (this.partners && this.partners.length > 0) {
+        this.partners.forEach((partner, index) => {
+          if (!partner.name || partner.name.trim().length < 3) {
+            errors.push(`Sócio ${index + 1}: Nome é obrigatório (mínimo 3 caracteres)`);
+          }
+
+          if (!partner.email || !this.isValidEmail(partner.email)) {
+            errors.push(`Sócio ${index + 1}: Email inválido ou não preenchido`);
+          }
+
+          if (!partner.phone || partner.phone.trim() === '') {
+            errors.push(`Sócio ${index + 1}: Telefone é obrigatório`);
+          }
+
+          if (!partner.bond || partner.bond.trim() === '') {
+            errors.push(`Sócio ${index + 1}: Vínculo com a USP é obrigatório`);
+          }
+
+          if (!partner.role || partner.role.trim() === '') {
+            errors.push(`Sócio ${index + 1}: Cargo é obrigatório`);
+          }
+        });
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+    isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
   },
 };
 </script>

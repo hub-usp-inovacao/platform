@@ -78,5 +78,15 @@ export default {
       default: true,
     },
   },
+  methods: {
+    validateStep() {
+      const errors = [];
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
+    },
+  },
 };
 </script>

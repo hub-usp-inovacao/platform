@@ -70,6 +70,7 @@
 <script>
 export default {
   data: () => ({
+    search: '',
     items: [
       { title: 'AUSPIN', href: 'http://www.inovacao.usp.br/' },
       {
