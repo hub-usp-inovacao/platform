@@ -15,7 +15,7 @@ data class InvestmentStep(
     val received: String?,
 
     /** List of investments received ("Investimento próprio", "Investimento-anjo", etc) */
-    @SerialName("investments") val investmentsReceived: List<String>,
+    @SerialName("investments") val investmentsReceived: Set<String> = emptySet(),
 
     /** "Investimento próprio" */
     val own: String?,
