@@ -48,12 +48,14 @@
             :key="id"
             :step="id"
         >
-          <ul v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
+          <v-container v-if="errorsOfStep(id) && errorsOfStep(id).length > 0">
             <v-alert type="error"><strong>Erros de validação</strong></v-alert>
-            <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
-              <strong>{{ errMsg }}</strong>
-            </li>
-          </ul>
+            <ul>
+              <li v-for="errMsg in errorsOfStep(id)" :key="errMsg">
+                <strong>{{ errMsg }}</strong>
+              </li>
+            </ul>
+          </v-container>
           <component
               :is="component"
               :is-update="update"

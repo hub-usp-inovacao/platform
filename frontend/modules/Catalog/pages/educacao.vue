@@ -29,6 +29,13 @@
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
           <p class="body-2">{{ item.nature }}</p>
+          <p class="body-2">
+            {{
+              item.beingOffered
+                ? "Sendo oferecida"
+                : "Não está sendo oferecida no momento"
+            }}
+          </p>
         </v-container>
       </template>
       <template #content="{ item }">
@@ -52,7 +59,6 @@ import Background from "../components/Background.vue";
 import Panel from "../components/Panel.vue";
 import MultipleFilters from "../components/MultipleFilters.vue";
 import DisplayData from "../components/DisplayData.vue";
-import NDText from "../components/NDText.vue";
 
 import { debounce } from "debounce";
 
@@ -62,7 +68,6 @@ export default {
     Background,
     MultipleFilters,
     DisplayData,
-    NDText,
   },
   data: () => ({
     search: { term: "" },
@@ -127,24 +132,9 @@ export default {
           items: ["Graduação", "Pós-graduação"],
         },
         {
-          label: "Período de Oferecimento",
-          items: Array.from(
-            this.disciplines.reduce((acc, discipline) => {
-              const offeringPeriod = discipline.offeringPeriod;
-              const hasPeriod = offeringPeriod && !acc.has(offeringPeriod) && offeringPeriod != "N/D"
-              if (hasPeriod)
-                acc.add(offeringPeriod);
-              return acc;
-            }, new Set())
-          ),
-        },
-        {
           label: "Sendo Oferecida",
-          items: [
-            "Sim",
-            "Não"
-          ]
-        }
+          items: ["Sim", "Não"],
+        },
       ];
     },
     searchTerm() {
@@ -156,8 +146,7 @@ export default {
         campus: this.filters?.terciary[0],
         unity: this.filters?.terciary[1],
         nature: this.filters?.terciary[3],
-        offeringPeriod: this.filters?.terciary[4],
-        beingOffered: this.filters?.terciary[5],
+        beingOffered: this.filters?.terciary[4],
         term: this.searchTerm,
       };
     },

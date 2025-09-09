@@ -7,6 +7,7 @@ import br.usp.inovacao.hubusp.server.persistence.models.InitiativeValidationErro
 import br.usp.inovacao.hubusp.server.persistence.models.InitiativeUniquenessErrorModel
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.Filters
 import org.litote.kmongo.getCollection
 
 class InitiativeErrorRepositoryImpl(
@@ -34,5 +35,10 @@ class InitiativeErrorRepositoryImpl(
             error = uniquenessError.error
         )
         initiativeUniquenessErrorCollection.insertOne(uniquenessErrorModel)
+    }
+
+    override fun clean() {
+        initiativeValidationErrorCollection.deleteMany(Filters.empty())
+        initiativeUniquenessErrorCollection.deleteMany(Filters.empty())
     }
 }
