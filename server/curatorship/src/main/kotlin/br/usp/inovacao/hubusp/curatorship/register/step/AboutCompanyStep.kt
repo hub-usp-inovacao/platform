@@ -16,11 +16,11 @@ import org.valiktor.validate
 data class AboutCompanyStep(
     val description: String?,
     val logo: String?,
-    val services: Set<String>,
-    val technologies: Set<String>,
+    val services: Set<String> = emptySet(),
+    val technologies: Set<String> = emptySet(),
     val site: String?,
-    val odss: Set<String>,
-    @SerialName("social_medias") val socialMedias: Set<String>
+    val odss: Set<String> = emptySet(),
+    @SerialName("social_medias") val socialMedias: Set<String> = emptySet()
 ) {
     companion object {
         val VALID_ODS =
