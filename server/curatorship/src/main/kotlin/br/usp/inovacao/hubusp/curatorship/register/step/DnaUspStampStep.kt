@@ -12,10 +12,10 @@ import org.valiktor.validate
 
 @Serializable
 data class DnaUspStampStep(
-    @SerialName("wants") val wantsStamp: Boolean,
+    @SerialName("wants") val wantsStamp: Boolean?,
     val name: String?,
     val email: String?,
-    @SerialName("truthful_informations") val truthfulInformations: Boolean,
+    @SerialName("truthful_informations") val truthfulInformations: Boolean?,
 
     /**
      * One of:
@@ -30,7 +30,7 @@ data class DnaUspStampStep(
      *
      * TODO: Refactor this (separate boolean members for each option? enum? etc)
      */
-    val permissions: Set<String>?,
+    val permissions: Set<String> = emptySet(),
 ) {
     companion object {}
 
@@ -38,11 +38,12 @@ data class DnaUspStampStep(
     fun validate() =
         try {
             validate(this) {
-                if (wantsStamp) {
+                validate(DnaUspStampStep::wantsStamp).isNotNull()
+                if (wantsStamp ?: false) {
                     validate(DnaUspStampStep::name).isNotNull().isNotBlank()
                     validate(DnaUspStampStep::email).isNotNull().isNotBlank().isEmail()
                 }
-                validate(DnaUspStampStep::truthfulInformations).isTrue()
+                validate(DnaUspStampStep::truthfulInformations).isNotNull().isTrue()
             }
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
