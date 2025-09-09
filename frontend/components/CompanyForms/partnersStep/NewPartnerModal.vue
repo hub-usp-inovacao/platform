@@ -67,7 +67,7 @@
               ref="unityInput"
             />
             <TextInputFormatted
-              v-model="formData.role"
+              v-model="formData.position"
               class="mt-5"
               label="Cargo *"
               capitalization="title"
@@ -163,7 +163,7 @@ export default {
             nusp: "",
             bond: "",
             unity: "",
-            role: "",
+            position: "",
           };
     },
   },

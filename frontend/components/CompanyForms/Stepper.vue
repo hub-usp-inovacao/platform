@@ -176,8 +176,6 @@ export default {
 
   watch: {
     errors() {
-      console.log("errors");
-      console.log(this.errors);
     },
   },
 
@@ -287,8 +285,8 @@ export default {
         const result = await this.$store.dispatch('company_forms/updateCompanyForm');
 
         if (result) {
-          this.resultTitle = "Sucesso!";
-          this.resultMessage = "Seu formulário foi enviado com sucesso!";
+          this.resultTitle = "Sucesso";
+          this.resultMessage = "Empresa cadastrada com sucesso! Redirecionando...";
 
           setTimeout(() => {
             this.$router.push('/');
@@ -312,7 +310,7 @@ export default {
 };
 </script>
 
-<style scoped>
+
 .component-border {
   border-bottom: 0px solid rgba(0, 0, 0, 0.4);
 }

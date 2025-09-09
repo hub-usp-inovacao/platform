@@ -3,7 +3,7 @@ const state = () => ({
 });
 
 const getters = {
-  partners: (s) => Array.isArray(s.partners) ? s.partners.filter((partner) => partner?.name) : [],
+  partners: (s) => Array.isArray(s.partners) ? s.partners : [],
 };
 
 

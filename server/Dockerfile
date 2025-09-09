@@ -80,7 +80,9 @@ EXPOSE ${HUB_HTTP_PORT}
 
 COPY --from=appbuilder /home/gradle/hub/hub-app/build/libs/hub*-all.jar ./hub-app.jar
 
-ENTRYPOINT ["java", "-jar", "/hub/hub-app.jar"]
+COPY --from=appbuilder /home/gradle/hub/credentials.json ./credentials.json
+
+CMD ["java", "-jar", "hub-app.jar"]
 
 
 

@@ -82,7 +82,6 @@ export default {
     validateStep() {
       const errors = [];
 
-
       if (this.partners && this.partners.length > 0) {
         this.partners.forEach((partner, index) => {
           if (!partner.name || partner.name.trim().length < 3) {
@@ -101,7 +100,7 @@ export default {
             errors.push(`Sócio ${index + 1}: Vínculo com a USP é obrigatório`);
           }
 
-          if (!partner.role || partner.role.trim() === '') {
+          if (!partner.position || partner.position.trim() === '') {
             errors.push(`Sócio ${index + 1}: Cargo é obrigatório`);
           }
         });

@@ -63,6 +63,10 @@ const actions = {
 
 const prepareSection = (obj) => ({
   about_company: {
+  setCompanyType: ({ commit }, value) =>
+    commit("setFormField", { key: "companyType", value }),
+  setIsUnicorn: ({ commit }, value) =>
+    commit("setFormField", { key: "isUnicorn", value }),
     description: obj.descriptionLong,
     services: obj.services,
     technologies: obj.technologies,

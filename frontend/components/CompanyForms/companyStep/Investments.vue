@@ -17,15 +17,15 @@
       Exemplos: investimento próprio, crowdfunding, equity-crowdfunding,
       investimento-anjo, venture capital, BNDES, FINEP, PIPE-FAPESP, outros.
     </em>
-    
+
     <Dropdown
       :value="received"
       :options="['Sim', 'Não']"
       label=""
       @input="setReceived"
-    />  
+    />
 
-    <div v-if="received == 'Sim'">
+    <div v-if="received === 'Sim'">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Quais investimentos a empresa recebeu?
       </h2>
@@ -36,43 +36,7 @@
         multiple-option
         @input="setPreDefinedInvestments"
       />
-      <div class="mt-5 text-h6 font-weight-regular">
-        Outros investimentos - Valores
-        <v-divider />
-        <v-container>
-          <div
-            v-for="(value, index) in localOtherInvestmentValues"
-            :key="`investment-value-${index}`"
-            class="d-flex align-center mb-2"
-          >
-            <CurrencyInput
-              :value="value"
-              :label="`Valor do investimento ${index + 1}`"
-              @input="updateOtherInvestmentValue(index, $event)"
-              class="mr-2"
-            />
-            <v-btn
-              icon
-              small
-              color="error"
-              @click="removeOtherInvestment(index)"
-              :disabled="localOtherInvestmentValues.length <= 1"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </div>
 
-          <v-btn
-            small
-            color="primary"
-            @click="addOtherInvestment"
-            :disabled="localOtherInvestmentValues.length >= 10"
-          >
-            <v-icon left>mdi-plus</v-icon>
-            Adicionar investimento
-          </v-btn>
-        </v-container>
-      </div>
       <CurrencyInput
         v-if="hasInvestmentTypeSelected('Investimento próprio')"
         :value="ownValue"
@@ -104,9 +68,21 @@
         @input="setPipeFapespValue"
       />
       <CurrencyInput
-        v-if="hasOtherInvestmentSelected()"
+        v-if="hasInvestmentTypeSelected('Crowdfunding')"
+        :value="crowdfundingValue"
+        label="Valor do Crowdfunding"
+        @input="setCrowdfundingValue"
+      />
+      <CurrencyInput
+        v-if="hasInvestmentTypeSelected('BNDES e/ou FINEP')"
+        :value="bndesFinepValue"
+        label="Valor do BNDES e/ou FINEP"
+        @input="setBndesFinepValue"
+      />
+      <CurrencyInput
+        v-if="hasInvestmentTypeSelected('Outros investimentos')"
         :value="otherValue"
-        label="Outros investimentos"
+        label="Valor de outros investimentos"
         @input="setOtherValue"
       />
     </div>
@@ -117,13 +93,11 @@
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import CurrencyInput from "@/components/CompanyForms/inputs/CurrencyInput.vue";
-import TextInputFormatted from "@/components/CompanyForms/inputs/TextInputFormatted.vue";
 
 export default {
   components: {
     Dropdown,
     CurrencyInput,
-    TextInputFormatted,
   },
   data: () => ({
     investimentos: [
@@ -134,8 +108,8 @@ export default {
       "Private equity",
       "PIPE-FAPESP",
       "BNDES e/ou FINEP",
+      "Outros investimentos",
     ],
-    localOtherInvestmentValues: [''],
   }),
   computed: {
     ...mapGetters({
@@ -146,12 +120,7 @@ export default {
 
     preDefinedInvestments() {
       return (this.investments || []).filter((inv) =>
-        this.investimentos.find((i) => i == inv)
-      );
-    },
-    otherInvestments() {
-      return (this.investments || []).filter(
-        (inv) => !this.investimentos.find((i) => i == inv)
+        this.investimentos.find((i) => i === inv)
       );
     },
     ownValue() {
@@ -169,6 +138,12 @@ export default {
     pipeFapespValue() {
       return (this.investmentsValues || {}).pipe;
     },
+    crowdfundingValue() {
+      return (this.investmentsValues || {}).crowdfunding;
+    },
+    bndesFinepValue() {
+      return (this.investmentsValues || {}).bndesFinep;
+    },
     otherValue() {
       return (this.investmentsValues || {}).others;
     },
@@ -182,21 +157,8 @@ export default {
     hasInvestmentTypeSelected(type) {
       return this.preDefinedInvestments.find((inv) => inv === type);
     },
-    hasOtherInvestmentSelected() {
-      return (
-        this.otherInvestments.length > 0 ||
-        this.preDefinedInvestments.find(
-          (inv) => inv === "Crowdfunding" || inv === "BNDES e/ou FINEP"
-        )
-      );
-    },
     setPreDefinedInvestments(preDefinedInvestments) {
-      const currentOtherInvestments = this.otherInvestments || [];
-      this.setInvestments(preDefinedInvestments.concat(currentOtherInvestments));
-    },
-    setOtherInvestments(otherInvestments) {
-      const currentPreDefinedInvestments = this.preDefinedInvestments || [];
-      this.setInvestments(currentPreDefinedInvestments.concat(otherInvestments));
+      this.setInvestments(preDefinedInvestments);
     },
     setOwnValue(newValue) {
       this.setInvestmentsValues({ ...this.investmentsValues, own: newValue });
@@ -222,8 +184,23 @@ export default {
         pipe: newValue,
       });
     },
+    setCrowdfundingValue(newValue) {
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        crowdfunding: newValue,
+      });
+    },
+    setBndesFinepValue(newValue) {
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        bndesFinep: newValue,
+      });
+    },
     setOtherValue(newValue) {
-      this.setInvestmentsValues({ ...this.investmentsValues, others: newValue });
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        others: newValue,
+      });
     },
     validateStep() {
       const errors = [];
@@ -233,11 +210,10 @@ export default {
       }
 
       if (this.received === 'Sim') {
-        const hasAnyInvestment = this.preDefinedInvestments.length > 0 ||
-                               this.localOtherInvestmentValues.some(value => value && value.trim() !== '' && value !== '0');
+        const hasAnyInvestment = this.preDefinedInvestments.length > 0;
 
         if (!hasAnyInvestment) {
-          errors.push('É necessário selecionar pelo menos um tipo de investimento ou informar valores de outros investimentos');
+          errors.push('É necessário selecionar pelo menos um tipo de investimento');
         }
 
         if (this.hasInvestmentTypeSelected('Investimento próprio') && (!this.ownValue || this.ownValue === '0')) {
@@ -255,34 +231,21 @@ export default {
         if (this.hasInvestmentTypeSelected('PIPE-FAPESP') && (!this.pipeFapespValue || this.pipeFapespValue === '0')) {
           errors.push('É necessário informar o valor do PIPE-FAPESP');
         }
+        if (this.hasInvestmentTypeSelected('Crowdfunding') && (!this.crowdfundingValue || this.crowdfundingValue === '0')) {
+          errors.push('É necessário informar o valor do Crowdfunding');
+        }
+        if (this.hasInvestmentTypeSelected('BNDES e/ou FINEP') && (!this.bndesFinepValue || this.bndesFinepValue === '0')) {
+          errors.push('É necessário informar o valor do BNDES e/ou FINEP');
+        }
+        if (this.hasInvestmentTypeSelected('Outros investimentos') && (!this.otherValue || this.otherValue === '0')) {
+          errors.push('É necessário informar o valor de outros investimentos');
+        }
       }
 
       return {
         isValid: errors.length === 0,
         errors: errors
       };
-    },
-    updateOtherInvestmentValue(index, value) {
-      const sanitizedValue = value ? value.toString().trim() : '';
-      this.localOtherInvestmentValues[index] = sanitizedValue;
-      this.saveOtherInvestments();
-    },
-    addOtherInvestment() {
-      if (this.localOtherInvestmentValues.length < 10) {
-        this.localOtherInvestmentValues.push('');
-      }
-    },
-    removeOtherInvestment(index) {
-      if (this.localOtherInvestmentValues.length > 1) {
-        this.localOtherInvestmentValues.splice(index, 1);
-        this.saveOtherInvestments();
-      }
-    },
-    saveOtherInvestments() {
-      const filteredInvestments = this.localOtherInvestmentValues
-        .filter(value => value && value.toString().trim() !== '' && value !== '0')
-        .map((value, index) => `Outros investimentos ${index + 1}`);
-      this.setOtherInvestments(filteredInvestments);
     },
   },
 };

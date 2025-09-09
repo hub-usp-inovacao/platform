@@ -80,11 +80,7 @@ export const actions = {
   },
 
   updateCompanyForm: async function ({ commit, getters }) {
-    if (getters.partners.length === 0) {
-      commit("setErrors", {
-        partners: ["É necessário informar pelo menos um sócio da empresa"],
-      });
-      return false;
+    if (getters.partners && getters.partners.length > 0) {
     }
 
     if (!getters.cnpj || !getters.name) {
@@ -168,8 +164,6 @@ const prepareCompanyObject = (obj) => {
     dnaUspContract: obj.dnaUspContract || null,
     truthfulInformation: Boolean(obj.truthfulInformations),
     agreementOptions: Array.isArray(obj.permissions) ? obj.permissions : [],
-    partnerNames: Array.isArray(obj.partners) ? obj.partners.map(p => p.name || "") : [],
-    partnerNusps: Array.isArray(obj.partners) ? obj.partners.map(p => p.nusp || "") : [],
     partnerBonds: Array.isArray(obj.partners) ? obj.partners.map(p => p.bond || "") : [],
     partnerUnities: Array.isArray(obj.partners) ? obj.partners.map(p => p.unity || "") : [],
     partnerPositions: Array.isArray(obj.partners) ? obj.partners.map(p => p.position || "") : [],
@@ -180,7 +174,6 @@ const prepareCompanyObject = (obj) => {
     wantsToAddMorePartners: Boolean(obj.wantsToAddMorePartners),
     cltEmployees: parseInt(obj.numberOfCLTEmployees) || 0,
     pjCollaborators: parseInt(obj.numberOfPJColaborators) || 0,
-    internsScholars: parseInt(obj.numberOfInterns) || 0,
     hasInvestment: obj.received === "Sim",
     investmentTypes: Array.isArray(obj.investments) ? obj.investments : [],
     ownInvestmentAmount: obj.investmentsValues?.own || null,
@@ -188,13 +181,15 @@ const prepareCompanyObject = (obj) => {
     ventureCapitalAmount: obj.investmentsValues?.venture || null,
     privateEquityAmount: obj.investmentsValues?.equity || null,
     pipeAmount: obj.investmentsValues?.pipe || null,
+    crowdfundingAmount: obj.investmentsValues?.crowdfunding || null,
+    bndesFinepAmount: obj.investmentsValues?.bndesFinep || null,
     otherInvestmentsAmount: obj.investmentsValues?.others || null,
     revenue2022: obj.lastYear || null,
     rfbSize: obj.size || null,
-    totalSum: (parseInt(obj.numberOfCLTEmployees) || 0) + (parseInt(obj.numberOfPJColaborators) || 0) + (parseInt(obj.numberOfInterns) || 0),
     companyType: obj.companyType || null,
-    operationalStatus: obj.operationalStatus || "Ativa",
+    operationalStatus: obj.registry_status || null,
     index: obj.index || null,
+    totalSum: (parseInt(obj.numberOfCLTEmployees) || 0) + (parseInt(obj.numberOfPJColaborators) || 0) + (parseInt(obj.numberOfInterns) || 0),
     incubatorBond: obj.incubatorBond || null,
     uspBondConfirmation: obj.uspBondConfirmation || null,
     uspDnaCategory: obj.category || null,

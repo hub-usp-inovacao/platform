@@ -55,6 +55,8 @@ data class Company(
     val ventureCapitalAmount: String? = null,
     val privateEquityAmount: String? = null,
     val pipeAmount: String? = null,
+    val crowdfundingAmount: String? = null,
+    val bndesFinepAmount: String? = null,
     val otherInvestmentsAmount: String? = null,
     val revenue2022: String? = null,
     val rfbSize: String? = null,

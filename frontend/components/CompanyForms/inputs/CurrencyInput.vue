@@ -1,16 +1,15 @@
 <template>
   <v-text-field
-    :value="formattedValue"
+    :value="displayValue"
     :label="label"
     :hint="hint"
-    :error="hasError"
-    :error-messages="errorMessage"
+    :placeholder="placeholder"
     :required="required"
-    :rules="validationRules"
-    @input="handleInput"
-    @blur="handleBlur"
-    placeholder="R$ 0,00"
+    :disabled="disabled"
     persistent-hint
+    @input="handleInput"
+    @focus="handleFocus"
+    @blur="handleBlur"
   />
 </template>
 
@@ -18,99 +17,139 @@
 export default {
   props: {
     value: {
-      type: [String, Number],
-      default: '',
+      type: String,
+      default: "R$ 0,00",
     },
     label: {
       type: String,
-      default: 'Valor',
+      default: "Valor",
     },
     hint: {
       type: String,
-      default: 'Digite um valor em reais',
+      default: "",
+    },
+    placeholder: {
+      type: String,
+      default: "0,00",
     },
     required: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
   },
   data() {
     return {
-      hasError: false,
-      errorMessage: '',
+      internalValue: "",
+      isFocused: false,
     };
   },
   computed: {
-    formattedValue() {
-      return this.formatCurrency(this.value);
-    },
-    validationRules() {
-      return this.required ? [this.validateCurrency] : [];
+    displayValue() {
+      if (this.isFocused) {
+        return this.internalValue;
+      }
+
+      if (!this.value || this.value === "R$ 0,00") {
+        return "";
+      }
+
+      return this.value;
     },
   },
+  watch: {
+    value: {
+      immediate: true,
+      handler(newValue) {
+        if (!this.isFocused) {
+          this.internalValue = this.getNumericPart(newValue || "");
+        }
+      }
+    }
+  },
   methods: {
-    formatCurrency(value) {
-      if (!value) return '';
-
-      const numbers = value.toString().replace(/\D/g, '');
-
-      if (!numbers) return '';
-
-      const cents = parseInt(numbers);
-
-      const formatted = (cents / 100).toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-      });
-
-      return formatted;
+    getNumericPart(value) {
+      if (!value || value === "R$ 0,00") return "";
+      return value.replace("R$ ", "").replace("R$", "");
     },
 
-    handleInput(value) {
-      const cleanValue = value.replace(/[^\d,.\s]/g, '');
-      const numbers = cleanValue.replace(/\D/g, '');
-
-      const sanitizedNumbers = numbers || '0';
-
-      this.$emit('input', sanitizedNumbers);
-      this.validateInput(sanitizedNumbers);
+    handleFocus() {
+      this.isFocused = true;
+      this.internalValue = this.getNumericPart(this.value);
     },
 
     handleBlur() {
-      const finalValue = this.value || '0';
-      this.validateInput(finalValue);
-    },
+      this.isFocused = false;
 
-    validateInput(value) {
-      const numericValue = value || '0';
-
-      if (this.required && (numericValue === '0' || numericValue === '')) {
-        this.hasError = true;
-        this.errorMessage = 'Campo obrigatório';
-        return false;
+      if (!this.internalValue || this.internalValue.trim() === "") {
+        this.$emit("input", "R$ 0,00");
+        return;
       }
 
-      if (isNaN(parseInt(numericValue))) {
-        this.hasError = true;
-        this.errorMessage = 'Valor inválido';
-        return false;
-      }
-
-      this.hasError = false;
-      this.errorMessage = '';
-      return true;
+      const formattedValue = this.formatCurrency(this.internalValue);
+      this.$emit("input", `R$ ${formattedValue}`);
     },
 
-    validateCurrency(value) {
-      if (this.required && (!value || value === '0')) {
-        return 'Campo obrigatório';
+    handleInput(inputValue) {
+      this.internalValue = this.cleanInput(inputValue);
+
+      if (!this.internalValue) {
+        this.$emit("input", "R$ 0,00");
+        return;
       }
 
-      return true;
+      const previewValue = this.formatCurrency(this.internalValue);
+      this.$emit("input", `R$ ${previewValue}`);
     },
 
-    isValid() {
-      return this.validateInput(this.value);
+    cleanInput(value) {
+      if (!value) return "";
+
+      let cleaned = value.replace(/[^\d,\.]/g, "");
+
+      if (cleaned.includes(",")) {
+        const parts = cleaned.split(",");
+        if (parts.length === 2) {
+          const integerPart = parts[0].replace(/\./g, "");
+          const decimalPart = parts[1].substring(0, 2);
+          cleaned = decimalPart ? `${integerPart},${decimalPart}` : integerPart;
+        } else {
+          const lastCommaIndex = cleaned.lastIndexOf(",");
+          const integerPart = cleaned.substring(0, lastCommaIndex).replace(/[,\.]/g, "");
+          const decimalPart = cleaned.substring(lastCommaIndex + 1).replace(/[,\.]/g, "").substring(0, 2);
+          cleaned = decimalPart ? `${integerPart},${decimalPart}` : integerPart;
+        }
+      } else {
+        // Remove pontos (separadores de milhares)
+        cleaned = cleaned.replace(/\./g, "");
+      }
+
+      return cleaned;
+    },
+
+    formatCurrency(value) {
+      if (!value || value === "0") return "0,00";
+
+      let cleanValue = value.toString();
+
+      if (cleanValue.includes(",")) {
+        const parts = cleanValue.split(",");
+        const integerPart = this.addThousandsSeparator(parts[0] || "0");
+        const decimalPart = parts[1] ? parts[1].padEnd(2, "0").substring(0, 2) : "00";
+        return `${integerPart},${decimalPart}`;
+      } else {
+        // Só parte inteira
+        const integerPart = this.addThousandsSeparator(cleanValue);
+        return `${integerPart},00`;
+      }
+    },
+
+    addThousandsSeparator(value) {
+      if (!value || value === "0") return "0";
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
   },
 };
