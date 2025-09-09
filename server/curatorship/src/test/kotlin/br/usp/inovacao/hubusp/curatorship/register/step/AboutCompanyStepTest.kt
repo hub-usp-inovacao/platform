@@ -28,6 +28,7 @@ class AboutCompanyStepTest {
     }
 
     private val validStep = VALID_STEP
+    private val invalidStep = INVALID_STEP
 
     @Test
     fun `it does not throws an error when AboutCompanyStep is valid`() {
@@ -35,9 +36,40 @@ class AboutCompanyStepTest {
     }
 
     @Test
-    fun `it throws an error when AboutCompanyStep description is empty`() {
-        assertFailsWith<StepValidationException> { validStep.copy(description = "").validate() }
+    fun `it does not throws an error when AboutCompanyStep is invalid`() {
+        assertFailsWith<StepValidationException> { invalidStep.validate() }
     }
 
-    // TODO: Test the other members
+    @Test
+    fun `it throws an error when AboutCompanyStep description is invalid`() {
+        assertFailsWith<StepValidationException> { validStep.copy(description = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(description = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when AboutCompanyStep logo is invalid`() {
+        assertFailsWith<StepValidationException> { validStep.copy(logo = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(logo = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when AboutCompanyStep site is invalid`() {
+        assertFailsWith<StepValidationException> { validStep.copy(site = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(site = "foobar").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(site = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when AboutCompanyStep odss is invalid`() {
+        assertFailsWith<StepValidationException> {
+            validStep.copy(odss = setOf("foobar")).validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when AboutCompanyStep socialMedias is invalid`() {
+        assertFailsWith<StepValidationException> {
+            validStep.copy(socialMedias = setOf("foobar")).validate()
+        }
+    }
 }
