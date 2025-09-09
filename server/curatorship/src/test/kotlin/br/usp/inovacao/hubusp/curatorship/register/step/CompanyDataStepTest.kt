@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.register.step
 
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -51,9 +52,92 @@ class CompanyDataStepTest {
     }
 
     @Test
-    fun `it throws an error when company data has blank cnpj`() {
+    fun `it throws an error when company data has invalid cnpj`() {
         assertFailsWith<StepValidationException> { validStep.copy(cnpj = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(cnpj = null).validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(cnpj = "foobar").validate() }
     }
 
-    // TODO: Check each validation error
+    @Test
+    fun `it throws an error when company data has invalid publicName`() {
+        assertFailsWith<StepValidationException> { validStep.copy(publicName = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(publicName = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid corporateName`() {
+        assertFailsWith<StepValidationException> { validStep.copy(corporateName = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(corporateName = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid year`() {
+        assertFailsWith<StepValidationException> { validStep.copy(year = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(year = null).validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(year = "0").validate() }
+        assertFailsWith<StepValidationException> {
+            validStep.copy(year = (LocalDate.now().year + 1).toString()).validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid size`() {
+        assertFailsWith<StepValidationException> { validStep.copy(size = "foobar").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(size = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid cnae`() {
+        assertFailsWith<StepValidationException> { validStep.copy(cnae = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(cnae = null).validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(cnae = "12345678").validate() }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid registryStatus`() {
+        assertFailsWith<StepValidationException> {
+            validStep.copy(registryStatus = "foobar").validate()
+        }
+        assertFailsWith<StepValidationException> {
+            validStep.copy(registryStatus = null).validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid phones`() {
+        assertFailsWith<StepValidationException> {
+            validStep.copy(phones = setOf("foobar")).validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid emails`() {
+        assertFailsWith<StepValidationException> {
+            validStep.copy(emails = setOf("foobar")).validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid street`() {
+        assertFailsWith<StepValidationException> { validStep.copy(street = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(street = null).validate() }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid zipcode`() {
+        assertFailsWith<StepValidationException> { validStep.copy(zipcode = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(zipcode = null).validate() }
+        assertFailsWith<StepValidationException> {
+            validStep.copy(zipcode = "000000000").validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid companyNature`() {
+        assertFailsWith<StepValidationException> { validStep.copy(companyNature = "").validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(companyNature = null).validate() }
+        assertFailsWith<StepValidationException> {
+            validStep.copy(companyNature = "foobar").validate()
+        }
+    }
 }
