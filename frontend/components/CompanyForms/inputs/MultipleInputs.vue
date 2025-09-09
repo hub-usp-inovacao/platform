@@ -1,105 +1,124 @@
 <template>
   <div>
-    <v-row v-for="i in counter" :key="i" align="center">
-      <v-col cols="10">
-        <component
-          :is="component"
-          :value="value[i - 1]"
-          clearable
-          :label="displayLabel(i)"
-          :mask="mask"
-          :rule="rule"
-          @input="changeItem($event, i - 1)"
-        ></component>
-      </v-col>
-      <v-col cols="2" align="center">
-        <v-btn icon @click="removeItem(i)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-btn color="primary" rounded @click="newItem" :disabled="!canAdd"
-      >Adicionar {{ inputLabel }}</v-btn
+    <div v-for="(item, index) in internalItems" :key="`item-${index}`" class="d-flex align-center mb-2">
+      <component
+        :is="inputComponent"
+        :value="item"
+        :label="`${inputLabel} ${index + 1}`"
+        @input="updateItem(index, $event)"
+        class="flex-grow-1 mr-2"
+      />
+      <v-btn
+        icon
+        small
+        color="error"
+        @click="removeItem(index)"
+        :disabled="internalItems.length <= 1"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </div>
+
+    <v-btn
+      small
+      color="primary"
+      @click="addItem"
+      :disabled="internalItems.length >= maxItems"
     >
+      <v-icon left>mdi-plus</v-icon>
+      Adicionar {{ inputLabel.toLowerCase() }}
+    </v-btn>
+
+    <div v-if="internalItems.length >= maxItems" class="caption text--secondary mt-2">
+      Máximo de {{ maxItems }} itens permitidos
+    </div>
   </div>
 </template>
 
 <script>
-import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
-import MaskInput from "@/components/CompanyForms/inputs/MaskInput.vue";
-import URLInput from "@/components/CompanyForms/inputs/URLInput.vue";
-import PairOfShortTextInput from "@/components/CompanyForms/inputs/PairOfShortTextInput.vue";
-import PatentNameAndCode from "@/components/CompanyForms/inputs/PatentNameAndCode.vue";
-
-import GroupInput from "../../SkillForms/BondStep/GroupInput.vue";
+import TextInputFormatted from './TextInputFormatted.vue';
+import PhoneInput from './PhoneInput.vue';
+import EmailInput from './EmailInput.vue';
 
 export default {
   components: {
-    ShortTextInput,
-    MaskInput,
-    URLInput,
-    PairOfShortTextInput,
-    PatentNameAndCode,
-    GroupInput,
+    TextInputFormatted,
+    PhoneInput,
+    EmailInput,
   },
   props: {
-    inputLabel: {
-      type: String,
-      required: true,
-    },
-    component: {
-      type: String,
-      required: false,
-      default: () => "ShortTextInput",
-    },
     value: {
       type: Array,
       default: () => [],
     },
-    rule: {
-      type: RegExp,
-      required: false,
-      default: () => /.*/,
-    },
-    mask: {
+    inputLabel: {
       type: String,
-      default: "",
+      default: 'Item',
     },
-    limit: {
+    component: {
+      type: String,
+      default: 'TextInputFormatted',
+    },
+    maxItems: {
       type: Number,
-      default: () => 0,
+      default: 10,
     },
+  },
+  data() {
+    return {
+      internalItems: []
+    };
   },
   computed: {
-    counter() {
-      return this.value.length;
-    },
-    canAdd() {
-      return this.limit == 0 || this.limit > this.counter;
+    inputComponent() {
+      const componentMap = {
+        'TextInputFormatted': 'TextInputFormatted',
+        'PhoneInput': 'PhoneInput',
+        'EmailInput': 'EmailInput',
+      };
+
+      return componentMap[this.component] || 'TextInputFormatted';
     },
   },
+  watch: {
+    value: {
+      handler(newValue) {
+        if (Array.isArray(newValue) && newValue.length > 0) {
+          this.internalItems = [...newValue];
+        } else {
+          this.internalItems = [''];
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
-    displayLabel(i) {
-      return `${this.inputLabel} ${i}`;
+    updateItem(index, value) {
+      this.internalItems[index] = value;
+      this.emitUpdate();
     },
-    newItem() {
-      const items = [];
-      Object.assign(items, this.value);
-      items.push("");
-      this.$emit("input", items);
+
+    addItem() {
+      if (this.internalItems.length < this.maxItems) {
+        this.internalItems.push('');
+        this.emitUpdate();
+      }
     },
-    changeItem(val, pos) {
-      const items = [];
-      Object.assign(items, this.value);
-      items[pos] = val;
-      this.$emit("input", items);
+
+    removeItem(index) {
+      if (this.internalItems.length > 1) {
+        this.internalItems.splice(index, 1);
+        this.emitUpdate();
+      }
     },
-    removeItem(i) {
-      const end = this.value.length;
-      const head = this.value.slice(0, i - 1);
-      const tail = this.value.slice(i, end);
-      const items = head.concat(tail);
-      this.$emit("input", items);
+
+    emitUpdate() {
+      const nonEmptyItems = this.internalItems.filter(item => item && item.trim() !== '');
+      this.$emit('input', nonEmptyItems);
+    },
+
+    isValid() {
+      return this.internalItems.some(item => item && item.trim() !== '');
     },
   },
 };

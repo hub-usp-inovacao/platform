@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    :value="value"
+    :value="formattedValue"
     :label="label"
     :hint="hint"
     :error="hasError"
@@ -9,8 +9,9 @@
     :rules="validationRules"
     @input="handleInput"
     @blur="handleBlur"
-    @keypress="onKeyPress"
+    placeholder="12345678"
     persistent-hint
+    type="tel"
   />
 </template>
 
@@ -23,23 +24,15 @@ export default {
     },
     label: {
       type: String,
-      default: 'Texto',
+      default: 'Número USP',
     },
     hint: {
       type: String,
-      default: '',
+      default: 'Digite o NUSP (máximo 8 dígitos)',
     },
     required: {
       type: Boolean,
       default: false,
-    },
-    minLength: {
-      type: Number,
-      default: 0,
-    },
-    maxLength: {
-      type: Number,
-      default: null,
     },
   },
   data() {
@@ -49,27 +42,21 @@ export default {
     };
   },
   computed: {
+    formattedValue() {
+      return this.value;
+    },
     validationRules() {
-      return this.required ? [this.validateText] : [];
+      return this.required ? [this.validateNusp] : [];
     },
   },
   methods: {
-    onKeyPress(event) {
-      if (this.maxLength && this.value && this.value.length >= this.maxLength) {
-        event.preventDefault();
-        return;
-      }
-    },
-
     handleInput(value) {
-      let processedValue = value;
+      const numbers = value.replace(/\D/g, '');
 
-      if (this.maxLength && value.length > this.maxLength) {
-        processedValue = value.slice(0, this.maxLength);
-      }
+      const limitedValue = numbers.slice(0, 8);
 
-      this.$emit('input', processedValue);
-      this.validateInput(processedValue);
+      this.$emit('input', limitedValue);
+      this.validateInput(limitedValue);
     },
 
     handleBlur() {
@@ -77,15 +64,15 @@ export default {
     },
 
     validateInput(value) {
-      if (this.required && (!value || value.trim() === '')) {
+      if (this.required && !value) {
         this.hasError = true;
         this.errorMessage = 'Campo obrigatório';
         return false;
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
+      if (value && (value.length < 7 || value.length > 8)) {
         this.hasError = true;
-        this.errorMessage = `Mínimo ${this.minLength} caracteres`;
+        this.errorMessage = 'NUSP deve ter 7 ou 8 dígitos';
         return false;
       }
 
@@ -94,13 +81,13 @@ export default {
       return true;
     },
 
-    validateText(value) {
-      if (this.required && (!value || value.trim() === '')) {
+    validateNusp(value) {
+      if (this.required && !value) {
         return 'Campo obrigatório';
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
-        return `Mínimo ${this.minLength} caracteres`;
+      if (value && (value.length < 7 || value.length > 8)) {
+        return 'NUSP deve ter 7 ou 8 dígitos';
       }
 
       return true;

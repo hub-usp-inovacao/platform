@@ -1,12 +1,11 @@
 <template>
-  <v-switch
-    :v-model="booleanSwitch"
+  <v-checkbox
+    :input-value="value"
     :label="label"
-    :color="color"
-    :value="value"
-    @change="$emit('input', $event)"
-  >
-  </v-switch>
+    :hint="hint"
+    @change="handleChange"
+    persistent-hint
+  />
 </template>
 
 <script>
@@ -18,17 +17,17 @@ export default {
     },
     label: {
       type: String,
-      required: true,
+      default: 'Opção',
     },
-
-    color: {
+    hint: {
       type: String,
-      default: "blue",
+      default: '',
     },
   },
-
-  data: () => ({
-    booleanSwitch: false,
-  }),
+  methods: {
+    handleChange(value) {
+      this.$emit('input', value);
+    },
+  },
 };
 </script>

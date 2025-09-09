@@ -1,13 +1,16 @@
 package br.usp.inovacao.hubusp.server.app.modules
 
+import br.usp.inovacao.hubusp.server.app.services.GoogleSheetsService
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.*
 import com.mongodb.client.MongoDatabase
 import io.ktor.http.*
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
+import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -181,6 +184,30 @@ fun Application.catalog(db: MongoDatabase) {
                 HttpStatusCode.OK,
                 mapOf("initiatives" to initiatives)
             )
+        }
+
+        post("/company/register") {
+            try {
+                val companyForm = call.receive<CompanyForm>()
+
+                val sheetsService = GoogleSheetsService()
+                sheetsService.addCompanyToSheet(companyForm)
+
+                call.respond(HttpStatusCode.OK, mapOf("status" to "enviado"))
+
+            } catch (e: IllegalArgumentException) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    mapOf("status" to "erro", "mensagem" to e.message)
+                )
+            } catch (e: Exception) {
+                println("Erro no endpoint /company/register: ${e.message}")
+                e.printStackTrace()
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    mapOf("status" to "erro", "mensagem" to "Erro interno: ${e.message}")
+                )
+            }
         }
     }
 }

@@ -16,6 +16,9 @@ const state = () => ({
     cep: "",
   },
   company_nature: "",
+  category: "",
+  companyType: "",
+  isUnicorn: false,
 });
 
 const getters = {
@@ -35,6 +38,9 @@ const getters = {
   state: (s) => s.address.state,
   cep: (s) => s.address.cep,
   company_nature: (s) => s.company_nature,
+  category: (s) => s.category,
+  companyType: (s) => s.companyType,
+  isUnicorn: (s) => s.isUnicorn,
 };
 
 const mutations = {
@@ -90,6 +96,12 @@ const actions = {
     }),
   setCompanyNature: ({ commit }, value) =>
     commit("setFormField", { key: "company_nature", value }),
+  setCategory: ({ commit }, value) =>
+    commit("setFormField", { key: "category", value }),
+  setCompanyType: ({ commit }, value) =>
+    commit("setFormField", { key: "companyType", value }),
+  setIsUnicorn: ({ commit }, value) =>
+    commit("setFormField", { key: "isUnicorn", value }),
 };
 
 const prepareSection = (obj) => ({
@@ -104,11 +116,14 @@ const prepareSection = (obj) => ({
     phones: obj.phones,
     emails: obj.emails,
     street: obj.address.venue,
-    neighborhood: obj.neighborhood,
-    city: obj.city,
-    state: obj.state,
-    zipcode: obj.cep,
+    neighborhood: obj.address.neighborhood,
+    city: obj.address.city,
+    state: obj.address.state,
+    zipcode: obj.address.cep,
     company_nature: obj.company_nature,
+    category: obj.category,
+    companyType: obj.companyType,
+    isUnicorn: obj.isUnicorn,
   },
 });
 

@@ -16,8 +16,6 @@ const getters = {
 
 const mutations = {
   setFormField: (s, { key, value }) => {
-    console.log('changing ', key)
-    console.log('to ', value)
     s[key] = value
   },
   setErrors: (s, errors) => (s.errors = errors),

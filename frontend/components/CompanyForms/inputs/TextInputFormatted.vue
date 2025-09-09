@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    :value="value"
+    :value="formattedValue"
     :label="label"
     :hint="hint"
     :error="hasError"
@@ -33,6 +33,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    capitalization: {
+      type: String,
+      default: 'none',
+      validator: (value) => ['none', 'title', 'upper', 'lower'].includes(value)
+    },
     minLength: {
       type: Number,
       default: 0,
@@ -49,11 +54,35 @@ export default {
     };
   },
   computed: {
+    formattedValue() {
+      return this.applyCapitalization(this.value);
+    },
     validationRules() {
       return this.required ? [this.validateText] : [];
     },
   },
   methods: {
+    applyCapitalization(value) {
+      if (!value) return '';
+
+      switch (this.capitalization) {
+        case 'title':
+          return this.toTitleCase(value);
+        case 'upper':
+          return value.toUpperCase();
+        case 'lower':
+          return value.toLowerCase();
+        default:
+          return value;
+      }
+    },
+
+    toTitleCase(str) {
+      return str.replace(/\w\S*/g, (txt) => {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    },
+
     onKeyPress(event) {
       if (this.maxLength && this.value && this.value.length >= this.maxLength) {
         event.preventDefault();

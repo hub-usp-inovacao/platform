@@ -20,14 +20,21 @@ class SpreadsheetReader {
     private val sheetsService: GoogleSheetsService
 
     companion object {
-        private const val CREDENTIALS_FILE_PATH = "/credentials.json"
+        private const val CREDENTIALS_FILE_PATH = "../credentials.json"
         private const val APPLICATION_NAME = "HubUSP"
     }
 
     init {
         sheetsService = try {
-            val credentialsStream = SpreadsheetReader::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
-                ?: throw IOException("Credentials file not found at $CREDENTIALS_FILE_PATH")
+            // Tentar carregar credentials.json do diretório server
+            val credentialsFile = java.io.File("../credentials.json")
+            val credentialsStream = if (credentialsFile.exists()) {
+                credentialsFile.inputStream()
+            } else {
+                // Fallback para resources se o arquivo não existir no diretório pai
+                SpreadsheetReader::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+                    ?: throw IOException("Credentials file not found at $CREDENTIALS_FILE_PATH or ../credentials.json")
+            }
 
             val credentials = GoogleCredentials.fromStream(credentialsStream)
                 .createScoped(listOf(SheetsScopes.SPREADSHEETS_READONLY))
@@ -40,7 +47,7 @@ class SpreadsheetReader {
                 .setApplicationName(APPLICATION_NAME)
                 .build()
         } catch (e: Exception) {
-            throw RuntimeException("Failed to initialize Google Sheets service", e)
+            throw RuntimeException("Failed to initialize Google Sheets service: ${e.message}", e)
         }
     }
 

@@ -10,7 +10,10 @@
     @input="handleInput"
     @blur="handleBlur"
     @keypress="onKeyPress"
+    placeholder="12345678"
     persistent-hint
+    type="text"
+    maxlength="8"
   />
 </template>
 
@@ -23,23 +26,15 @@ export default {
     },
     label: {
       type: String,
-      default: 'Texto',
+      default: 'Número USP',
     },
     hint: {
       type: String,
-      default: '',
+      default: 'Digite o número USP (máximo 8 dígitos)',
     },
     required: {
       type: Boolean,
       default: false,
-    },
-    minLength: {
-      type: Number,
-      default: 0,
-    },
-    maxLength: {
-      type: Number,
-      default: null,
     },
   },
   data() {
@@ -50,26 +45,30 @@ export default {
   },
   computed: {
     validationRules() {
-      return this.required ? [this.validateText] : [];
+      return this.required ? [this.validateNUSP] : [];
     },
   },
   methods: {
     onKeyPress(event) {
-      if (this.maxLength && this.value && this.value.length >= this.maxLength) {
+      const char = String.fromCharCode(event.keyCode);
+      if (!/[0-9]/.test(char)) {
+        event.preventDefault();
+        return;
+      }
+
+      const currentValue = this.value || '';
+      if (currentValue.length >= 8) {
         event.preventDefault();
         return;
       }
     },
 
     handleInput(value) {
-      let processedValue = value;
+      // Remove qualquer caractere não numérico e limita a 8 dígitos
+      const numericValue = value.toString().replace(/\D/g, '').slice(0, 8);
 
-      if (this.maxLength && value.length > this.maxLength) {
-        processedValue = value.slice(0, this.maxLength);
-      }
-
-      this.$emit('input', processedValue);
-      this.validateInput(processedValue);
+      this.$emit('input', numericValue);
+      this.validateInput(numericValue);
     },
 
     handleBlur() {
@@ -83,9 +82,9 @@ export default {
         return false;
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
+      if (value && value.length < 7) {
         this.hasError = true;
-        this.errorMessage = `Mínimo ${this.minLength} caracteres`;
+        this.errorMessage = 'NUSP deve ter pelo menos 7 dígitos';
         return false;
       }
 
@@ -94,13 +93,13 @@ export default {
       return true;
     },
 
-    validateText(value) {
+    validateNUSP(value) {
       if (this.required && (!value || value.trim() === '')) {
         return 'Campo obrigatório';
       }
 
-      if (this.minLength && value && value.trim().length < this.minLength) {
-        return `Mínimo ${this.minLength} caracteres`;
+      if (value && value.length < 7) {
+        return 'NUSP deve ter pelo menos 7 dígitos';
       }
 
       return true;

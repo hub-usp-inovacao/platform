@@ -17,15 +17,15 @@
       Exemplos: investimento próprio, crowdfunding, equity-crowdfunding,
       investimento-anjo, venture capital, BNDES, FINEP, PIPE-FAPESP, outros.
     </em>
-    
+
     <Dropdown
       :value="received"
       :options="['Sim', 'Não']"
       label=""
       @input="setReceived"
-    />  
+    />
 
-    <div v-if="received == 'Sim'">
+    <div v-if="received === 'Sim'">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Quais investimentos a empresa recebeu?
       </h2>
@@ -36,18 +36,7 @@
         multiple-option
         @input="setPreDefinedInvestments"
       />
-      <div class="mt-5 text-h6 font-weight-regular">
-        Outros
-        <v-divider />
-        <v-container>
-          <MultipleInputs
-            :value="otherInvestments"
-            input-label="Investimento"
-            @items="outros = $event"
-            @input="setOtherInvestments"
-          />
-        </v-container>
-      </div>
+
       <CurrencyInput
         v-if="hasInvestmentTypeSelected('Investimento próprio')"
         :value="ownValue"
@@ -79,9 +68,21 @@
         @input="setPipeFapespValue"
       />
       <CurrencyInput
-        v-if="hasOtherInvestmentSelected()"
+        v-if="hasInvestmentTypeSelected('Crowdfunding')"
+        :value="crowdfundingValue"
+        label="Valor do Crowdfunding"
+        @input="setCrowdfundingValue"
+      />
+      <CurrencyInput
+        v-if="hasInvestmentTypeSelected('BNDES e/ou FINEP')"
+        :value="bndesFinepValue"
+        label="Valor do BNDES e/ou FINEP"
+        @input="setBndesFinepValue"
+      />
+      <CurrencyInput
+        v-if="hasInvestmentTypeSelected('Outros investimentos')"
         :value="otherValue"
-        label="Outros investimentos"
+        label="Valor de outros investimentos"
         @input="setOtherValue"
       />
     </div>
@@ -91,13 +92,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
-import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 import CurrencyInput from "@/components/CompanyForms/inputs/CurrencyInput.vue";
 
 export default {
   components: {
     Dropdown,
-    MultipleInputs,
     CurrencyInput,
   },
   data: () => ({
@@ -109,6 +108,7 @@ export default {
       "Private equity",
       "PIPE-FAPESP",
       "BNDES e/ou FINEP",
+      "Outros investimentos",
     ],
   }),
   computed: {
@@ -120,12 +120,7 @@ export default {
 
     preDefinedInvestments() {
       return (this.investments || []).filter((inv) =>
-        this.investimentos.find((i) => i == inv)
-      );
-    },
-    otherInvestments() {
-      return (this.investments || []).filter(
-        (inv) => !this.investimentos.find((i) => i == inv)
+        this.investimentos.find((i) => i === inv)
       );
     },
     ownValue() {
@@ -143,6 +138,12 @@ export default {
     pipeFapespValue() {
       return (this.investmentsValues || {}).pipe;
     },
+    crowdfundingValue() {
+      return (this.investmentsValues || {}).crowdfunding;
+    },
+    bndesFinepValue() {
+      return (this.investmentsValues || {}).bndesFinep;
+    },
     otherValue() {
       return (this.investmentsValues || {}).others;
     },
@@ -156,19 +157,8 @@ export default {
     hasInvestmentTypeSelected(type) {
       return this.preDefinedInvestments.find((inv) => inv === type);
     },
-    hasOtherInvestmentSelected() {
-      return (
-        this.otherInvestments.length > 0 ||
-        this.preDefinedInvestments.find(
-          (inv) => inv === "Crowdfunding" || inv === "BNDES e/ou FINEP"
-        )
-      );
-    },
     setPreDefinedInvestments(preDefinedInvestments) {
-      this.setInvestments(preDefinedInvestments.concat(this.otherInvestments));
-    },
-    setOtherInvestments(otherInvestments) {
-      this.setInvestments(this.preDefinedInvestments.concat(otherInvestments));
+      this.setInvestments(preDefinedInvestments);
     },
     setOwnValue(newValue) {
       this.setInvestmentsValues({ ...this.investmentsValues, own: newValue });
@@ -194,8 +184,68 @@ export default {
         pipe: newValue,
       });
     },
+    setCrowdfundingValue(newValue) {
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        crowdfunding: newValue,
+      });
+    },
+    setBndesFinepValue(newValue) {
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        bndesFinep: newValue,
+      });
+    },
     setOtherValue(newValue) {
-      this.setInvestmentsValues({ ...this.investmentsValues, others: newValue });
+      this.setInvestmentsValues({
+        ...this.investmentsValues,
+        others: newValue,
+      });
+    },
+    validateStep() {
+      const errors = [];
+
+      if (!this.received) {
+        errors.push('É obrigatório informar se a empresa recebeu investimento');
+      }
+
+      if (this.received === 'Sim') {
+        const hasAnyInvestment = this.preDefinedInvestments.length > 0;
+
+        if (!hasAnyInvestment) {
+          errors.push('É necessário selecionar pelo menos um tipo de investimento');
+        }
+
+        if (this.hasInvestmentTypeSelected('Investimento próprio') && (!this.ownValue || this.ownValue === '0')) {
+          errors.push('É necessário informar o valor do investimento próprio');
+        }
+        if (this.hasInvestmentTypeSelected('Investimento-anjo') && (!this.angelValue || this.angelValue === '0')) {
+          errors.push('É necessário informar o valor do investimento-anjo');
+        }
+        if (this.hasInvestmentTypeSelected('Venture capital') && (!this.ventureCapitalValue || this.ventureCapitalValue === '0')) {
+          errors.push('É necessário informar o valor do Venture Capital');
+        }
+        if (this.hasInvestmentTypeSelected('Private equity') && (!this.privateEquityValue || this.privateEquityValue === '0')) {
+          errors.push('É necessário informar o valor do Private Equity');
+        }
+        if (this.hasInvestmentTypeSelected('PIPE-FAPESP') && (!this.pipeFapespValue || this.pipeFapespValue === '0')) {
+          errors.push('É necessário informar o valor do PIPE-FAPESP');
+        }
+        if (this.hasInvestmentTypeSelected('Crowdfunding') && (!this.crowdfundingValue || this.crowdfundingValue === '0')) {
+          errors.push('É necessário informar o valor do Crowdfunding');
+        }
+        if (this.hasInvestmentTypeSelected('BNDES e/ou FINEP') && (!this.bndesFinepValue || this.bndesFinepValue === '0')) {
+          errors.push('É necessário informar o valor do BNDES e/ou FINEP');
+        }
+        if (this.hasInvestmentTypeSelected('Outros investimentos') && (!this.otherValue || this.otherValue === '0')) {
+          errors.push('É necessário informar o valor de outros investimentos');
+        }
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors
+      };
     },
   },
 };

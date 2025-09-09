@@ -1,103 +1,155 @@
 <template>
   <v-text-field
+    :value="displayValue"
     :label="label"
-    :value="value"
     :hint="hint"
+    :placeholder="placeholder"
+    :required="required"
+    :disabled="disabled"
     persistent-hint
-    @keydown="handleKeyDown"
-    @click="moveCursorToTheEnd"
+    @input="handleInput"
+    @focus="handleFocus"
+    @blur="handleBlur"
   />
 </template>
 
 <script>
 export default {
-  components: {},
   props: {
     value: {
       type: String,
-      required: false,
       default: "R$ 0,00",
     },
     label: {
       type: String,
-      required: true,
+      default: "Valor",
     },
     hint: {
       type: String,
-      required: false,
-      default: () => "",
+      default: "",
+    },
+    placeholder: {
+      type: String,
+      default: "0,00",
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
+  data() {
+    return {
+      internalValue: "",
+      isFocused: false,
+    };
+  },
+  computed: {
+    displayValue() {
+      if (this.isFocused) {
+        return this.internalValue;
+      }
+
+      if (!this.value || this.value === "R$ 0,00") {
+        return "";
+      }
+
+      return this.value;
+    },
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(newValue) {
+        if (!this.isFocused) {
+          this.internalValue = this.getNumericPart(newValue || "");
+        }
+      }
+    }
+  },
   methods: {
-    handleKeyDown(e) {
-      const TAB = 9;
-      const BACKSPACE = 8;
-      const NUMBERS =
-        (e.keyCode >= 48 && e.keyCode <= 57) ||
-        (e.keyCode >= 96 && e.keyCode <= 105);
+    getNumericPart(value) {
+      if (!value || value === "R$ 0,00") return "";
+      return value.replace("R$ ", "").replace("R$", "");
+    },
 
-      if (e.keyCode !== TAB) {
-        e.preventDefault();
-        this.moveCursorToTheEnd(e);
+    handleFocus() {
+      this.isFocused = true;
+      this.internalValue = this.getNumericPart(this.value);
+    },
+
+    handleBlur() {
+      this.isFocused = false;
+
+      if (!this.internalValue || this.internalValue.trim() === "") {
+        this.$emit("input", "R$ 0,00");
+        return;
       }
 
-      if (e.keyCode === BACKSPACE) {
-        this.removeLastDigit();
+      const formattedValue = this.formatCurrency(this.internalValue);
+      this.$emit("input", `R$ ${formattedValue}`);
+    },
+
+    handleInput(inputValue) {
+      this.internalValue = this.cleanInput(inputValue);
+
+      if (!this.internalValue) {
+        this.$emit("input", "R$ 0,00");
+        return;
       }
 
-      if (NUMBERS) {
-        this.updateCurrencyValue(e.key);
+      const previewValue = this.formatCurrency(this.internalValue);
+      this.$emit("input", `R$ ${previewValue}`);
+    },
+
+    cleanInput(value) {
+      if (!value) return "";
+
+      let cleaned = value.replace(/[^\d,\.]/g, "");
+
+      if (cleaned.includes(",")) {
+        const parts = cleaned.split(",");
+        if (parts.length === 2) {
+          const integerPart = parts[0].replace(/\./g, "");
+          const decimalPart = parts[1].substring(0, 2);
+          cleaned = decimalPart ? `${integerPart},${decimalPart}` : integerPart;
+        } else {
+          const lastCommaIndex = cleaned.lastIndexOf(",");
+          const integerPart = cleaned.substring(0, lastCommaIndex).replace(/[,\.]/g, "");
+          const decimalPart = cleaned.substring(lastCommaIndex + 1).replace(/[,\.]/g, "").substring(0, 2);
+          cleaned = decimalPart ? `${integerPart},${decimalPart}` : integerPart;
+        }
+      } else {
+        // Remove pontos (separadores de milhares)
+        cleaned = cleaned.replace(/\./g, "");
+      }
+
+      return cleaned;
+    },
+
+    formatCurrency(value) {
+      if (!value || value === "0") return "0,00";
+
+      let cleanValue = value.toString();
+
+      if (cleanValue.includes(",")) {
+        const parts = cleanValue.split(",");
+        const integerPart = this.addThousandsSeparator(parts[0] || "0");
+        const decimalPart = parts[1] ? parts[1].padEnd(2, "0").substring(0, 2) : "00";
+        return `${integerPart},${decimalPart}`;
+      } else {
+        // Só parte inteira
+        const integerPart = this.addThousandsSeparator(cleanValue);
+        return `${integerPart},00`;
       }
     },
-    formatCurrency(digits) {
-      const length = digits.length;
-      const digitsBeforeComma = digits.slice(0, length - 2);
-      const lastTwoDigits = digits.slice(length - 2);
-      const formattedValue = digitsBeforeComma
-        .reverse()
-        .reduce(
-          (acc, digit, index) =>
-            index % 3 === 0 && index !== 0
-              ? acc.concat([".", digit])
-              : acc.concat(digit),
-          []
-        )
-        .reverse()
-        .concat(",")
-        .concat(lastTwoDigits)
-        .join("");
 
-      return `R$ ${formattedValue}`;
-    },
-    updateCurrencyValue(newNumber) {
-      const value = this.value || "R$ 0,00";
-      const allDigits = value
-        .split("")
-        .filter((val) => "R$ .,".split("").every((elem) => elem !== val))
-        .concat(newNumber);
-
-      if (allDigits[0] === "0") {
-        allDigits.shift();
-      }
-
-      this.$emit("input", this.formatCurrency(allDigits));
-    },
-    removeLastDigit() {
-      const allDigits = this.value
-        .split("")
-        .filter((val) => "R$ .,".split("").every((elem) => elem !== val));
-
-      if (allDigits.length <= 3) {
-        allDigits.unshift("0");
-      }
-
-      allDigits.pop();
-      this.$emit("input", this.formatCurrency(allDigits));
-    },
-    moveCursorToTheEnd(event) {
-      const input = event.target;
-      const length = input.value.length;
-      input.setSelectionRange(length, length);
+    addThousandsSeparator(value) {
+      if (!value || value === "0") return "0";
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
   },
 };

@@ -7,6 +7,10 @@ const state = () => ({
   socialMedias: [],
   logo: "",
   logoFile: null,
+  linkedin: "",
+  instagram: "",
+  facebook: "",
+  youtube: "",
 });
 
 const getters = {
@@ -19,6 +23,10 @@ const getters = {
   socialMedias: (s) => s.socialMedias,
   logo: (s) => s.logo,
   logoFile: (s) => s.logoFile,
+  linkedin: (s) => s.linkedin,
+  instagram: (s) => s.instagram,
+  facebook: (s) => s.facebook,
+  youtube: (s) => s.youtube,
 };
 
 const mutations = {
@@ -43,10 +51,22 @@ const actions = {
     commit("setFormField", { key: "logo", value }),
   setLogoFile: ({ commit }, value) =>
     commit("setFormField", { key: "logoFile", value }),
+  setLinkedin: ({ commit }, value) =>
+    commit("setFormField", { key: "linkedin", value }),
+  setInstagram: ({ commit }, value) =>
+    commit("setFormField", { key: "instagram", value }),
+  setFacebook: ({ commit }, value) =>
+    commit("setFormField", { key: "facebook", value }),
+  setYoutube: ({ commit }, value) =>
+    commit("setFormField", { key: "youtube", value }),
 };
 
 const prepareSection = (obj) => ({
   about_company: {
+  setCompanyType: ({ commit }, value) =>
+    commit("setFormField", { key: "companyType", value }),
+  setIsUnicorn: ({ commit }, value) =>
+    commit("setFormField", { key: "isUnicorn", value }),
     description: obj.descriptionLong,
     services: obj.services,
     technologies: obj.technologies,
@@ -54,6 +74,10 @@ const prepareSection = (obj) => ({
     odss: obj.odss,
     social_medias: obj.socialMedias,
     logo: obj.logo,
+    linkedin: obj.linkedin,
+    instagram: obj.instagram,
+    facebook: obj.facebook,
+    youtube: obj.youtube,
   },
 });
 
