@@ -8,7 +8,7 @@ class InvestmentStepTest {
         val VALID_STEP =
             InvestmentStep(
                 received = "Sim",
-                investmentsReceived = listOf("Investmento próprio"),
+                investmentsReceived = setOf("Investmento próprio"),
                 own = "R$ 1,00",
                 angel = "R$ 0,00",
                 venture = "R$ 0,00",
@@ -19,7 +19,7 @@ class InvestmentStepTest {
         val INVALID_STEP =
             InvestmentStep(
                 received = "Sim",
-                investmentsReceived = emptyList(),
+                investmentsReceived = emptySet(),
                 own = "",
                 angel = "",
                 venture = "",
@@ -100,12 +100,12 @@ class InvestmentStepTest {
     @Test
     fun `it throws an error when received is set to true, but investments received is empty`() {
         assertFailsWith<StepValidationException> {
-            validStep.copy(investmentsReceived = emptyList()).validate()
+            validStep.copy(investmentsReceived = emptySet()).validate()
         }
     }
 
     @Test
     fun `it does not throw an error when received is set to false and investments received is empty`() {
-        validStep.copy(received = "Não", investmentsReceived = emptyList()).validate()
+        validStep.copy(received = "Não", investmentsReceived = emptySet()).validate()
     }
 }
