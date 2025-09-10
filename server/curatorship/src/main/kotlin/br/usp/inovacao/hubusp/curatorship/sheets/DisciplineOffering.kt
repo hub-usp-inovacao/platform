@@ -42,21 +42,22 @@ data class DisciplineOffering(
         ): Set<DisciplineOffering> {
             val offerings: MutableSet<DisciplineOffering> = mutableSetOf()
 
-            skrape(fetcher) {
-                request {
-                    url = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${sgldis}"
-                    timeout = timeoutMs
-                }
-                response {
-                    htmlDocument {
-                        // Jupiter
-                        "tr > td > b > font > span" {
-                            findAll {
-                                forEach {
-                                    if (it.text.contains("Código da Turma")) {
-                                        val tableElement = it.parent.parent.parent.parent.parent
-                                        DisciplineOffering.tryFrom(tableElement)?.let {
-                                            offerings.add(it)
+            try {
+                skrape(fetcher) {
+                    request {
+                        url = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${sgldis}"
+                        timeout = timeoutMs
+                    }
+                    response {
+                        htmlDocument {
+                            "tr > td > b > font > span" {
+                                findAll {
+                                    forEach {
+                                        if (it.text.contains("Código da Turma")) {
+                                            val tableElement = it.parent.parent.parent.parent.parent
+                                            DisciplineOffering.tryFrom(tableElement)?.let {
+                                                offerings.add(it)
+                                            }
                                         }
                                     }
                                 }
@@ -64,6 +65,8 @@ data class DisciplineOffering(
                         }
                     }
                 }
+            } catch (e: Exception) {
+                return offerings
             }
 
             return offerings
