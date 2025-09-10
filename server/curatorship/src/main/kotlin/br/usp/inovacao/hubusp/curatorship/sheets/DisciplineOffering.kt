@@ -6,7 +6,7 @@ import it.skrape.fetcher.HttpFetcher
 import it.skrape.fetcher.Request
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
-import it.skrape.selects.DocElement
+import it.skrape.selects.*
 import it.skrape.selects.html5.*
 import org.valiktor.functions.*
 
@@ -15,20 +15,21 @@ data class DisciplineOffering(
     val classCode: String?,
     val startDate: String?,
     val endDate: String?,
-    // TODO: Professors
+    val professors: Set<String>,
 ) {
     companion object {
-        fun tryFrom(tableElement: DocElement): DisciplineOffering? {
+        fun tryFromJupiter(generalTableText: String, professors: Set<String>): DisciplineOffering? {
             val regexPattern =
                 "Código da Turma: ([^ ]*) *Início: ([^ ]*) *Fim: ([^ ]*) *Tipo da Turma: (.*)"
 
-            val groupValues = Regex(regexPattern).find(tableElement.text)?.groupValues
+            val groupValues = Regex(regexPattern).find(generalTableText)?.groupValues
 
             return if (groupValues != null) {
                 DisciplineOffering(
                     classCode = groupValues.getOrNull(1),
                     startDate = groupValues.getOrNull(2),
                     endDate = groupValues.getOrNull(3),
+                    professors,
                 )
             } else {
                 null
@@ -50,14 +51,25 @@ data class DisciplineOffering(
                     }
                     response {
                         htmlDocument {
-                            "tr > td > b > font > span" {
+                            "td > div:has(table:nth-of-type(3))" {
                                 findAll {
                                     forEach {
-                                        if (it.text.contains("Código da Turma")) {
-                                            val tableElement = it.parent.parent.parent.parent.parent
-                                            DisciplineOffering.tryFrom(tableElement)?.let {
-                                                offerings.add(it)
-                                            }
+                                        val generalTable = it.children.getOrNull(0)
+                                        val scheduleTable = it.children.getOrNull(2)
+
+                                        if (generalTable != null && scheduleTable != null) {
+                                            val professors =
+                                                scheduleTable.children
+                                                    .getOrNull(0)
+                                                    ?.children
+                                                    ?.drop(1)
+                                                    ?.mapNotNull { it.children.getOrNull(3)?.text }
+
+                                            DisciplineOffering.tryFromJupiter(
+                                                    generalTable.text,
+                                                    professors?.toSet() ?: emptySet(),
+                                                )
+                                                ?.let { offerings.add(it) }
                                         }
                                     }
                                 }

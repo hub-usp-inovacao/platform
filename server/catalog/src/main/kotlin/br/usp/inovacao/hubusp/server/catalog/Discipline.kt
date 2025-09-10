@@ -13,6 +13,7 @@ data class Offering(
     val classCode: String,
     val startDate: String,
     val endDate: String,
+    val professors: Set<String> = emptySet(),
 )
 
 @kotlinx.serialization.Serializable

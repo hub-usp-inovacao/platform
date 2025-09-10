@@ -38,19 +38,21 @@ internal class DisciplineOfferingTest {
         val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
 
         assertEquals(
-            offerings,
             setOf(
                 DisciplineOffering(
                     classCode = "2025203",
                     startDate = "04/08/2025",
                     endDate = "30/09/2025",
+                    professors = setOf("Docente 1"),
                 ),
                 DisciplineOffering(
                     classCode = "2025204",
                     startDate = "04/08/2025",
                     endDate = "30/09/2025",
+                    professors = setOf("Docente 2"),
                 ),
             ),
+            offerings,
         )
     }
 
@@ -68,14 +70,20 @@ internal class DisciplineOfferingTest {
         val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
 
         assertEquals(
-            offerings,
             setOf(
                 DisciplineOffering(
                     classCode = "20252CC",
                     startDate = "04/08/2025",
                     endDate = "12/12/2025",
+                    professors =
+                        setOf(
+                            "Docente 1",
+                            "Docente 2",
+                            "Docente 3",
+                        ),
                 ),
             ),
+            offerings,
         )
     }
 }

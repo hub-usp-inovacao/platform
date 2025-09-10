@@ -35,6 +35,7 @@ class DisciplineRepositoryImpl(db: MongoDatabase) : DisciplineRepository {
                         classCode = it.classCode ?: "",
                         startDate = it.startDate ?: "",
                         endDate = it.endDate ?: "",
+                        professors = it.professors,
                     )
                 }
                 .toSet()

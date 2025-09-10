@@ -24,6 +24,7 @@ fun DisciplineOffering.toCatalogOffering() =
         classCode = this.classCode,
         startDate = this.startDate,
         endDate = this.endDate,
+        professors = this.professors,
     )
 
 fun DisciplineModel.toCatalogDiscipline(): Discipline =
