@@ -29,13 +29,59 @@
           <p class="body-2">{{ item.campus }}</p>
           <p class="body-2">{{ item.unity }}</p>
           <p class="body-2">{{ item.nature }}</p>
-          <p class="body-2">
-            {{
-              item.beingOffered
-                ? "Sendo oferecida"
-                : "Não está sendo oferecida no momento"
-            }}
-          </p>
+          <div class="body-2" v-if="item.beingOffered">
+            <v-expansion-panels v-if="item.offerings.length != 0">
+              <v-expansion-panel>
+                <v-expansion-panel-header class="font-weight-bold"
+                  >Oferecimentos</v-expansion-panel-header
+                >
+                <v-expansion-panel-content>
+                  <div
+                    class="mb-3"
+                    v-for="(offering, offeringIndex) in item.offerings"
+                    :key="offeringIndex"
+                  >
+                    <v-card class="pa-1" max-width="360" rounded="sm" tonal>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td class="text-right font-weight-bold pr-1">
+                              Turma:
+                            </td>
+                            <td>{{ offering.classCode }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right font-weight-bold pr-1">
+                              Início:
+                            </td>
+                            <td>{{ offering.startDate }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right font-weight-bold pr-1">
+                              Fim:
+                            </td>
+                            <td>{{ offering.endDate }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right font-weight-bold pr-1">
+                              Docente{{
+                                offering.professors.length > 1 ? "s" : ""
+                              }}:
+                            </td>
+                            <td>{{ offering.professors.join(", ") }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </v-card>
+                  </div>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+            <p v-else>
+              Está sendo oferecida (Não foi possível encontrar mais detalhes)
+            </p>
+          </div>
+          <p v-else>Não está sendo oferecida no momento</p>
         </v-container>
       </template>
       <template #content="{ item }">
@@ -169,7 +215,7 @@ export default {
     async runSearch() {
       try {
         this.disciplines = await this.$DisciplineAdapter.filterData(
-          this.queryParams
+          this.queryParams,
         );
       } catch (error) {
         console.log(error);
