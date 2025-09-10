@@ -6,6 +6,7 @@ import it.skrape.fetcher.Result
 import it.skrape.selects.html5.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 internal class DisciplineOfferingTest {
     private class MockFetcher(val mockedResponse: String) : BlockingFetcher<Request> {
@@ -25,68 +26,29 @@ internal class DisciplineOfferingTest {
 
     @Test
     fun `it can parse HTML to multiple offerings`() {
-        val htmlWithMultipleOfferings =
-            """
-<html>
-  <body>
-    <table border="0" cellpadding="2" cellspacing="2">
-      <tbody>
-        <tr>
-          <td><b><font><span>Código da Turma:</span></font></b></td>
-          <td><font><span>2025202&nbsp;</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Início:</span></font></b></td>
-          <td><font><span>04/08/2025</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Fim:</span></font></b></td>
-          <td><font><span>12/12/2025</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Tipo da Turma:</span></font></b></td>
-          <td><font><span>Prática</span></font></td>
-        </tr>
-      </tbody>
-    </table>
-    <table border="0" cellpadding="2" cellspacing="2">
-      <tbody>
-        <tr>
-          <td><b><font><span>Código da Turma:</span></font></b></td>
-          <td><font><span>1234&nbsp;</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Início:</span></font></b></td>
-          <td><font><span>01/02/2022</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Fim:</span></font></b></td>
-          <td><font><span>02/03/2023</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Tipo da Turma:</span></font></b></td>
-          <td><font><span>Teórica</span></font></td>
-        </tr>
-      </tbody>
-    </table>
-  </body>
-</html>
-            """
+        val htmlText =
+            this::class
+                .java
+                .getResourceAsStream("/sheets/DisciplineOffering/jupiter/multipleOfferings.html")
+                ?.bufferedReader()
+                ?.readText()
 
-        val offerings =
-            DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlWithMultipleOfferings))
+        assertNotNull(htmlText)
+
+        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
+
         assertEquals(
             offerings,
             setOf(
                 DisciplineOffering(
-                    classCode = "2025202",
+                    classCode = "2025203",
                     startDate = "04/08/2025",
-                    endDate = "12/12/2025",
+                    endDate = "30/09/2025",
                 ),
                 DisciplineOffering(
-                    classCode = "1234",
-                    startDate = "01/02/2022",
-                    endDate = "02/03/2023",
+                    classCode = "2025204",
+                    startDate = "04/08/2025",
+                    endDate = "30/09/2025",
                 ),
             ),
         )
@@ -94,41 +56,22 @@ internal class DisciplineOfferingTest {
 
     @Test
     fun `it can parse HTML to a valid offering`() {
-        val htmlWithSingleOffering =
-            """
-<html>
-  <body>
-    <table border="0" cellpadding="2" cellspacing="2">
-      <tbody>
-        <tr>
-          <td><b><font><span>Código da Turma:</span></font></b></td>
-          <td><font><span>2025202&nbsp;</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Início:</span></font></b></td>
-          <td><font><span>04/08/2025</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Fim:</span></font></b></td>
-          <td><font><span>12/12/2025</span></font></td>
-        </tr>
-        <tr>
-          <td><b><font><span>Tipo da Turma:</span></font></b></td>
-          <td><font><span>Prática</span></font></td>
-        </tr>
-      </tbody>
-    </table>
-  </body>
-</html>
-            """
+        val htmlText =
+            this::class
+                .java
+                .getResourceAsStream("/sheets/DisciplineOffering/jupiter/singleOffering.html")
+                ?.bufferedReader()
+                ?.readText()
 
-        val offerings =
-            DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlWithSingleOffering))
+        assertNotNull(htmlText)
+
+        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
+
         assertEquals(
             offerings,
             setOf(
                 DisciplineOffering(
-                    classCode = "2025202",
+                    classCode = "20252CC",
                     startDate = "04/08/2025",
                     endDate = "12/12/2025",
                 ),
