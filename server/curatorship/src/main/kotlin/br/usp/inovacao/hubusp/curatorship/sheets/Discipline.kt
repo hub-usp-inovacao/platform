@@ -1,23 +1,13 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import org.valiktor.Constraint
-import org.valiktor.Validator
-import org.valiktor.ConstraintViolationException
-import org.valiktor.functions.*
-import org.valiktor.i18n.mapToMessage
-import org.valiktor.validate
-import java.time.LocalDate
 import it.skrape.core.*
 import it.skrape.fetcher.*
 import it.skrape.selects.html5.*
+import org.valiktor.ConstraintViolationException
+import org.valiktor.functions.isNotBlank
+import org.valiktor.functions.isNotNull
+import org.valiktor.i18n.mapToMessage
+import org.valiktor.validate
 
 @kotlinx.serialization.Serializable
 data class DisciplineCategory(
@@ -49,7 +39,8 @@ data class Discipline(
     val category: DisciplineCategory,
     val keywords: Set<String>?,
     val offeringPeriod: String?,
-    val beingOffered: Boolean
+    val beingOffered: Boolean,
+    val offerings: Set<DisciplineOffering> = emptySet(),
 ){
     companion object{
 
@@ -92,7 +83,21 @@ data class Discipline(
                         subRow[1],
                         subRow[0],
                     ),
+                offerings = fetchOffering(subRow[1], subRow[0]),
             )
+
+        fun fetchOffering(name: String?, nature: String?): Set<DisciplineOffering> {
+            val code = name?.split(" - ")?.getOrNull(0)
+
+            if (code == null) return emptySet()
+
+            if (nature == "Graduação") {
+                return DisciplineOffering.trySetFromJupiter(code)
+            } else {
+                // TODO: Janus
+                return emptySet()
+            }
+        }
 
         fun checkIfOffering(name : String?, nature: String?) : Boolean {
             val code = name?.split(" - ")?.get(0)

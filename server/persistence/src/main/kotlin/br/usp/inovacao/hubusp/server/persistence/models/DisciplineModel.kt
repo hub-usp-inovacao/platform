@@ -11,6 +11,13 @@ data class DisciplineCategory(
 )
 
 @Serializable
+data class DisciplineOffering(
+    val classCode: String,
+    val startDate: String,
+    val endDate: String,
+)
+
+@Serializable
 data class DisciplineModel(
     val campus: String,
     val category: DisciplineCategory,
@@ -23,5 +30,6 @@ data class DisciplineModel(
     val start_date: String,
     val unity: String,
     val url: String,
-    val beingOffered: Boolean
+    val beingOffered: Boolean,
+    val offerings: Set<DisciplineOffering> = emptySet()
 )

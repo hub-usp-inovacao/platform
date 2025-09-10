@@ -9,6 +9,13 @@ data class Category(
 )
 
 @kotlinx.serialization.Serializable
+data class Offering(
+    val classCode: String,
+    val startDate: String,
+    val endDate: String,
+)
+
+@kotlinx.serialization.Serializable
 data class Discipline(
     val name: String,
     val category: Category,
@@ -19,5 +26,6 @@ data class Discipline(
     val nature: String,
     val url: String,
     val offeringPeriod: String,
-    val beingOffered: Boolean
+    val beingOffered: Boolean,
+    val offerings: Set<Offering> = emptySet(),
 )
