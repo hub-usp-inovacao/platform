@@ -5,10 +5,15 @@ val clikt_version: String by project
 val kmongo_version: String by project
 
 plugins {
+    application
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("org.jetbrains.dokka")
+}
+
+application {
+    mainClass.set("br.usp.inovacao.hubusp.server.cli.MainKt")
 }
 
 tasks {
