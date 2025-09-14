@@ -1,21 +1,29 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import it.skrape.fetcher.BlockingFetcher
 import it.skrape.fetcher.Request
 import it.skrape.fetcher.Result
-import it.skrape.selects.html5.*
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 internal class DisciplineOfferingTest {
-    private class MockFetcher(val mockedResponse: String) : BlockingFetcher<Request> {
-        override val requestBuilder: Request
-            get() = Request()
+    @MockK private lateinit var mockFetcher: BlockingFetcher<Request>
 
-        override fun fetch(request: Request) =
+    @BeforeTest
+    fun setup() {
+        MockKAnnotations.init(this)
+        every { mockFetcher.requestBuilder } returns Request()
+    }
+
+    companion object {
+        fun createMockResultFromResource(resource: String) =
             Result(
-                responseBody = this.mockedResponse,
+                responseBody =
+                    this::class.java.getResourceAsStream(resource)?.bufferedReader()?.readText()!!,
                 responseStatus = Result.Status(200, "OK"),
                 contentType = "text/html",
                 headers = emptyMap(),
@@ -25,17 +33,13 @@ internal class DisciplineOfferingTest {
     }
 
     @Test
-    fun `it can parse HTML to multiple offerings`() {
-        val htmlText =
-            this::class
-                .java
-                .getResourceAsStream("/sheets/DisciplineOffering/jupiter/multipleOfferings.html")
-                ?.bufferedReader()
-                ?.readText()
+    fun `it can parse multiple offerings from Jupiter`() {
+        every { mockFetcher.fetch(any()) } returns
+            createMockResultFromResource(
+                "/sheets/DisciplineOffering/jupiter/multipleOfferings.html",
+            )
 
-        assertNotNull(htmlText)
-
-        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
+        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
 
         assertEquals(
             setOf(
@@ -57,17 +61,13 @@ internal class DisciplineOfferingTest {
     }
 
     @Test
-    fun `it can parse HTML to a valid offering`() {
-        val htmlText =
-            this::class
-                .java
-                .getResourceAsStream("/sheets/DisciplineOffering/jupiter/singleOffering.html")
-                ?.bufferedReader()
-                ?.readText()
+    fun `it can parse a single offering from Jupiter`() {
+        every { mockFetcher.fetch(any()) } returns
+            createMockResultFromResource(
+                "/sheets/DisciplineOffering/jupiter/singleOffering.html",
+            )
 
-        assertNotNull(htmlText)
-
-        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, MockFetcher(htmlText))
+        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
 
         assertEquals(
             setOf(
