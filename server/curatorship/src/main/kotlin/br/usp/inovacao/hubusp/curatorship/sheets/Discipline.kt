@@ -85,10 +85,15 @@ data class Discipline(
             )
         }
 
-        fun fetchOffering(name: String?, nature: String?): Set<DisciplineOffering> {
+        fun fetchOffering(
+            name: String?,
+            nature: String?,
+            delayBetweenRequests: Long = 2000L
+        ): Set<DisciplineOffering> {
             val code = name?.split(" - ")?.getOrNull(0)
-
             if (code == null) return emptySet()
+
+            Thread.sleep(delayBetweenRequests)
 
             return if (nature == "Graduação") {
                 DisciplineOffering.trySetFromJupiter(code)
