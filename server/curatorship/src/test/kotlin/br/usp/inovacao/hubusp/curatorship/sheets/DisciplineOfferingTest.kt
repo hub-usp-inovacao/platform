@@ -86,4 +86,31 @@ internal class DisciplineOfferingTest {
             offerings,
         )
     }
+
+    @Test
+    fun `it can parse a single offering from Janus`() {
+        every { mockFetcher.fetch(any()) } returnsMany
+            listOf(
+                createMockResultFromResource(
+                    "/sheets/DisciplineOffering/janus/Discipline.html",
+                ),
+                createMockResultFromResource(
+                    "/sheets/DisciplineOffering/janus/Offering.html",
+                ),
+            )
+
+        val offerings = DisciplineOffering.trySetFromJanus("", 10000, mockFetcher)
+
+        assertEquals(
+            setOf(
+                DisciplineOffering(
+                    classCode = "2",
+                    startDate = "06/08/2025",
+                    endDate = "12/12/2025",
+                    professors = setOf("Professor 1", "Professor 2"),
+                ),
+            ),
+            offerings,
+        )
+    }
 }

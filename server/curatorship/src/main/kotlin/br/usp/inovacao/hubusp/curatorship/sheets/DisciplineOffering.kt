@@ -4,15 +4,16 @@ import it.skrape.core.htmlDocument
 import it.skrape.fetcher.BlockingFetcher
 import it.skrape.fetcher.HttpFetcher
 import it.skrape.fetcher.Request
+import it.skrape.fetcher.extractIt
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
 
 @kotlinx.serialization.Serializable
 data class DisciplineOffering(
-    val classCode: String?,
-    val startDate: String?,
-    val endDate: String?,
-    val professors: Set<String>,
+    var classCode: String? = null,
+    var startDate: String? = null,
+    var endDate: String? = null,
+    var professors: Set<String> = emptySet(),
 ) {
     companion object {
         fun trySetFromJupiter(
@@ -64,6 +65,57 @@ data class DisciplineOffering(
             }
 
             return offerings
+        }
+
+        fun trySetFromJanus(
+            sgldis: String,
+            timeoutMs: Int = 20000,
+            fetcher: BlockingFetcher<Request> = HttpFetcher,
+        ): Set<DisciplineOffering> {
+            try {
+                val classCode =
+                    skrape(fetcher) {
+                        request {
+                            url =
+                                "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${sgldis}"
+                            timeout = timeoutMs
+                        }
+                        response {
+                            htmlDocument {
+                                // example: publico/turma/SCC5832/2 <- offering number (classCode)
+                                "td > a" { findSecond { attribute("href").split('/').last() } }
+                            }
+                        }
+                    }
+
+                return setOf(
+                    skrape(fetcher) {
+                        request {
+                            url =
+                                "https://uspdigital.usp.br/janus/TurmaDet?sgldis=SCC5832&ofe=${classCode}"
+                            timeout = timeoutMs
+                        }
+                        extractIt<DisciplineOffering> {
+                            it.classCode = classCode
+                            htmlDocument {
+                                it.startDate =
+                                    findFirst("tr:nth-of-type(12) font:nth-of-type(2)") { text }
+                                it.endDate =
+                                    findFirst("tr:nth-of-type(12) font:nth-of-type(4)") { text }
+                                it.professors =
+                                    findAll(
+                                        "tr:nth-of-type(16) tr:not(:first-child)",
+                                    ) {
+                                        map { it.text }.toSet()
+                                    }
+                            }
+                        }
+                    },
+                )
+            } catch (e: Exception) {
+                // If there's no offering or if the selection fails for whatever reason
+                return emptySet()
+            }
         }
     }
 }
