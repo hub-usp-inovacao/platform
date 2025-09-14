@@ -9,42 +9,43 @@ class RefreshCompany(
     val companyErrorRepository: CompanyErrorRepository
 ) {
     companion object {
+        /** we skip the first row (headers) and google sheets is 1-indexed */
         private const val INDEX_CORRECTION_FACTOR = 2
     }
 
-    private fun validateRow(rowIndex: Int, row: List<String?>) = try {
-        Company.fromRow(row)
-    } catch (e: ValidationException) {
-        CompanyValidationError(
-            errors = e.messages,
-            spreadsheetLineNumber = rowIndex + INDEX_CORRECTION_FACTOR
-        )
-    }
-
-    private fun persistValidData(data: Any) = when(data) {
-        is Company -> try {
-            companyRepository.save(data)
+    private fun persistData(rowIndex: Int, company: Company) {
+        try {
+            companyRepository.save(company)
         } catch (e: UniquenessException) {
+            // TODO: Show line number
             companyErrorRepository.save(CompanyUniquenessError(error = e.message))
         }
-        is CompanyValidationError -> companyErrorRepository.save(data)
-        else -> throw RuntimeException("Error while persisting Company: data isn't Company nor CompanyValidationError/CompanyUniquenessError")
+
+        try {
+            company.validate()
+        } catch (e: ValidationException) {
+            companyErrorRepository.save(
+                CompanyValidationError(
+                    errors = e.messages,
+                    spreadsheetLineNumber = rowIndex + INDEX_CORRECTION_FACTOR,
+                ),
+            )
+        }
     }
 
     fun refresh() {
         try {
             // TODO: delete "old" documents, when due
-            val data = spreadsheetReader
-                .read(Sheets.Companies)
-                .drop(1)
-                .mapIndexed(this::validateRow)
-            if(data.filterIsInstance<Company>().isNotEmpty()){
+            val companyRows = spreadsheetReader.read(Sheets.Companies).drop(1).map(Company::fromRow)
+
+            if (companyRows.isNotEmpty()) {
                 companyRepository.clean()
                 companyErrorRepository.clean()
-                data.forEach(this::persistValidData)
-            }
-            else{
-                mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")
+                companyRows.forEachIndexed(this::persistData)
+            } else {
+                mailer.notifySpreadsheetError(
+                    "Error while fetching the data: the new fetched data is Empty",
+                )
             }
         } catch (e: SheetReadingException) {
             mailer.notifySpreadsheetError(e.message)
