@@ -41,8 +41,8 @@ data class Discipline(
     val offeringPeriod: String?,
     val beingOffered: Boolean,
     val offerings: Set<DisciplineOffering> = emptySet(),
-){
-    companion object{
+) {
+    companion object {
 
         val natures = listOf("Graduação", "Pós-graduação")
         val levels = listOf("Preciso testar minha ideia!", "Quero aprender!", "Tenho uma ideia, e agora?", "Tópicos avançados em Empreendedorismo")
@@ -65,8 +65,10 @@ data class Discipline(
          */
         fun fixJupiterUrl(url: String?) = url?.replace(Regex("&?verdis=[^&]+"), "")
 
-        fun fromRow(subRow: List<String?>) =
-            Discipline(
+        fun fromRow(subRow: List<String?>): Discipline {
+            val offerings = fetchOffering(subRow[1], subRow[0])
+
+            return Discipline(
                 name = subRow[1],
                 campus = subRow[2],
                 unity = subRow[3],
@@ -78,77 +80,21 @@ data class Discipline(
                 category = DisciplineCategory.fromRow(subRow),
                 keywords = createKeywords(subRow),
                 offeringPeriod = subRow[13],
-                beingOffered =
-                    checkIfOffering(
-                        subRow[1],
-                        subRow[0],
-                    ),
-                offerings = fetchOffering(subRow[1], subRow[0]),
+                beingOffered = offerings.isNotEmpty(),
+                offerings,
             )
+        }
 
         fun fetchOffering(name: String?, nature: String?): Set<DisciplineOffering> {
             val code = name?.split(" - ")?.getOrNull(0)
 
             if (code == null) return emptySet()
 
-            if (nature == "Graduação") {
-                return DisciplineOffering.trySetFromJupiter(code)
+            return if (nature == "Graduação") {
+                DisciplineOffering.trySetFromJupiter(code)
             } else {
-                // TODO: Janus
-                return emptySet()
+                DisciplineOffering.trySetFromJanus(code)
             }
-        }
-
-        fun checkIfOffering(name : String?, nature: String?) : Boolean {
-            val code = name?.split(" - ")?.get(0)
-            val jupiterUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${code}"
-            val janusUrl = "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${code}"
-            val toleranceTime = 20000
-            val delayBetweenFetches = 2000L
-            var scrap = false
-            if(nature == "Graduação"){
-                skrape(HttpFetcher) {
-                    request {
-                        url = jupiterUrl
-                        timeout = toleranceTime
-                    }
-                    response {
-                        htmlDocument {
-                            val text = findFirst("div#my_web_cabecalho").text
-                            if (text == "Disciplinas oferecidas") {
-                                scrap = true
-                            }
-                        }
-                    }
-                }
-            }
-            else if(nature == "Pós-graduação"){
-                skrape(HttpFetcher){
-                    request {
-                        url = janusUrl
-                        timeout = toleranceTime
-                    }
-                    response {
-                        htmlDocument {
-                            try{
-                                val found = td {
-                                    findFirst {
-                                        b {
-                                            findFirst {
-                                                text
-                                            }
-                                        }
-                                    }
-                                }
-                                scrap = true
-                            }catch (_: Exception){
-                            }
-                        }
-                    }
-                }
-            }
-            Thread.sleep(delayBetweenFetches)
-            return scrap
         }
     }
 
