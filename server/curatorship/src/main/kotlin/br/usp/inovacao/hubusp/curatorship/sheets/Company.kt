@@ -345,7 +345,9 @@ data class Company(
 
                 validate(Company::incubated).isNotNull().isNotBlank()
 
-                validate(Company::ecosystems).isNotNull().isNotEmpty()
+                if (incubated != null && incubated.lowercase().contains("sim")) {
+                    validate(Company::ecosystems).isNotNull().isNotEmpty()
+                }
 
                 validate(Company::corporateName).isNotNull().isNotBlank()
 
