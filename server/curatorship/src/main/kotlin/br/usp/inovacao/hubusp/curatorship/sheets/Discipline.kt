@@ -1,23 +1,13 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import org.valiktor.Constraint
-import org.valiktor.Validator
-import org.valiktor.ConstraintViolationException
-import org.valiktor.functions.*
-import org.valiktor.i18n.mapToMessage
-import org.valiktor.validate
-import java.time.LocalDate
 import it.skrape.core.*
 import it.skrape.fetcher.*
 import it.skrape.selects.html5.*
+import org.valiktor.ConstraintViolationException
+import org.valiktor.functions.isNotBlank
+import org.valiktor.functions.isNotNull
+import org.valiktor.i18n.mapToMessage
+import org.valiktor.validate
 
 @kotlinx.serialization.Serializable
 data class DisciplineCategory(
@@ -49,9 +39,10 @@ data class Discipline(
     val category: DisciplineCategory,
     val keywords: Set<String>?,
     val offeringPeriod: String?,
-    val beingOffered: Boolean
-){
-    companion object{
+    val beingOffered: Boolean,
+    val offerings: Set<DisciplineOffering> = emptySet(),
+) {
+    companion object {
 
         val natures = listOf("Graduação", "Pós-graduação")
         val levels = listOf("Preciso testar minha ideia!", "Quero aprender!", "Tenho uma ideia, e agora?", "Tópicos avançados em Empreendedorismo")
@@ -68,71 +59,47 @@ data class Discipline(
             return keywords.toSet()
         }
 
-        fun fromRow(subRow: List<String?>) = Discipline(
-            name = subRow[1],
-            campus = subRow[2],
-            unity = subRow[3],
-            start_date = subRow[8],
-            nature = subRow[0],
-            level = subRow[5],
-            url = subRow[4],
-            description = subRow[6],
-            category = DisciplineCategory.fromRow(subRow),
-            keywords = createKeywords(subRow),
-            offeringPeriod = subRow[13],
-            beingOffered = checkIfOffering(subRow[1], subRow[0])
-        )
+        /**
+         * Removes the query parameter 'verdis' from Jupiter URLs, otherwise it goes to an outdated
+         * page.
+         */
+        fun fixJupiterUrl(url: String?) = url?.replace(Regex("&?verdis=[^&]+"), "")
 
-        fun checkIfOffering(name : String?, nature: String?) : Boolean {
-            val code = name?.split(" - ")?.get(0)
-            val jupiterUrl = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${code}"
-            val janusUrl = "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${code}"
-            val toleranceTime = 20000
-            val delayBetweenFetches = 2000L
-            var scrap = false
-            if(nature == "Graduação"){
-                skrape(HttpFetcher) {
-                    request {
-                        url = jupiterUrl
-                        timeout = toleranceTime
-                    }
-                    response {
-                        htmlDocument {
-                            val text = findFirst("div#my_web_cabecalho").text
-                            if (text == "Disciplinas oferecidas") {
-                                scrap = true
-                            }
-                        }
-                    }
-                }
+        fun fromRow(subRow: List<String?>): Discipline {
+            val offerings = fetchOffering(subRow[1], subRow[0])
+
+            return Discipline(
+                name = subRow[1],
+                campus = subRow[2],
+                unity = subRow[3],
+                start_date = subRow[8],
+                nature = subRow[0],
+                level = subRow[5],
+                url = fixJupiterUrl(subRow[4]),
+                description = subRow[6],
+                category = DisciplineCategory.fromRow(subRow),
+                keywords = createKeywords(subRow),
+                offeringPeriod = subRow[13],
+                beingOffered = offerings.isNotEmpty(),
+                offerings,
+            )
+        }
+
+        fun fetchOffering(
+            name: String?,
+            nature: String?,
+            delayBetweenRequests: Long = 2000L
+        ): Set<DisciplineOffering> {
+            val code = name?.split(" - ")?.getOrNull(0)
+            if (code == null) return emptySet()
+
+            Thread.sleep(delayBetweenRequests)
+
+            return if (nature == "Graduação") {
+                DisciplineOffering.trySetFromJupiter(code)
+            } else {
+                DisciplineOffering.trySetFromJanus(code)
             }
-            else if(nature == "Pós-graduação"){
-                skrape(HttpFetcher){
-                    request {
-                        url = janusUrl
-                        timeout = toleranceTime
-                    }
-                    response {
-                        htmlDocument {
-                            try{
-                                val found = td {
-                                    findFirst {
-                                        b {
-                                            findFirst {
-                                                text
-                                            }
-                                        }
-                                    }
-                                }
-                                scrap = true
-                            }catch (_: Exception){
-                            }
-                        }
-                    }
-                }
-            }
-            Thread.sleep(delayBetweenFetches)
-            return scrap
         }
     }
 
