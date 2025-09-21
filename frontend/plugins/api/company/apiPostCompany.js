@@ -2,14 +2,22 @@ import { parseValidationErrors } from "./parse.js";
 
 /**
  * Send POST request to register Company
- *
- * TODO: Deal with logo:
- * - allow local images (and serve them from the kotlin server)
- * - or restrict it to only allow web images
  */
-// eslint-disable-next-line no-unused-vars
-export default (data, _logo) =>
-  fetch(`${process.env.BACKEND_URL}/v2/company`, {
+export default async (data, logo) => {
+  // TODO: Upload logo to the kotlin backend
+  if (logo) {
+    const body = new FormData();
+
+    body.append("company[logo]", logo);
+    body.append("company[cnpj]", data.company.company_data.cnpj);
+
+    await fetch(`${process.env.BACKEND_URL}/update_request/logo`, {
+      method: "POST",
+      body,
+    });
+  }
+
+  return fetch(`${process.env.BACKEND_URL}/v2/company`, {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
@@ -36,3 +44,4 @@ export default (data, _logo) =>
           err,
       },
     }));
+};
