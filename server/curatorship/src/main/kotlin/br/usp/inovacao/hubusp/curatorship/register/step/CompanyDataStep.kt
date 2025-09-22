@@ -34,12 +34,24 @@ data class CompanyDataStep(
     val city: String?,
     val state: String?,
     val zipcode: String?,
+    val category: String?,
     @SerialName("company_nature") val companyNature: String?
 ) {
     companion object {
         val VALID_SIZES = listOf("MEI", "ME", "EPP", "DEMAIS")
         val VALID_REGISTRY_STATUS =
             listOf("Ativa", "Ativa Não Regular", "Baixada", "Inapta", "Nula", "Suspensa")
+
+        val VALID_CATEGORIES =
+            listOf(
+                "Fundada por aluno ou ex-aluno de graduação da USP",
+                "Fundada por aluno ou ex-aluno de pós-graduação da USP",
+                "Fundada por aluno ou ex-aluno de pós-doutorado da USP",
+                "Fundada por aluno ou ex-aluno do IPEN (Instituto de Pesquisas Energéticas e Nucleares)",
+                "Fundada por um docente ou Professor Sênior da USP",
+                "Fundada por um servidor técnico e administrativo (ou ex-servidor) da USP",
+                "Empresa incubada ou graduada em uma das incubadoras ligadas à USP (Incubadora USP/IPEN, ESALQTEC, HABITS, SUPERA e ParqTec)",
+            )
     }
 
     @Throws(StepValidationException::class)
@@ -64,6 +76,7 @@ data class CompanyDataStep(
                 validate(CompanyDataStep::state).isNotNull().isNotBlank()
                 validate(CompanyDataStep::zipcode).isNotNull().isNotBlank().isCep()
 
+                validate(CompanyDataStep::category).isIn(VALID_CATEGORIES)
                 validate(CompanyDataStep::companyNature).isNotNull().isNotBlank().isCompanyNature()
             }
         } catch (cve: ConstraintViolationException) {
