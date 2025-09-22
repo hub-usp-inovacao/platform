@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import com.mongodb.client.MongoDatabase
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -20,6 +21,9 @@ fun Application.configureRouting(db: MongoDatabase) {
             environment.config.property("email.password").getString(),
         ),
         listOf(environment.config.property("email.devs").getString()),
+        SpreadsheetWriter(
+            environment.config.property("sheets.company_form_id").getString(),
+            environment.config.property("sheets.company_form_tab").getString()),
     )
 
     routing {
