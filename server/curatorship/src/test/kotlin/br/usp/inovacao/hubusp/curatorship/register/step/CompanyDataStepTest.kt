@@ -22,6 +22,7 @@ class CompanyDataStepTest {
                 city = "Cidade tal",
                 state = "Estado tal",
                 zipcode = "00000-000",
+                category = "Fundada por aluno ou ex-aluno de pós-graduação da USP",
                 companyNature = "000-0 - Automated Tests",
             )
         val INVALID_STEP =
@@ -40,6 +41,7 @@ class CompanyDataStepTest {
                 city = "",
                 state = "",
                 zipcode = "hello world",
+                category = "hello world",
                 companyNature = "hello world",
             )
     }
@@ -129,6 +131,14 @@ class CompanyDataStepTest {
         assertFailsWith<StepValidationException> { validStep.copy(zipcode = null).validate() }
         assertFailsWith<StepValidationException> {
             validStep.copy(zipcode = "000000000").validate()
+        }
+    }
+
+    @Test
+    fun `it throws an error when company data has invalid category`() {
+        assertFailsWith<StepValidationException> { validStep.copy(category = "").validate() }
+        assertFailsWith<StepValidationException> {
+            validStep.copy(category = "hello world").validate()
         }
     }
 

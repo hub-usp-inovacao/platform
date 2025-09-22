@@ -9,7 +9,6 @@ import br.usp.inovacao.hubusp.curatorship.register.step.PartnerStepTest
 import br.usp.inovacao.hubusp.curatorship.register.step.RevenueStepTest
 import br.usp.inovacao.hubusp.curatorship.register.step.StaffStepTest
 import kotlin.test.Test
-import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -126,6 +125,7 @@ class CompanyFormTest {
     "city": "Cidade tal",
     "state": "Estado tal",
     "zipcode": "00000-000",
+    "category": "Fundada por aluno ou ex-aluno de graduação da USP",
     "company_nature": "000-0 - Automated Tests"
   },
   "about_company": {
