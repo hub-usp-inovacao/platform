@@ -78,7 +78,7 @@
             :options="odsList"
             multiple-option
             label="Objetivos de Desenvolvimento Sustentável"
-            @input="setOds"
+            @input="setOdss"
           />
         </v-container>
       </div>
@@ -171,7 +171,7 @@ export default {
       setDescriptionLong: "company_forms/setDescriptionLong",
       setTechnologies: "company_forms/setTechnologies",
       setServices: "company_forms/setServices",
-      setOds: "company_forms/setOds",
+      setOdss: "company_forms/setOdss",
       setSocialMedias: "company_forms/setSocialMedias",
       setUrl: "company_forms/setSite",
       setLogo: "company_forms/setLogo",
