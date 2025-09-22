@@ -18,6 +18,9 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import java.nio.file.Files
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -34,12 +37,6 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
             try {
                 val text = call.receiveText()
 
-                val file =
-                    // TODO: to CSV
-                    Files.createTempFile("tmp-company", ".json").apply {
-                        writeText(text, Charsets.UTF_8)
-                    }
-
                 val json = Json { explicitNulls = false }
                 val message = json.decodeFromString<RecvMessage>(text)
 
@@ -48,8 +45,31 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
                         to = recipientList,
                         subject = "Cadastro de companhia",
                         body = message.toString(),
-                        attachments = listOf(Mail.Attachment("company.json", file.toFile())),
-                    ))
+                        attachments =
+                            listOf(
+                                Mail.Attachment(
+                                    "company.json",
+                                    Files.createTempFile("company", ".json")
+                                        .apply { writeText(text, Charsets.UTF_8) }
+                                        .toFile(),
+                                ),
+                                Mail.Attachment(
+                                    "company.csv",
+                                    Files.createTempFile("company", ".csv")
+                                        .apply {
+                                            writeLines(
+                                                listOf(
+                                                    CSV_HEADERS.joinToString(","),
+                                                    message.company.toCsvRow().joinToString(","),
+                                                ),
+                                                Charsets.UTF_8,
+                                            )
+                                        }
+                                        .toFile(),
+                                ),
+                            ),
+                    ),
+                )
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
@@ -251,3 +271,97 @@ fun Set<String>.toCsvCell() = if (this.isEmpty()) "N/D" else this.joinToString("
 fun List<String>.toCsvCell() = if (this.isEmpty()) "N/D" else this.joinToString(";")
 
 fun Boolean?.toCsvCell() = if (this == null) "N/D" else if (this) "Sim" else "Não"
+
+val CSV_HEADERS =
+    listOf(
+        "Data e hora",
+        "CNPJ",
+        "Nome fantasia da empresa",
+        "Razão social da empresa",
+        "Ano de fundação",
+        "CNAE (Classificação Nacional de Atividades Econômicas) da empresa",
+        "Telefone comercial",
+        "Email institucional",
+        "Endereço da empresa",
+        "Bairro",
+        "Cidade",
+        "Estado",
+        "CEP",
+        "Insira uma breve descrição da empresa",
+        "'Liste os principais produtos e/ou serviços oferecidos",
+        " separando-os por ; (ponto e vírgula)'",
+        "'Caso a sua empresa atue no desenvolvimento de tecnologias",
+        " indique as 5 principais tecnologias desenvolvidas pela mesma separadas por ; (ponto e vírgula)'",
+        "Logotipo da empresa",
+        "Site da empresa",
+        "A empresa está ou esteve em alguma incubadora ou Parque tecnológico?",
+        "Em qual incubadora ou Parque Tecnológico?",
+        "Unicórnio?",
+        "Número total de colaboradores",
+        "ODS",
+        "LinkedIn",
+        "Instagram",
+        "Youtube",
+        "Facebook",
+        "Sua empresa gostaria de receber o selo DNA USP?",
+        "Por qual email podemos entrar em contato para tratar do uso da marca DNA USP?",
+        "Qual o nome do responsável por este email?",
+        "Contrato para uso da marca DNA USP (enviado ou assinado)",
+        "Declaro que as informações fornecidas são verdadeiras e que a empresa atende aos critérios estabelecidos",
+        "Selecione as opções com as quais a empresa está de acordo",
+        "Nome completo do empreendedor que possuiu ou mantém vínculo com a USP (sem abreviações)",
+        "Número USP (Sócio 1)",
+        "Qual tipo de vínculo já possuiu ou ainda mantém com a USP?",
+        "'Com qual instituto",
+        " escola ou centro é o vínculo atual ou mais recente?'",
+        "Cargo",
+        "Email do empreendedor",
+        "Telefone (fixo ou celular)",
+        "Quantos sócios a empresa possui?",
+        "Possui sócios que mantiveram ou mantêm vínculo com a USP?",
+        "Gostaria de adicionar os dados dos demais sócios?",
+        "Nome completo (Sócio 2)",
+        "Número USP (Sócio 2)",
+        "Qual o tipo de vínculo possuiu ou mantém com a USP (Sócio 2)?",
+        "'Com qual instituto",
+        " escola ou centro é o vínculo atual ou mais recente?'",
+        "Deseja adicionar os dados de outro sócio?",
+        "Nome completo (Sócio 3)",
+        "Número USP (Sócio 3)",
+        "Qual o tipo de vínculo possuiu ou mantém com a USP (Sócio 3)?",
+        "'Com qual instituto",
+        " escola ou centro é o vínculo atual ou mais recente?'",
+        "Deseja adicionar os dados de outro sócio?",
+        "Nome completo (Sócio 4)",
+        "Número USP (Sócio 4)",
+        "Qual o tipo de vínculo possuiu ou mantém com a USP (Sócio 4)?",
+        "'Com qual instituto",
+        " escola ou centro é o vínculo atual ou mais recente?'",
+        "Deseja adicionar os dados de outro sócio?",
+        "Nome completo (Sócio 5)",
+        "Número USP (Sócio 5)",
+        "Qual o tipo de vínculo possuiu ou mantém com a USP (Sócio 5)?",
+        "'Com qual instituto",
+        " escola ou centro é o vínculo atual ou mais recente?'",
+        "Qual o número de funcionários contratados como CLT?",
+        "Qual o número de colaboradores contratados como pessoa jurídica (PJ)?",
+        "Qual o número de estagiários/bolsistas contratados?",
+        "A empresa recebeu investimento?",
+        "Qual(is) investimento(s) a empresa recebeu?",
+        "Valor do investimento próprio (R$)",
+        "Valor do investimento-anjo (R$)",
+        "Valor do Venture Capital (R$)",
+        "Valor do Private Equity (R$)",
+        "Valor do PIPE-FAPESP (R$)",
+        "Outros investimentos (R$)",
+        "Qual foi o faturamento da empresa em 2022? (R$)",
+        "Porte (RFB)",
+        "Somatório (sócios + CLT + PJ + E/B)",
+        "Tipo de empresa",
+        "Status operacional da empresa",
+        "Índice",
+        "Vínculo com a incubadora",
+        "Confirmação de vínculo USP",
+        "Indique em qual categoria DNA USP sua empresa se encontra:",
+        "Confirmação de vínculo EMPRESA",
+    )
