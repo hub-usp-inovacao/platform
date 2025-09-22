@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.curatorship.register.CompanyForm
 import br.usp.inovacao.hubusp.curatorship.register.CompanyFormValidationException
+import br.usp.inovacao.hubusp.curatorship.register.ErrorsPerStep
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import io.ktor.http.ContentType
@@ -27,7 +28,8 @@ import kotlinx.serialization.json.Json
 fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String>) {
     routing {
         post("/company") {
-            @Serializable data class Message(val company: CompanyForm)
+            @Serializable data class RecvMessage(val company: CompanyForm)
+            @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
             try {
                 val text = call.receiveText()
@@ -39,7 +41,7 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
                     }
 
                 val json = Json { explicitNulls = false }
-                val message = json.decodeFromString<Message>(text)
+                val message = json.decodeFromString<RecvMessage>(text)
 
                 mailer.send(
                     Mail(
@@ -51,7 +53,10 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
-                call.respond(HttpStatusCode.UnprocessableEntity, e.errorsPerStep)
+                call.respond(
+                    HttpStatusCode.UnprocessableEntity,
+                    ErrorMessage(errors = e.errorsPerStep),
+                )
             } catch (e: Exception) {
                 application.log.warn(
                     """Internal Server Error
