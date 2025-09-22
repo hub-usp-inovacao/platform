@@ -27,7 +27,7 @@
         <v-container>
           <ShortTextInput
             :value="otherIncubator"
-            input-label="Incubadora/Parque Tecnológico"
+            label="Incubadora/Parque Tecnológico"
             @input="setOtherIncubators"
           />
         </v-container>
