@@ -1,5 +1,5 @@
 import personal from './personal'
-import bond from './bond'
+import bond from './_bond'
 import resources from './resources'
 import confirmation from './confirmation'
 
