@@ -5,6 +5,7 @@ import br.usp.inovacao.hubusp.curatorship.register.CompanyFormValidationExceptio
 import br.usp.inovacao.hubusp.curatorship.register.ErrorsPerStep
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -28,7 +29,11 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
-fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String>) {
+fun Application.configureCompanyRoute(
+    mailer: Mailer,
+    recipientList: List<String>,
+    spreadsheetWriter: SpreadsheetWriter
+) {
     routing {
         post("/company") {
             @Serializable data class RecvMessage(val company: CompanyForm)
@@ -39,6 +44,7 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
 
                 val json = Json { explicitNulls = false }
                 val message = json.decodeFromString<RecvMessage>(text)
+                val row = message.company.toCsvRow()
 
                 mailer.send(
                     Mail(
@@ -60,7 +66,7 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
                                             writeLines(
                                                 listOf(
                                                     CSV_HEADERS.joinToString(","),
-                                                    message.company.toCsvRow().joinToString(","),
+                                                    row.joinToString(","),
                                                 ),
                                                 Charsets.UTF_8,
                                             )
@@ -70,6 +76,8 @@ fun Application.configureCompanyRoute(mailer: Mailer, recipientList: List<String
                             ),
                     ),
                 )
+
+                spreadsheetWriter.append(listOf(row))
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
