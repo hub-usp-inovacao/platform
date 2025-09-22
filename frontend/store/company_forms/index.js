@@ -5,7 +5,7 @@ import investment from "./investment";
 import revenue from "./revenue";
 import incubation from "./incubation";
 import staff from "./staff";
-import partners from "./partners";
+import partners from "./_partners";
 
 export const state = () => ({
   numberOfCLTEmployees: "",
