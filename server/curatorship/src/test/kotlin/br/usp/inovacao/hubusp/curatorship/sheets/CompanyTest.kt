@@ -55,8 +55,13 @@ internal class CompanyTest {
     @Test
     fun `it is invalid without required ecosystems`() {
         assertFailsWith<ValidationException> {
-            valid.copy(ecosystems = emptySet())
+            valid.copy(incubated = "Sim").copy(ecosystems = emptySet())
         }
+    }
+
+    @Test
+    fun `it doesn't check ecosystems if it wasn't incubated`() {
+        valid.copy(incubated = "Não").copy(ecosystems = emptySet())
     }
 
     @Test
