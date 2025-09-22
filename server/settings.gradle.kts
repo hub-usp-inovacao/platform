@@ -1,3 +1,13 @@
 rootProject.name = "br.usp.inovacao.hubusp.server"
 
-include("mailer", "catalog", "curatorship", "discovery", "techtransfer", "persistence", "hub-cli", "hub-app")
+include(
+    "catalog",
+    "curatorship",
+    "discovery",
+    "hub-app",
+    "hub-cli",
+    "mailer",
+    "persistence",
+    "sheets",
+    "techtransfer",
+)
