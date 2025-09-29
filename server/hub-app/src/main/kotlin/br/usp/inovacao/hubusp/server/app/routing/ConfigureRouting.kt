@@ -22,8 +22,8 @@ fun Application.configureRouting(db: MongoDatabase) {
         ),
         listOf(environment.config.property("email.devs").getString()),
         SpreadsheetWriter(
-            environment.config.property("sheets.company_form_id").getString(),
-            environment.config.property("sheets.company_form_tab").getString()),
+            environment.config.property("sheets.company_register_form_id").getString(),
+            environment.config.property("sheets.company_register_form_tab").getString()),
     )
 
     routing {
