@@ -1,0 +1,67 @@
+{
+  "errors": {
+    "partner": [
+      "name: Não deve estar em branco",
+      "email: Deve ser um endereço de e-mail válido",
+      "phone: Deve ser lista de números de telefone",
+      "bond: Não deve estar em branco",
+      "unit: Não deve estar em branco"
+    ],
+    "company_data": [
+      "cnpj: Não deve estar em branco",
+      "cnpj: Deve ser CNPJ (XX.XXX.XXX/XXXX-XX) or foreign value (ExteriorXX...)",
+      "publicName: Não deve estar em branco",
+      "corporateName: Não deve estar em branco",
+      "year: O tamanho deve ser maior ou igual a 4",
+      "size: Deve ser um desses: MEI, ME, EPP, DEMAIS",
+      "cnae: Não deve estar em branco",
+      "cnae: Deve ser CNAE (XXXXXXX)",
+      "registryStatus: Deve ser um desses: Ativa, Ativa Não Regular, Baixada, Inapta, Nula, Suspensa",
+      "phones: Deve ser lista de números de telefone",
+      "emails: Deve ser lista de emails",
+      "street: Não deve estar em branco",
+      "city: Não deve estar em branco",
+      "state: Não deve estar em branco",
+      "zipcode: Não deve estar em branco",
+      "zipcode: Deve ser CEP (XXXXX-XXX)",
+      "category: Deve ser um desses: Fundada por aluno ou ex-aluno de graduação da USP, Fundada por aluno ou ex-aluno de pós-graduação da USP, Fundada por aluno ou ex-aluno de pós-doutorado da USP, Fundada por aluno ou ex-aluno do IPEN (Instituto de Pesquisas Energéticas e Nucleares), Fundada por um docente ou Professor Sênior da USP, Fundada por um servidor técnico e administrativo (ou ex-servidor) da USP, Empresa incubada ou graduada em uma das incubadoras ligadas à USP (Incubadora USP/IPEN, ESALQTEC, HABITS, SUPERA e ParqTec)",
+      "companyNature: Não deve estar em branco",
+      "companyNature: Deve ser natureza jurídica (XXX-X: Nature...)"
+    ],
+    "about_company": [
+      "description: Não deve estar em branco",
+      "logo: Não deve estar em branco",
+      "logo: Deve ser um website válido",
+      "site: Não deve estar em branco",
+      "site: Deve ser um website válido",
+      "odss: Deve ser um desses: 1 - Erradicação da Pobreza, 2 - Fome Zero, 3 - Saúde e Bem Estar, 4 - Educação de Qualidade, 5 - Igualdade de Gênero, 6 - Água Potável e Saneamento, 7 - Energia Limpa e Acessível, 8 - Trabalho Decente e Crescimento Econômico, 9 - Indústria, Inovação e Infraestrutura, 10 - Redução das Desigualdades, 11 - Cidades e Comunidades Sustentáveis, 12 - Consumo e Produção Responsáveis, 13 - Ação Contra a Mudança Global do Clima, 14 - Vida na Água, 15 - Vida Terrestre, 16 - Paz, Justiça e Instituições Eficazes, 17 - Parcerias e Meios de Implementação",
+      "socialMedias: Deve ser um website válido"
+    ],
+    "incubation": [
+      "wasIncubated: Não deve estar em branco"
+    ],
+    "staff": [
+      "numberOfCltEmployees: Deve ser número",
+      "numberOfPjColaborators: Deve ser número",
+      "numberOfInterns: Deve ser número"
+    ],
+    "revenue": [
+      "lastYearRevenue: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)"
+    ],
+    "investment": [
+      "investmentsReceived: Não deve ser vazio",
+      "own: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)",
+      "angel: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)",
+      "venture: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)",
+      "equity: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)",
+      "pipe: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)",
+      "others: Deve ser quantia em reais (R$ X.XXX.XXX,XX / XXXXXXXX...)"
+    ],
+    "dna_usp_stamp": [
+      "name: Não deve estar em branco",
+      "email: Não deve estar em branco",
+      "email: Deve ser um endereço de e-mail válido",
+      "truthfulInformations: Deve ser verdadeiro"
+    ]
+  }
+}

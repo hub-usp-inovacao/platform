@@ -1,0 +1,74 @@
+{
+  "company": {
+    "about_company": {
+      "description": "Something not blank",
+      "services": ["Anything"],
+      "technologies": ["Anything"],
+      "site": "example.coe",
+      "odss": [
+        "1 - Erradicação da Pobreza",
+        "16 - Paz, Justiça e Instituições Eficazes"
+      ],
+      "social_medias": ["example.com"],
+      "logo": "example.com"
+    },
+    "company_data": {
+      "cnpj": "00.000.000/0000-00",
+      "public_name": "Public name",
+      "corporate_name": "Corporate name",
+      "year": "2020",
+      "size": "MEI",
+      "cnae": "0000000",
+      "registry_status": "Ativa",
+      "phones": ["11999999999"],
+      "emails": ["company@example.com"],
+      "street": "Street",
+      "neighborhood": "Neighborhood",
+      "city": "City",
+      "state": "State",
+      "zipcode": "00000-000",
+      "category": "Fundada por aluno ou ex-aluno de graduação da USP",
+      "company_nature": "000-0: Something"
+    },
+    "dna_usp_stamp": {
+      "wants": true,
+      "name": "Not blank",
+      "email": "dnauspstamp@example.com",
+      "truthful_informations": true,
+      "permissions": ["Anything"]
+    },
+    "investment": {
+      "received": "Sim",
+      "investments": ["Something"],
+      "own": "R$ 0,00",
+      "angel": "R$ 0,00",
+      "venture": "R$ 0,00",
+      "equity": "R$ 0,00",
+      "pipe": "R$ 0,00",
+      "others": "R$ 0,00"
+    },
+    "revenue": {
+      "last_year": "R$ 0,00"
+    },
+    "incubation": {
+      "was_incubated": "Sim",
+      "ecosystem": "Some ecosystem"
+    },
+    "staff": {
+      "number_of_CLT_employees": "3",
+      "number_of_PJ_colaborators": "4",
+      "number_of_interns": "5"
+    },
+    "partners": [
+      {
+        "name": "Not blank",
+        "email": "partner@example.com",
+        "phone": "11999999999",
+        "nusp": "11111111",
+        "bond": "Not blank",
+        "unity": "Not blank",
+        "role": "Somethig"
+      }
+    ]
+  }
+}
