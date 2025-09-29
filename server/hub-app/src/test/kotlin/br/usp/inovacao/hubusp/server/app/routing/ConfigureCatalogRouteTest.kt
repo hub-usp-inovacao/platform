@@ -13,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
-class CatalogTest {
+class ConfigureCatalogRouteTest {
     @Test
     fun `test GET company ecosystems`() = testCatalogApplication {
         // given ... when

@@ -1,0 +1,71 @@
+{
+  "company": {
+    "company_data": {
+      "cnpj": "",
+      "public_name": "",
+      "corporate_name": "",
+      "year": "",
+      "size": "",
+      "cnae": "",
+      "registry_status": "",
+      "phones": [""],
+      "emails": [""],
+      "street": "",
+      "neighborhood": "",
+      "city": "",
+      "state": "",
+      "zipcode": "",
+      "category": "",
+      "company_nature": ""
+    },
+    "dna_usp_stamp": {
+      "wants": true,
+      "name": "",
+      "email": "",
+      "truthful_informations": false,
+      "permissions": [""]
+    },
+    "about_company": {
+      "description": "",
+      "services": [""],
+      "technologies": [""],
+      "site": "",
+      "odss": [""],
+      "social_medias": [""],
+      "logo": ""
+    },
+    "investment": {
+      "received": "Sim",
+      "investments": [],
+      "own": "",
+      "angel": "",
+      "venture": "",
+      "equity": "",
+      "pipe": "",
+      "others": ""
+    },
+    "revenue": {
+      "last_year": ""
+    },
+    "incubation": {
+      "was_incubated": "",
+      "ecosystem": ""
+    },
+    "staff": {
+      "number_of_CLT_employees": "",
+      "number_of_PJ_colaborators": "",
+      "number_of_interns": ""
+    },
+    "partners": [
+      {
+        "name": "",
+        "email": "",
+        "phone": "",
+        "nusp": "",
+        "bond": "",
+        "unity": "",
+        "role": ""
+      }
+    ]
+  }
+}
