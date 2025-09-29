@@ -10,6 +10,7 @@ class RefreshDiscipline(
 ){
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
+        private val errorsList = mutableListOf<DisciplineValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
@@ -27,7 +28,10 @@ class RefreshDiscipline(
         } catch (e: UniquenessException) {
             disciplineErrorRepository.save(DisciplineUniquenessError(error = e.message))
         }
-        is DisciplineValidationError -> disciplineErrorRepository.save(data)
+        is DisciplineValidationError -> {
+            disciplineErrorRepository.save(data)
+            errorsList.add(data)
+        }
         else -> throw RuntimeException("Error while persisting Discipline: data isn't Discipline nor DisciplineValidationError/DisciplineUniquenessError")
     }
 
@@ -41,6 +45,10 @@ class RefreshDiscipline(
                 disciplineRepository.clean()
                 disciplineErrorRepository.clean()
                 data.forEach(this::persistValidData)
+                if(errorsList.isNotEmpty()){
+                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Disciplinas:\n\n${errorMail}")
+                }
             }
             else{
                 mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")

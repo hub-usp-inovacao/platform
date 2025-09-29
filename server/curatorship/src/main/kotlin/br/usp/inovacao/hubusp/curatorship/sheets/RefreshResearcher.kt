@@ -10,6 +10,7 @@ class RefreshResearcher(
 ) {
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
+        private val errorsList = mutableListOf<ResearcherValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
@@ -27,7 +28,10 @@ class RefreshResearcher(
         } catch (e: UniquenessException) {
             researcherErrorRepository.save(ResearcherUniquenessError(error = e.message))
         }
-        is ResearcherValidationError -> researcherErrorRepository.save(data)
+        is ResearcherValidationError -> {
+            researcherErrorRepository.save(data)
+            errorsList.add(data)
+        }
         else -> throw RuntimeException("Error while persisting Researcher: data isn't Researcher nor ResearcherValidationError/ResearcherUniquenessError")
     }
 
@@ -41,6 +45,10 @@ class RefreshResearcher(
                 researcherRepository.clean()
                 researcherErrorRepository.clean()
                 data.forEach(this::persistValidData)
+                if(errorsList.isNotEmpty()){
+                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Competências:\n\n${errorMail}")
+                }
             }
             else{
                 mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")
