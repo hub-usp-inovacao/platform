@@ -238,6 +238,7 @@ export default {
       city: "company_forms/city",
       state: "company_forms/state",
       cep: "company_forms/cep",
+      category: "company_forms/category",
       company_nature: "company_forms/company_nature",
     }),
   },
@@ -263,6 +264,7 @@ export default {
       setCity: "company_forms/setCity",
       setState: "company_forms/setState",
       setCep: "company_forms/setCep",
+      setCategory: "company_forms/setCategory",
       setCompanyNature: "company_forms/setCompanyNature",
     }),
     async getStates() {

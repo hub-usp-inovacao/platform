@@ -34,6 +34,7 @@ const getters = {
   city: (s) => s.address.city,
   state: (s) => s.address.state,
   cep: (s) => s.address.cep,
+  category: (s) => s.category,
   company_nature: (s) => s.company_nature,
 };
 
@@ -88,28 +89,37 @@ const actions = {
       key: "address",
       value: { ...getters.address, cep: value },
     }),
+  setCategory: ({ commit }, value) =>
+    commit("setFormField", {
+      key: "category",
+      value: value,
+    }),
   setCompanyNature: ({ commit }, value) =>
     commit("setFormField", { key: "company_nature", value }),
 };
 
 const prepareSection = (obj) => ({
-  company_data: {
-    cnpj: obj.cnpj,
-    public_name: obj.name,
-    corporate_name: obj.corporateName,
-    year: obj.year,
-    size: obj.size,
-    cnae: obj.cnae,
-    registry_status: obj.registry_status,
-    phones: obj.phones,
-    emails: obj.emails,
-    street: obj.address.venue,
-    neighborhood: obj.neighborhood,
-    city: obj.city,
-    state: obj.state,
-    zipcode: obj.cep,
-    company_nature: obj.company_nature,
-  },
+  company_data: Object.assign(
+    {
+      cnpj: obj.cnpj,
+      public_name: obj.name,
+      corporate_name: obj.corporateName,
+      year: obj.year,
+      size: obj.size,
+      cnae: obj.cnae,
+      registry_status: obj.registry_status,
+      phones: obj.phones,
+      emails: obj.emails,
+      street: obj.address.venue,
+      neighborhood: obj.neighborhood,
+      city: obj.city,
+      state: obj.state,
+      zipcode: obj.cep,
+      company_nature: obj.company_nature,
+    },
+    // Category should only appear in the request if it's a registration (as of now)
+    !!obj.category ? { category: obj.category } : {},
+  ),
 });
 
 export default {
