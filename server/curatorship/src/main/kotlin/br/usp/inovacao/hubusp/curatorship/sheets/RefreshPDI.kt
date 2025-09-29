@@ -10,6 +10,7 @@ class RefreshPDI(
 ) {
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
+        private val errorsList = mutableListOf<PDIValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
@@ -23,7 +24,10 @@ class RefreshPDI(
 
     private fun persistValidData(data: Any) = when(data) {
         is PDI -> pdiRepository.save(data)
-        is PDIValidationError -> pdiErrorRepository.save(data)
+        is PDIValidationError -> {
+            pdiErrorRepository.save(data)
+            errorsList.add(data)
+        }
         else -> throw RuntimeException("Error while persisting PDI: data isn't PDI nor PDIValidationError")
     }
 
@@ -38,6 +42,10 @@ class RefreshPDI(
                 pdiRepository.clean()
                 pdiErrorRepository.clean()
                 data.forEach(this::persistValidData)
+                if(errorsList.isNotEmpty()){
+                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de PDI:\n\n${errorMail}")
+                }
             }
             else{
                 mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")

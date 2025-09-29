@@ -10,6 +10,7 @@ class RefreshInitiative(
 ) {
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
+        private val errorsList = mutableListOf<InitiativeValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
@@ -27,7 +28,10 @@ class RefreshInitiative(
         } catch (e: UniquenessException) {
             initiativeErrorRepository.save(InitiativeUniquenessError(error = e.message))
         }
-        is InitiativeValidationError -> initiativeErrorRepository.save(data)
+        is InitiativeValidationError -> {
+            initiativeErrorRepository.save(data)
+            errorsList.add(data)
+        }
         else -> throw RuntimeException("Error while persisting Initiative: data isn't Initiative nor InitiativeValidationError/InitiativeUniquenessError")
     }
 
@@ -42,6 +46,10 @@ class RefreshInitiative(
                 initiativeRepository.clean()
                 initiativeErrorRepository.clean()
                 data.forEach(this::persistValidData)
+                if(errorsList.isNotEmpty()){
+                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Iniciativas:\n\n${errorMail}")
+                }
             }
             else{
                 mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")
