@@ -51,25 +51,28 @@ export default {
     }),
 
     async onStepperFinish() {
-      const requestStatus = await this.registerCompanyForm();
-
-      if (requestStatus) {
-        this.dialog = {
-          show: true,
-          latestRequestSucceeded: requestStatus,
-          title: "Solicitação de registro enviada!",
-          message:
-            "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
-        };
-      } else {
-        this.dialog = {
-          show: true,
-          latestRequestSucceeded: requestStatus,
-          title: "Erro ao registrar dados",
-          message:
-            this.errors.server || "Verifique o formulário e tente novamente.",
-        };
-      }
+      await this.registerCompanyForm()
+        .then((status) => {
+          if (status) {
+            this.dialog = {
+              show: true,
+              latestRequestSucceeded: true,
+              title: "Solicitação de registro enviada!",
+              message:
+                "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
+            };
+          } else {
+            this.dialog = {
+              show: true,
+              latestRequestSucceeded: false,
+              title: "Erro ao registrar dados",
+              message:
+                this.errors.server ||
+                "Verifique o formulário e tente novamente.",
+            };
+          }
+        })
+        .catch(console.log);
     },
 
     clearDialog() {
