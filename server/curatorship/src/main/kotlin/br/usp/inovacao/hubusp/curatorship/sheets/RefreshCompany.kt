@@ -10,6 +10,7 @@ class RefreshCompany(
 ) {
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
+        private val errorsList = mutableListOf<CompanyValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
@@ -27,7 +28,10 @@ class RefreshCompany(
         } catch (e: UniquenessException) {
             companyErrorRepository.save(CompanyUniquenessError(error = e.message))
         }
-        is CompanyValidationError -> companyErrorRepository.save(data)
+        is CompanyValidationError -> {
+            companyErrorRepository.save(data)
+            errorsList.add(data)
+        }
         else -> throw RuntimeException("Error while persisting Company: data isn't Company nor CompanyValidationError/CompanyUniquenessError")
     }
 
@@ -42,6 +46,10 @@ class RefreshCompany(
                 companyRepository.clean()
                 companyErrorRepository.clean()
                 data.forEach(this::persistValidData)
+                if(errorsList.isNotEmpty()){
+                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Empresas:\n\n${errorMail}")
+                }
             }
             else{
                 mailer.notifySpreadsheetError("Error while fetching the data: the new fetched data is Empty")
