@@ -8,23 +8,23 @@ import org.valiktor.validate
 
 @kotlinx.serialization.Serializable
 data class Partner(
-        val name: String?,
-        val nusp: String?,
-        val bond: String?,
-        val unity: String?,
-        val email: String?,
-        val phone: String?,
+    val name: String?,
+    val nusp: String?,
+    val bond: String?,
+    val unity: String?,
+    val email: String?,
+    val phone: String?,
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) =
-                Partner(
-                        name = subRow[0],
-                        nusp = subRow[1],
-                        bond = subRow[2],
-                        unity = subRow[3],
-                        email = if (subRow.size > 5) subRow[5] else "",
-                        phone = if (subRow.size > 6) subRow[6] else ""
-                )
+            Partner(
+                name = subRow[0],
+                nusp = subRow[1],
+                bond = subRow[2],
+                unity = subRow[3],
+                email = if (subRow.size > 5) subRow[5] else "",
+                phone = if (subRow.size > 6) subRow[6] else ""
+            )
     }
 
     init {
@@ -32,9 +32,9 @@ data class Partner(
             validate(this) { validate(Partner::name).isNotBlank() }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> =
-                    cve.constraintViolations.mapToMessage(baseName = "messages").map {
-                        "${it.property}: ${it.message}"
-                    }
+                cve.constraintViolations.mapToMessage(baseName = "messages").map {
+                    "${it.property}: ${it.message}"
+                }
 
             throw ValidationException(messages = violations)
         }
@@ -88,21 +88,21 @@ data class CompanyClassification(val major: String?, val minor: String?) {
 
 @kotlinx.serialization.Serializable
 data class CompanyAddress(
-        val cep: String?,
-        val city: String?,
-        val neighborhood: String?,
-        val state: String?,
-        val venue: String?
+    val cep: String?,
+    val city: String?,
+    val neighborhood: String?,
+    val state: String?,
+    val venue: String?
 ) {
     companion object {
         fun fromRow(subRow: List<String?>) =
-                CompanyAddress(
-                        venue = subRow[0],
-                        neighborhood = subRow[1],
-                        city = subRow[2],
-                        state = subRow[3],
-                        cep = subRow[4]
-                )
+            CompanyAddress(
+                venue = subRow[0],
+                neighborhood = subRow[1],
+                city = subRow[2],
+                state = subRow[3],
+                cep = subRow[4]
+            )
     }
 
     init {
@@ -110,9 +110,9 @@ data class CompanyAddress(
             validate(this) { validate(CompanyAddress::city).isNotBlank() }
         } catch (cve: ConstraintViolationException) {
             val violations: List<String> =
-                    cve.constraintViolations.mapToMessage(baseName = "messages").map {
-                        "${it.property}: ${it.message}"
-                    }
+                cve.constraintViolations.mapToMessage(baseName = "messages").map {
+                    "${it.property}: ${it.message}"
+                }
 
             throw ValidationException(messages = violations)
         }
@@ -144,15 +144,20 @@ data class Company(
 ) {
     companion object {
         fun createPartners(subRow: List<String?>): List<Partner> {
-            var partners = mutableListOf<Partner>()
+            val partners = mutableListOf<Partner>()
             val subRowIndexes = listOf(0..6, 10..13, 15..18, 20..23, 25..28)
 
-            for (subRowIndex in subRowIndexes) {
+            subRowIndexes.forEachIndexed { index, subRowIndex ->
                 val partnerSubRow = subRow.slice(subRowIndex)
-                val partner = Partner.fromRow(partnerSubRow)
 
-                if (partnerSubRow.any { it != "" }) {
-                    partners.add(partner)
+                if (partnerSubRow.any { it != "" && it != null }) {
+                    try {
+                        val partner = Partner.fromRow(partnerSubRow)
+                        partners.add(partner)
+                    } catch (e: ValidationException) {
+                        val enrichedMessages = e.messages.map { "partners[$index].${it}" }
+                        throw ValidationException(messages = enrichedMessages)
+                    }
                 }
             }
             return partners
@@ -259,31 +264,70 @@ data class Company(
             return raw?.split(separator)?.map { it.trim() }?.toSet()
         }
 
+        private fun indexToColumnLetter(index: Int): String {
+            var i = index
+            var letter = ""
+            while (i >= 0) {
+                letter = ('A' + i % 26) + letter
+                i = i / 26 - 1
+            }
+            return letter
+        }
+
+        val propertyToColumn: Map<String, String> = mapOf(
+            "cnpj" to indexToColumnLetter(1),
+            "name" to indexToColumnLetter(2),
+            "corporateName" to indexToColumnLetter(3),
+            "year" to indexToColumnLetter(4),
+            "logo" to indexToColumnLetter(16),
+            "url" to indexToColumnLetter(17),
+            "incubated" to indexToColumnLetter(18),
+            "ecosystems" to indexToColumnLetter(19),
+
+            "address.city" to indexToColumnLetter(10),
+
+            "partners[0].name" to indexToColumnLetter(33),
+            "partners[1].name" to indexToColumnLetter(43),
+            "partners[2].name" to indexToColumnLetter(48),
+            "partners[3].name" to indexToColumnLetter(53),
+            "partners[4].name" to indexToColumnLetter(58)
+        )
+
         fun fromRow(row: List<String?>): Company {
-            var classification = CompanyClassification.classify(row[5])
+            val classification = CompanyClassification.classify(row[5])
+
+            val address = try {
+                CompanyAddress.fromRow(row.subList(8, 13))
+            } catch (e: ValidationException) {
+                val enrichedMessages = e.messages.map { "address.${it}" }
+                throw ValidationException(messages = enrichedMessages)
+            }
+
+            val partners = if (row.size < 62) emptyList() else {
+                createPartners(row.subList(33, 62))
+            }
 
             return Company(
-                    active = true,
-                    address = CompanyAddress.fromRow(row.subList(8, 13)),
-                    allowed = true,
-                    classification = classification,
-                    cnae = row[5],
-                    cnpj = row[1],
-                    companySize = calculateSize(row[21], row[20], classification),
-                    corporateName = row[3],
-                    description = row[13],
-                    ecosystems = splitAndTrim(row[19], ';'),
-                    emails = splitAndTrim(row[7], ';'),
-                    incubated = formatIncubated(row[18]),
-                    logo = formatLogo(row[16]),
-                    name = row[2],
-                    phones = formatPhones(row[6]),
-                    services = splitAndTrim(row[14], ';'),
-                    technologies = splitAndTrim(row[15], ';'),
-                    partners =
-                            if (row.size < 62) emptyList() else createPartners(row.subList(33, 62)),
-                    url = formatUrl(row[17]),
-                    year = row[4]
+                active = true,
+                address = address,
+                allowed = true,
+                classification = classification,
+                cnae = row[5],
+                cnpj = row[1],
+                companySize = calculateSize(row[21], row[20], classification),
+                corporateName = row[3],
+                description = row[13],
+                ecosystems = splitAndTrim(row[19], ';'),
+                emails = splitAndTrim(row[7], ';'),
+                incubated = formatIncubated(row[18]),
+                logo = formatLogo(row[16]),
+                name = row[2],
+                phones = formatPhones(row[6]),
+                services = splitAndTrim(row[14], ';'),
+                technologies = splitAndTrim(row[15], ';'),
+                partners = partners,
+                url = formatUrl(row[17]),
+                year = row[4]
             )
         }
     }

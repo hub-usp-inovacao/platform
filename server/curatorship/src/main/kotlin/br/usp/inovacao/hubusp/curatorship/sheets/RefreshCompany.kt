@@ -37,7 +37,6 @@ class RefreshCompany(
 
     fun refresh() {
         try {
-            // TODO: delete "old" documents, when due
             val data = spreadsheetReader
                 .read(Sheets.Companies)
                 .drop(1)
@@ -47,7 +46,20 @@ class RefreshCompany(
                 companyErrorRepository.clean()
                 data.forEach(this::persistValidData)
                 if(errorsList.isNotEmpty()){
-                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    val errorMail = errorsList.joinToString("\n") { validationError ->
+                        val formattedErrors = validationError.errors.map { error ->
+                            val property = error.substringBefore(": ")
+                            val message = error.substringAfter(": ")
+                            val column = Company.propertyToColumn[property]
+
+                            if (column != null) {
+                                "Coluna $column ($property): $message"
+                            } else {
+                                error
+                            }
+                        }.joinToString(", ")
+                        "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
+                    }
                     mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Empresas:\n\n${errorMail}")
                 }
             }
