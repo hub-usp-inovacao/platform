@@ -46,7 +46,20 @@ class RefreshDiscipline(
                 disciplineErrorRepository.clean()
                 data.forEach(this::persistValidData)
                 if(errorsList.isNotEmpty()){
-                    val errorMail = errorsList.joinToString("\n") { "Erros na linha ${it.spreadsheetLineNumber}: ${it.errors.joinToString(", ")}" }
+                    val errorMail = errorsList.joinToString("\n") { validationError ->
+                        val formattedErrors = validationError.errors.map { error ->
+                            val property = error.substringBefore(": ")
+                            val message = error.substringAfter(": ")
+                            val column = Discipline.propertyToColumn[property]
+
+                            if (column != null) {
+                                "Coluna $column ($property): $message"
+                            } else {
+                                error
+                            }
+                        }.joinToString(", ")
+                        "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
+                    }
                     mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Disciplinas:\n\n${errorMail}")
                 }
             }

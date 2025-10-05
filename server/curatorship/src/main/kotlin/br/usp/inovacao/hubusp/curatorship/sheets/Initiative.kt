@@ -28,16 +28,48 @@ data class Initiative(
     var contact: InitiativeContact
 ) {
     companion object {
-        fun fromRow(subRow: List<String?>) = Initiative(
-            name = subRow[1],
-            classification = subRow[0],
-            localization = subRow[3],
-            unity = possible_ND(subRow[4]),
-            tags = splitUnlessND(subRow[5]),
-            url = subRow[6],
-            description = subRow[7],
-            email = splitUnlessND(subRow[8]),
-            contact = InitiativeContact.fromRow(subRow)
+        fun fromRow(subRow: List<String?>): Initiative {
+            val contact = try {
+                InitiativeContact.fromRow(subRow)
+            } catch (e: ValidationException) {
+                val enrichedMessages = e.messages.map { "contact.${it}" }
+                throw ValidationException(messages = enrichedMessages)
+            }
+
+            return Initiative(
+                name = subRow[1],
+                classification = subRow[0],
+                localization = subRow[3],
+                unity = possible_ND(subRow[4]),
+                tags = splitUnlessND(subRow[5]),
+                url = subRow[6],
+                description = subRow[7],
+                email = splitUnlessND(subRow[8]),
+                contact = contact
+            )
+        }
+
+        private fun indexToColumnLetter(index: Int): String {
+            var i = index
+            var letter = ""
+            while (i >= 0) {
+                letter = ('A' + i % 26) + letter
+                i = i / 26 - 1
+            }
+            return letter
+        }
+
+        val propertyToColumn: Map<String, String> = mapOf(
+            "classification" to indexToColumnLetter(0),
+            "name" to indexToColumnLetter(1),
+            "localization" to indexToColumnLetter(3),
+            "unity" to indexToColumnLetter(4),
+            "tags" to indexToColumnLetter(5),
+            "url" to indexToColumnLetter(6),
+            "description" to indexToColumnLetter(7),
+            "email" to indexToColumnLetter(8),
+            "contact.person" to indexToColumnLetter(11),
+            "contact.info" to indexToColumnLetter(12)
         )
 
         fun possible_ND(term: String?) : String? {

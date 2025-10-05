@@ -36,23 +36,58 @@ data class Researcher(
                         "Professor Contratado"
                 )
 
-        fun createFrom(subrow: List<String?>) =
-                Researcher(
-                        name = subrow[2],
-                        email = subrow[3],
-                        unities = readSet(subrow[5]),
-                        keywords = readSet(subrow[28]),
-                        lattes = subrow[29],
-                        photo = formatPhoto(subrow[30]),
-                        skills = splitUnlessND(subrow[23]),
-                        services = splitUnlessND(subrow[24]),
-                        equipments = splitUnlessND(subrow[25]),
-                        phone = read(subrow[31]),
-                        limitDate = read(subrow[36]),
-                        bond = subrow[1],
-                        campus = subrow[6],
-                        area = KnowledgeAreas.createFrom(subrow)
-                )
+        fun createFrom(subrow: List<String?>): Researcher {
+            val area = try {
+                KnowledgeAreas.createFrom(subrow)
+            } catch (e: ValidationException) {
+                val enrichedMessages = e.messages.map { "area.${it}" }
+                throw ValidationException(messages = enrichedMessages)
+            }
+
+            return Researcher(
+                name = subrow[2],
+                email = subrow[3],
+                unities = readSet(subrow[5]),
+                keywords = readSet(subrow[28]),
+                lattes = subrow[29],
+                photo = formatPhoto(subrow[30]),
+                skills = splitUnlessND(subrow[23]),
+                services = splitUnlessND(subrow[24]),
+                equipments = splitUnlessND(subrow[25]),
+                phone = read(subrow[31]),
+                limitDate = read(subrow[36]),
+                bond = subrow[1],
+                campus = subrow[6],
+                area = area
+            )
+        }
+
+        private fun indexToColumnLetter(index: Int): String {
+            var i = index
+            var letter = ""
+            while (i >= 0) {
+                letter = ('A' + i % 26) + letter
+                i = i / 26 - 1
+            }
+            return letter
+        }
+
+        val propertyToColumn: Map<String, String> = mapOf(
+            "bond" to indexToColumnLetter(1),
+            "name" to indexToColumnLetter(2),
+            "email" to indexToColumnLetter(3),
+            "unities" to indexToColumnLetter(5),
+            "campus" to indexToColumnLetter(6),
+            "skills" to indexToColumnLetter(23),
+            "services" to indexToColumnLetter(24),
+            "equipments" to indexToColumnLetter(25),
+            "area.major" to indexToColumnLetter(26),
+            "area.minors" to indexToColumnLetter(27),
+            "keywords" to indexToColumnLetter(28),
+            "lattes" to indexToColumnLetter(29),
+            "phone" to indexToColumnLetter(31),
+            "limitDate" to indexToColumnLetter(36)
+        )
 
         fun formatPhoto(raw: String?): String? {
 

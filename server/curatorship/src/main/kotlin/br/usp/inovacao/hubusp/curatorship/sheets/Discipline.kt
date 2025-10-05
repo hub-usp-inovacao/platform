@@ -59,6 +59,27 @@ data class Discipline(
             return keywords.toSet()
         }
 
+        private fun indexToColumnLetter(index: Int): String {
+            var i = index
+            var letter = ""
+            while (i >= 0) {
+                letter = ('A' + i % 26) + letter
+                i = i / 26 - 1
+            }
+            return letter
+        }
+
+        val propertyToColumn: Map<String, String> = mapOf(
+            "nature" to indexToColumnLetter(0),
+            "name" to indexToColumnLetter(1),
+            "campus" to indexToColumnLetter(2),
+            "unity" to indexToColumnLetter(3),
+            "url" to indexToColumnLetter(4),
+            "level" to indexToColumnLetter(5),
+            "description" to indexToColumnLetter(6),
+            "category" to indexToColumnLetter(9)
+        )
+
         /**
          * Removes the query parameter 'verdis' from Jupiter URLs, otherwise it goes to an outdated
          * page.

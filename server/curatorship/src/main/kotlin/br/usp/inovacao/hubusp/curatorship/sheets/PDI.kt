@@ -23,6 +23,28 @@ data class PDI(
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
 
+        private fun indexToColumnLetter(index: Int): String {
+            var i = index
+            var letter = ""
+            while (i >= 0) {
+                letter = ('A' + i % 26) + letter
+                i = i / 26 - 1
+            }
+            return letter
+        }
+
+        val propertyToColumn: Map<String, String> = mapOf(
+            "category" to indexToColumnLetter(0),
+            "name" to indexToColumnLetter(1),
+            "campus" to indexToColumnLetter(3),
+            "unity" to indexToColumnLetter(4),
+            "site" to indexToColumnLetter(6),
+            "email" to indexToColumnLetter(7),
+            "phone" to indexToColumnLetter(8),
+            "description" to indexToColumnLetter(11),
+            "keywords" to indexToColumnLetter(14)
+        )
+
         fun fromRow(row: List<String?>) = PDI(
             category = row[0],
             name = row[1],
