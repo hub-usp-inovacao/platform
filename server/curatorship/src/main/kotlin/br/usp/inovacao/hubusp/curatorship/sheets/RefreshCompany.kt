@@ -60,7 +60,7 @@ class RefreshCompany(
                         }.joinToString(", ")
                         "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
                     }
-                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Empresas:\n\n${errorMail}")
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Empresas:\n\n${errorMail}", "Relatório Semanal - Empresas")
                 }
             }
             else{
