@@ -12,12 +12,12 @@ class Mailer(
         mailerImpl = br.usp.inovacao.hubusp.mailer.Mailer(user, password)
     }
 
-    fun notifySpreadsheetError(message: String) {
+    fun notifySpreadsheetError(message: String, subject: String = "Erro ao buscar as planilhas") {
         val developersEmail = Configuration.DEVS_EMAIL
         mailerImpl.send(
             Mail(
                 to = listOf(developersEmail),
-                subject ="Erro ao buscar as planilhas",
+                subject = subject,
                 body = message
             )
         )

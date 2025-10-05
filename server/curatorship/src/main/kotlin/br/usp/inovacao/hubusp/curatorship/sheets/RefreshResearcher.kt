@@ -60,7 +60,7 @@ class RefreshResearcher(
                         }.joinToString(", ")
                         "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
                     }
-                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Competências:\n\n${errorMail}")
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Competências:\n\n${errorMail}", "Relatório Semanal - Competências")
                 }
             }
             else{

@@ -60,7 +60,7 @@ class RefreshInitiative(
                         }.joinToString(", ")
                         "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
                     }
-                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Iniciativas:\n\n${errorMail}")
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Iniciativas:\n\n${errorMail}", "Relatório Semanal - Iniciativas")
                 }
             }
             else{

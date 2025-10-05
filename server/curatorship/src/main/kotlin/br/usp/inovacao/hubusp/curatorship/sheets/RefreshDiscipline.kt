@@ -60,7 +60,7 @@ class RefreshDiscipline(
                         }.joinToString(", ")
                         "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
                     }
-                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Disciplinas:\n\n${errorMail}")
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de Disciplinas:\n\n${errorMail}", "Relatório Semanal - Disciplinas")
                 }
             }
             else{

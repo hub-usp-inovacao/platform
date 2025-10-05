@@ -56,7 +56,7 @@ class RefreshPDI(
                         }.joinToString(", ")
                         "Erros na linha ${validationError.spreadsheetLineNumber}: $formattedErrors"
                     }
-                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de PDI:\n\n${errorMail}")
+                    mailer.notifySpreadsheetError("Foram encontrados erros na planilha de PDI:\n\n${errorMail}", "Relatório Semanal - P&D&I")
                 }
             }
             else{
