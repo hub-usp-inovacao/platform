@@ -116,7 +116,7 @@ async function sendCompanyData({commit, getters}, request) {
     const company = prepareCompanyObject(getters);
     const { errors } = await request(company, logo);
 
-    if (errors !== undefined) {
+    if (errors !== undefined && Object.keys(errors).length != 0) {
       commit("setErrors", errors);
       return false;
     }
