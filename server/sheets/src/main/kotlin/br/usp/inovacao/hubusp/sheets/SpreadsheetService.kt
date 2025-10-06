@@ -20,6 +20,11 @@ object SpreadsheetService {
     private const val CREDENTIALS_FILE_PATH = "/credentials.json"
     private const val APPLICATION_NAME = "HubUSP"
 
+    private enum class ValueInputOption {
+        RAW,
+        USER_ENTERED,
+    }
+
     val googleSheetsService: GoogleSheetsService by lazy {
         try {
             val credentialsStream =
@@ -42,11 +47,12 @@ object SpreadsheetService {
         }
     }
 
-    /** Append `values` to `sheetId` at `range` */
+    /** Append `values` row to `sheetId` at `range`. */
     fun append(sheetId: String, range: String, values: Matrix<String?>) =
         googleSheetsService
             .spreadsheets()
             .values()
             .append(sheetId, range, ValueRange().setValues(values))
+            .setValueInputOption(ValueInputOption.RAW.name)
             .execute()
 }
