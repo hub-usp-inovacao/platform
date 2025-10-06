@@ -4,6 +4,8 @@
 export default async (data, logo) => {
   let promises = [];
 
+  console.log(data, logo);
+
   // TODO: Upload logo to the kotlin backend
   if (logo) {
     const body = new FormData();
@@ -15,9 +17,13 @@ export default async (data, logo) => {
       fetch(`${process.env.BACKEND_URL}/update_request/logo`, {
         method: "POST",
         body,
-      }).catch((e) => {
-        throw new Error(`Falha ao fazer upload da logo: ${e}`);
-      }),
+      })
+        .then(() => ({
+          errors: {},
+        }))
+        .catch((e) => ({
+          errors: { logo: `Falha ao fazer upload da logo: ${e}` },
+        })),
     );
   }
 
@@ -49,5 +55,16 @@ export default async (data, logo) => {
       })),
   );
 
-  return Promise.allSettled(promises);
+  return Promise.allSettled(promises).then((responses) =>
+    responses
+      .map((response) => response?.value ?? {})
+      .reduce(
+        (acc, val) => ({
+          ...acc,
+          ...val,
+          errors: Object.assign(acc?.errors ?? {}, val?.errors ?? {}),
+        }),
+        {},
+      ),
+  );
 };
