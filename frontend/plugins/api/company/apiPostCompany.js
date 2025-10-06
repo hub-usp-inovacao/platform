@@ -1,5 +1,3 @@
-import { parseValidationErrors } from "./parse.js";
-
 /**
  * Send POST request to register Company
  */
@@ -36,9 +34,7 @@ export default async (data, logo) => {
           case 201: // Created
             return {};
           case 422: // Unprocessable Content
-            return response.json().then(({ errors }) => ({
-              errors: parseValidationErrors(errors),
-            }));
+            return response.json();
           default:
             throw new Error(`Unexpected server response: ${response.status}`);
         }
