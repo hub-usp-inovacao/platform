@@ -28,7 +28,7 @@ object SpreadsheetService {
 
             val credentials =
                 GoogleCredentials.fromStream(credentialsStream)
-                    .createScoped(listOf(SheetsScopes.SPREADSHEETS_READONLY))
+                    .createScoped(listOf(SheetsScopes.SPREADSHEETS))
 
             GoogleSheetsService.Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
