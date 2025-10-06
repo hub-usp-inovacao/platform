@@ -142,16 +142,14 @@ fun CompanyForm.toCsvRow(): List<String?> {
     // {X..Z} AA
     // Social medias
 
-    val linkedin = this.about.socialMedias.filter { it.contains("linkedin.com") }.toCsvCell()
-    val instagram = this.about.socialMedias.filter { it.contains("instagram.com") }.toCsvCell()
+    val linkedin = this.about.socialMedias.filter { it.contains("linkedin.com") }
+    val instagram = this.about.socialMedias.filter { it.contains("instagram.com") }
     val youtube =
-        this.about.socialMedias
-            .filter { it.contains("youtube.com") || it.contains("youtu.be") }
-            .toCsvCell()
+        this.about.socialMedias.filter { it.contains("youtube.com") || it.contains("youtu.be") }
     val facebook =
-        this.about.socialMedias
-            .filter { it.contains("facebook.com") || it.contains("fb.me") || it.contains("fb.com") }
-            .toCsvCell()
+        this.about.socialMedias.filter {
+            it.contains("facebook.com") || it.contains("fb.me") || it.contains("fb.com")
+        }
     val otherSocialMedias = this.about.socialMedias - linkedin - instagram - youtube - facebook
 
     row +=
