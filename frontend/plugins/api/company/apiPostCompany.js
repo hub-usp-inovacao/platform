@@ -1,3 +1,13 @@
+import dictionary from "./dictionary.json";
+
+function translateKey(text) {
+  Object.entries(dictionary).forEach(
+    ([english, portuguese]) => (text = text.replace(english, portuguese)),
+  );
+
+  return text;
+}
+
 /**
  * Send POST request to register Company
  */
@@ -40,7 +50,15 @@ export default async (data, logo) => {
           case 201: // Created
             return {};
           case 422: // Unprocessable Content
-            return response.json();
+            return response.json().then((response) => ({
+              ...response,
+              errors: Object.fromEntries(
+                Object.entries(response?.errors ?? {}).map(([key, value]) => [
+                  key,
+                  value.map(translateKey),
+                ]),
+              ),
+            }));
           default:
             throw new Error(`Unexpected server response: ${response.status}`);
         }

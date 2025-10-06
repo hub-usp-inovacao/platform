@@ -1,0 +1,58 @@
+{
+  "description:": "descrição:",
+  "logo:": "logotipo:",
+  "services:": "serviços:",
+  "technologies:": "tecnologias:",
+  "site:": "site:",
+  "odss:": "objetivo de desenvolvimento sustentável:",
+  "socialMedias:": "mídias sociais:",
+
+  "cnpj:": "CNPJ:",
+  "publicName:": "nome fantasia:",
+  "corporateName:": "razão social:",
+  "year:": "ano de fundação:",
+  "size:": "porte:",
+  "cnae:": "CNAE:",
+  "registryStatus:": "situação cadastral:",
+  "phones:": "telefones:",
+  "emails:": "e-mails:",
+  "street:": "endereço:",
+  "neighborhood:": "vizinhança:",
+  "city:": "cidade:",
+  "state:": "estado:",
+  "zipcode:": "CEP:",
+  "category:": "vínculo/categoria DNA USP:",
+  "companyNature:": "natureza jurídica:",
+
+  "wantsStamp:": "quer a marca?:",
+  "name:": "nome:",
+  "email:": "e-mail:",
+  "truthfulInformations:": "declaração final:",
+  "permissions:": "permissões:",
+
+  "wasIncubated:": "está/esteve em incubadora/parque tecnológico?:",
+  "ecosystem:": "qual incubadora/parque tecnológico::",
+
+  "received:": "recebeu investimento?:",
+  "investmentsReceived:": "investimentos recebidos:",
+  "own:": "investimento próprio:",
+  "angel:": "investimento-anjo:",
+  "venture:": "venture capital:",
+  "equity:": "private equitiy:",
+  "pipe:": "PIPE:",
+  "others:": "outros:",
+
+  "name:": "nome:",
+  "email:": "e-mail:",
+  "phone:": "telefone:",
+  "nusp:": "número USP:",
+  "bond:": "vínculo:",
+  "unit:": "unidade:",
+  "role:": "cargo:",
+
+  "lastYearRevenue:": "faturamento no ano anterior:",
+
+  "numberOfCltEmployees:": "número CLT:",
+  "numberOfPjColaborators:": "número PJ:",
+  "numberOfInterns:": "número bolsistas/estagiários:"
+}
