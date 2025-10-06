@@ -49,7 +49,7 @@ internal class RefreshPDITest {
     fun `it stores valid rows as PDI and invalid as PDIError`() {
         // given
         every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
-        every { mockMailer.notifySpreadsheetError(any()) } returns Unit
+        every { mockMailer.notifySpreadsheetError(any(), any()) } returns Unit
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIErrorRepo.save(any()) } returns Unit
         every { mockPDIRepo.clean()} returns Unit
@@ -71,6 +71,7 @@ internal class RefreshPDITest {
         every { mockSSReader.read(any()) } returns PDITestHelp.validRowAndInvalidRow()
         every { mockPDIRepo.save(any()) } returns Unit
         every { mockPDIRepo.clean() } returns Unit
+        every { mockMailer.notifySpreadsheetError(any(), any()) } returns Unit
 
         //when
         underTest.refresh()
