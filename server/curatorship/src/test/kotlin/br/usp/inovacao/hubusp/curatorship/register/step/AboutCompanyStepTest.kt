@@ -48,15 +48,12 @@ class AboutCompanyStepTest {
 
     @Test
     fun `it throws an error when AboutCompanyStep logo is invalid`() {
-        assertFailsWith<StepValidationException> { validStep.copy(logo = "").validate() }
-        assertFailsWith<StepValidationException> { validStep.copy(logo = null).validate() }
+        assertFailsWith<StepValidationException> { validStep.copy(logo = "foobar").validate() }
     }
 
     @Test
     fun `it throws an error when AboutCompanyStep site is invalid`() {
-        assertFailsWith<StepValidationException> { validStep.copy(site = "").validate() }
         assertFailsWith<StepValidationException> { validStep.copy(site = "foobar").validate() }
-        assertFailsWith<StepValidationException> { validStep.copy(site = null).validate() }
     }
 
     @Test

@@ -29,10 +29,10 @@
       "description": "",
       "services": [""],
       "technologies": [""],
-      "site": "",
+      "site": "foobar",
       "odss": [""],
       "social_medias": [""],
-      "logo": ""
+      "logo": "foobar"
     },
     "investment": {
       "received": "Sim",
