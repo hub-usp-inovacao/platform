@@ -77,7 +77,8 @@ export default {
         href: 'https://usp.inteum.com/usp/InventorPortal'
       },
       { title: 'Hub USP Inovação', href: '/' },
-    ]
+    ],
+    search: ""
   }),
   computed: {
     barHeight() {
