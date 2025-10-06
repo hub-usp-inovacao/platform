@@ -8,9 +8,10 @@ class RefreshDiscipline(
     val disciplineRepository: DisciplineRepository,
     val disciplineErrorRepository: DisciplineErrorRepository
 ){
+    private val errorsList = mutableListOf<DisciplineValidationError>()
+
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
-        private val errorsList = mutableListOf<DisciplineValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {

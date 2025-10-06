@@ -8,9 +8,10 @@ class RefreshCompany(
     val companyRepository: CompanyRepository,
     val companyErrorRepository: CompanyErrorRepository
 ) {
+    private val errorsList = mutableListOf<CompanyValidationError>()
+
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
-        private val errorsList = mutableListOf<CompanyValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {

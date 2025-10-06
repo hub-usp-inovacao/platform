@@ -8,9 +8,10 @@ class RefreshInitiative(
     val initiativeRepository: InitiativeRepository,
     val initiativeErrorRepository: InitiativeErrorRepository
 ) {
+    private val errorsList = mutableListOf<InitiativeValidationError>()
+
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
-        private val errorsList = mutableListOf<InitiativeValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {

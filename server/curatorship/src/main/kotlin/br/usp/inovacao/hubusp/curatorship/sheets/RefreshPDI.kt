@@ -8,9 +8,10 @@ class RefreshPDI(
     val pdiRepository: PDIRepository,
     val pdiErrorRepository: PDIErrorRepository
 ) {
+    private val errorsList = mutableListOf<PDIValidationError>()
+    
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
-        private val errorsList = mutableListOf<PDIValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
