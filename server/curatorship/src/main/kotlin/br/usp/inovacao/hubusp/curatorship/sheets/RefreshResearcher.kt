@@ -8,9 +8,10 @@ class RefreshResearcher(
     val researcherRepository: ResearcherRepository,
     val researcherErrorRepository: ResearcherErrorRepository
 ) {
+    private val errorsList = mutableListOf<ResearcherValidationError>()
+
     companion object {
         private const val INDEX_CORRECTION_FACTOR = 2
-        private val errorsList = mutableListOf<ResearcherValidationError>()
     }
 
     private fun validateRow(rowIndex: Int, row: List<String?>) = try {
