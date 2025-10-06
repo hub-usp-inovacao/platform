@@ -19,6 +19,7 @@ fun Application.configureHttp() {
         allowMethod(HttpMethod.Patch)
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
 
         if (corsHosts == anyHostSymbol) anyHost()
         else corsHosts
