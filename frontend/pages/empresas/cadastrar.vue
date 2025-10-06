@@ -47,7 +47,6 @@ export default {
   methods: {
     ...mapActions({
       registerCompanyForm: "company_forms/registerCompanyForm",
-      errors: "company_forms/errors",
     }),
 
     async onStepperFinish() {
