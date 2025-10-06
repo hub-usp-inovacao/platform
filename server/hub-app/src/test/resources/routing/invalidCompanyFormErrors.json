@@ -38,7 +38,7 @@
     "incubation": [
       "wasIncubated: Não deve estar em branco"
     ],
-    "staff": [
+    "colaborators": [
       "numberOfCltEmployees: Deve ser número",
       "numberOfPjColaborators: Deve ser número",
       "numberOfInterns: Deve ser número"
