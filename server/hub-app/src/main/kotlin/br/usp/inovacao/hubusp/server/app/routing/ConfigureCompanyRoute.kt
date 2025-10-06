@@ -99,7 +99,7 @@ fun Application.configureCompanyRoute(
     }
 }
 
-fun CompanyForm.toCsvRow(): List<String?> {
+fun CompanyForm.toCsvRow(): List<String> {
     val row =
         mutableListOf(
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -130,12 +130,12 @@ fun CompanyForm.toCsvRow(): List<String?> {
             this.about.description,
             this.about.services.toCsvCell(),
             this.about.technologies.toCsvCell(),
-            this.about.logo,
-            this.about.site,
+            this.about.logo.toCsvCell(),
+            this.about.site.toCsvCell(),
             this.incubation.wasIncubated,
             this.incubation.ecosystem,
-            null, // "Unicórnio"
-            null, // "Número total de colaboradores"
+            "", // "Unicórnio"
+            "", // "Número total de colaboradores"
             this.about.odss.toCsvCell(),
         )
 
@@ -173,15 +173,15 @@ fun CompanyForm.toCsvRow(): List<String?> {
             )
         } else {
             listOf(
-                null, // "Por qual email podemos entrar em contato para tratar do uso da
+                "", // "Por qual email podemos entrar em contato para tratar do uso da
                 // marca..."
-                null, // "Qual o nome do responsável por este email?"
+                "", // "Qual o nome do responsável por este email?"
             )
         }
 
     row +=
         listOf(
-            null, // "Contrato para uso da marca DNA USP"
+            "", // "Contrato para uso da marca DNA USP"
             this.dnaUspStamp.truthfulInformations.toCsvCell(),
             this.dnaUspStamp.permissions.toCsvCell(),
         )
@@ -193,13 +193,13 @@ fun CompanyForm.toCsvRow(): List<String?> {
 
     row +=
         listOf(
-            firstPartner?.name,
-            firstPartner?.nusp,
-            firstPartner?.bond,
-            firstPartner?.unit,
-            firstPartner?.role,
-            firstPartner?.email,
-            firstPartner?.phone,
+            firstPartner?.name ?: "",
+            firstPartner?.nusp ?: "",
+            firstPartner?.bond ?: "",
+            firstPartner?.unit ?: "",
+            firstPartner?.role ?: "",
+            firstPartner?.email ?: "",
+            firstPartner?.phone ?: "",
         )
 
     // A{O,P}
@@ -208,7 +208,7 @@ fun CompanyForm.toCsvRow(): List<String?> {
     row +=
         listOf(
             this.partners.size.toString(),
-            null, // "Possui sócios que mantiveram ou mantêm vínculo com a USP"
+            "", // "Possui sócios que mantiveram ou mantêm vínculo com a USP"
         )
 
     // A{Q..Z} B{A..J}
@@ -219,11 +219,11 @@ fun CompanyForm.toCsvRow(): List<String?> {
 
         row +=
             listOf(
-                null, // "Gostaria de adicionar os dados dos demais sócios"
-                partner?.name,
-                partner?.nusp,
-                partner?.bond,
-                partner?.unit,
+                "", // "Gostaria de adicionar os dados dos demais sócios"
+                partner?.name ?: "",
+                partner?.nusp ?: "",
+                partner?.bond ?: "",
+                partner?.unit ?: "",
             )
     }
 
@@ -257,14 +257,14 @@ fun CompanyForm.toCsvRow(): List<String?> {
     row +=
         listOf(
             this.data.size,
-            null, // "Somatório (sócios + CLT + PJ + E/B)"
+            "", // "Somatório (sócios + CLT + PJ + E/B)"
             this.data.companyNature,
             this.data.registryStatus,
-            null, // "Índice"
-            null, // "Vínculo com a incubadora"
-            null, // "Confirmação de vínculo"
+            "", // "Índice"
+            "", // "Vínculo com a incubadora"
+            "", // "Confirmação de vínculo"
             this.data.category,
-            null, // "Confirmação de vínculo EMPRESA"
+            "", // "Confirmação de vínculo EMPRESA"
         )
 
     return row
