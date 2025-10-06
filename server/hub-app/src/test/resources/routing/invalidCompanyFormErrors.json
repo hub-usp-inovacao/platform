@@ -1,6 +1,6 @@
 {
   "errors": {
-    "partner": [
+    "partners": [
       "name: Não deve estar em branco",
       "email: Deve ser um endereço de e-mail válido",
       "phone: Deve ser lista de números de telefone",

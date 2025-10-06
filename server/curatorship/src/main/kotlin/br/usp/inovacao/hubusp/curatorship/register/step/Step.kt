@@ -11,6 +11,6 @@ enum class Step {
     @SerialName("incubation") Incubation,
     @SerialName("dna_usp_stamp") DNAUspStamp,
     @SerialName("staff") Staff,
-    @SerialName("partner") Partner,
+    @SerialName("partners") Partner,
     @SerialName("about_company") AboutCompany,
 }

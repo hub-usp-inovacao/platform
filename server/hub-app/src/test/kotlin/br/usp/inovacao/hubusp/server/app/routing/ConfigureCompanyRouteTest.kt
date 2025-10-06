@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
+import br.usp.inovacao.hubusp.curatorship.register.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.configureSerialization
 import br.usp.inovacao.hubusp.server.catalog.*
@@ -30,19 +31,7 @@ class ConfigureCompanyRouteTest {
 
     @Serializable
     data class RecvMessage(
-        val errors: ValidationErrors,
-    )
-
-    @Serializable
-    data class ValidationErrors(
-        val company_data: Set<String> = emptySet(),
-        val investment: Set<String> = emptySet(),
-        val revenue: Set<String> = emptySet(),
-        val incubation: Set<String> = emptySet(),
-        val dna_usp_stamp: Set<String> = emptySet(),
-        val staff: Set<String> = emptySet(),
-        val partner: Set<String> = emptySet(),
-        val about_company: Set<String> = emptySet(),
+        val errors: HashMap<Step, Set<String>>,
     )
 
     @BeforeTest
