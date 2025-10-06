@@ -49,8 +49,12 @@ data class AboutCompanyStep(
         try {
             validate(this) {
                 validate(AboutCompanyStep::description).isNotNull().isNotBlank()
-                validate(AboutCompanyStep::logo).isNotNull().isNotBlank().isWebsite()
-                validate(AboutCompanyStep::site).isNotNull().isNotBlank().isWebsite()
+                if (logo != "") {
+                    validate(AboutCompanyStep::logo).isWebsite()
+                }
+                if (site != "") {
+                    validate(AboutCompanyStep::site).isWebsite()
+                }
                 validate(AboutCompanyStep::odss).isIn(AboutCompanyStep.VALID_ODS)
                 validate(AboutCompanyStep::socialMedias).isWebsite()
             }
