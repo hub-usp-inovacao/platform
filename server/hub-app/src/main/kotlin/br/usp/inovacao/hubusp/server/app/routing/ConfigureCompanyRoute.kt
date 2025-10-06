@@ -50,7 +50,7 @@ fun Application.configureCompanyRoute(
                     Mail(
                         to = recipientList,
                         subject = "Cadastro de companhia",
-                        body = message.toString(),
+                        body = "Mensagem automática. Novo cadastro de companhia recebido.",
                         attachments =
                             listOf(
                                 Mail.Attachment(
