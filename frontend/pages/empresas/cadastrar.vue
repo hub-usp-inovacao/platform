@@ -66,7 +66,7 @@ export default {
               latestRequestSucceeded: false,
               title: "Erro ao registrar dados",
               message:
-                this.errors.server ||
+                this.errors.server || this.errors.logo ||
                 "Verifique o formulário e tente novamente.",
             };
           }
