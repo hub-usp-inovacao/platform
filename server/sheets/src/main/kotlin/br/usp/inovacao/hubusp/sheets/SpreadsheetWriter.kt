@@ -1,7 +1,5 @@
 package br.usp.inovacao.hubusp.sheets
 
-import com.google.api.services.sheets.v4.model.AppendValuesResponse
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse
 import java.io.IOException
 
 class SpreadsheetWriter(val sheetId: String, val sheetName: String) {
@@ -16,17 +14,17 @@ class SpreadsheetWriter(val sheetId: String, val sheetName: String) {
             val separator = if (tableRange == "") "" else "!"
             val range = "'${sheetName}'${separator}${tableRange}"
             return SpreadsheetService.append(sheetId, range, matrix).updates.updatedRange
-        } catch (_: IOException) {
+        } catch (e: IOException) {
             throw SpreasheetException(
                 sheetName,
                 sheetId,
-                message = "Failed to connect to spreadsheet",
+                message = "Failed to connect to spreadsheet: ${e.message}",
             )
-        } catch (_: Exception) {
+        } catch (e: Exception) {
             throw SpreasheetException(
                 sheetName,
                 sheetId,
-                message = "Unexpected response from spreadsheet",
+                message = "Unexpected response from spreadsheet: ${e.message}",
             )
         }
     }
