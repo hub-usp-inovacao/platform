@@ -267,9 +267,7 @@ fun CompanyForm.toCsvRow(): List<String> {
             "", // "Confirmação de vínculo EMPRESA"
         )
 
-    row.map { it.replace(",", ";") }
-
-    return row
+    return row.map { it.replace(",", ";") }
 }
 
 fun String?.toCsvCell() = this ?: "N/D"
