@@ -92,7 +92,7 @@ data class DisciplineOffering(
                     skrape(fetcher) {
                         request {
                             url =
-                                "https://uspdigital.usp.br/janus/TurmaDet?sgldis=SCC5832&ofe=${classCode}"
+                                "https://uspdigital.usp.br/janus/TurmaDet?sgldis=${sgldis}&ofe=${classCode}"
                             timeout = timeoutMs
                         }
                         extractIt<DisciplineOffering> {
