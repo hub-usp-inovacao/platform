@@ -9,7 +9,6 @@
       label=""
       @input="setIncubated"
     />
-
     <div v-if="!disabledIncubatorsSelect">
       <h2 class="text-h6 mt-6 font-weight-regular">
         Se sim, em qual incubadora ou Parque Tecnológico? *
@@ -20,12 +19,13 @@
         :disabled="disabledIncubatorsSelect"
         label=""
         @input="setDefaultIncubators"
+        :multipleOption="true"
       />
       <div class="mt-5 text-h6 font-weight-regular">
-        Em caso de outros, digite abaixo:
+        Em caso de outros, adicione abaixo:
         <v-divider />
         <v-container>
-          <ShortTextInput
+          <MultipleInputs
             :value="otherIncubator"
             label="Incubadora/Parque Tecnológico"
             @input="setOtherIncubators"
@@ -40,11 +40,13 @@
 import { mapGetters, mapActions } from "vuex";
 import Dropdown from "@/components/CompanyForms/inputs/Dropdown.vue";
 import ShortTextInput from "@/components/CompanyForms/inputs/ShortTextInput.vue";
+import MultipleInputs from "@/components/CompanyForms/inputs/MultipleInputs.vue";
 
 export default {
   components: {
     Dropdown,
     ShortTextInput,
+    MultipleInputs,
   },
   data: () => ({
     options: [
@@ -57,7 +59,7 @@ export default {
       "ESALQTec - Incubadora de Empresas Agrozootécnicas de Piracicaba",
       "HABITs - Habitat de Inovação Tecnológica e Social/Incubadora-Escola",
       "ParqTec - Fundação Parque Tecnológico de São Carlos",
-      "Supera - Parque de Inovação e Tecnologia de Ribeirão Preto",
+      "Supera - Parque de Inovação e Tecnologia de Ribeirão Preto"
     ],
   }),
   computed: {
@@ -73,10 +75,14 @@ export default {
       return false;
     },
     defaultIncubators() {
-      return this.incubadoras.includes(this.ecosystems) ? this.ecosystems : "";
+      const ecosystems = Array.isArray(this.ecosystems) ? this.ecosystems : [this.ecosystems];
+      const matchingIncubators = ecosystems.filter(ecosystem => this.incubadoras.includes(ecosystem));
+      return matchingIncubators;
     },
     otherIncubator() {
-      return this.incubadoras.includes(this.ecosystems) ? "" : this.ecosystems;
+      const ecosystems = Array.isArray(this.ecosystems) ? this.ecosystems : [this.ecosystems];
+      const matchingOtherIncubators = ecosystems.filter(ecosystem => !this.incubadoras.includes(ecosystem));
+      return matchingOtherIncubators;
     },
   },
   methods: {
