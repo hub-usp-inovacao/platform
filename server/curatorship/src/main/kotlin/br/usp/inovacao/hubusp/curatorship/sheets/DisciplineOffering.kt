@@ -7,6 +7,7 @@ import it.skrape.fetcher.Request
 import it.skrape.fetcher.extractIt
 import it.skrape.fetcher.response
 import it.skrape.fetcher.skrape
+import it.skrape.selects.DocElement
 
 @kotlinx.serialization.Serializable
 data class DisciplineOffering(
@@ -16,6 +17,35 @@ data class DisciplineOffering(
     var professors: Set<String> = emptySet(),
 ) {
     companion object {
+        private fun parseHtmlTable(tableElm: DocElement?) =
+            tableElm?.findAll("tr")?.map { it.findAll("td").map { it.text } } ?: emptyList()
+
+        private fun getProfessorsFromJupiterTable(
+            table: List<List<String>>,
+        ): Set<String> {
+            var professorCol: Int? = null
+            var professorRow: Int? = null
+
+            professorFound@ for ((rowIndex, row) in table.withIndex()) {
+                for ((colIndex, col) in row.withIndex()) {
+                    if (col.contains("prof", true)) {
+                        professorCol = colIndex
+                        professorRow = rowIndex
+                        break@professorFound
+                    }
+                }
+            }
+
+            if (professorRow == null || professorCol == null) {
+                return emptySet()
+            }
+
+            return table
+                .subList(professorRow + 1, table.size)
+                .mapNotNull { it.getOrNull(professorCol) }
+                .toSet()
+        }
+
         fun trySetFromJupiter(
             sgldis: String,
             timeoutMs: Int = 20000,
@@ -33,9 +63,8 @@ data class DisciplineOffering(
                     }
                     .forEach {
                         val generalTable = it.children.getOrNull(0)
-                        val scheduleTable = it.children.getOrNull(2)
 
-                        if (generalTable != null && scheduleTable != null) {
+                        if (generalTable != null) {
                             val regexPattern =
                                 "Código da Turma: ([^ ]*) *Início: ([^ ]*) *Fim: ([^ ]*) *Tipo da Turma: (.*)"
 
@@ -43,18 +72,14 @@ data class DisciplineOffering(
                                 Regex(regexPattern).find(generalTable.text)?.groupValues
 
                             if (groupValues != null) {
+                                val scheduleTable = parseHtmlTable(it.children.getOrNull(2))
+
                                 offerings.add(
                                     DisciplineOffering(
                                         classCode = groupValues.getOrNull(1),
                                         startDate = groupValues.getOrNull(2),
                                         endDate = groupValues.getOrNull(3),
-                                        professors =
-                                            scheduleTable.children
-                                                .getOrNull(0)
-                                                ?.children
-                                                ?.drop(1)
-                                                ?.mapNotNull { it.children.getOrNull(3)?.text }
-                                                ?.toSet() ?: emptySet(),
+                                        professors = getProfessorsFromJupiterTable(scheduleTable),
                                     ),
                                 )
                             }
