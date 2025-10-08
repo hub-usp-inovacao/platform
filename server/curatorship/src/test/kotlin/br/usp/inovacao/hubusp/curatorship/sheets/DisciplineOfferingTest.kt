@@ -88,6 +88,28 @@ internal class DisciplineOfferingTest {
     }
 
     @Test
+    fun `it can parse an alternative layout from Jupiter`() {
+        every { mockFetcher.fetch(any()) } returns
+            createMockResultFromResource(
+                "/sheets/DisciplineOffering/jupiter/alternativeLayout.html",
+            )
+
+        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
+
+        assertEquals(
+            setOf(
+                DisciplineOffering(
+                    classCode = "2025201",
+                    startDate = "04/08/2025",
+                    endDate = "12/12/2025",
+                    professors = setOf("Professor 1", "Professor 2", "Professor 3"),
+                ),
+            ),
+            offerings,
+        )
+    }
+
+    @Test
     fun `it can parse a single offering from Janus`() {
         every { mockFetcher.fetch(any()) } returnsMany
             listOf(

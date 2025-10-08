@@ -44,25 +44,25 @@
                     <v-card class="pa-1" max-width="360" rounded="sm" tonal>
                       <table>
                         <tbody>
-                          <tr>
+                          <tr v-if="!!offering.classCode">
                             <td class="text-right font-weight-bold pr-1">
                               Turma:
                             </td>
                             <td>{{ offering.classCode }}</td>
                           </tr>
-                          <tr>
+                          <tr v-if="!!offering.startDate">
                             <td class="text-right font-weight-bold pr-1">
                               Início:
                             </td>
                             <td>{{ offering.startDate }}</td>
                           </tr>
-                          <tr>
+                          <tr v-if="!!offering.endDate">
                             <td class="text-right font-weight-bold pr-1">
                               Fim:
                             </td>
                             <td>{{ offering.endDate }}</td>
                           </tr>
-                          <tr>
+                          <tr v-if="!!offering.professors && offering.professors.length > 0">
                             <td class="text-right font-weight-bold pr-1">
                               Docente{{
                                 offering.professors.length > 1 ? "s" : ""
