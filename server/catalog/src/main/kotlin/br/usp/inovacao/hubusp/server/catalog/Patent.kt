@@ -12,16 +12,16 @@ data class Patent(
     val status: String,
     val summary: String,
     val url: String? = null
-)
+) {
+    companion object {}
+}
 
 @kotlinx.serialization.Serializable
-data class DualClassification(
-    val primary: Area,
-    val secondary: Area? = null
-)
+data class DualClassification(val primary: Area, val secondary: Area? = null) {
+    companion object {}
+}
 
 @kotlinx.serialization.Serializable
-data class Area(
-    val cip: String,
-    val subarea: String
-)
+data class Area(val cip: String, val subarea: String) {
+    companion object {}
+}

@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp.server.catalog
 
-interface PatentRepository {
+interface PatentRepository : OverwritableRepository<Patent> {
     /**
      * Filters Patents from the datasource
      *
