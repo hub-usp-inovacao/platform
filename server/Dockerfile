@@ -5,7 +5,7 @@ FROM gradle:7.4.2-jdk17 AS base
 
 WORKDIR /home/gradle/hub
 
-RUN mkdir catalog curatorship discovery hub-app hub-cli mailer persistence techtransfer \
+RUN mkdir catalog curatorship discovery hub-app hub-cli mailer persistence sheets techtransfer \
     && chown gradle:gradle . -R
 
 USER gradle
@@ -22,6 +22,7 @@ COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.prop
 COPY --chown=gradle:gradle  hub-cli/build.gradle.kts         hub-cli/gradle.properties          ./hub-cli/
 COPY --chown=gradle:gradle  mailer/build.gradle.kts          mailer/gradle.properties           ./mailer/
 COPY --chown=gradle:gradle  persistence/build.gradle.kts     persistence/gradle.properties      ./persistence/
+COPY --chown=gradle:gradle  sheets/build.gradle.kts          sheets/gradle.properties           ./sheets/
 COPY --chown=gradle:gradle  techtransfer/build.gradle.kts    techtransfer/gradle.properties     ./techtransfer/
 
 # PRE-INSTALL JUST THE DEPENDENCIES -- THIS SHALL SPEEDUP FUTURE BUILDS
