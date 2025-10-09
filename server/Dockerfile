@@ -1,3 +1,5 @@
+#syntax=docker/dockerfile:1.19-labs
+
 #####################################
 # BASE IMAGE FOR BUILDING THE PROJECT
 #####################################
@@ -5,24 +7,16 @@ FROM gradle:7.4.2-jdk17 AS base
 
 WORKDIR /home/gradle/hub
 
-RUN mkdir catalog curatorship discovery hub-app hub-cli mailer persistence techtransfer \
-    && chown gradle:gradle . -R
+RUN chown gradle:gradle . -R
 
 USER gradle
 
 CMD gradle build --continuous
 
 # COPY ALL PROJECTS build.gradle.kts FILES TO THEIR DESTINATIONS
-COPY --chown=gradle:gradle  settings.gradle.kts                                                 ./
-COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  ./
-COPY --chown=gradle:gradle  catalog/build.gradle.kts         catalog/gradle.properties          ./catalog/
-COPY --chown=gradle:gradle  curatorship/build.gradle.kts     curatorship/gradle.properties      ./curatorship/
-COPY --chown=gradle:gradle  discovery/build.gradle.kts       discovery/gradle.properties        ./discovery/
-COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.properties          ./hub-app/
-COPY --chown=gradle:gradle  hub-cli/build.gradle.kts         hub-cli/gradle.properties          ./hub-cli/
-COPY --chown=gradle:gradle  mailer/build.gradle.kts          mailer/gradle.properties           ./mailer/
-COPY --chown=gradle:gradle  persistence/build.gradle.kts     persistence/gradle.properties      ./persistence/
-COPY --chown=gradle:gradle  techtransfer/build.gradle.kts    techtransfer/gradle.properties     ./techtransfer/
+COPY --chown=gradle:gradle  settings.gradle.kts                                 ./
+COPY --chown=gradle:gradle  build.gradle.kts              gradle.properties     ./
+COPY --parents --chown=gradle:gradle  */build.gradle.kts  */gradle.properties   ./
 
 # PRE-INSTALL JUST THE DEPENDENCIES -- THIS SHALL SPEEDUP FUTURE BUILDS
 RUN gradle clean build
