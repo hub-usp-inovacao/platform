@@ -8,19 +8,24 @@ import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
+import io.ktor.http.content.streamProvider
 import io.ktor.server.application.Application
 import io.ktor.server.application.application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
-import io.ktor.server.request.receiveText
+import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.uri
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import java.nio.file.Files
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeBytes
 import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -36,15 +41,39 @@ fun Application.configureCompanyRoute(
 ) {
     routing {
         post("/company") {
-            @Serializable data class RecvMessage(val company: CompanyForm)
             @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
             try {
-                val text = call.receiveText()
-
+                val multipartData = call.receiveMultipart()
                 val json = Json { explicitNulls = false }
-                val message = json.decodeFromString<RecvMessage>(text)
-                val row = message.company.toCsvRow()
+
+                var logo: File? = null
+                var companyFormJson: String? = null
+                var companyForm: CompanyForm? = null
+
+                multipartData.forEachPart { part ->
+                    when (part) {
+                        is PartData.FormItem -> {
+                            when (part.name) {
+                                "company" -> {
+                                    companyFormJson = part.value
+                                    companyForm = json.decodeFromString<CompanyForm>(part.value)
+                                }
+                            }
+                        }
+
+                        is PartData.FileItem -> {
+                            val file = createTempFile().toFile()
+                            file.writeBytes(part.streamProvider().readBytes())
+                            logo = file
+                        }
+
+                        else -> {}
+                    }
+                    part.dispose()
+                }
+
+                val row = companyForm?.toCsvRow()
 
                 mailer.send(
                     Mail(
@@ -55,29 +84,36 @@ fun Application.configureCompanyRoute(
                             listOf(
                                 Mail.Attachment(
                                     "company.json",
-                                    Files.createTempFile("company", ".json")
-                                        .apply { writeText(text, Charsets.UTF_8) }
+                                    createTempFile()
+                                        .apply { writeText(companyFormJson!!, Charsets.UTF_8) }
                                         .toFile(),
                                 ),
                                 Mail.Attachment(
                                     "company.csv",
-                                    Files.createTempFile("company", ".csv")
+                                    createTempFile()
                                         .apply {
                                             writeLines(
                                                 listOf(
                                                     CSV_HEADERS.joinToString(","),
-                                                    row.joinToString(","),
+                                                    row!!.joinToString(","),
                                                 ),
                                                 Charsets.UTF_8,
                                             )
                                         }
                                         .toFile(),
                                 ),
-                            ),
-                    ),
-                )
+                            ) +
+                                if (logo != null) {
+                                    listOf(
+                                        Mail.Attachment(
+                                            "logo",
+                                            logo!!,
+                                        ),
+                                    )
+                                } else emptyList(),
+                    ))
 
-                spreadsheetWriter.append(listOf(row))
+                spreadsheetWriter.append(listOf(row!!))
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
