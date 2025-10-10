@@ -3,6 +3,7 @@ package br.usp.inovacao.hubusp.server.app.routing
 import br.usp.inovacao.hubusp.curatorship.register.CompanyForm
 import br.usp.inovacao.hubusp.curatorship.register.CompanyFormValidationException
 import br.usp.inovacao.hubusp.curatorship.register.ErrorsPerStep
+import br.usp.inovacao.hubusp.curatorship.register.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
@@ -21,7 +22,6 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.io.path.createTempFile
@@ -43,11 +43,11 @@ fun Application.configureCompanyRoute(
         post("/company") {
             @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
+            var logo: Image? = null
+
             try {
                 val multipartData = call.receiveMultipart()
-                val json = Json { explicitNulls = false }
 
-                var logo: File? = null
                 var companyFormJson: String? = null
                 var companyForm: CompanyForm? = null
 
@@ -56,6 +56,7 @@ fun Application.configureCompanyRoute(
                         is PartData.FormItem -> {
                             when (part.name) {
                                 "company" -> {
+                                    val json = Json { explicitNulls = false }
                                     companyFormJson = part.value
                                     companyForm = json.decodeFromString<CompanyForm>(part.value)
                                 }
@@ -65,7 +66,7 @@ fun Application.configureCompanyRoute(
                         is PartData.FileItem -> {
                             val file = createTempFile().toFile()
                             file.writeBytes(part.streamProvider().readBytes())
-                            logo = file
+                            logo = Image(file)
                         }
 
                         else -> {}
@@ -104,10 +105,11 @@ fun Application.configureCompanyRoute(
                                 ),
                             ) +
                                 if (logo != null) {
+                                    logo!!.validate()
                                     listOf(
                                         Mail.Attachment(
-                                            "logo",
-                                            logo!!,
+                                            "logo.${logo!!.extension!!}",
+                                            logo!!.file,
                                         ),
                                     )
                                 } else emptyList(),
@@ -120,6 +122,16 @@ fun Application.configureCompanyRoute(
                 call.respond(
                     HttpStatusCode.UnprocessableEntity,
                     ErrorMessage(errors = e.errorsPerStep),
+                )
+            } catch (e: ImageValidationException) {
+                call.respond(
+                    HttpStatusCode.UnprocessableEntity,
+                    ErrorMessage(
+                        errors =
+                            mapOf(
+                                Step.CompanyData to listOf("logo: Imagem inválida. (${e.message})"),
+                            ),
+                    ),
                 )
             } catch (e: Exception) {
                 application.log.warn(

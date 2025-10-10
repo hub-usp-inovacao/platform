@@ -71,8 +71,6 @@ class ConfigureCompanyRouteTest {
 
     @Test
     fun `test POST company with logo`() = testCompanyApplication {
-        val logo = createTempFile().toFile()
-
         val response =
             client.post("/company") {
                 setBody(
@@ -80,10 +78,15 @@ class ConfigureCompanyRouteTest {
                         formData {
                             append(
                                 "logo",
-                                InputProvider { logo.inputStream().asInput() },
+                                InputProvider {
+                                    this::class
+                                        .java
+                                        .getResourceAsStream("/routing/logo.webp")
+                                        ?.asInput()!!
+                                },
                                 Headers.build {
-                                    append(HttpHeaders.ContentType, "image/png")
-                                    append(HttpHeaders.ContentDisposition, "filename=\"blob\"")
+                                    append(HttpHeaders.ContentType, "image/webp")
+                                    append(HttpHeaders.ContentDisposition, "filename=\"logo.webp\"")
                                 },
                             )
                             append(
@@ -101,6 +104,42 @@ class ConfigureCompanyRouteTest {
 
         verify(exactly = 1) { mockMailer.send(withArg { assertEquals(3, it.attachments.size) }) }
         verify(exactly = 1) { mockSpreadsheetWriter.append(any()) }
+    }
+
+    @Test
+    fun `test POST company with invalid logo`() = testCompanyApplication {
+        val response =
+            client.post("/company") {
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append(
+                                "logo",
+                                InputProvider { createTempFile().toFile().inputStream().asInput() },
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/webp")
+                                    append(HttpHeaders.ContentDisposition, "filename=\"logo.webp\"")
+                                },
+                            )
+                            append(
+                                FormPart(
+                                    "company",
+                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                ),
+                            )
+                        },
+                    ),
+                )
+            }
+
+        assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
+
+        verify(exactly = 0) { mockMailer.send(any()) }
+        verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
+
+        val recvMessage = response.bodyAsText().let { Json.decodeFromString<RecvMessage>(it) }
+
+        assert(recvMessage.errors.get(Step.CompanyData)?.firstOrNull()?.contains("logo") == true)
     }
 
     @Test
@@ -123,7 +162,7 @@ class ConfigureCompanyRouteTest {
 
         assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
 
-        verify(exactly = 0) { mockMailer.send(withArg { assertEquals(2, it.attachments.size) }) }
+        verify(exactly = 0) { mockMailer.send(any()) }
         verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
 
         val recvMessage = response.bodyAsText().let { Json.decodeFromString<RecvMessage>(it) }
