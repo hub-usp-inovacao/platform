@@ -9,14 +9,12 @@ import kotlin.test.assertFailsWith
 class ImageTest {
     @Test
     fun `it fails when file is NOT an image`() {
-        val image = Image(createTempFile().toFile())
-        assertFailsWith<ImageValidationException> { image.validate() }
+        assertFailsWith<ImageValidationException> { Image(createTempFile().toFile()) }
     }
 
     @Test
     fun `it does NOT fail when file IS image`() {
-        val image = Image(File(this::class.java.getResource("/routing/logo.webp").toURI()))
-        image.validate()
+        Image(File(this::class.java.getResource("/routing/logo.webp").toURI()))
     }
 
     @Test
