@@ -22,6 +22,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.io.path.createTempFile
@@ -43,7 +44,7 @@ fun Application.configureCompanyRoute(
         post("/company") {
             @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
-            var logo: Image? = null
+            var logo: File? = null
 
             try {
                 val multipartData = call.receiveMultipart()
@@ -66,7 +67,7 @@ fun Application.configureCompanyRoute(
                         is PartData.FileItem -> {
                             val file = createTempFile().toFile()
                             file.writeBytes(part.streamProvider().readBytes())
-                            logo = Image(file)
+                            logo = file
                         }
 
                         else -> {}
@@ -105,11 +106,11 @@ fun Application.configureCompanyRoute(
                                 ),
                             ) +
                                 if (logo != null) {
-                                    logo!!.validate()
+                                    val image = Image(logo!!)
                                     listOf(
                                         Mail.Attachment(
-                                            "logo.${logo!!.extension!!}",
-                                            logo!!.file,
+                                            "logo.${image.extension!!}",
+                                            image.file,
                                         ),
                                     )
                                 } else emptyList(),
