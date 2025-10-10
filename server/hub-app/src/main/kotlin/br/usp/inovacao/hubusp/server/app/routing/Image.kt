@@ -1,6 +1,8 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
 import java.io.File
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeText
 import org.apache.tika.Tika
 import org.owasp.html.HtmlPolicyBuilder
 
@@ -17,7 +19,8 @@ data class Image(var file: File) {
         if (this.extension == null) {
             throw ImageValidationException("Image type not recognized: ${mimeType}")
         } else if (extension.contains("svg")) {
-            // TODO: Basic SVG sanitization
+            val text = svgPolicy.sanitize(this.file.readText())
+            this.file = createTempFile().apply { writeText(text, Charsets.UTF_8) }.toFile()
         }
     }
 }
