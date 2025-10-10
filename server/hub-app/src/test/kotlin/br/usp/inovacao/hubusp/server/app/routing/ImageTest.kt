@@ -24,4 +24,13 @@ class ImageTest {
         assertEquals("image/webp", image.mimeType)
         assertEquals("webp", image.extension)
     }
+
+    @Test
+    fun `it sanitizes svg`() {
+        val image = Image(File(this::class.java.getResource("/routing/maliciousLogo.svg").toURI()))
+
+        assert(image.mimeType.contains("image/svg"))
+        assertEquals("svg", image.extension)
+        assert(!image.file.readText().contains("script"))
+    }
 }
