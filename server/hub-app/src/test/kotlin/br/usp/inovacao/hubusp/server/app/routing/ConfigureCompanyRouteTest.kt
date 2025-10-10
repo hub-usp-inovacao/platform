@@ -143,6 +143,32 @@ class ConfigureCompanyRouteTest {
     }
 
     @Test
+    fun `test POST with just logo fails`() = testCompanyApplication {
+        val response =
+            client.post("/company") {
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append(
+                                "logo",
+                                InputProvider { createTempFile().toFile().inputStream().asInput() },
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/webp")
+                                    append(HttpHeaders.ContentDisposition, "filename=\"logo.webp\"")
+                                },
+                            )
+                        },
+                    ),
+                )
+            }
+
+        assertEquals(HttpStatusCode.InternalServerError, response.status)
+
+        verify(exactly = 0) { mockMailer.send(any()) }
+        verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
+    }
+
+    @Test
     fun `test POST invalid company`() = testCompanyApplication {
         val response =
             client.post("/company") {
