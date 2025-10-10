@@ -29,6 +29,7 @@ import kotlin.io.path.createTempFile
 import kotlin.io.path.writeBytes
 import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
+import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -75,7 +76,7 @@ fun Application.configureCompanyRoute(
                     part.dispose()
                 }
 
-                val row = companyForm?.toCsvRow()
+                val row = companyForm!!.toCsvRow()
 
                 mailer.send(
                     Mail(
@@ -87,7 +88,7 @@ fun Application.configureCompanyRoute(
                                 Mail.Attachment(
                                     "company.json",
                                     createTempFile()
-                                        .apply { writeText(companyFormJson!!, Charsets.UTF_8) }
+                                        .apply { writeText(companyFormJson ?: "", Charsets.UTF_8) }
                                         .toFile(),
                                 ),
                                 Mail.Attachment(
@@ -97,7 +98,7 @@ fun Application.configureCompanyRoute(
                                             writeLines(
                                                 listOf(
                                                     CSV_HEADERS.joinToString(","),
-                                                    row!!.joinToString(","),
+                                                    row.joinToString(","),
                                                 ),
                                                 Charsets.UTF_8,
                                             )
@@ -116,7 +117,7 @@ fun Application.configureCompanyRoute(
                                 } else emptyList(),
                     ))
 
-                spreadsheetWriter.append(listOf(row!!))
+                spreadsheetWriter.append(listOf(row))
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
@@ -316,7 +317,7 @@ fun CompanyForm.toCsvRow(): List<String> {
             "", // "Confirmação de vínculo EMPRESA"
         )
 
-    return row.map { it.replace(",", ";") }
+    return row.map { (it ?: "").replace(",", ";") }
 }
 
 fun String?.toCsvCell() = this ?: "N/D"
