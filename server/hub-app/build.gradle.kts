@@ -3,6 +3,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val mockk_version: String by project
 val kmongo_version: String by project
+val tika_core_version: String by project
 
 plugins {
     application
@@ -54,6 +55,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-call-logging:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("org.apache.tika:tika-core:$tika_core_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
