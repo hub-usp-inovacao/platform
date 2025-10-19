@@ -9,7 +9,12 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" text @click="$emit('ok-click')">
+        <v-btn
+          :disabled="disableActions"
+          color="green darken-1"
+          text
+          @click="$emit('ok-click')"
+        >
           Ok!
         </v-btn>
       </v-card-actions>
@@ -29,6 +34,10 @@ export default {
     message: {
       type: String,
       default: "",
+    },
+    disableActions: {
+      type: Boolean,
+      default: false,
     },
   },
 };
