@@ -8,6 +8,7 @@
       :show="dialog.show"
       :title="dialog.title"
       :message="dialog.message"
+      :disableActions="dialog.disableActions"
       @ok-click="handleOkClick"
     />
   </div>
@@ -35,6 +36,7 @@ export default {
       latestRequestSucceeded: false,
       title: "",
       message: "",
+      disableActions: false,
     },
   }),
 
@@ -50,6 +52,14 @@ export default {
     }),
 
     async onStepperFinish() {
+      this.dialog = {
+        show: true,
+        latestRequestSucceeded: false,
+        title: "Aguarde, por favor",
+        message: "Os dados estão sendo enviados para o servidor...",
+        disableActions: true,
+      };
+
       await this.registerCompanyForm()
         .then((status) => {
           if (status) {
@@ -59,6 +69,7 @@ export default {
               title: "Solicitação de registro enviada!",
               message:
                 "Agora os dados da empresa serão validados pela equipe Hub USPInovação e em breve estarão disponíveis na plataforma.",
+              disableActions: false,
             };
           } else {
             this.dialog = {
@@ -68,6 +79,7 @@ export default {
               message:
                 this.errors.server || this.errors.logo ||
                 "Verifique o formulário e tente novamente.",
+              disableActions: false,
             };
           }
         })
