@@ -68,15 +68,15 @@ data class CompanyDataStep(
                 validate(CompanyDataStep::size).isNotNull().isIn(VALID_SIZES)
                 validate(CompanyDataStep::cnae).isNotNull().isNotBlank().isCnae()
                 validate(CompanyDataStep::registryStatus).isNotNull().isIn(VALID_REGISTRY_STATUS)
-                validate(CompanyDataStep::phones).isPhone()
-                validate(CompanyDataStep::emails).isEmail()
+                validate(CompanyDataStep::phones).isNotNull().isPhone()
+                validate(CompanyDataStep::emails).isNotNull().isEmail()
 
                 validate(CompanyDataStep::street).isNotNull().isNotBlank()
                 validate(CompanyDataStep::city).isNotNull().isNotBlank()
                 validate(CompanyDataStep::state).isNotNull().isNotBlank()
                 validate(CompanyDataStep::zipcode).isNotNull().isNotBlank().isCep()
 
-                validate(CompanyDataStep::category).isIn(VALID_CATEGORIES)
+                validate(CompanyDataStep::category).isNotNull().isIn(VALID_CATEGORIES)
                 validate(CompanyDataStep::companyNature).isNotNull().isNotBlank().isCompanyNature()
             }
         } catch (cve: ConstraintViolationException) {
