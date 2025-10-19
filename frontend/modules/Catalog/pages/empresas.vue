@@ -7,7 +7,7 @@
         description="As Empresas DNA USP estão organizadas nesta plataforma por: CNAEs (Classificação Nacional de Atividades Econômicas), cidade, habitats de inovação e porte."
         url="https://leginf.usp.br/?portaria=portaria-gr-no-7679-de-29-de-novembro-de-2021" 
         forms-call="Verique o regulamento de cadastro"
-        second-url="/empresas/cadastrar"
+        second-url="https://docs.google.com/forms/d/1q354be1_cPpeSIWVQkU2CXUpjUiyYuC0IU5W1_4W_zA"
         second-call="Cadastre sua empresa aqui"
         third-url="/empresas/atualizar/solicitar"
         third-call="Atualize seu cadastro aqui"
