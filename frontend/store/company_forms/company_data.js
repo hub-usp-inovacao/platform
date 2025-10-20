@@ -15,6 +15,7 @@ const state = () => ({
     state: "",
     cep: "",
   },
+  category: "",
   company_nature: "",
 });
 
