@@ -14,9 +14,11 @@ class Mailer(
 
     fun notifySpreadsheetError(message: String, subject: String = "Erro ao buscar as planilhas") {
         val developersEmail = Configuration.DEVS_EMAIL
+            .split(',')
+            .map { it.trim() }
         mailerImpl.send(
             Mail(
-                to = listOf(developersEmail),
+                to = developersEmail,
                 subject = subject,
                 body = message
             )
