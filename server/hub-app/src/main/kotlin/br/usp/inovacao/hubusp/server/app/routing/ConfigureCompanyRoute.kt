@@ -23,8 +23,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.io.path.createTempFile
 import kotlin.io.path.writeBytes
 import kotlin.io.path.writeLines
@@ -150,10 +148,7 @@ fun Application.configureCompanyRoute(
 }
 
 fun CompanyForm.toCsvRow(): List<String> {
-    val row =
-        mutableListOf(
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-        )
+    val row = mutableListOf(Time.timestamp())
 
     // {A..M}
 
