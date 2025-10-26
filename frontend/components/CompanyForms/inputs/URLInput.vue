@@ -13,7 +13,16 @@
 
 <script>
 function validURL(str) {
-  const pattern = /((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|N\/D)/g;
+  const protocol = "http(s)?://";
+  const alphanumeric = "a-zA-Z0-9";
+  const label = `[${alphanumeric}]([${alphanumeric}-]*[${alphanumeric}])?`;
+  const port = ":[0-9]+";
+  const path = "[/?].*";
+
+  const pattern = new RegExp(
+    `^(${protocol})?(${label}\\.)+${label}(${port})?(${path})?$`,
+  );
+
   return !str?.includes(" ") && pattern.test(str);
 }
 
@@ -43,13 +52,8 @@ export default {
   }),
   methods: {
     handleInput(url) {
-      if (validURL(url)) {
-        this.isValid = true;
-        this.$emit("input", url);
-      } else if (this.isValid) {
-        this.isValid = false;
-        this.$emit("input", undefined);
-      }
+      this.isValid = validURL(url);
+      this.$emit("input", url);
     },
   },
 };
