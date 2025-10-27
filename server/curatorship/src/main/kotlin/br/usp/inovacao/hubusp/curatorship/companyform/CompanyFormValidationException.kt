@@ -1,6 +1,6 @@
-package br.usp.inovacao.hubusp.curatorship.register
+package br.usp.inovacao.hubusp.curatorship.companyform
 
-import br.usp.inovacao.hubusp.curatorship.register.step.Step
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 
 data class CompanyFormValidationException(val errorsPerStep: ErrorsPerStep) :
     RuntimeException(errorsPerStep.toList().joinToString("|"))
