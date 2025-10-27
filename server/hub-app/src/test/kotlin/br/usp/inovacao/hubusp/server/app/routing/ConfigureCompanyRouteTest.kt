@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
-import br.usp.inovacao.hubusp.curatorship.register.step.Step
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.configureSerialization
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter

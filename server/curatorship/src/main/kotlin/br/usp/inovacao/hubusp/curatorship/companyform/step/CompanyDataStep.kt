@@ -1,10 +1,10 @@
-package br.usp.inovacao.hubusp.curatorship.register.step
+package br.usp.inovacao.hubusp.curatorship.companyform.step
 
-import br.usp.inovacao.hubusp.curatorship.register.isCep
-import br.usp.inovacao.hubusp.curatorship.register.isCnae
-import br.usp.inovacao.hubusp.curatorship.register.isCnpj
-import br.usp.inovacao.hubusp.curatorship.register.isCompanyNature
-import br.usp.inovacao.hubusp.curatorship.register.isPhone
+import br.usp.inovacao.hubusp.curatorship.companyform.isCep
+import br.usp.inovacao.hubusp.curatorship.companyform.isCnae
+import br.usp.inovacao.hubusp.curatorship.companyform.isCnpj
+import br.usp.inovacao.hubusp.curatorship.companyform.isCompanyNature
+import br.usp.inovacao.hubusp.curatorship.companyform.isPhone
 import br.usp.inovacao.hubusp.curatorship.sheets.isEmail
 import java.time.LocalDate
 import kotlinx.serialization.SerialName

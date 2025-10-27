@@ -1,6 +1,6 @@
-package br.usp.inovacao.hubusp.curatorship.register.step
+package br.usp.inovacao.hubusp.curatorship.companyform.step
 
-import br.usp.inovacao.hubusp.curatorship.register.isNumber
+import br.usp.inovacao.hubusp.curatorship.companyform.isNumber
 import br.usp.inovacao.hubusp.curatorship.sheets.isPhone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

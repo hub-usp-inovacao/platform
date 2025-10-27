@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.curatorship.register.step
+package br.usp.inovacao.hubusp.curatorship.companyform.step
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
