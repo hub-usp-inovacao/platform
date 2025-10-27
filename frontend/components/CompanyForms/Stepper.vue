@@ -29,7 +29,9 @@
 
       <v-stepper-items>
         <v-stepper-content
-          v-for="({ id, component }, index) in steps"
+          v-for="(
+            { id, component, eventHandlers, hideNavigationButtons }, index
+          ) in steps"
           :key="id"
           :step="id"
         >
@@ -44,10 +46,11 @@
           <component
             :is="component"
             :is-update="update"
+            v-on="eventHandlers"
             class="component-border mb-12"
           ></component>
 
-          <v-row class="mr-4" justify="end">
+          <v-row class="mr-4" justify="end" v-if="!hideNavigationButtons">
             <v-btn
               class="mr-4"
               color="secondary"
@@ -127,6 +130,11 @@ export default {
           title: "Empresa",
           component: CompanyStep,
           hasError: this.companyHasErrors,
+          eventHandlers: {
+            nextStep: () => this.nextStep(3),
+            previousStep: () => this.previousStep(3),
+          },
+          hideNavigationButtons: true,
         },
         {
           id: 4,
@@ -189,10 +197,7 @@ export default {
       const length = this.numberOfSteps;
       const lastId = this.steps[length - 1].id;
 
-      const nextStepIndex = this.steps.findIndex((step) => step.id === id) + 1;
-      const nextStepName = this.steps[nextStepIndex]?.title;
-
-      return id < lastId ? `Seguir para passo "${nextStepName}"` : "Finalizar";
+      return id < lastId ? "Próximo" : "Finalizar";
     },
     isStepCompleted(number) {
       return this.e1 > number;
