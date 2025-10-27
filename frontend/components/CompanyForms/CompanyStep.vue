@@ -10,18 +10,11 @@
         <component :is="item.content"></component>
       </v-tab-item>
     </v-tabs-items>
-    <div class="ma-4 d-flex justify-space-between">
-      <v-btn
-        class="mr-4"
-        color="primary"
-        :disabled="disableBackButton"
-        @click="previousTab"
-      >
-        {{ backButtonName }}
+    <div class="mr-4 d-flex justify-end">
+      <v-btn class="mr-4" color="secondary" @click="previousTab">
+        Voltar
       </v-btn>
-      <v-btn color="primary" :disabled="disableNextButton" @click="nextTab">
-        {{ nextButtonName }}
-      </v-btn>
+      <v-btn color="secondary" @click="nextTab"> Próximo </v-btn>
     </div>
   </v-container>
 </template>
@@ -53,30 +46,20 @@ export default {
       { tab: "Investimentos", content: Investments },
     ],
   }),
-  computed: {
-    backButtonName() {
-      if (this.disableBackButton) return "Voltar";
-      const tabName = this.items[this.tab - 1].tab;
-      return `Voltar para aba "${tabName}"`;
-    },
-    nextButtonName() {
-      if (this.disableNextButton) return "Próximo";
-      const tabName = this.items[this.tab + 1].tab;
-      return `Ir para aba "${tabName}"`;
-    },
-    disableBackButton() {
-      return this.tab === 0;
-    },
-    disableNextButton() {
-      return this.tab === this.items.length - 1;
-    },
-  },
   methods: {
     nextTab() {
-      this.tab = this.tab + 1;
+      if (this.tab < this.items.length - 1) {
+        this.tab = this.tab + 1;
+      } else {
+        this.$emit("nextStep");
+      }
     },
     previousTab() {
-      this.tab = this.tab - 1;
+      if (this.tab > 0) {
+        this.tab = this.tab - 1;
+      } else {
+        this.$emit("previousStep");
+      }
     },
   },
 };
