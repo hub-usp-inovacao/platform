@@ -1,16 +1,16 @@
-package br.usp.inovacao.hubusp.curatorship.register
+package br.usp.inovacao.hubusp.curatorship.companyform
 
-import br.usp.inovacao.hubusp.curatorship.register.step.AboutCompanyStep
-import br.usp.inovacao.hubusp.curatorship.register.step.CompanyDataStep
-import br.usp.inovacao.hubusp.curatorship.register.step.DnaUspStampStep
-import br.usp.inovacao.hubusp.curatorship.register.step.IncubationStep
-import br.usp.inovacao.hubusp.curatorship.register.step.InvestmentStep
-import br.usp.inovacao.hubusp.curatorship.register.step.PartnerStep
-import br.usp.inovacao.hubusp.curatorship.register.step.RevenueStep
-import br.usp.inovacao.hubusp.curatorship.register.step.StaffStep
-import br.usp.inovacao.hubusp.curatorship.register.step.Step
-import br.usp.inovacao.hubusp.curatorship.register.step.StepValidationException
-import br.usp.inovacao.hubusp.curatorship.register.step.validate
+import br.usp.inovacao.hubusp.curatorship.companyform.step.AboutCompanyStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.CompanyDataStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.DnaUspStampStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.IncubationStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.InvestmentStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.PartnerStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.RevenueStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.StaffStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
+import br.usp.inovacao.hubusp.curatorship.companyform.step.StepValidationException
+import br.usp.inovacao.hubusp.curatorship.companyform.step.validate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,13 +1,13 @@
-package br.usp.inovacao.hubusp.curatorship.register
+package br.usp.inovacao.hubusp.curatorship.companyform
 
-import br.usp.inovacao.hubusp.curatorship.register.step.AboutCompanyStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.CompanyDataStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.DnaUspStampStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.IncubationStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.InvestmentStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.PartnerStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.RevenueStepTest
-import br.usp.inovacao.hubusp.curatorship.register.step.StaffStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.AboutCompanyStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.CompanyDataStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.DnaUspStampStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.IncubationStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.InvestmentStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.PartnerStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.RevenueStepTest
+import br.usp.inovacao.hubusp.curatorship.companyform.step.StaffStepTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlinx.serialization.decodeFromString
@@ -31,7 +31,7 @@ class CompanyFormTest {
         val validCompanyFormJSON =
             this::class
                 .java
-                .getResourceAsStream("/register/validCompanyForm.json")
+                .getResourceAsStream("/companyform/validCompanyForm.json")
                 ?.bufferedReader()
                 ?.readText()!!
 

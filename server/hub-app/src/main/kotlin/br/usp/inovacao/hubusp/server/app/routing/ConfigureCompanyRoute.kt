@@ -1,10 +1,10 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.config.Configuration
-import br.usp.inovacao.hubusp.curatorship.register.CompanyForm
-import br.usp.inovacao.hubusp.curatorship.register.CompanyFormValidationException
-import br.usp.inovacao.hubusp.curatorship.register.ErrorsPerStep
-import br.usp.inovacao.hubusp.curatorship.register.step.Step
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyForm
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidationException
+import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter

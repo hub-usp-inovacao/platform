@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.curatorship.register
+package br.usp.inovacao.hubusp.curatorship.companyform
 
 import org.valiktor.Constraint
 import org.valiktor.Validator
