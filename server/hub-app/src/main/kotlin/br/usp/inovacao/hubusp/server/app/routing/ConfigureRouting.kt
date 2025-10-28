@@ -20,7 +20,7 @@ fun Application.configureRouting(db: MongoDatabase) {
             environment.config.property("email.username").getString(),
             environment.config.property("email.password").getString(),
         ),
-        listOf(environment.config.property("email.devs").getString()),
+        setOf(environment.config.property("email.devs").getString()),
         SpreadsheetWriter(
             environment.config.property("sheets.company_register_form_id").getString(),
             environment.config.property("sheets.company_register_form_tab").getString()),

@@ -16,7 +16,7 @@ class Mailer(
         val developersEmail = Configuration.DEVS_EMAIL
         mailerImpl.send(
             Mail(
-                to = listOf(developersEmail),
+                to = setOf(developersEmail),
                 subject = subject,
                 body = message
             )

@@ -218,7 +218,7 @@ class ConfigureCompanyRouteTest {
             application {
                 configureCompanyRoute(
                     mockMailer,
-                    emptyList(),
+                    emptySet(),
                     mockSpreadsheetWriter,
                 )
                 configureSerialization()

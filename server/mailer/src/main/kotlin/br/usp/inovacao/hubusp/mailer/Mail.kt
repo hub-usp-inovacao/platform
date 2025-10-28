@@ -3,11 +3,11 @@ package br.usp.inovacao.hubusp.mailer
 import java.io.File
 
 class Mail(
-    val to: List<String>,
+    val to: Set<String>,
     subject: String,
     val body: String,
-    val cc: List<String> = emptyList(),
-    val bcc: List<String> = emptyList(),
+    val cc: Set<String> = emptySet(),
+    val bcc: Set<String> = emptySet(),
     val attachments: List<Attachment> = emptyList()
 ) {
     class Attachment(
