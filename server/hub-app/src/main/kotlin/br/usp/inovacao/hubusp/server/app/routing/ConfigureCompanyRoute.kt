@@ -36,7 +36,7 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 fun Application.configureCompanyRoute(
     mailer: Mailer,
-    recipientList: List<String>,
+    recipientList: Set<String>,
     spreadsheetWriter: SpreadsheetWriter
 ) {
     routing {
