@@ -60,4 +60,12 @@ class ConfigurationTest {
         assertEquals("jwt audience", Configuration.jwt.audience)
         assertEquals("jwt realm", Configuration.jwt.realm)
     }
+
+    @Test
+    fun `it reads database config`() {
+        assertEquals("database protocol", Configuration.database.protocol)
+        assertEquals("database host", Configuration.database.host)
+        assertEquals("database port", Configuration.database.port)
+        assertEquals("database dbName", Configuration.database.dbName)
+    }
 }

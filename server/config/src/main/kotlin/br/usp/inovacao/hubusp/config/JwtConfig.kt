@@ -1,9 +1,9 @@
 package br.usp.inovacao.hubusp.config
 
 data class JwtConfig(
-    var secret : String = "",
-    var issuer : String = "",
-    var domain : String = "",
-    var audience : String = "",
-    var realm : String = "",
+    val secret: String,
+    val issuer: String,
+    val domain: String,
+    val audience: String,
+    val realm: String,
 )

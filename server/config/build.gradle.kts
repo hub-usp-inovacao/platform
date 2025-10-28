@@ -1,5 +1,5 @@
 val kotlin_version: String by project
-val typesafe_config_version: String by project
+val hoplite_version: String by project
 
 plugins {
     kotlin("jvm")
@@ -14,6 +14,7 @@ version = "0.0.1"
 repositories { mavenCentral() }
 
 dependencies {
-    implementation("com.typesafe:config:$typesafe_config_version")
+    implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
+    implementation("com.sksamuel.hoplite:hoplite-hocon:$hoplite_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
