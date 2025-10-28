@@ -46,4 +46,9 @@ class ConfigurationTest {
         assertEquals("email password", Configuration.email.password)
         // TODO: Test (B)CC
     }
+
+    @Test
+    fun `it reads ktor config`() {
+        assertEquals("allowed hosts", Configuration.ktor.allowedHosts)
+    }
 }

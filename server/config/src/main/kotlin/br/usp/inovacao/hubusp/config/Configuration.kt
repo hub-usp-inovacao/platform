@@ -6,8 +6,8 @@ import com.typesafe.config.ConfigFactory
 data class RootConfig(
     var sheets: SheetsConfig = SheetsConfig(),
     var email: EmailConfig = EmailConfig(),
+    var ktor: KtorConfig = KtorConfig(),
     // TODO:
-    // - ktor
     // - jwt
     // - datasource
 )
