@@ -38,4 +38,12 @@ class ConfigurationTest {
         assertEquals("company register form id", Configuration.sheets.companyRegisterForm.id)
         assertEquals("company register form tab", Configuration.sheets.companyRegisterForm.tab)
     }
+
+    @Test
+    fun `it reads email config`() {
+        assertEquals("email devs", Configuration.email.devs)
+        assertEquals("email username", Configuration.email.username)
+        assertEquals("email password", Configuration.email.password)
+        // TODO: Test (B)CC
+    }
 }
