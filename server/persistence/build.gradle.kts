@@ -4,7 +4,6 @@ val logback_version: String by project
 val mockk_version: String by project
 val kmongo_version: String by project
 val ktor_version: String by project
-val typesafe_config_version: String by project
 val coroutines_version: String by project
 
 plugins {
@@ -23,11 +22,11 @@ repositories {
 
 dependencies {
     implementation(project(":catalog"))
+    implementation(project(":config"))
     implementation(project(":curatorship"))
     implementation(project(":discovery"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-    implementation("com.typesafe:config:$typesafe_config_version")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
