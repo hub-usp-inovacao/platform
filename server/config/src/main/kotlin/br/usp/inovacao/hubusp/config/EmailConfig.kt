@@ -1,7 +1,7 @@
 package br.usp.inovacao.hubusp.config
 
 data class EmailConfig(
-    var devs: String = "",
-    var username: String = "",
-    var password: String = "",
+    val devs: String,
+    val username: String,
+    val password: String,
 )

@@ -1,17 +1,19 @@
 package br.usp.inovacao.hubusp.config
 
-import com.typesafe.config.ConfigBeanFactory
-import com.typesafe.config.ConfigFactory
+import com.sksamuel.hoplite.ConfigLoaderBuilder
+import com.sksamuel.hoplite.addResourceSource
 
 data class RootConfig(
-    var sheets: SheetsConfig = SheetsConfig(),
-    var email: EmailConfig = EmailConfig(),
-    var ktor: KtorConfig = KtorConfig(),
-    var jwt: JwtConfig = JwtConfig(),
-    // TODO:
-    // - datasource
+    val sheets: SheetsConfig,
+    val email: EmailConfig,
+    val ktor: KtorConfig,
+    val jwt: JwtConfig,
+    val database: DatabaseConfig,
 )
 
-val Configuration: RootConfig by lazy {
-    ConfigBeanFactory.create(ConfigFactory.load().getConfig("hub-usp"), RootConfig::class.java)
-}
+val Configuration =
+    ConfigLoaderBuilder.default()
+        .addResourceSource("/application.conf")
+        .build()
+        .configBinder()
+        .bindOrThrow<RootConfig>("hub-usp")
