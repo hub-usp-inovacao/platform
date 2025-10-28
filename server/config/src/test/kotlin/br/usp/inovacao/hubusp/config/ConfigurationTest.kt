@@ -52,7 +52,7 @@ class ConfigurationTest {
 
     @Test
     fun `it reads ktor config`() {
-        assertEquals("allowed hosts", Configuration.ktor.allowedHosts)
+        assertEquals(setOf("0.0.0.0:8080", "localhost:8080"), Configuration.ktor.allowedHosts)
     }
 
     @Test
