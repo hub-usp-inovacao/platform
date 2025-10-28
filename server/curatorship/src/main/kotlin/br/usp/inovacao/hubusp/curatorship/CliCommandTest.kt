@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship
 
+import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.curatorship.sheets.Sheets
 import br.usp.inovacao.hubusp.curatorship.sheets.SpreadsheetReader
 
@@ -8,11 +9,8 @@ class CliCommandTest {
     private val mailer: Mailer
 
     init {
-        val user = Configuration.EMAIL_USERNAME
-        val password = Configuration.EMAIL_PASSWORD
-
         reader = SpreadsheetReader()
-        mailer = Mailer(user, password)
+        mailer = Mailer(Configuration.email.username, Configuration.email.password)
     }
 
     fun execute() {

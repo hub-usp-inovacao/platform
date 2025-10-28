@@ -3,7 +3,6 @@ val kotlin_version: String by project
 val logback_version: String by project
 val mockk_version: String by project
 val ktor_version : String by project
-val typesafe_config_version: String by project
 val coroutines_version: String by project
 val valiktor_version: String by project
 
@@ -22,6 +21,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":config"))
     implementation(project(":mailer"))
 
     implementation("org.valiktor:valiktor-core:$valiktor_version")
@@ -32,7 +32,6 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-    implementation("com.typesafe:config:$typesafe_config_version")
     implementation("it.skrape:skrapeit:1.3.0-alpha.1")
     implementation("com.google.auth:google-auth-library-oauth2-http:1.37.1")
     implementation("com.google.api-client:google-api-client:2.7.2")

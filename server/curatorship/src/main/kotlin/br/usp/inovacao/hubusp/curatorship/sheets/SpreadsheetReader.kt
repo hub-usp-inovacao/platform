@@ -1,6 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import br.usp.inovacao.hubusp.curatorship.Configuration
+import br.usp.inovacao.hubusp.config.Configuration
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.sheets.v4.Sheets as GoogleSheetsService
@@ -44,44 +44,51 @@ class SpreadsheetReader {
         }
     }
 
-    fun read(sheet: Sheets): Matrix<String?> = when(sheet) {
-        Sheets.PDIs -> readPDI()
-        Sheets.Companies -> readCompany()
-        Sheets.Disciplines -> readDiscipline()
-        Sheets.Patents -> readPatent()
-        Sheets.Researchers -> readResearcher()
-        Sheets.Initiatives -> readInitiative()
-    }
+    fun read(sheet: Sheets): Matrix<String?> =
+        when (sheet) {
+            Sheets.PDIs -> readPDI()
+            Sheets.Companies -> readCompany()
+            Sheets.Disciplines -> readDiscipline()
+            Sheets.Patents -> readPatent()
+            Sheets.Researchers -> readResearcher()
+            Sheets.Initiatives -> readInitiative()
+        }
 
-    private fun readPDI(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.PDI_SHEET_ID,
-        sheetName = Configuration.PDI_TAB_NAME
-    )
+    private fun readPDI(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.pdi.id,
+            sheetName = Configuration.sheets.pdi.tab,
+        )
 
-    private fun readCompany(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.COMPANY_SHEET_ID,
-        sheetName = Configuration.COMPANY_TAB_NAME
-    )
+    private fun readCompany(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.company.id,
+            sheetName = Configuration.sheets.company.tab,
+        )
 
-    private fun readDiscipline(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.DISCIPLINE_SHEET_ID,
-        sheetName = Configuration.DISCIPLINE_TAB_NAME
-    )
+    private fun readDiscipline(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.discipline.id,
+            sheetName = Configuration.sheets.discipline.tab,
+        )
 
-    private fun readPatent(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.PATENT_SHEET_ID,
-        sheetName = Configuration.PATENT_TAB_NAME
-    )
+    private fun readPatent(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.patent.id,
+            sheetName = Configuration.sheets.patent.tab,
+        )
 
-    private fun readResearcher(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.RESEARCHER_SHEET_ID,
-        sheetName = Configuration.RESEARCHER_TAB_NAME
-    )
+    private fun readResearcher(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.researcher.id,
+            sheetName = Configuration.sheets.researcher.tab,
+        )
 
-    private fun readInitiative(): Matrix<String?> = readOneSpreadsheet(
-        sheetId = Configuration.INITIATIVE_SHEET_ID,
-        sheetName = Configuration.INITIATIVE_TAB_NAME
-    )
+    private fun readInitiative(): Matrix<String?> =
+        readOneSpreadsheet(
+            sheetId = Configuration.sheets.initiative.id,
+            sheetName = Configuration.sheets.initiative.tab,
+        )
 
     private fun readOneSpreadsheet(sheetId: String, sheetName: String): Matrix<String?> {
         try {
