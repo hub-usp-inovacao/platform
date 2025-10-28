@@ -51,4 +51,13 @@ class ConfigurationTest {
     fun `it reads ktor config`() {
         assertEquals("allowed hosts", Configuration.ktor.allowedHosts)
     }
+
+    @Test
+    fun `it reads jwt config`() {
+        assertEquals("jwt secret", Configuration.jwt.secret)
+        assertEquals("jwt issuer", Configuration.jwt.issuer)
+        assertEquals("jwt domain", Configuration.jwt.domain)
+        assertEquals("jwt audience", Configuration.jwt.audience)
+        assertEquals("jwt realm", Configuration.jwt.realm)
+    }
 }

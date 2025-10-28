@@ -7,8 +7,8 @@ data class RootConfig(
     var sheets: SheetsConfig = SheetsConfig(),
     var email: EmailConfig = EmailConfig(),
     var ktor: KtorConfig = KtorConfig(),
+    var jwt: JwtConfig = JwtConfig(),
     // TODO:
-    // - jwt
     // - datasource
 )
 
