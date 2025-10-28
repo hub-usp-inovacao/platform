@@ -13,7 +13,8 @@ data class RootConfig(
 
 val Configuration =
     ConfigLoaderBuilder.default()
-        .addResourceSource("/application.conf")
+        .addResourceSource("/application.conf", optional = true)
+        .addResourceSource("/hub-usp.conf")
         .build()
         .configBinder()
         .bindOrThrow<RootConfig>("hub-usp")
