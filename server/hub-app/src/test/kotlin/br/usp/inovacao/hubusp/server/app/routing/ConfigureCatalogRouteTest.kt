@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.server.catalog.*
 import br.usp.inovacao.hubusp.server.persistence.configureDB
+import br.usp.inovacao.hubusp.config.Configuration
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
@@ -133,10 +134,10 @@ class ConfigureCatalogRouteTest {
     ) = testApplication {
         application {
             val db = configureDB(
-                protocol = environment.config.property("datasource.protocol").getString(),
-                host = environment.config.property("datasource.host").getString(),
-                port = environment.config.property("datasource.port").getString(),
-                dbName = environment.config.property("datasource.dbName").getString()
+                protocol = Configuration.database.protocol,
+                host = Configuration.database.host,
+                port = Configuration.database.port,
+                dbName = Configuration.database.dbName,
             )
             configureCatalogRoute(db)
         }

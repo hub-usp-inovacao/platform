@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app
 
+import br.usp.inovacao.hubusp.config.Configuration
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.server.application.Application
@@ -10,7 +11,7 @@ import io.ktor.server.plugins.cors.routing.CORS
 fun Application.configureHttp() {
     val anyHostSymbol = "*"
 
-    val corsHosts = environment.config.property("ktor.deployment.allowedHosts").getString()
+    val corsHosts = Configuration.ktor.allowedHosts
 
     install(CORS) {
         allowMethod(HttpMethod.Options)
@@ -21,9 +22,7 @@ fun Application.configureHttp() {
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.ContentType)
 
-        if (corsHosts == anyHostSymbol) anyHost()
-        else corsHosts
-            .split(";")
-            .forEach { allowHost(it, schemes = listOf("http", "https")) }
+        if (corsHosts.contains(anyHostSymbol)) anyHost()
+        else corsHosts.forEach { allowHost(it, schemes = listOf("http", "https")) }
     }
 }

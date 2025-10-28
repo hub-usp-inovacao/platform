@@ -39,6 +39,7 @@ repositories {
 
 dependencies {
     implementation(project(":catalog"))
+    implementation(project(":config"))
     implementation(project(":curatorship"))
     implementation(project(":discovery"))
     implementation(project(":techtransfer"))
