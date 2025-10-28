@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app
 
+import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.server.app.routing.configureRouting
 import br.usp.inovacao.hubusp.server.persistence.configureDB
 import io.ktor.server.application.Application
@@ -14,10 +15,10 @@ fun Application.module() {
     configureSerialization()
     configureRouting(
         configureDB(
-            protocol = environment.config.property("datasource.protocol").getString(),
-            host = environment.config.property("datasource.host").getString(),
-            port = environment.config.property("datasource.port").getString(),
-            dbName = environment.config.property("datasource.dbName").getString(),
+            protocol = Configuration.database.protocol,
+            host = Configuration.database.host,
+            port = Configuration.database.port,
+            dbName = Configuration.database.dbName,
         ),
     )
     configureCallLogging()

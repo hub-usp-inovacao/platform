@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
+import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import com.mongodb.client.MongoDatabase
@@ -17,13 +18,14 @@ fun Application.configureRouting(db: MongoDatabase) {
     configureJourneyRoute(db)
     configureCompanyRoute(
         Mailer(
-            environment.config.property("email.username").getString(),
-            environment.config.property("email.password").getString(),
+            Configuration.email.username,
+            Configuration.email.password,
         ),
-        setOf(environment.config.property("email.devs").getString()),
+        Configuration.email.devs,
         SpreadsheetWriter(
-            environment.config.property("sheets.company_register_form_id").getString(),
-            environment.config.property("sheets.company_register_form_tab").getString()),
+            Configuration.sheets.companyRegisterForm.id,
+            Configuration.sheets.companyRegisterForm.tab,
+        ),
     )
 
     routing {
