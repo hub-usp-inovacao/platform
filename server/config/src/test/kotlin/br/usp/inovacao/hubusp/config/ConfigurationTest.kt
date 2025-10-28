@@ -42,9 +42,12 @@ class ConfigurationTest {
     @Test
     fun `it reads email config`() {
         assertEquals("email devs", Configuration.email.devs)
+        assertEquals(
+            setOf("first@example.com", "second@example.com", "third@example.com"),
+            Configuration.email.cc,
+        )
         assertEquals("email username", Configuration.email.username)
         assertEquals("email password", Configuration.email.password)
-        // TODO: Test (B)CC
     }
 
     @Test
