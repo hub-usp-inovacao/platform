@@ -44,6 +44,10 @@ class Mailer(private val user: String, private val password: String) {
                 addRecipient(javax.mail.Message.RecipientType.CC, InternetAddress(it))
             }
 
+            mail.bcc.forEach {
+                addRecipient(javax.mail.Message.RecipientType.BCC, InternetAddress(it))
+            }
+
             setSubject(mail.subject)
         }
 

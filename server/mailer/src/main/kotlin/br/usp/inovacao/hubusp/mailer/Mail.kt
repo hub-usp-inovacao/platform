@@ -7,6 +7,7 @@ class Mail(
     subject: String,
     val body: String,
     val cc: List<String> = emptyList(),
+    val bcc: List<String> = emptyList(),
     val attachments: List<Attachment> = emptyList()
 ) {
     class Attachment(
