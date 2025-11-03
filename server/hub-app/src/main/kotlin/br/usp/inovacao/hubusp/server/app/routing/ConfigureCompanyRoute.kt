@@ -15,11 +15,16 @@ import io.ktor.http.content.forEachPart
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.httpMethod
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.uri
 import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.util.cio.writeChannel
@@ -41,6 +46,20 @@ fun Application.configureCompanyRoute(
     spreadsheetWriter: SpreadsheetWriter
 ) {
     routing {
+        authenticate(HubJWT.AuthProvider.Company.toString()) {
+            get("/company") {
+                val principal = call.principal<JWTPrincipal>()
+
+                application.log.debug("GET /company: ${principal?.payload?.getClaim("cnpj")}")
+                call.respond(HttpStatusCode.OK)
+            }
+            patch("/company") {
+                val principal = call.principal<JWTPrincipal>()
+
+                application.log.debug("PATCH /company: ${principal?.payload?.getClaim("cnpj")}")
+                call.respond(HttpStatusCode.OK)
+            }
+        }
         post("/company/jwt") {
             @Serializable data class RecvMessage(val cnpj: String)
 
