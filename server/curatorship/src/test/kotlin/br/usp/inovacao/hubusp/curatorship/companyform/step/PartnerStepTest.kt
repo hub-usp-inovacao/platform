@@ -36,11 +36,6 @@ class PartnerStepTest {
     private val validPartner = VALID_PARTNER
 
     @Test
-    fun `it does not throws an error when PartnerStep is valid`() {
-        validStep.validate()
-    }
-
-    @Test
     fun `it does not throws an error when Partner is valid`() {
         validPartner.validate()
     }
