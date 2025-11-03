@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import br.usp.inovacao.hubusp.curatorship.companyform.isBrl
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -34,11 +35,10 @@ data class InvestmentStep(
 
     /** "Crowdfunding" / "BNDES e/ou FINEP" */
     val others: String?
-) {
+) : CompanyFormValidate {
     companion object {}
 
-    @Throws(StepValidationException::class)
-    fun validate() =
+    override fun validate() {
         try {
             validate(this) {
                 if (receivedAnyInvestment()) {
@@ -54,6 +54,7 @@ data class InvestmentStep(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 
     private fun receivedAnyInvestment() = this.received == "Sim"
 }

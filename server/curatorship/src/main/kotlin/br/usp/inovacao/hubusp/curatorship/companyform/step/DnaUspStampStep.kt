@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.valiktor.ConstraintViolationException
@@ -31,11 +32,10 @@ data class DnaUspStampStep(
      * TODO: Refactor this (separate boolean members for each option? enum? etc)
      */
     val permissions: Set<String> = emptySet(),
-) {
+) : CompanyFormValidate {
     companion object {}
 
-    @Throws(StepValidationException::class)
-    fun validate() =
+    override fun validate() {
         try {
             validate(this) {
                 validate(DnaUspStampStep::wantsStamp).isNotNull()
@@ -48,4 +48,5 @@ data class DnaUspStampStep(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 }
