@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app
+package br.usp.inovacao.hubusp.server.app.auth
 
 import br.usp.inovacao.hubusp.config.Configuration
 import com.auth0.jwt.JWT
@@ -26,7 +26,7 @@ class HubJWT {
     }
 }
 
-fun Application.configureSecurity() {
+fun Application.configureAuthentication() {
     val secret = Configuration.jwt.secret
     val issuer = Configuration.jwt.issuer
     val audience = Configuration.jwt.audience

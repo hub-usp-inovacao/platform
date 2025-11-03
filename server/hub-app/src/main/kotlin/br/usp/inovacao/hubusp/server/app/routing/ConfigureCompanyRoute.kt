@@ -7,14 +7,14 @@ import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
-import br.usp.inovacao.hubusp.server.app.HubJWT
-import io.ktor.server.application.log
+import br.usp.inovacao.hubusp.server.app.auth.HubJWT
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
+import io.ktor.server.application.log
 import io.ktor.server.request.httpMethod
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
