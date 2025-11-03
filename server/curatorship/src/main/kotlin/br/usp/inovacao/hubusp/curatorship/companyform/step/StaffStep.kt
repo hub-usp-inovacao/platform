@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import br.usp.inovacao.hubusp.curatorship.companyform.isNumber
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,11 +14,10 @@ data class StaffStep(
     @SerialName("number_of_CLT_employees") val numberOfCltEmployees: String?,
     @SerialName("number_of_PJ_colaborators") val numberOfPjColaborators: String?,
     @SerialName("number_of_interns") val numberOfInterns: String?
-) {
+) : CompanyFormValidate {
     companion object {}
 
-    @Throws(StepValidationException::class)
-    fun validate() =
+    override fun validate() {
         try {
             validate(this) {
                 validate(StaffStep::numberOfCltEmployees).isNotNull().isNumber()
@@ -27,4 +27,5 @@ data class StaffStep(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 }

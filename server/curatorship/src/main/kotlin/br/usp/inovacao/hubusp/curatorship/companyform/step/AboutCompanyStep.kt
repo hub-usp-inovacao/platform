@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import br.usp.inovacao.hubusp.curatorship.companyform.isIn
 import br.usp.inovacao.hubusp.curatorship.companyform.isWebsite
 import kotlinx.serialization.SerialName
@@ -21,7 +22,7 @@ data class AboutCompanyStep(
     val site: String?,
     val odss: Set<String> = emptySet(),
     @SerialName("social_medias") val socialMedias: Set<String> = emptySet()
-) {
+) : CompanyFormValidate {
     companion object {
         val VALID_ODS =
             listOf(
@@ -41,11 +42,11 @@ data class AboutCompanyStep(
                 "14 - Vida na Água",
                 "15 - Vida Terrestre",
                 "16 - Paz, Justiça e Instituições Eficazes",
-                "17 - Parcerias e Meios de Implementação")
+                "17 - Parcerias e Meios de Implementação",
+            )
     }
 
-    @Throws(StepValidationException::class)
-    fun validate() =
+    override fun validate() {
         try {
             validate(this) {
                 validate(AboutCompanyStep::description).isNotNull().isNotBlank()
@@ -61,4 +62,5 @@ data class AboutCompanyStep(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 }

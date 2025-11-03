@@ -129,7 +129,7 @@ fun Application.configureCompanyRoute(
                     ErrorMessage(
                         errors =
                             mapOf(
-                                Step.CompanyData to listOf("logo: Imagem inválida. (${e.message})"),
+                                Step.CompanyData to setOf("logo: Imagem inválida. (${e.message})"),
                             ),
                     ),
                 )

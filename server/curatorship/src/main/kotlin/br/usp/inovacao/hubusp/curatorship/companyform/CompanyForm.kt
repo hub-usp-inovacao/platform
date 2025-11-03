@@ -10,7 +10,6 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.RevenueStep
 import br.usp.inovacao.hubusp.curatorship.companyform.step.StaffStep
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.curatorship.companyform.step.StepValidationException
-import br.usp.inovacao.hubusp.curatorship.companyform.step.validate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -26,56 +25,31 @@ data class CompanyForm(
     @SerialName("dna_usp_stamp") val dnaUspStamp: DnaUspStampStep,
 ) {
     init {
-        val errorMap: MutableMap<Step, List<String>> = mutableMapOf()
+        val errorMap: MutableMap<Step, MutableSet<String>> = mutableMapOf()
 
-        // TODO: Refactor this into a hashmap (impl some sort of LazyValidate interface)
+        val steps =
+            listOf(
+                Pair(Step.CompanyData, this.data),
+                Pair(Step.Investment, this.investment),
+                Pair(Step.Revenue, this.revenue),
+                Pair(Step.Incubation, this.incubation),
+                Pair(Step.DNAUspStamp, this.dnaUspStamp),
+                Pair(Step.Staff, this.staff),
+                Pair(Step.AboutCompany, this.about),
+            ) + this.partners.map { Pair(Step.Partner, it) }
 
-        try {
-            this.partners.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.Partner, e.messages)
-        }
+        for (step in steps) {
+            val (stepKey, stepData) = step
 
-        try {
-            this.data.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.CompanyData, e.messages)
-        }
-
-        try {
-            this.about.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.AboutCompany, e.messages)
-        }
-
-        try {
-            this.incubation.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.Incubation, e.messages)
-        }
-
-        try {
-            this.staff.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.Staff, e.messages)
-        }
-
-        try {
-            this.revenue.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.Revenue, e.messages)
-        }
-
-        try {
-            this.investment.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.Investment, e.messages)
-        }
-
-        try {
-            this.dnaUspStamp.validate()
-        } catch (e: StepValidationException) {
-            errorMap.put(Step.DNAUspStamp, e.messages)
+            try {
+                stepData.validate()
+            } catch (e: StepValidationException) {
+                if (errorMap.containsKey(stepKey)) {
+                    errorMap.get(stepKey)?.addAll(e.messages)
+                } else {
+                    errorMap.put(stepKey, e.messages.toMutableSet())
+                }
+            }
         }
 
         if (errorMap.isNotEmpty()) {

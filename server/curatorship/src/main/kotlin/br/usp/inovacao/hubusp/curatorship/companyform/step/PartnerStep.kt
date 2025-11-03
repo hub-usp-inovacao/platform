@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import br.usp.inovacao.hubusp.curatorship.companyform.isNumber
 import br.usp.inovacao.hubusp.curatorship.sheets.isPhone
 import kotlinx.serialization.SerialName
@@ -22,9 +23,8 @@ data class Partner(
     /** TODO: Rename this to unit in the frontend */
     @SerialName("unity") val unit: String?,
     val role: String?,
-) {
-    @Throws(StepValidationException::class)
-    fun validate() =
+) : CompanyFormValidate {
+    override fun validate() {
         try {
             validate(this) {
                 validate(Partner::name).isNotNull().isNotBlank()
@@ -41,22 +41,7 @@ data class Partner(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 }
 
 typealias PartnerStep = List<Partner>
-
-fun PartnerStep.validate() {
-    val errors =
-        this.mapIndexedNotNull { _, value ->
-            try {
-                value.validate()
-                null
-            } catch (sve: StepValidationException) {
-                sve.messages
-            }
-        }
-
-    if (errors.isNotEmpty()) {
-        throw StepValidationException(messages = errors.flatten())
-    }
-}
