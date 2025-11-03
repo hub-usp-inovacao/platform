@@ -27,9 +27,4 @@ fun Application.configureRouting(db: MongoDatabase) {
             Configuration.sheets.companyRegisterForm.tab,
         ),
     )
-
-    routing {
-        get("/") { call.respond("app root ok") }
-        authenticate { get("/admin/") { call.respond("admin root ok") } }
-    }
 }
