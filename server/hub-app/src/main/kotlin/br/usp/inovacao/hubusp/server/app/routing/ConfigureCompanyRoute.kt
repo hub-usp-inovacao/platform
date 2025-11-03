@@ -7,13 +7,16 @@ import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.server.app.HubJWT
+import io.ktor.server.application.log
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
-import io.ktor.server.application.log
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.uri
 import io.ktor.server.response.respond
@@ -38,6 +41,39 @@ fun Application.configureCompanyRoute(
     spreadsheetWriter: SpreadsheetWriter
 ) {
     routing {
+        post("/company/jwt") {
+            @Serializable data class RecvMessage(val cnpj: String)
+
+            try {
+                val recv = call.receive<RecvMessage>()
+
+                // TODO: Check if cnpj is in the database
+                // TODO: Return corresponding error if not found
+
+                val token = HubJWT.createCompanyToken(recv.cnpj)
+
+                // TODO: Send token to the company's contact emails
+
+                log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
+
+                call.respond(HttpStatusCode.OK)
+            } catch (e: RuntimeException) {
+                call.respond(HttpStatusCode.InternalServerError)
+
+                val subject =
+                    "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
+
+                log.warn("${subject}: ${e.stackTraceToString()}")
+
+                mailer.send(
+                    Mail(
+                        to = Configuration.email.devs,
+                        subject,
+                        body = e.stackTraceToString(),
+                    ),
+                )
+            }
+        }
         post("/company") {
             @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
@@ -135,16 +171,18 @@ fun Application.configureCompanyRoute(
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.InternalServerError)
 
-                log.warn(
-                    "Internal Server Error (${call.request.uri}): ${e.stackTraceToString()}",
-                )
+                val subject =
+                    "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
+
+                log.warn("${subject}: ${e.stackTraceToString()}")
 
                 mailer.send(
                     Mail(
                         to = Configuration.email.devs,
-                        subject = "[INTERNAL SERVER ERROR] POST /company",
-                        body = "Internal server error: ${e.stackTraceToString()}",
-                    ))
+                        subject,
+                        body = e.stackTraceToString(),
+                    ),
+                )
             }
         }
     }
