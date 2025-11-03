@@ -4,7 +4,7 @@
     :label="label"
     :color="color"
     :value="value"
-    @change="$emit('input', $event)"
+    @change="onChange"
   >
   </v-switch>
 </template>
@@ -30,5 +30,11 @@ export default {
   data: () => ({
     booleanSwitch: false,
   }),
+
+  methods: {
+    onChange() {
+      this.$emit("input", this.booleanSwitch);
+    },
+  },
 };
 </script>
