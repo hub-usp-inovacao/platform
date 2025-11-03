@@ -5,6 +5,8 @@ import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 fun CompanySearchParams.toCollectionFilter(): String {
     val inner = mutableListOf<String>()
 
+    if (cnpj != null) inner.add("\"cnpj\":\"$cnpj\"")
+
     if (areaMajors.isNotEmpty()) {
         val orCriteria = areaMajors.joinToString(",") {
             "{\"classification.major\":\"$it\"}"

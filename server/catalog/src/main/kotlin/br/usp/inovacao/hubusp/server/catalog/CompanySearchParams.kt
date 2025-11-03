@@ -1,6 +1,7 @@
 package br.usp.inovacao.hubusp.server.catalog
 
 data class CompanySearchParams(
+    val cnpj: String? = null,
     val areaMajors: Set<String> = emptySet(),
     val areaMinors: Set<String> = emptySet(),
     val unity: String? = null,
