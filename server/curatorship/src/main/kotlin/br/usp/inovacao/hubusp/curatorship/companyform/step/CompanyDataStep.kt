@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.companyform.step
 
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidate
 import br.usp.inovacao.hubusp.curatorship.companyform.isCep
 import br.usp.inovacao.hubusp.curatorship.companyform.isCnae
 import br.usp.inovacao.hubusp.curatorship.companyform.isCnpj
@@ -36,7 +37,7 @@ data class CompanyDataStep(
     val zipcode: String?,
     val category: String?,
     @SerialName("company_nature") val companyNature: String?
-) {
+) : CompanyFormValidate {
     companion object {
         val VALID_SIZES = listOf("MEI", "ME", "EPP", "DEMAIS")
         val VALID_REGISTRY_STATUS =
@@ -54,8 +55,7 @@ data class CompanyDataStep(
             )
     }
 
-    @Throws(StepValidationException::class)
-    fun validate() =
+    override fun validate() {
         try {
             validate(this) {
                 validate(CompanyDataStep::cnpj).isNotNull().isNotBlank().isCnpj()
@@ -82,4 +82,5 @@ data class CompanyDataStep(
         } catch (cve: ConstraintViolationException) {
             throw StepValidationException.from(cve)
         }
+    }
 }
