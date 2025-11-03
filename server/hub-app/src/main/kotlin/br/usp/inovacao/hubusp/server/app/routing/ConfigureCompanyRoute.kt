@@ -18,6 +18,7 @@ import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
@@ -52,6 +53,22 @@ fun Application.configureCompanyRoute(
     spreadsheetWriter: SpreadsheetWriter,
 ) {
     val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
+
+    suspend fun panic(call: ApplicationCall, e: Exception) {
+        call.respond(HttpStatusCode.InternalServerError)
+
+        val subject = "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
+
+        this.log.warn("${subject}: ${e.stackTraceToString()}")
+
+        mailer.send(
+            Mail(
+                to = Configuration.email.devs,
+                subject,
+                body = e.stackTraceToString(),
+            ),
+        )
+    }
 
     routing {
         authenticate(CompanyJWT.providerName) {
@@ -101,21 +118,8 @@ fun Application.configureCompanyRoute(
 
                     call.respond(HttpStatusCode.OK)
                 }
-            } catch (e: RuntimeException) {
-                call.respond(HttpStatusCode.InternalServerError)
-
-                val subject =
-                    "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
-
-                application.log.warn("${subject}: ${e.stackTraceToString()}")
-
-                mailer.send(
-                    Mail(
-                        to = Configuration.email.devs,
-                        subject,
-                        body = e.stackTraceToString(),
-                    ),
-                )
+            } catch (e: Exception) {
+                panic(call, e)
             }
         }
         post("/company") {
@@ -213,20 +217,7 @@ fun Application.configureCompanyRoute(
                     ),
                 )
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError)
-
-                val subject =
-                    "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
-
-                application.log.warn("${subject}: ${e.stackTraceToString()}")
-
-                mailer.send(
-                    Mail(
-                        to = Configuration.email.devs,
-                        subject,
-                        body = e.stackTraceToString(),
-                    ),
-                )
+                panic(call, e)
             }
         }
     }
