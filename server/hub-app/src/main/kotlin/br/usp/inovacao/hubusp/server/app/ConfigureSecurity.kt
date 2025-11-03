@@ -8,7 +8,24 @@ import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 
-@Suppress("unused")
+/** Wrapper around JWT methods */
+class HubJWT {
+    companion object {
+        /** Create token for AuthProvider.Company */
+        fun createCompanyToken(cnpj: String): String {
+            return JWT.create()
+                .withAudience(Configuration.jwt.audience)
+                .withIssuer(Configuration.jwt.issuer)
+                .withClaim("cnpj", cnpj)
+                .sign(Algorithm.HMAC256(Configuration.jwt.secret))
+        }
+    }
+
+    enum class AuthProvider {
+        Company
+    }
+}
+
 fun Application.configureSecurity() {
     val secret = Configuration.jwt.secret
     val issuer = Configuration.jwt.issuer
@@ -16,7 +33,7 @@ fun Application.configureSecurity() {
     val myRealm = Configuration.jwt.realm
 
     authentication {
-        jwt {
+        jwt(HubJWT.AuthProvider.Company.toString()) {
             realm = myRealm
 
             verifier(
@@ -27,7 +44,7 @@ fun Application.configureSecurity() {
             )
 
             validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") {
+                if (credential.payload.getClaim("cnpj").asString() != "") {
                     JWTPrincipal(credential.payload)
                 } else {
                     null
