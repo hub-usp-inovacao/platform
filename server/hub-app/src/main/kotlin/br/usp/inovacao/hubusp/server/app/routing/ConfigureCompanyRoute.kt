@@ -78,6 +78,7 @@ fun Application.configureCompanyRoute(
                 mailer.send(
                     Mail(
                         to = recipientList,
+                        cc = Configuration.email.cc,
                         subject = "Cadastro de companhia",
                         body = "Mensagem automática. Novo cadastro de companhia recebido.",
                         attachments =
