@@ -8,7 +8,11 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
+import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
+import br.usp.inovacao.hubusp.server.persistence.CatalogCompanyRepositoryImpl
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
+import com.mongodb.client.MongoDatabase
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
@@ -41,25 +45,37 @@ import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 fun Application.configureCompanyRoute(
+    db: MongoDatabase,
     mailer: Mailer,
     recipientList: Set<String>,
-    spreadsheetWriter: SpreadsheetWriter
+    spreadsheetWriter: SpreadsheetWriter,
 ) {
+    val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
+
     routing {
         authenticate(CompanyJWT.providerName) {
             get("/company") {
                 val principal = call.principal<JWTPrincipal>()
 
-                val claim = CompanyJWT.fromPayload(principal!!.payload)
-                application.log.debug("GET /company: ${claim?.cnpj}")
+                // TODO: Handle errors
 
-                call.respond(HttpStatusCode.OK)
+                val claim = CompanyJWT.fromPayload(principal!!.payload)
+                log.debug("GET /company: ${claim?.cnpj}")
+
+                val company =
+                    searchCompanies.search(CompanySearchParams(cnpj = claim?.cnpj)).first()
+
+                call.respond(HttpStatusCode.OK, company)
             }
             patch("/company") {
                 val principal = call.principal<JWTPrincipal>()
 
+                // TODO: Handle errors
+
                 val claim = CompanyJWT.fromPayload(principal!!.payload)
-                application.log.debug("PATCH /company: ${claim?.cnpj}")
+                log.debug("PATCH /company: ${claim?.cnpj}")
+                // TODO: Refactor: move company form request parsing and validation to function
+                // TODO: Save company form to sheets and send email
 
                 call.respond(HttpStatusCode.OK)
             }
@@ -68,16 +84,22 @@ fun Application.configureCompanyRoute(
             try {
                 val recv = call.receive<CompanyJWT>()
 
-                // TODO: Check if cnpj is in the database
-                // TODO: Return corresponding error if not found
+                val company = searchCompanies.search(CompanySearchParams(cnpj = recv.cnpj))
 
-                val token = recv.createToken()
+                if (company.isEmpty()) {
+                    call.respond(
+                        HttpStatusCode.NotFound,
+                        "CNPJ not found",
+                    )
+                } else {
+                    val token = recv.createToken()
 
-                // TODO: Send token to the company's contact emails
+                    // TODO: Send token to the company's contact emails
 
-                log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
+                    log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
 
-                call.respond(HttpStatusCode.OK)
+                    call.respond(HttpStatusCode.OK)
+                }
             } catch (e: RuntimeException) {
                 call.respond(HttpStatusCode.InternalServerError)
 
