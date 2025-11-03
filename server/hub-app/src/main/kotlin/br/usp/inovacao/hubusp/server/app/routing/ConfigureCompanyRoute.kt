@@ -7,7 +7,7 @@ import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
-import br.usp.inovacao.hubusp.server.app.auth.HubJWT
+import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
@@ -46,30 +46,32 @@ fun Application.configureCompanyRoute(
     spreadsheetWriter: SpreadsheetWriter
 ) {
     routing {
-        authenticate(HubJWT.AuthProvider.Company.toString()) {
+        authenticate(CompanyJWT.providerName) {
             get("/company") {
                 val principal = call.principal<JWTPrincipal>()
 
-                application.log.debug("GET /company: ${principal?.payload?.getClaim("cnpj")}")
+                val claim = CompanyJWT.fromPayload(principal!!.payload)
+                application.log.debug("GET /company: ${claim?.cnpj}")
+
                 call.respond(HttpStatusCode.OK)
             }
             patch("/company") {
                 val principal = call.principal<JWTPrincipal>()
 
-                application.log.debug("PATCH /company: ${principal?.payload?.getClaim("cnpj")}")
+                val claim = CompanyJWT.fromPayload(principal!!.payload)
+                application.log.debug("PATCH /company: ${claim?.cnpj}")
+
                 call.respond(HttpStatusCode.OK)
             }
         }
         post("/company/jwt") {
-            @Serializable data class RecvMessage(val cnpj: String)
-
             try {
-                val recv = call.receive<RecvMessage>()
+                val recv = call.receive<CompanyJWT>()
 
                 // TODO: Check if cnpj is in the database
                 // TODO: Return corresponding error if not found
 
-                val token = HubJWT.createCompanyToken(recv.cnpj)
+                val token = recv.createToken()
 
                 // TODO: Send token to the company's contact emails
 

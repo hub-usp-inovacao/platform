@@ -17,7 +17,7 @@ fun Application.configureAuthentication() {
     val myRealm = Configuration.jwt.realm
 
     authentication {
-        jwt(HubJWT.AuthProvider.Company.toString()) {
+        jwt(CompanyJWT.providerName) {
             realm = myRealm
 
             verifier(
