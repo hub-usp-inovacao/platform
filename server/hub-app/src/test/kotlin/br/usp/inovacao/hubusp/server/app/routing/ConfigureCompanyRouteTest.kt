@@ -1,8 +1,10 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
+import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.configureSerialization
+import br.usp.inovacao.hubusp.server.persistence.configureDB
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.client.request.forms.FormPart
 import io.ktor.client.request.forms.InputProvider
@@ -217,6 +219,12 @@ class ConfigureCompanyRouteTest {
 
             application {
                 configureCompanyRoute(
+                    configureDB(
+                        protocol = Configuration.database.protocol,
+                        host = Configuration.database.host,
+                        port = Configuration.database.port,
+                        dbName = Configuration.database.dbName,
+                    ),
                     mockMailer,
                     emptySet(),
                     mockSpreadsheetWriter,
