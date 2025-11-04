@@ -159,6 +159,30 @@ fun Application.configureCompanyRoute(
     }
 
     routing {
+        post("/company/jwt") {
+            try {
+                val recv = call.receive<CompanyJWT>()
+
+                val company = searchCompanies.search(CompanySearchParams(cnpj = recv.cnpj))
+
+                if (company.isEmpty()) {
+                    call.respond(
+                        HttpStatusCode.NotFound,
+                        "CNPJ not found",
+                    )
+                } else {
+                    val token = recv.createToken()
+
+                    // TODO: Send token to the company's contact emails
+
+                    log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
+
+                    call.respond(HttpStatusCode.OK)
+                }
+            } catch (e: Exception) {
+                panic(call, e)
+            }
+        }
         authenticate(CompanyJWT.providerName) {
             get("/company") {
                 val principal = call.principal<JWTPrincipal>()
@@ -198,30 +222,6 @@ fun Application.configureCompanyRoute(
 
                     call.respond(HttpStatusCode.OK)
                 }
-            }
-        }
-        post("/company/jwt") {
-            try {
-                val recv = call.receive<CompanyJWT>()
-
-                val company = searchCompanies.search(CompanySearchParams(cnpj = recv.cnpj))
-
-                if (company.isEmpty()) {
-                    call.respond(
-                        HttpStatusCode.NotFound,
-                        "CNPJ not found",
-                    )
-                } else {
-                    val token = recv.createToken()
-
-                    // TODO: Send token to the company's contact emails
-
-                    log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
-
-                    call.respond(HttpStatusCode.OK)
-                }
-            } catch (e: Exception) {
-                panic(call, e)
             }
         }
         post("/company") {
