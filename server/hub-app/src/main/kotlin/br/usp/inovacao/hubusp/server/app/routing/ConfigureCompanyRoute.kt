@@ -54,6 +54,8 @@ fun Application.configureCompanyRoute(
     val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
 
     suspend fun panic(call: ApplicationCall, e: Exception) {
+        // If this gets executed, then an exception somewhere was not caught. Fix it.
+
         call.respond(HttpStatusCode.InternalServerError)
 
         val subject = "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
@@ -133,7 +135,7 @@ fun Application.configureCompanyRoute(
                 )
             } else emptyList()
 
-    suspend fun handleCompanyFormErrors(call: ApplicationCall, block: suspend () -> Unit) {
+    suspend fun handleErrors(call: ApplicationCall, block: suspend () -> Unit) {
         @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
 
         try {
@@ -153,6 +155,10 @@ fun Application.configureCompanyRoute(
                         ),
                 ),
             )
+        } catch (e: NotFoundException) {
+            call.respond(HttpStatusCode.NotFound, e.message ?: "")
+        } catch (e: BadRequestException) {
+            call.respond(HttpStatusCode.BadRequest, e.message ?: "")
         } catch (e: Exception) {
             panic(call, e)
         }
@@ -160,16 +166,19 @@ fun Application.configureCompanyRoute(
 
     routing {
         post("/company/jwt") {
-            try {
-                val recv = call.receive<CompanyJWT>()
+            handleErrors(call) {
+                var recv: CompanyJWT
+
+                try {
+                    recv = call.receive<CompanyJWT>()
+                } catch (e: Exception) {
+                    throw BadRequestException(e.message)
+                }
 
                 val company = searchCompanies.search(CompanySearchParams(cnpj = recv.cnpj))
 
                 if (company.isEmpty()) {
-                    call.respond(
-                        HttpStatusCode.NotFound,
-                        "CNPJ not found",
-                    )
+                    throw NotFoundException("CNPJ not found")
                 } else {
                     val token = recv.createToken()
 
@@ -179,33 +188,49 @@ fun Application.configureCompanyRoute(
 
                     call.respond(HttpStatusCode.OK)
                 }
-            } catch (e: Exception) {
-                panic(call, e)
             }
         }
         authenticate(CompanyJWT.providerName) {
             get("/company") {
-                val principal = call.principal<JWTPrincipal>()
+                handleErrors(call) {
+                    var principal: JWTPrincipal
 
-                // TODO: Handle errors
+                    try {
+                        principal = call.principal<JWTPrincipal>()!!
+                    } catch (e: Exception) {
+                        throw BadRequestException(e.message)
+                    }
 
-                val claim = CompanyJWT.fromPayload(principal!!.payload)
-                log.debug("GET /company: ${claim?.cnpj}")
+                    val claim = CompanyJWT.fromPayload(principal.payload)
+                    log.debug("GET /company: ${claim?.cnpj}")
 
-                val company =
-                    searchCompanies.search(CompanySearchParams(cnpj = claim?.cnpj)).first()
-
-                call.respond(HttpStatusCode.OK, company)
+                    try {
+                        val company =
+                            searchCompanies
+                                .search(CompanySearchParams(cnpj = claim?.cnpj))
+                                .firstOrNull()!!
+                        call.respond(HttpStatusCode.OK, company)
+                    } catch (e: Exception) {
+                        throw NotFoundException("company not found")
+                    }
+                }
             }
             patch("/company") {
-                handleCompanyFormErrors(call) {
-                    val principal = call.principal<JWTPrincipal>()
+                handleErrors(call) {
+                    var principal: JWTPrincipal
+
+                    try {
+                        principal = call.principal<JWTPrincipal>()!!
+                    } catch (e: Exception) {
+                        throw BadRequestException(e.message)
+                    }
 
                     val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
                     // TODO: Check if CNPJ is the same as token
 
                     val claim = CompanyJWT.fromPayload(principal!!.payload)
                     log.debug("PATCH /company: ${claim?.cnpj}")
+
                     // TODO: Save company form to sheets
 
                     mailer.send(
@@ -225,7 +250,7 @@ fun Application.configureCompanyRoute(
             }
         }
         post("/company") {
-            handleCompanyFormErrors(call) {
+            handleErrors(call) {
                 val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
 
                 mailer.send(
