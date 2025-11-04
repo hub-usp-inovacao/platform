@@ -69,6 +69,95 @@ fun Application.configureCompanyRoute(
         )
     }
 
+    suspend fun recvCompanyForm(call: ApplicationCall): Triple<String, CompanyForm, File?> {
+        val multipartData = call.receiveMultipart()
+
+        var companyFormJson: String? = null
+        var companyForm: CompanyForm? = null
+        var logo: File? = null
+
+        multipartData.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    when (part.name) {
+                        "company" -> {
+                            val json = Json { explicitNulls = false }
+                            companyFormJson = part.value
+                            companyForm = json.decodeFromString<CompanyForm>(part.value)
+                        }
+                    }
+                }
+
+                is PartData.FileItem -> {
+                    val file = createTempFile().toFile()
+                    part.provider().copyAndClose(file.writeChannel())
+                    logo = file
+                }
+
+                else -> {}
+            }
+            part.dispose()
+        }
+
+        return Triple(companyFormJson!!, companyForm!!, logo)
+    }
+
+    suspend fun createCompanyFormAttachments(json: String, form: CompanyForm, logo: File?) =
+        listOf(
+            Mail.Attachment(
+                "company.json",
+                createTempFile().apply { writeText(json, Charsets.UTF_8) }.toFile(),
+            ),
+            Mail.Attachment(
+                "company.csv",
+                createTempFile()
+                    .apply {
+                        writeLines(
+                            listOf(
+                                CSV_HEADERS.joinToString(","),
+                                form.toCsvRow().joinToString(","),
+                            ),
+                            Charsets.UTF_8,
+                        )
+                    }
+                    .toFile(),
+            ),
+        ) +
+            if (logo != null) {
+                val image = Image(logo)
+                listOf(
+                    Mail.Attachment(
+                        "logo.${image.extension}",
+                        image.file,
+                    ),
+                )
+            } else emptyList()
+
+    suspend fun handleCompanyFormErrors(call: ApplicationCall, block: suspend () -> Unit) {
+        @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
+
+        try {
+            block()
+        } catch (e: CompanyFormValidationException) {
+            call.respond(
+                HttpStatusCode.UnprocessableEntity,
+                ErrorMessage(errors = e.errorsPerStep),
+            )
+        } catch (e: ImageValidationException) {
+            call.respond(
+                HttpStatusCode.UnprocessableEntity,
+                ErrorMessage(
+                    errors =
+                        mapOf(
+                            Step.CompanyData to setOf("logo: Imagem inválida. (${e.message})"),
+                        ),
+                ),
+            )
+        } catch (e: Exception) {
+            panic(call, e)
+        }
+    }
+
     routing {
         authenticate(CompanyJWT.providerName) {
             get("/company") {
@@ -85,16 +174,30 @@ fun Application.configureCompanyRoute(
                 call.respond(HttpStatusCode.OK, company)
             }
             patch("/company") {
-                val principal = call.principal<JWTPrincipal>()
+                handleCompanyFormErrors(call) {
+                    val principal = call.principal<JWTPrincipal>()
 
-                // TODO: Handle errors
+                    val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
+                    // TODO: Check if CNPJ is the same as token
 
-                val claim = CompanyJWT.fromPayload(principal!!.payload)
-                log.debug("PATCH /company: ${claim?.cnpj}")
-                // TODO: Refactor: move company form request parsing and validation to function
-                // TODO: Save company form to sheets and send email
+                    val claim = CompanyJWT.fromPayload(principal!!.payload)
+                    log.debug("PATCH /company: ${claim?.cnpj}")
+                    // TODO: Save company form to sheets
 
-                call.respond(HttpStatusCode.OK)
+                    mailer.send(
+                        Mail(
+                            to = recipientList,
+                            cc = Configuration.email.cc,
+                            subject = "Atualização de companhia",
+                            body =
+                                "Mensagem automática. Pedido de atualização de companhia recebida.",
+                            attachments =
+                                createCompanyFormAttachments(companyFormJson, companyForm, logo),
+                        ),
+                    )
+
+                    call.respond(HttpStatusCode.OK)
+                }
             }
         }
         post("/company/jwt") {
@@ -122,40 +225,8 @@ fun Application.configureCompanyRoute(
             }
         }
         post("/company") {
-            @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
-
-            var logo: File? = null
-
-            try {
-                val multipartData = call.receiveMultipart(formFieldLimit = 2 * 1024 * 1024)
-
-                var companyFormJson: String? = null
-                var companyForm: CompanyForm? = null
-
-                multipartData.forEachPart { part ->
-                    when (part) {
-                        is PartData.FormItem -> {
-                            when (part.name) {
-                                "company" -> {
-                                    val json = Json { explicitNulls = false }
-                                    companyFormJson = part.value
-                                    companyForm = json.decodeFromString<CompanyForm>(part.value)
-                                }
-                            }
-                        }
-
-                        is PartData.FileItem -> {
-                            val file = createTempFile().toFile()
-                            part.provider().copyAndClose(file.writeChannel())
-                            logo = file
-                        }
-
-                        else -> {}
-                    }
-                    part.dispose()
-                }
-
-                val row = companyForm!!.toCsvRow()
+            handleCompanyFormErrors(call) {
+                val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
 
                 mailer.send(
                     Mail(
@@ -164,59 +235,13 @@ fun Application.configureCompanyRoute(
                         subject = "Cadastro de companhia",
                         body = "Mensagem automática. Novo cadastro de companhia recebido.",
                         attachments =
-                            listOf(
-                                Mail.Attachment(
-                                    "company.json",
-                                    createTempFile()
-                                        .apply { writeText(companyFormJson ?: "", Charsets.UTF_8) }
-                                        .toFile(),
-                                ),
-                                Mail.Attachment(
-                                    "company.csv",
-                                    createTempFile()
-                                        .apply {
-                                            writeLines(
-                                                listOf(
-                                                    CSV_HEADERS.joinToString(","),
-                                                    row.joinToString(","),
-                                                ),
-                                                Charsets.UTF_8,
-                                            )
-                                        }
-                                        .toFile(),
-                                ),
-                            ) +
-                                if (logo != null) {
-                                    val image = Image(logo!!)
-                                    listOf(
-                                        Mail.Attachment(
-                                            "logo.${image.extension!!}",
-                                            image.file,
-                                        ),
-                                    )
-                                } else emptyList(),
-                    ))
-
-                spreadsheetWriter.append(listOf(row))
-
-                call.respond(HttpStatusCode.Created)
-            } catch (e: CompanyFormValidationException) {
-                call.respond(
-                    HttpStatusCode.UnprocessableEntity,
-                    ErrorMessage(errors = e.errorsPerStep),
-                )
-            } catch (e: ImageValidationException) {
-                call.respond(
-                    HttpStatusCode.UnprocessableEntity,
-                    ErrorMessage(
-                        errors =
-                            mapOf(
-                                Step.CompanyData to setOf("logo: Imagem inválida. (${e.message})"),
-                            ),
+                            createCompanyFormAttachments(companyFormJson, companyForm, logo),
                     ),
                 )
-            } catch (e: Exception) {
-                panic(call, e)
+
+                spreadsheetWriter.append(listOf(companyForm.toCsvRow()))
+
+                call.respond(HttpStatusCode.Created)
             }
         }
     }
