@@ -7,7 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.Payload
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
-import io.ktor.server.auth.Principal
 import io.ktor.server.auth.jwt.JWTChallengeContext
 import io.ktor.server.auth.jwt.JWTCredential
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -34,7 +33,7 @@ class CompanyJWT(val cnpj: String) : AuthProvider {
                 .withIssuer(Configuration.jwt.issuer)
                 .build()
 
-        override val validate: suspend ApplicationCall.(JWTCredential) -> Principal? =
+        override val validate: suspend ApplicationCall.(JWTCredential) -> JWTPrincipal? =
             { credential ->
                 if (credential.payload.getClaim("cnpj").asString() != "") {
                     JWTPrincipal(credential.payload)

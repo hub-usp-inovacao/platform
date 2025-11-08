@@ -217,19 +217,21 @@ fun Application.configureCompanyRoute(
             }
             patch("/company") {
                 handleErrors(call) {
-                    var principal: JWTPrincipal
+                    var jwt: CompanyJWT
 
                     try {
-                        principal = call.principal<JWTPrincipal>()!!
+                        jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
                         throw BadRequestException(e.message)
                     }
 
                     val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
-                    // TODO: Check if CNPJ is the same as token
 
-                    val claim = CompanyJWT.fromPayload(principal!!.payload)
-                    log.debug("PATCH /company: ${claim?.cnpj}")
+                    if (companyForm.data.cnpj != jwt.cnpj) {
+                        throw BadRequestException("company form cnpj does not match token")
+                    }
+
+                    log.debug("PATCH /company: ${jwt.cnpj}")
 
                     // TODO: Save company form to sheets
 
