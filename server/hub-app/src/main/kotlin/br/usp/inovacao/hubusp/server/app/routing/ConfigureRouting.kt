@@ -18,7 +18,6 @@ fun Application.configureRouting(db: MongoDatabase) {
             Configuration.email.username,
             Configuration.email.password,
         ),
-        Configuration.email.devs,
         SpreadsheetWriter(
             Configuration.sheets.companyRegisterForm.id,
             Configuration.sheets.companyRegisterForm.tab,
