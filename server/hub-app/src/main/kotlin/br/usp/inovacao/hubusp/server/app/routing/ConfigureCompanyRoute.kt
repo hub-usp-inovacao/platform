@@ -188,7 +188,7 @@ fun Application.configureCompanyRoute(
                 mailer.send(
                     Mail(
                         to = company.emails,
-                        subject = "Token de segurança para atualização de dados da empresa",
+                        subject = "Token de segurança para atualização de dados da empresa DNA USP",
                         body =
                             """
 Mensagem automática.
@@ -260,9 +260,9 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                         Mail(
                             to = Configuration.email.devs,
                             cc = Configuration.email.cc,
-                            subject = "Atualização de companhia",
+                            subject = "Atualização de empresa DNA USP",
                             body =
-                                "Mensagem automática. Pedido de atualização de companhia recebida.",
+                                "Mensagem automática. Pedido de atualização de empresa DNA USP recebida.",
                             attachments =
                                 createCompanyFormAttachments(companyFormJson, companyForm, logo),
                         ),
@@ -282,8 +282,8 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     Mail(
                         to = Configuration.email.devs,
                         cc = Configuration.email.cc,
-                        subject = "Cadastro de companhia",
-                        body = "Mensagem automática. Novo cadastro de companhia recebido.",
+                        subject = "Cadastro de empresa DNA USP",
+                        body = "Mensagem automática. Novo cadastro de empresa DNA USP recebido.",
                         attachments =
                             createCompanyFormAttachments(companyFormJson, companyForm, logo),
                     ),
