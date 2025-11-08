@@ -8,6 +8,7 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
+import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
@@ -171,19 +172,45 @@ fun Application.configureCompanyRoute(
                     throw BadRequestException(e.message)
                 }
 
-                val company = searchCompanies.search(CompanySearchParams(cnpj = recv.cnpj))
+                var company: Company
 
-                if (company.isEmpty()) {
+                try {
+                    company =
+                        searchCompanies
+                            .search(CompanySearchParams(cnpj = recv.cnpj))
+                            .firstOrNull()!!
+                } catch (_: Exception) {
                     throw NotFoundException("CNPJ not found")
-                } else {
-                    val token = recv.createToken()
-
-                    // TODO: Send token to the company's contact emails
-
-                    log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
-
-                    call.respond(HttpStatusCode.OK)
                 }
+
+                val token = recv.createToken()
+
+                mailer.send(
+                    Mail(
+                        to = company.emails,
+                        subject = "Token de segurança para atualização de dados da empresa",
+                        body =
+                            """
+Mensagem automática.
+
+Foi solicitada uma atualização de dados da sua empresa na plataforma.
+
+Para garantir a segurança desta solicitação, informe o token quando solicitado no site:
+
+${token}
+
+Ou acesse diretamente o link:
+
+${Configuration.jwt.audience}/empresas/atualizar?token=${token}
+
+Se não foi você que solicitou a atualização de dados, ignore este e-mail.
+                        """,
+                    ),
+                )
+
+                log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
+
+                call.respond(HttpStatusCode.OK)
             }
         }
         authenticate(CompanyJWT.providerName) {
