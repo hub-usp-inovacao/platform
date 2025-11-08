@@ -216,25 +216,23 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
         authenticate(CompanyJWT.providerName) {
             get("/company") {
                 handleErrors(call) {
-                    var principal: JWTPrincipal
+                    var jwt: CompanyJWT
 
                     try {
-                        principal = call.principal<JWTPrincipal>()!!
+                        jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
                         throw BadRequestException(e.message)
                     }
 
-                    val claim = CompanyJWT.fromPayload(principal.payload)
-                    log.debug("GET /company: ${claim?.cnpj}")
-
                     try {
                         val company =
                             searchCompanies
-                                .search(CompanySearchParams(cnpj = claim?.cnpj))
+                                .search(CompanySearchParams(cnpj = jwt.cnpj))
                                 .firstOrNull()!!
+
                         call.respond(HttpStatusCode.OK, company)
                     } catch (e: Exception) {
-                        throw NotFoundException("company not found")
+                        throw NotFoundException("CNPJ not found")
                     }
                 }
             }
