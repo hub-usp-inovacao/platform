@@ -4,6 +4,7 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.configureAuthentication
 import br.usp.inovacao.hubusp.server.app.configureSerialization
+import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.client.call.body
@@ -18,7 +19,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
@@ -27,6 +30,7 @@ import io.ktor.utils.io.streams.inputStream
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.verify
 import kotlin.io.path.createTempFile
 import kotlin.test.BeforeTest
@@ -207,12 +211,59 @@ class ConfigureCompanyRouteTest {
         assertEquals(expectedRecvMessage, recvMessage)
     }
 
+    @Test
+    fun `test POST valid company jwt`() = testCompanyApplication {
+        val mockCompany = mockk<Company>()
+        every { mockCompany.emails } returns setOf("company@example.com")
+        every { mockSearchCompanies.search(any()) } returns setOf(mockCompany)
+
+        val response =
+            client.post("/company/jwt") {
+                contentType(ContentType.Application.Json)
+                setBody("""{ "cnpj": "12345" }""")
+            }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        verify(exactly = 1) { mockMailer.send(any()) }
+    }
+
+    @Test
+    fun `test POST bad request to company jwt`() = testCompanyApplication {
+        var response = client.post("/company/jwt") { setBody("""foo bar""") }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+
+        response =
+            client.post("/company/jwt") {
+                contentType(ContentType.Application.Json)
+                setBody("""{ "foo": "bar" }""")
+            }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+        verify(exactly = 0) { mockMailer.send(any()) }
+    }
+
+    @Test
+    fun `test POST unknown cnpj to company jwt`() = testCompanyApplication {
+        every { mockSearchCompanies.search(any()) } returns emptySet()
+
+        val response =
+            client.post("/company/jwt") {
+                contentType(ContentType.Application.Json)
+                setBody("""{ "cnpj": "12345" }""")
+            }
+
+        assertEquals(HttpStatusCode.NotFound, response.status)
+        verify(exactly = 0) { mockMailer.send(any()) }
+    }
+
     private fun getResourceAsString(path: String) =
         this::class.java.getResourceAsStream(path)?.bufferedReader()?.readText()!!
 
     private fun testCompanyApplication(block: suspend ApplicationTestBuilder.() -> Unit) {
         every { mockMailer.send(any()) } returns Unit
         every { mockSpreadsheetWriter.append(any()) } returns ""
+        every { mockSearchCompanies.search(any()) } returns emptySet()
 
         testApplication {
             environment {
