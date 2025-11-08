@@ -2,6 +2,8 @@ package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
+import br.usp.inovacao.hubusp.server.persistence.CatalogCompanyRepositoryImpl
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import com.mongodb.client.MongoDatabase
 import io.ktor.server.application.Application
@@ -13,11 +15,11 @@ fun Application.configureRouting(db: MongoDatabase) {
     configureCatalogRoute(db)
     configureJourneyRoute(db)
     configureCompanyRoute(
-        db,
         Mailer(
             Configuration.email.username,
             Configuration.email.password,
         ),
+        CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) },
         SpreadsheetWriter(
             Configuration.sheets.companyRegisterForm.id,
             Configuration.sheets.companyRegisterForm.tab,

@@ -10,9 +10,7 @@ import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
-import br.usp.inovacao.hubusp.server.persistence.CatalogCompanyRepositoryImpl
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
-import com.mongodb.client.MongoDatabase
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
@@ -46,13 +44,11 @@ import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 fun Application.configureCompanyRoute(
-    db: MongoDatabase,
     mailer: Mailer,
+    searchCompanies: SearchCompanies,
     companyRegisterFormSheet: SpreadsheetWriter,
     companyUpdateFormSheet: SpreadsheetWriter,
 ) {
-    val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
-
     suspend fun panic(call: ApplicationCall, e: Exception) {
         // If this gets executed, then an exception somewhere was not caught. Fix it.
 
