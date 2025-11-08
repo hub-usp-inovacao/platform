@@ -1,10 +1,9 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
-import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.configureSerialization
-import br.usp.inovacao.hubusp.server.persistence.configureDB
+import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.client.request.forms.FormPart
 import io.ktor.client.request.forms.InputProvider
@@ -13,6 +12,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -36,6 +36,8 @@ import kotlinx.serialization.json.Json
 class ConfigureCompanyRouteTest {
     @MockK private lateinit var mockMailer: Mailer
     @MockK private lateinit var mockSpreadsheetWriter: SpreadsheetWriter
+
+    @MockK private lateinit var mockSearchCompanies: SearchCompanies
 
     @Serializable
     data class RecvMessage(
@@ -219,13 +221,8 @@ class ConfigureCompanyRouteTest {
 
             application {
                 configureCompanyRoute(
-                    configureDB(
-                        protocol = Configuration.database.protocol,
-                        host = Configuration.database.host,
-                        port = Configuration.database.port,
-                        dbName = Configuration.database.dbName,
-                    ),
                     mockMailer,
+                    mockSearchCompanies,
                     mockSpreadsheetWriter,
                     mockSpreadsheetWriter,
                 )
