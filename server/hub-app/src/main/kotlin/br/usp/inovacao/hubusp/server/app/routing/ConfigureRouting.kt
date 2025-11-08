@@ -22,5 +22,9 @@ fun Application.configureRouting(db: MongoDatabase) {
             Configuration.sheets.companyRegisterForm.id,
             Configuration.sheets.companyRegisterForm.tab,
         ),
+        SpreadsheetWriter(
+            Configuration.sheets.companyUpdateForm.id,
+            Configuration.sheets.companyUpdateForm.tab,
+        ),
     )
 }

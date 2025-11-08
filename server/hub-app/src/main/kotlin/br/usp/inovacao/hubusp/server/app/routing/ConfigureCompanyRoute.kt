@@ -48,7 +48,8 @@ import kotlinx.serialization.json.Json
 fun Application.configureCompanyRoute(
     db: MongoDatabase,
     mailer: Mailer,
-    companyFormSheetWriter: SpreadsheetWriter,
+    companyRegisterFormSheet: SpreadsheetWriter,
+    companyUpdateFormSheet: SpreadsheetWriter,
 ) {
     val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
 
@@ -232,8 +233,6 @@ fun Application.configureCompanyRoute(
 
                     log.debug("PATCH /company: ${jwt.cnpj}")
 
-                    // TODO: Save company form to sheets
-
                     mailer.send(
                         Mail(
                             to = Configuration.email.devs,
@@ -245,6 +244,8 @@ fun Application.configureCompanyRoute(
                                 createCompanyFormAttachments(companyFormJson, companyForm, logo),
                         ),
                     )
+
+                    companyUpdateFormSheet.append(listOf(companyForm.toCsvRow()))
 
                     call.respond(HttpStatusCode.OK)
                 }
@@ -265,7 +266,7 @@ fun Application.configureCompanyRoute(
                     ),
                 )
 
-                companyFormSheetWriter.append(listOf(companyForm.toCsvRow()))
+                companyRegisterFormSheet.append(listOf(companyForm.toCsvRow()))
 
                 call.respond(HttpStatusCode.Created)
             }

@@ -231,6 +231,7 @@ class ConfigureCompanyRouteTest {
                     ),
                     mockMailer,
                     mockSpreadsheetWriter,
+                    mockSpreadsheetWriter,
                 )
                 configureSerialization()
             }
