@@ -226,7 +226,6 @@ class ConfigureCompanyRouteTest {
                         dbName = Configuration.database.dbName,
                     ),
                     mockMailer,
-                    emptySet(),
                     mockSpreadsheetWriter,
                 )
                 configureSerialization()

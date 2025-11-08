@@ -49,8 +49,7 @@ import kotlinx.serialization.json.Json
 fun Application.configureCompanyRoute(
     db: MongoDatabase,
     mailer: Mailer,
-    recipientList: Set<String>,
-    spreadsheetWriter: SpreadsheetWriter,
+    companyFormSheetWriter: SpreadsheetWriter,
 ) {
     val searchCompanies = CatalogCompanyRepositoryImpl(db).let { SearchCompanies(it) }
 
@@ -238,7 +237,7 @@ fun Application.configureCompanyRoute(
 
                     mailer.send(
                         Mail(
-                            to = recipientList,
+                            to = Configuration.email.devs,
                             cc = Configuration.email.cc,
                             subject = "Atualização de companhia",
                             body =
@@ -258,7 +257,7 @@ fun Application.configureCompanyRoute(
 
                 mailer.send(
                     Mail(
-                        to = recipientList,
+                        to = Configuration.email.devs,
                         cc = Configuration.email.cc,
                         subject = "Cadastro de companhia",
                         body = "Mensagem automática. Novo cadastro de companhia recebido.",
@@ -267,7 +266,7 @@ fun Application.configureCompanyRoute(
                     ),
                 )
 
-                spreadsheetWriter.append(listOf(companyForm.toCsvRow()))
+                companyFormSheetWriter.append(listOf(companyForm.toCsvRow()))
 
                 call.respond(HttpStatusCode.Created)
             }
