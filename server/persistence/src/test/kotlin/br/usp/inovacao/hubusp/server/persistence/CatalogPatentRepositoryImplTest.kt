@@ -160,7 +160,7 @@ internal class CatalogPatentRepositoryImplTest {
             countries_with_protection = setOf("Brasil"),
         ),
         Patent(
-            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra… 2",
             summary = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
             classification = DualClassification(
                 primary = Area(
@@ -209,7 +209,7 @@ internal class CatalogPatentRepositoryImplTest {
             countries_with_protection = setOf("Brasil"),
         ),
         Patent(
-            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
+            name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra… 2",
             summary = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra…",
             classification = DualClassification(
                 primary = Area(
