@@ -121,3 +121,23 @@ fun <E> Validator<E>.Property<String?>.isPhoneOrEmail() = this.validate(PhoneOrE
 (it == null) || it.matches(Regex("N/D")) || it.replace("""\D""".toRegex(), "").matches("""^\d{8,13}$""".toRegex()) ||
             Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
 }
+
+object PatentAreaRegister : Constraint
+
+fun Validator<Area>.Property<String?>.isValidCip() = this.validate(PatentAreaRegister) {
+    it == null || it.matches(Regex("^[A-H] - .+$"))
+}
+
+fun Validator<Area>.Property<String?>.isValidSubarea() = this.validate(PatentAreaRegister) {
+    it == null || it.matches(Regex("^[A-H][0-9]{2} - .+$"))
+}
+
+object PatentRegister : Constraint
+
+fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentRegister) {
+    it == null || Patent.valid_statuses.contains(it)
+}
+
+fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentRegister) {
+    it == null || it.all { ipc -> ipc.matches(Regex("^[A-H][0-9]{2}[A-Z][0-9]{6,}$")) }
+}
