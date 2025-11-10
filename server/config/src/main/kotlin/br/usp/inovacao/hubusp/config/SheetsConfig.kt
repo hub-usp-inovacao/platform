@@ -11,6 +11,7 @@ data class SheetsConfig(
     val pdi: SpreadsheetConfig,
     val researcher: SpreadsheetConfig,
     var companyRegisterForm: SpreadsheetConfig,
+    var companyUpdateForm: SpreadsheetConfig,
 )
 
 data class SpreadsheetConfig(var id: String, var tab: String)

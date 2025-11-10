@@ -12,15 +12,19 @@ class ImageValidationException(
 
 data class Image(var file: File) {
     val mimeType = Tika().detect(this.file) ?: ""
-    val extension = Regex("image/([a-z]+)").find(this.mimeType)?.groupValues?.getOrNull(1)
+    val extension: String
     private val svgPolicy = HtmlPolicyBuilder().toFactory()
 
     init {
-        if (this.extension == null) {
+        val extension = Regex("image/([a-z]+)").find(this.mimeType)?.groupValues?.getOrNull(1)
+
+        if (extension == null) {
             throw ImageValidationException("Image type not recognized: ${mimeType}")
         } else if (extension.contains("svg")) {
             val text = svgPolicy.sanitize(this.file.readText())
             this.file = createTempFile().apply { writeText(text, Charsets.UTF_8) }.toFile()
         }
+
+        this.extension = extension
     }
 }

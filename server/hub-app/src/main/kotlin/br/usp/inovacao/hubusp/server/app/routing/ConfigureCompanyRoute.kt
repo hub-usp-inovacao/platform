@@ -1,24 +1,36 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.config.Configuration
-import br.usp.inovacao.hubusp.curatorship.register.CompanyForm
-import br.usp.inovacao.hubusp.curatorship.register.CompanyFormValidationException
-import br.usp.inovacao.hubusp.curatorship.register.ErrorsPerStep
-import br.usp.inovacao.hubusp.curatorship.register.step.Step
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyForm
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidationException
+import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
+import br.usp.inovacao.hubusp.server.catalog.Company
+import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
+import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.uri
 import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import java.io.File
@@ -35,117 +47,251 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 fun Application.configureCompanyRoute(
     mailer: Mailer,
-    recipientList: Set<String>,
-    spreadsheetWriter: SpreadsheetWriter
+    searchCompanies: SearchCompanies,
+    companyRegisterFormSheet: SpreadsheetWriter,
+    companyUpdateFormSheet: SpreadsheetWriter,
 ) {
-    routing {
-        post("/company") {
-            @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
+    suspend fun panic(call: ApplicationCall, e: Exception) {
+        // If this gets executed, then an exception somewhere was not caught. Fix it.
 
-            var logo: File? = null
+        call.respond(HttpStatusCode.InternalServerError)
 
-            try {
-                val multipartData = call.receiveMultipart()
+        val subject = "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
 
-                var companyFormJson: String? = null
-                var companyForm: CompanyForm? = null
+        this.log.warn("${subject}: ${e.stackTraceToString()}")
 
-                multipartData.forEachPart { part ->
-                    when (part) {
-                        is PartData.FormItem -> {
-                            when (part.name) {
-                                "company" -> {
-                                    val json = Json { explicitNulls = false }
-                                    companyFormJson = part.value
-                                    companyForm = json.decodeFromString<CompanyForm>(part.value)
-                                }
-                            }
+        mailer.send(
+            Mail(
+                to = Configuration.email.devs,
+                subject,
+                body = e.stackTraceToString(),
+            ),
+        )
+    }
+
+    suspend fun recvCompanyForm(call: ApplicationCall): Triple<String, CompanyForm, File?> {
+        val multipartData = call.receiveMultipart()
+
+        var companyFormJson: String? = null
+        var companyForm: CompanyForm? = null
+        var logo: File? = null
+
+        multipartData.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    when (part.name) {
+                        "company" -> {
+                            val json = Json { explicitNulls = false }
+                            companyFormJson = part.value
+                            companyForm = json.decodeFromString<CompanyForm>(part.value)
                         }
-
-                        is PartData.FileItem -> {
-                            val file = createTempFile().toFile()
-                            file.writeBytes(part.streamProvider().readBytes())
-                            logo = file
-                        }
-
-                        else -> {}
                     }
-                    part.dispose()
                 }
 
-                val row = companyForm!!.toCsvRow()
+                is PartData.FileItem -> {
+                    val file = createTempFile().toFile()
+                    file.writeBytes(part.streamProvider().readBytes())
+                    logo = file
+                }
 
-                mailer.send(
-                    Mail(
-                        to = recipientList,
-                        cc = Configuration.email.cc,
-                        subject = "Cadastro de companhia",
-                        body = "Mensagem automática. Novo cadastro de companhia recebido.",
-                        attachments =
+                else -> {}
+            }
+            part.dispose()
+        }
+
+        return Triple(companyFormJson!!, companyForm!!, logo)
+    }
+
+    suspend fun createCompanyFormAttachments(json: String, form: CompanyForm, logo: File?) =
+        listOf(
+            Mail.Attachment(
+                "company.json",
+                createTempFile().apply { writeText(json, Charsets.UTF_8) }.toFile(),
+            ),
+            Mail.Attachment(
+                "company.csv",
+                createTempFile()
+                    .apply {
+                        writeLines(
                             listOf(
-                                Mail.Attachment(
-                                    "company.json",
-                                    createTempFile()
-                                        .apply { writeText(companyFormJson ?: "", Charsets.UTF_8) }
-                                        .toFile(),
-                                ),
-                                Mail.Attachment(
-                                    "company.csv",
-                                    createTempFile()
-                                        .apply {
-                                            writeLines(
-                                                listOf(
-                                                    CSV_HEADERS.joinToString(","),
-                                                    row.joinToString(","),
-                                                ),
-                                                Charsets.UTF_8,
-                                            )
-                                        }
-                                        .toFile(),
-                                ),
-                            ) +
-                                if (logo != null) {
-                                    val image = Image(logo!!)
-                                    listOf(
-                                        Mail.Attachment(
-                                            "logo.${image.extension!!}",
-                                            image.file,
-                                        ),
-                                    )
-                                } else emptyList(),
-                    ))
-
-                spreadsheetWriter.append(listOf(row))
-
-                call.respond(HttpStatusCode.Created)
-            } catch (e: CompanyFormValidationException) {
-                call.respond(
-                    HttpStatusCode.UnprocessableEntity,
-                    ErrorMessage(errors = e.errorsPerStep),
-                )
-            } catch (e: ImageValidationException) {
-                call.respond(
-                    HttpStatusCode.UnprocessableEntity,
-                    ErrorMessage(
-                        errors =
-                            mapOf(
-                                Step.CompanyData to listOf("logo: Imagem inválida. (${e.message})"),
+                                CSV_HEADERS.joinToString(","),
+                                form.toCsvRow().joinToString(","),
                             ),
+                            Charsets.UTF_8,
+                        )
+                    }
+                    .toFile(),
+            ),
+        ) +
+            if (logo != null) {
+                val image = Image(logo)
+                listOf(
+                    Mail.Attachment(
+                        "logo.${image.extension}",
+                        image.file,
                     ),
                 )
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.InternalServerError)
+            } else emptyList()
 
-                application.log.warn(
-                    "Internal Server Error (${call.request.uri}): ${e.stackTraceToString()}",
+    suspend fun handleErrors(call: ApplicationCall, block: suspend () -> Unit) {
+        @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
+
+        try {
+            block()
+        } catch (e: CompanyFormValidationException) {
+            call.respond(
+                HttpStatusCode.UnprocessableEntity,
+                ErrorMessage(errors = e.errorsPerStep),
+            )
+        } catch (e: ImageValidationException) {
+            call.respond(
+                HttpStatusCode.UnprocessableEntity,
+                ErrorMessage(
+                    errors =
+                        mapOf(
+                            Step.CompanyData to setOf("logo: Imagem inválida. (${e.message})"),
+                        ),
+                ),
+            )
+        } catch (e: NotFoundException) {
+            call.respond(HttpStatusCode.NotFound, e.message ?: "")
+        } catch (e: BadRequestException) {
+            call.respond(HttpStatusCode.BadRequest, e.message ?: "")
+        } catch (e: Exception) {
+            panic(call, e)
+        }
+    }
+
+    routing {
+        post("/company/jwt") {
+            handleErrors(call) {
+                var recv: CompanyJWT
+
+                try {
+                    recv = call.receive<CompanyJWT>()
+                } catch (e: Exception) {
+                    throw BadRequestException(e.message)
+                }
+
+                var company: Company
+
+                try {
+                    company =
+                        searchCompanies
+                            .search(CompanySearchParams(cnpj = recv.cnpj))
+                            .firstOrNull()!!
+                } catch (_: Exception) {
+                    throw NotFoundException("CNPJ not found")
+                }
+
+                val token = recv.createToken()
+
+                // TODO: Send token to the company's contact emails
+                mailer.send(
+                    Mail(
+                        to = company.emails,
+                        subject = "Token de segurança para atualização de dados da empresa DNA USP",
+                        body =
+                            """
+Mensagem automática.
+
+Foi solicitada uma atualização de dados da sua empresa na plataforma.
+
+Para garantir a segurança desta solicitação, informe o token quando solicitado no site:
+
+${token}
+
+Ou acesse diretamente o link:
+
+${Configuration.jwt.audience}/empresas/atualizar?token=${token}
+
+Se não foi você que solicitou a atualização de dados, ignore este e-mail.
+                        """,
+                    ),
                 )
+
+                application.log.info("Company with cnpj ${recv.cnpj} requested JWT:\n${token}")
+
+                call.respond(HttpStatusCode.OK)
+            }
+        }
+        authenticate(CompanyJWT.providerName) {
+            get("/company") {
+                handleErrors(call) {
+                    var jwt: CompanyJWT
+
+                    try {
+                        jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
+                    } catch (e: Exception) {
+                        throw BadRequestException(e.message)
+                    }
+
+                    try {
+                        val company =
+                            searchCompanies
+                                .search(CompanySearchParams(cnpj = jwt.cnpj))
+                                .firstOrNull()!!
+
+                        call.respond(HttpStatusCode.OK, company)
+                    } catch (e: Exception) {
+                        throw NotFoundException("CNPJ not found")
+                    }
+                }
+            }
+            patch("/company") {
+                handleErrors(call) {
+                    var jwt: CompanyJWT
+
+                    try {
+                        jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
+                    } catch (e: Exception) {
+                        throw BadRequestException(e.message)
+                    }
+
+                    val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
+
+                    if (companyForm.data.cnpj != jwt.cnpj) {
+                        throw BadRequestException("company form cnpj does not match token")
+                    }
+
+                    application.log.debug("PATCH /company: ${jwt.cnpj}")
+
+                    mailer.send(
+                        Mail(
+                            to = Configuration.email.devs,
+                            cc = Configuration.email.cc,
+                            subject = "Atualização de empresa DNA USP",
+                            body =
+                                "Mensagem automática. Pedido de atualização de empresa DNA USP recebida.",
+                            attachments =
+                                createCompanyFormAttachments(companyFormJson, companyForm, logo),
+                        ),
+                    )
+
+                    companyUpdateFormSheet.append(listOf(companyForm.toCsvRow()))
+
+                    call.respond(HttpStatusCode.OK)
+                }
+            }
+        }
+        post("/company") {
+            handleErrors(call) {
+                val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
 
                 mailer.send(
                     Mail(
                         to = Configuration.email.devs,
-                        subject = "[INTERNAL SERVER ERROR] POST /company",
-                        body = "Internal server error: ${e.stackTraceToString()}",
-                    ))
+                        cc = Configuration.email.cc,
+                        subject = "Cadastro de empresa DNA USP",
+                        body = "Mensagem automática. Novo cadastro de empresa DNA USP recebido.",
+                        attachments =
+                            createCompanyFormAttachments(companyFormJson, companyForm, logo),
+                    ),
+                )
+
+                companyRegisterFormSheet.append(listOf(companyForm.toCsvRow()))
+
+                call.respond(HttpStatusCode.Created)
             }
         }
     }

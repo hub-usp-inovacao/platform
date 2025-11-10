@@ -81,7 +81,7 @@ export const actions = {
   },
 
   registerCompanyForm: async function ({ commit, getters }) {
-    return sendCompanyData({commit, getters}, this.$apiPostCompany)
+    return sendCompanyData({commit, getters}, this.$api.company.post)
   },
 
   updateCompanyForm: async function ({ commit, getters }) {
