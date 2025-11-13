@@ -205,9 +205,9 @@ class ConfigureCompanyRouteTest {
                 )
             }
 
-        assertEquals(HttpStatusCode.InternalServerError, response.status)
+        assertEquals(HttpStatusCode.BadRequest, response.status)
 
-        verify(exactly = 1) { mockMailer.send(any()) }
+        verify(exactly = 0) { mockMailer.send(any()) }
         verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
     }
 

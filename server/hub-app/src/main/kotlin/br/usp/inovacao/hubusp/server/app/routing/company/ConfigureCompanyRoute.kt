@@ -83,7 +83,11 @@ fun Application.configureCompanyRoute(
             part.dispose()
         }
 
-        return Triple(companyFormJson!!, companyForm!!, logo)
+        try {
+            return Triple(companyFormJson!!, companyForm!!, logo)
+        } catch (e: Exception) {
+            throw RoutingException.BadRequestException("Company form is possibly missing")
+        }
     }
 
     suspend fun createCompanyFormAttachments(json: String, form: CompanyForm, logo: File?) =
