@@ -9,7 +9,6 @@ import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
 import br.usp.inovacao.hubusp.server.app.routing.Image
-import br.usp.inovacao.hubusp.server.app.routing.ImageValidationException
 import br.usp.inovacao.hubusp.server.app.routing.RoutingException
 import br.usp.inovacao.hubusp.server.app.routing.Time
 import br.usp.inovacao.hubusp.server.catalog.Company
@@ -146,7 +145,7 @@ fun Application.configureCompanyRoute(
                 HttpStatusCode.UnprocessableEntity,
                 ErrorMessage(errors = e.errorsPerStep),
             )
-        } catch (e: ImageValidationException) {
+        } catch (e: Image.ValidationException) {
             call.respond(
                 HttpStatusCode.UnprocessableEntity,
                 ErrorMessage(
