@@ -8,10 +8,9 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
-import br.usp.inovacao.hubusp.server.app.routing.BadRequestException
 import br.usp.inovacao.hubusp.server.app.routing.Image
 import br.usp.inovacao.hubusp.server.app.routing.ImageValidationException
-import br.usp.inovacao.hubusp.server.app.routing.NotFoundException
+import br.usp.inovacao.hubusp.server.app.routing.RoutingException
 import br.usp.inovacao.hubusp.server.app.routing.Time
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
@@ -157,9 +156,9 @@ fun Application.configureCompanyRoute(
                         ),
                 ),
             )
-        } catch (e: NotFoundException) {
+        } catch (e: RoutingException.NotFoundException) {
             call.respond(HttpStatusCode.NotFound, e.message ?: "")
-        } catch (e: BadRequestException) {
+        } catch (e: RoutingException.BadRequestException) {
             call.respond(HttpStatusCode.BadRequest, e.message ?: "")
         } catch (e: Exception) {
             panic(call, e)
@@ -174,7 +173,7 @@ fun Application.configureCompanyRoute(
                 try {
                     recv = call.receive<CompanyJWT>()
                 } catch (e: Exception) {
-                    throw BadRequestException(e.message)
+                    throw RoutingException.BadRequestException(e.message)
                 }
 
                 var company: Company
@@ -185,7 +184,7 @@ fun Application.configureCompanyRoute(
                             .search(CompanySearchParams(cnpj = recv.cnpj))
                             .firstOrNull()!!
                 } catch (_: Exception) {
-                    throw NotFoundException("CNPJ not found")
+                    throw RoutingException.NotFoundException("CNPJ not found")
                 }
 
                 val token = recv.createToken()
@@ -226,7 +225,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     try {
                         jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
-                        throw BadRequestException(e.message)
+                        throw RoutingException.BadRequestException(e.message)
                     }
 
                     try {
@@ -237,7 +236,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
 
                         call.respond(HttpStatusCode.OK, company)
                     } catch (e: Exception) {
-                        throw NotFoundException("CNPJ not found")
+                        throw RoutingException.NotFoundException("CNPJ not found")
                     }
                 }
             }
@@ -248,13 +247,14 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     try {
                         jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
-                        throw BadRequestException(e.message)
+                        throw RoutingException.BadRequestException(e.message)
                     }
 
                     val (companyFormJson, companyForm, logo) = recvCompanyForm(call)
 
                     if (companyForm.data.cnpj != jwt.cnpj) {
-                        throw BadRequestException("company form cnpj does not match token")
+                        throw RoutingException.BadRequestException(
+                            "company form cnpj does not match token")
                     }
 
                     log.debug("PATCH /company: ${jwt.cnpj}")
