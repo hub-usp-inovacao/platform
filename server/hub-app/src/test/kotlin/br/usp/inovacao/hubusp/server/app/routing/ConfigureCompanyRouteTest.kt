@@ -18,6 +18,7 @@ import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -299,6 +300,58 @@ class ConfigureCompanyRouteTest {
             catalogCompany,
             response.body(),
         )
+    }
+
+    @Test
+    fun `test PATCH company with jwt authentication`() = testCompanyApplication {
+        every { mockSearchCompanies.search(any()) } returns setOf(catalogCompany)
+
+        val response =
+            client.patch("/company") {
+                bearerAuth(CompanyJWT("00.000.000/0000-00").createToken())
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append(
+                                FormPart(
+                                    "company",
+                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                ),
+                            )
+                        },
+                    ),
+                )
+            }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+
+        verify(exactly = 1) { mockMailer.send(withArg { assertEquals(2, it.attachments.size) }) }
+        verify(exactly = 1) { mockSpreadsheetWriter.append(any()) }
+    }
+
+    @Test
+    fun `test PATCH company with different cnpj than the jwt`() = testCompanyApplication {
+        every { mockSearchCompanies.search(any()) } returns setOf(catalogCompany)
+
+        val response =
+            client.patch("/company") {
+                bearerAuth(CompanyJWT("00.000.000/0000-01").createToken())
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append(
+                                FormPart(
+                                    "company",
+                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                ),
+                            )
+                        },
+                    ),
+                )
+            }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+        verify(exactly = 0) { mockMailer.send(any()) }
     }
 
     private fun getResourceAsString(path: String) =
