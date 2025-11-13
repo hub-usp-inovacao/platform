@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.routing
+package br.usp.inovacao.hubusp.server.app.routing.company
 
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
@@ -98,7 +98,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                    getResourceAsString("/routing/company/validCompanyForm.json"),
                                 ),
                             )
                         },
@@ -135,7 +135,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                    getResourceAsString("/routing/company/validCompanyForm.json"),
                                 ),
                             )
                         },
@@ -167,7 +167,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                    getResourceAsString("/routing/company/validCompanyForm.json"),
                                 ),
                             )
                         },
@@ -221,7 +221,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/invalidCompanyForm.json"),
+                                    getResourceAsString("/routing/company/invalidCompanyForm.json"),
                                 ),
                             )
                         },
@@ -236,7 +236,7 @@ class ConfigureCompanyRouteTest {
 
         val recvMessage: RecvMessage = response.body()
         val expectedRecvMessage =
-            getResourceAsString("/routing/invalidCompanyFormErrors.json").let {
+            getResourceAsString("/routing/company/invalidCompanyFormErrors.json").let {
                 Json.decodeFromString<RecvMessage>(it)
             }
 
@@ -315,7 +315,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                    getResourceAsString("/routing/company/validCompanyForm.json"),
                                 ),
                             )
                         },
@@ -342,7 +342,7 @@ class ConfigureCompanyRouteTest {
                             append(
                                 FormPart(
                                     "company",
-                                    getResourceAsString("/routing/validCompanyForm.json"),
+                                    getResourceAsString("/routing/company/validCompanyForm.json"),
                                 ),
                             )
                         },

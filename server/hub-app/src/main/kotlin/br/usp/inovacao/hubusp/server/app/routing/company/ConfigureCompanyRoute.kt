@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.server.app.routing
+package br.usp.inovacao.hubusp.server.app.routing.company
 
 import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.curatorship.companyform.CompanyForm
@@ -8,6 +8,11 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
+import br.usp.inovacao.hubusp.server.app.routing.BadRequestException
+import br.usp.inovacao.hubusp.server.app.routing.Image
+import br.usp.inovacao.hubusp.server.app.routing.ImageValidationException
+import br.usp.inovacao.hubusp.server.app.routing.NotFoundException
+import br.usp.inovacao.hubusp.server.app.routing.Time
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.CompanySearchParams
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies

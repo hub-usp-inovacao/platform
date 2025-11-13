@@ -2,6 +2,7 @@ package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.config.Configuration
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.server.app.routing.company.configureCompanyRoute
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.server.persistence.CatalogCompanyRepositoryImpl
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
