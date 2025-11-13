@@ -53,24 +53,6 @@ fun Application.configureCompanyRoute(
     companyRegisterFormSheet: SpreadsheetWriter,
     companyUpdateFormSheet: SpreadsheetWriter,
 ) {
-    suspend fun panic(call: ApplicationCall, e: Exception) {
-        // If this gets executed, then an exception somewhere was not caught. Fix it.
-
-        call.respond(HttpStatusCode.InternalServerError)
-
-        val subject = "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
-
-        this.log.warn("${subject}: ${e.stackTraceToString()}")
-
-        mailer.send(
-            Mail(
-                to = Configuration.email.devs,
-                subject,
-                body = e.stackTraceToString(),
-            ),
-        )
-    }
-
     suspend fun recvCompanyForm(call: ApplicationCall): Triple<String, CompanyForm, File?> {
         val multipartData = call.receiveMultipart()
 
@@ -160,7 +142,19 @@ fun Application.configureCompanyRoute(
         } catch (e: RoutingException.BadRequestException) {
             call.respond(HttpStatusCode.BadRequest, e.message ?: "")
         } catch (e: Exception) {
-            panic(call, e)
+            call.respond(HttpStatusCode.InternalServerError)
+
+            val subject = "[INTERNAL SERVER ERROR] ${call.request.httpMethod} ${call.request.uri}"
+
+            this.log.warn("${subject}: ${e.stackTraceToString()}")
+
+            mailer.send(
+                Mail(
+                    to = Configuration.email.devs,
+                    subject,
+                    body = e.stackTraceToString(),
+                ),
+            )
         }
     }
 
