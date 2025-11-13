@@ -2,17 +2,22 @@ package br.usp.inovacao.hubusp.server.app.routing
 
 import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
+import br.usp.inovacao.hubusp.server.app.auth.CompanyJWT
 import br.usp.inovacao.hubusp.server.app.auth.configureAuthentication
 import br.usp.inovacao.hubusp.server.app.configureSerialization
+import br.usp.inovacao.hubusp.server.catalog.Address
+import br.usp.inovacao.hubusp.server.catalog.Classification
 import br.usp.inovacao.hubusp.server.catalog.Company
 import br.usp.inovacao.hubusp.server.catalog.SearchCompanies
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.FormPart
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -45,6 +50,32 @@ class ConfigureCompanyRouteTest {
     @MockK private lateinit var mockSpreadsheetWriter: SpreadsheetWriter
 
     @MockK private lateinit var mockSearchCompanies: SearchCompanies
+
+    private val catalogCompany =
+        Company(
+            address =
+                Address(
+                    cep = "",
+                    city = "",
+                    neighborhood = "",
+                    state = "",
+                    venue = "",
+                ),
+            classification = Classification(major = "", minor = ""),
+            cnae = "",
+            companySize = emptySet(),
+            description = "",
+            ecosystems = emptySet(),
+            emails = emptySet(),
+            incubated = "",
+            logo = "",
+            name = "",
+            phones = emptySet(),
+            services = emptySet(),
+            technologies = emptySet(),
+            unities = emptySet(),
+            url = "",
+        )
 
     @Serializable
     data class RecvMessage(
@@ -255,6 +286,19 @@ class ConfigureCompanyRouteTest {
 
         assertEquals(HttpStatusCode.NotFound, response.status)
         verify(exactly = 0) { mockMailer.send(any()) }
+    }
+
+    @Test
+    fun `test GET company with jwt authentication`() = testCompanyApplication {
+        every { mockSearchCompanies.search(any()) } returns setOf(catalogCompany)
+
+        val response = client.get("/company") { bearerAuth(CompanyJWT("1234").createToken()) }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(
+            catalogCompany,
+            response.body(),
+        )
     }
 
     private fun getResourceAsString(path: String) =
