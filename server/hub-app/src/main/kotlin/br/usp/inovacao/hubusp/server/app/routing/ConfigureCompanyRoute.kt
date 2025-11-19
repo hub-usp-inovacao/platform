@@ -136,7 +136,7 @@ fun Application.configureCompanyRoute(
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.InternalServerError)
 
-                application.log.warn(
+                log.warn(
                     "Internal Server Error (${call.request.uri}): ${e.stackTraceToString()}",
                 )
 

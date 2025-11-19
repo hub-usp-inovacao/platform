@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.kmongo.serialization)
 
     implementation(libs.bundles.ktor.server)
+    testImplementation(libs.bundles.ktor.client)
     testImplementation(libs.bundles.ktor.server.test)
 
     implementation(libs.tika.core)

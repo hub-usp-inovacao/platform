@@ -4,16 +4,18 @@ import br.usp.inovacao.hubusp.curatorship.register.step.Step
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.server.app.configureSerialization
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.forms.FormPart
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
@@ -137,7 +139,7 @@ class ConfigureCompanyRouteTest {
         verify(exactly = 0) { mockMailer.send(any()) }
         verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
 
-        val recvMessage = response.bodyAsText().let { Json.decodeFromString<RecvMessage>(it) }
+        val recvMessage: RecvMessage = response.body()
 
         assert(recvMessage.errors.get(Step.CompanyData)?.firstOrNull()?.contains("logo") == true)
     }
@@ -191,7 +193,7 @@ class ConfigureCompanyRouteTest {
         verify(exactly = 0) { mockMailer.send(any()) }
         verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
 
-        val recvMessage = response.bodyAsText().let { Json.decodeFromString<RecvMessage>(it) }
+        val recvMessage: RecvMessage = response.body()
         val expectedRecvMessage =
             getResourceAsString("/routing/invalidCompanyFormErrors.json").let {
                 Json.decodeFromString<RecvMessage>(it)
@@ -223,6 +225,8 @@ class ConfigureCompanyRouteTest {
                 )
                 configureSerialization()
             }
+
+            client = createClient { install(ContentNegotiation) { json() } }
 
             block()
         }
