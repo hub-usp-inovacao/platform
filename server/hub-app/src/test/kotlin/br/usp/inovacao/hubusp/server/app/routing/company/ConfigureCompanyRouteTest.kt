@@ -48,7 +48,8 @@ import kotlinx.serialization.json.Json
 
 class ConfigureCompanyRouteTest {
     @MockK private lateinit var mockMailer: Mailer
-    @MockK private lateinit var mockSpreadsheetWriter: SpreadsheetWriter
+    @MockK private lateinit var mockRegisterSpreadsheetWriter: SpreadsheetWriter
+    @MockK private lateinit var mockUpdateSpreadsheetWriter: SpreadsheetWriter
 
     @MockK private lateinit var mockSearchCompanies: SearchCompanies
 
@@ -109,7 +110,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.Created, response.status)
 
         verify(exactly = 1) { mockMailer.send(withArg { assertEquals(2, it.attachments.size) }) }
-        verify(exactly = 1) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 1) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockUpdateSpreadsheetWriter.append(any()) }
     }
 
     @Test
@@ -146,7 +148,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.Created, response.status)
 
         verify(exactly = 1) { mockMailer.send(withArg { assertEquals(3, it.attachments.size) }) }
-        verify(exactly = 1) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 1) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockUpdateSpreadsheetWriter.append(any()) }
     }
 
     @Test
@@ -178,7 +181,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
 
         verify(exactly = 0) { mockMailer.send(any()) }
-        verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockUpdateSpreadsheetWriter.append(any()) }
 
         val recvMessage: RecvMessage = response.body()
 
@@ -208,7 +212,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.BadRequest, response.status)
 
         verify(exactly = 0) { mockMailer.send(any()) }
-        verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockUpdateSpreadsheetWriter.append(any()) }
     }
 
     @Test
@@ -232,7 +237,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.UnprocessableEntity, response.status)
 
         verify(exactly = 0) { mockMailer.send(any()) }
-        verify(exactly = 0) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockUpdateSpreadsheetWriter.append(any()) }
 
         val recvMessage: RecvMessage = response.body()
         val expectedRecvMessage =
@@ -326,7 +332,8 @@ class ConfigureCompanyRouteTest {
         assertEquals(HttpStatusCode.OK, response.status)
 
         verify(exactly = 1) { mockMailer.send(withArg { assertEquals(2, it.attachments.size) }) }
-        verify(exactly = 1) { mockSpreadsheetWriter.append(any()) }
+        verify(exactly = 0) { mockRegisterSpreadsheetWriter.append(any()) }
+        verify(exactly = 1) { mockUpdateSpreadsheetWriter.append(any()) }
     }
 
     @Test
@@ -359,7 +366,8 @@ class ConfigureCompanyRouteTest {
 
     private fun testCompanyApplication(block: suspend ApplicationTestBuilder.() -> Unit) {
         every { mockMailer.send(any()) } returns Unit
-        every { mockSpreadsheetWriter.append(any()) } returns ""
+        every { mockRegisterSpreadsheetWriter.append(any()) } returns ""
+        every { mockUpdateSpreadsheetWriter.append(any()) } returns ""
         every { mockSearchCompanies.search(any()) } returns emptySet()
 
         testApplication {
@@ -375,8 +383,8 @@ class ConfigureCompanyRouteTest {
                 configureCompanyRoute(
                     mockMailer,
                     mockSearchCompanies,
-                    mockSpreadsheetWriter,
-                    mockSpreadsheetWriter,
+                    mockRegisterSpreadsheetWriter,
+                    mockUpdateSpreadsheetWriter,
                 )
                 configureSerialization()
             }
