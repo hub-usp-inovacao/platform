@@ -19,6 +19,7 @@ repositories { mavenCentral() }
 dependencies {
     implementation(project(":config"))
     implementation(project(":curatorship"))
+    implementation(project(":hub-app"))
     implementation(project(":techtransfer"))
     implementation(project(":persistence"))
 
