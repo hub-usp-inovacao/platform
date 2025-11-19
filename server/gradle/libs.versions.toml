@@ -1,0 +1,11 @@
+[versions]
+kotlin = "1.7.10"
+
+[libraries]
+
+[bundles]
+
+[plugins]
+jvm = { id = "org.jetbrains.kotlin.jvm",  version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
