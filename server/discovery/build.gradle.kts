@@ -1,8 +1,3 @@
-val kotlinx_serialization_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-val mockk_version: String by project
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
@@ -11,6 +6,7 @@ plugins {
 }
 
 group = "br.usp.inovacao.hubusp.discovery"
+
 version = "0.0.1"
 
 repositories {
@@ -19,8 +15,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    testImplementation("io.mockk:mockk:$mockk_version")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.logback)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }
