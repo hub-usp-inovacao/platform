@@ -1,11 +1,9 @@
 package br.usp.inovacao.hubusp.server.app.routing
 
 object RoutingException {
-    class BadRequestException(
-        message: String?,
-    ) : RuntimeException(message)
+    class BadRequest(val response: Any) : RuntimeException()
 
-    class NotFoundException(
-        message: String?,
-    ) : RuntimeException(message)
+    class NotFound(val response: Any) : RuntimeException()
+
+    class Unprocessable(val response: Any) : RuntimeException()
 }

@@ -1,7 +1,9 @@
 package br.usp.inovacao.hubusp.server.app.routing.company
 
 import br.usp.inovacao.hubusp.curatorship.companyform.CompanyForm
+import br.usp.inovacao.hubusp.curatorship.companyform.CompanyFormValidationException
 import br.usp.inovacao.hubusp.curatorship.companyform.ErrorsPerStep
+import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.server.app.routing.Image
 import br.usp.inovacao.hubusp.server.app.routing.RoutingException
@@ -25,7 +27,7 @@ import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 class CompanyFormRequest {
-    @Serializable data class ErrorMessage(val errors: ErrorsPerStep)
+    @Serializable data class ErrorResponse(val errors: ErrorsPerStep)
 
     val json: String
     val form: CompanyForm
@@ -72,8 +74,21 @@ class CompanyFormRequest {
 
             try {
                 return CompanyFormRequest(companyFormJson!!, logo)
+            } catch (e: CompanyFormValidationException) {
+                throw RoutingException.Unprocessable(
+                    ErrorResponse(errors = e.errorsPerStep),
+                )
+            } catch (e: Image.ValidationException) {
+                throw RoutingException.Unprocessable(
+                    ErrorResponse(
+                        errors =
+                            mapOf(
+                                Step.CompanyData to setOf("logo: Imagem inválida. (${e.message})"),
+                            ),
+                    ),
+                )
             } catch (e: Exception) {
-                throw RoutingException.BadRequestException("Company form is malformed")
+                throw RoutingException.BadRequest("Company form is malformed")
             }
         }
     }

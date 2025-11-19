@@ -38,10 +38,12 @@ fun Application.configureCompanyRoute(
     suspend fun handleErrors(call: ApplicationCall, block: suspend () -> Unit) {
         try {
             block()
-        } catch (e: RoutingException.NotFoundException) {
-            call.respond(HttpStatusCode.NotFound, e.message ?: "")
-        } catch (e: RoutingException.BadRequestException) {
-            call.respond(HttpStatusCode.BadRequest, e.message ?: "")
+        } catch (e: RoutingException.NotFound) {
+            call.respond(HttpStatusCode.NotFound, e.response)
+        } catch (e: RoutingException.BadRequest) {
+            call.respond(HttpStatusCode.BadRequest, e.response)
+        } catch (e: RoutingException.Unprocessable) {
+            call.respond(HttpStatusCode.UnprocessableEntity, e.response)
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError)
 
@@ -67,8 +69,7 @@ fun Application.configureCompanyRoute(
                 try {
                     recv = call.receive<CompanyJWT>()
                 } catch (e: Exception) {
-                    throw RoutingException.BadRequestException(
-                        "Failed to receive company jwt: ${e.message}")
+                    throw RoutingException.BadRequest("Failed to receive company jwt: ${e.message}")
                 }
 
                 var company: Company
@@ -79,7 +80,7 @@ fun Application.configureCompanyRoute(
                             .search(CompanySearchParams(cnpj = recv.cnpj))
                             .firstOrNull()!!
                 } catch (_: Exception) {
-                    throw RoutingException.NotFoundException("CNPJ not found")
+                    throw RoutingException.NotFound("CNPJ not found")
                 }
 
                 val token = recv.createToken()
@@ -120,7 +121,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     try {
                         jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
-                        throw RoutingException.BadRequestException(
+                        throw RoutingException.BadRequest(
                             "Failed to parse company jwt: ${e.message}")
                     }
 
@@ -132,7 +133,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
 
                         call.respond(HttpStatusCode.OK, company)
                     } catch (e: Exception) {
-                        throw RoutingException.NotFoundException("CNPJ not found")
+                        throw RoutingException.NotFound("CNPJ not found")
                     }
                 }
             }
@@ -143,7 +144,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     try {
                         jwt = CompanyJWT.fromPayload(call.principal<JWTPrincipal>()!!.payload)!!
                     } catch (e: Exception) {
-                        throw RoutingException.BadRequestException(
+                        throw RoutingException.BadRequest(
                             "Failed to parse company jwt: ${e.message}",
                         )
                     }
@@ -151,8 +152,7 @@ Se não foi você que solicitou a atualização de dados, ignore este e-mail.
                     val companyFormRequest = CompanyFormRequest.recv(call)
 
                     if (companyFormRequest.form.data.cnpj != jwt.cnpj) {
-                        throw RoutingException.BadRequestException(
-                            "company form cnpj does not match token")
+                        throw RoutingException.BadRequest("company form cnpj does not match token")
                     }
 
                     log.debug("PATCH /company: ${jwt.cnpj}")
