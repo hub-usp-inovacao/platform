@@ -44,7 +44,7 @@ fun Application.configureCompanyRoute(
             var logo: File? = null
 
             try {
-                val multipartData = call.receiveMultipart()
+                val multipartData = call.receiveMultipart(formFieldLimit = 2 * 1024 * 1024)
 
                 var companyFormJson: String? = null
                 var companyForm: CompanyForm? = null
