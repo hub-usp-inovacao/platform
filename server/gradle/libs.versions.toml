@@ -22,6 +22,15 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
+ktor-server-core-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-server-cors-jvm = { module = "io.ktor:ktor-server-cors-jvm", version.ref = "ktor" }
+ktor-server-auth-jvm = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "ktor" }
+ktor-server-auth-jwt-jvm = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor" }
+ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-tests-jvm = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+ktor-server-test-host-jvm = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
 
 skrapeit = { module = "it.skrape:skrapeit", version = "1.3.0-alpha.1" }
 
@@ -29,8 +38,32 @@ google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-librar
 google-api-client = { module = "com.google.api-client:google-api-client", version = "2.7.2" }
 google-api-services-sheets = { module = "com.google.apis:google-api-services-sheets", version = "v4-rev20250211-2.0.0" }
 
+kmongo-serialization = { module = "org.litote.kmongo:kmongo-serialization", version = "4.5.0" }
+
+tika-core = { module = "org.apache.tika:tika-core", version = "3.2.3" }
+html-sanitizer = { module = "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer", version = "20240325.1" }
+
 [bundles]
-ktor-client = [ "ktor-client-core", "ktor-client-cio", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json" ]
+ktor-client = [
+  "ktor-client-core",
+  "ktor-client-cio",
+  "ktor-client-content-negotiation",
+  "ktor-serialization-kotlinx-json",
+]
+ktor-server = [
+  "ktor-server-content-negotiation-jvm",
+  "ktor-server-core-jvm",
+  "ktor-server-cors-jvm",
+  "ktor-server-auth-jvm",
+  "ktor-server-auth-jwt-jvm",
+  "ktor-server-netty-jvm",
+  "ktor-server-call-logging",
+  "ktor-serialization-kotlinx-json",
+]
+ktor-server-test = [
+  "ktor-server-tests-jvm",
+  "ktor-server-test-host-jvm",
+]
 hoplite = [ "hoplite-core", "hoplite-hocon" ]
 google-sheets = [ "google-auth-library-oauth2-http", "google-api-client", "google-api-services-sheets" ]
 
@@ -38,3 +71,4 @@ google-sheets = [ "google-auth-library-oauth2-http", "google-api-client", "googl
 jvm = { id = "org.jetbrains.kotlin.jvm",  version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
+shadow = { id = "com.github.johnrengelman.shadow", version = "7.0.0" }
