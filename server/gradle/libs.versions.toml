@@ -45,6 +45,8 @@ html-sanitizer = { module = "com.googlecode.owasp-java-html-sanitizer:owasp-java
 
 clikt = { module = "com.github.ajalt.clikt:clikt", version = "3.4.0" }
 
+javax-mail = { module = "javax.mail:mail", version = "1.5.0-b01" }
+
 [bundles]
 ktor-client = [
   "ktor-client-core",
