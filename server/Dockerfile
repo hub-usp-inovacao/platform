@@ -1,11 +1,11 @@
 #####################################
 # BASE IMAGE FOR BUILDING THE PROJECT
 #####################################
-FROM gradle:7.4.2-jdk17 AS base
+FROM gradle:8.14.3-jdk21 AS base
 
 WORKDIR /home/gradle/hub
 
-RUN mkdir catalog config curatorship discovery hub-app hub-cli mailer persistence sheets techtransfer \
+RUN mkdir gradle catalog config curatorship discovery hub-app hub-cli mailer persistence sheets techtransfer \
     && chown gradle:gradle . -R
 
 USER gradle
@@ -13,18 +13,19 @@ USER gradle
 CMD gradle build --continuous
 
 # COPY ALL PROJECTS build.gradle.kts FILES TO THEIR DESTINATIONS
-COPY --chown=gradle:gradle  settings.gradle.kts                                                 ./
-COPY --chown=gradle:gradle  build.gradle.kts                 gradle.properties                  ./
-COPY --chown=gradle:gradle  catalog/build.gradle.kts         catalog/gradle.properties          ./catalog/
-COPY --chown=gradle:gradle  config/build.gradle.kts          config/gradle.properties           ./config/
-COPY --chown=gradle:gradle  curatorship/build.gradle.kts     curatorship/gradle.properties      ./curatorship/
-COPY --chown=gradle:gradle  discovery/build.gradle.kts       discovery/gradle.properties        ./discovery/
-COPY --chown=gradle:gradle  hub-app/build.gradle.kts         hub-app/gradle.properties          ./hub-app/
-COPY --chown=gradle:gradle  hub-cli/build.gradle.kts         hub-cli/gradle.properties          ./hub-cli/
-COPY --chown=gradle:gradle  mailer/build.gradle.kts          mailer/gradle.properties           ./mailer/
-COPY --chown=gradle:gradle  persistence/build.gradle.kts     persistence/gradle.properties      ./persistence/
-COPY --chown=gradle:gradle  sheets/build.gradle.kts          sheets/gradle.properties           ./sheets/
-COPY --chown=gradle:gradle  techtransfer/build.gradle.kts    techtransfer/gradle.properties     ./techtransfer/
+COPY --chown=gradle:gradle  settings.gradle.kts             ./
+COPY --chown=gradle:gradle  build.gradle.kts                ./
+COPY --chown=gradle:gradle  gradle/libs.versions.toml       ./gradle
+COPY --chown=gradle:gradle  catalog/build.gradle.kts        ./catalog/
+COPY --chown=gradle:gradle  config/build.gradle.kts         ./config/
+COPY --chown=gradle:gradle  curatorship/build.gradle.kts    ./curatorship/
+COPY --chown=gradle:gradle  discovery/build.gradle.kts      ./discovery/
+COPY --chown=gradle:gradle  hub-app/build.gradle.kts        ./hub-app/
+COPY --chown=gradle:gradle  hub-cli/build.gradle.kts        ./hub-cli/
+COPY --chown=gradle:gradle  mailer/build.gradle.kts         ./mailer/
+COPY --chown=gradle:gradle  persistence/build.gradle.kts    ./persistence/
+COPY --chown=gradle:gradle  sheets/build.gradle.kts         ./sheets/
+COPY --chown=gradle:gradle  techtransfer/build.gradle.kts   ./techtransfer/
 
 # PRE-INSTALL JUST THE DEPENDENCIES -- THIS SHALL SPEEDUP FUTURE BUILDS
 RUN gradle clean build
@@ -63,7 +64,7 @@ RUN gradle :hub-app:shadowJar
 ############################
 # BASE IMAGE FOR THE RUNNERS
 ############################
-FROM eclipse-temurin:17-jdk AS rbase
+FROM eclipse-temurin:21-jdk AS rbase
 
 WORKDIR /hub
 
