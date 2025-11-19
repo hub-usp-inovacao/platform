@@ -11,9 +11,7 @@ import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
 import io.ktor.server.application.Application
-import io.ktor.server.application.application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
 import io.ktor.server.request.receiveMultipart
@@ -21,9 +19,10 @@ import io.ktor.server.request.uri
 import io.ktor.server.response.respond
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
 import java.io.File
 import kotlin.io.path.createTempFile
-import kotlin.io.path.writeBytes
 import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
 import kotlinx.coroutines.*
@@ -64,7 +63,7 @@ fun Application.configureCompanyRoute(
 
                         is PartData.FileItem -> {
                             val file = createTempFile().toFile()
-                            file.writeBytes(part.streamProvider().readBytes())
+                            part.provider().copyAndClose(file.writeChannel())
                             logo = file
                         }
 
