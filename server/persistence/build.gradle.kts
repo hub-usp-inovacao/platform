@@ -1,11 +1,3 @@
-val kotlinx_serialization_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-val mockk_version: String by project
-val kmongo_version: String by project
-val ktor_version: String by project
-val coroutines_version: String by project
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
@@ -14,11 +6,10 @@ plugins {
 }
 
 group = "br.usp.inovacao.hubusp.persistence"
+
 version = "0.0.1"
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     implementation(project(":catalog"))
@@ -26,14 +17,12 @@ dependencies {
     implementation(project(":curatorship"))
     implementation(project(":discovery"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-    implementation("org.litote.kmongo:kmongo-serialization:$kmongo_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    testImplementation("io.mockk:mockk:$mockk_version")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.bundles.ktor.client)
+    implementation(libs.kmongo.serialization)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.logback)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }
