@@ -43,6 +43,8 @@ kmongo-serialization = { module = "org.litote.kmongo:kmongo-serialization", vers
 tika-core = { module = "org.apache.tika:tika-core", version = "3.2.3" }
 html-sanitizer = { module = "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer", version = "20240325.1" }
 
+clikt = { module = "com.github.ajalt.clikt:clikt", version = "3.4.0" }
+
 [bundles]
 ktor-client = [
   "ktor-client-core",
