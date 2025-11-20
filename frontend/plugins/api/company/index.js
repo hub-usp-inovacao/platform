@@ -9,6 +9,35 @@ function translateKey(text) {
   return text;
 }
 
+const handlers = {
+  form: (response) => {
+    switch (response.status) {
+      case 201: // Created
+        return {};
+      case 422: // Unprocessable Content
+        return response.json().then((response) => ({
+          errors: Object.fromEntries(
+            Object.entries(response?.errors ?? {}).map(([key, value]) => [
+              key,
+              value.map(translateKey),
+            ]),
+          ),
+        }));
+      default:
+        throw new Error(`Unexpected server response: ${response.status}`);
+    }
+  },
+
+  error: (err) => ({
+    errors: {
+      server:
+        "Falha de conexão com o servidor.\n" +
+        "Por favor, entre em contato com a AUSPIN.\n" +
+        err,
+    },
+  }),
+};
+
 /**
  * Send POST request to register Company
  */
@@ -25,32 +54,31 @@ const post = async (data, logo) => {
     method: "POST",
     body: form,
   })
-    .then((response) => {
-      switch (response.status) {
-        case 201: // Created
-          return {};
-        case 422: // Unprocessable Content
-          return response.json().then((response) => ({
-            ...response,
-            errors: Object.fromEntries(
-              Object.entries(response?.errors ?? {}).map(([key, value]) => [
-                key,
-                value.map(translateKey),
-              ]),
-            ),
-          }));
-        default:
-          throw new Error(`Unexpected server response: ${response.status}`);
-      }
-    })
-    .catch((err) => ({
-      errors: {
-        server:
-          "Falha de conexão com o servidor.\n" +
-          "Por favor, entre em contato com a AUSPIN.\n" +
-          err,
-      },
-    }));
+    .then(handlers.form)
+    .catch(handlers.error);
+};
+
+/**
+ * Send PATCH request to update Company with jwt auth
+ */
+const patch = async (jwt, data, logo) => {
+  const form = new FormData();
+
+  form.append("company", JSON.stringify(data.company));
+
+  if (logo) {
+    form.append("logo", logo);
+  }
+
+  return fetch(`${process.env.BACKEND_URL}/v2/company`, {
+    method: "PATCH",
+    body: form,
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+    .then(handlers.form)
+    .catch(handlers.error);
 };
 
 /**
@@ -74,15 +102,7 @@ const get = async (jwt) => {
           throw new Error(`Unexpected server response: ${response.status}`);
       }
     })
-    .catch((err) => ({
-      success: false,
-      payload: {
-        server:
-          "Falha de conexão com o servidor.\n" +
-          "Por favor, entre em contato com a AUSPIN.\n" +
-          err,
-      },
-    }));
+    .catch(handlers.error);
 };
 
-export default { post, get, jwt };
+export default { post, patch, get, jwt };
