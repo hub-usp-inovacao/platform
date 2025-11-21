@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
 import java.time.LocalDate
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
@@ -144,6 +145,40 @@ data class Company(
         val year: String?
 ) {
     companion object {
+
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "cnpj" to 1,
+            "name" to 2,
+            "cnae" to 5,
+            "corporateName" to 3,
+            "year" to 4,
+            "phones" to 6,
+            "emails" to 7,
+            "description" to 13,
+            "services" to 14,
+            "technologies" to 15,
+            "logo" to 16,
+            "url" to 17,
+            "incubated" to 18,
+            "ecosystems" to 19,
+            "unicorn" to 20,
+            "employees" to 21,
+
+            "address.venue" to 8,
+            "address.neighborhood" to 9,
+            "address.city" to 10,
+            "address.state" to 11,
+            "address.cep" to 12,
+
+            "partners[0].name" to 33,
+            "partners[1].name" to 43,
+            "partners[2].name" to 48,
+            "partners[3].name" to 53,
+            "partners[4].name" to 58,
+        )
+
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
+
         fun createPartners(subRow: List<String?>): List<Partner> {
             val partners = mutableListOf<Partner>()
             val subRowIndexes = listOf(0..6, 10..13, 15..18, 20..23, 25..28)
@@ -265,37 +300,18 @@ data class Company(
             return raw?.split(separator)?.map { it.trim() }?.toSet()
         }
 
-        val propertyToColumn: Map<String, String> = mapOf(
-            "cnpj" to indexToColumnLetter(1),
-            "name" to indexToColumnLetter(2),
-            "corporateName" to indexToColumnLetter(3),
-            "year" to indexToColumnLetter(4),
-            "logo" to indexToColumnLetter(16),
-            "url" to indexToColumnLetter(17),
-            "incubated" to indexToColumnLetter(18),
-            "ecosystems" to indexToColumnLetter(19),
-
-            "address.city" to indexToColumnLetter(10),
-
-            "partners[0].name" to indexToColumnLetter(33),
-            "partners[1].name" to indexToColumnLetter(43),
-            "partners[2].name" to indexToColumnLetter(48),
-            "partners[3].name" to indexToColumnLetter(53),
-            "partners[4].name" to indexToColumnLetter(58)
-        )
-
         fun fromRow(row: List<String?>): Company {
-            val classification = CompanyClassification.classify(row[5])
+            val classification = CompanyClassification.classify(row[propertyToIndex["cnae"]!!])
 
             val address = try {
-                CompanyAddress.fromRow(row.subList(8, 13))
+                CompanyAddress.fromRow(row.subList(propertyToIndex["address.venue"]!!, propertyToIndex["address.cep"]!! + 1))
             } catch (e: ValidationException) {
                 val enrichedMessages = e.messages.map { "address.${it}" }
                 throw ValidationException(messages = enrichedMessages)
             }
 
             val partners = if (row.size < 62) emptyList() else {
-                createPartners(row.subList(33, 62))
+                createPartners(row.subList(propertyToIndex["partners[0].name"]!!, row.size))
             }
 
             return Company(
@@ -303,22 +319,22 @@ data class Company(
                 address = address,
                 allowed = true,
                 classification = classification,
-                cnae = row[5],
-                cnpj = row[1],
-                companySize = calculateSize(row[21], row[20], classification),
-                corporateName = row[3],
-                description = row[13],
-                ecosystems = splitAndTrim(row[19], ';'),
-                emails = splitAndTrim(row[7], ';'),
-                incubated = formatIncubated(row[18]),
-                logo = formatLogo(row[16]),
-                name = row[2],
-                phones = formatPhones(row[6]),
-                services = splitAndTrim(row[14], ';'),
-                technologies = splitAndTrim(row[15], ';'),
+                cnae = row[propertyToIndex["cnae"]!!],
+                cnpj = row[propertyToIndex["cnpj"]!!],
+                companySize = calculateSize(row[propertyToIndex["employees"]!!], row[propertyToIndex["unicorn"]!!], classification),
+                corporateName = row[propertyToIndex["corporateName"]!!],
+                description = row[propertyToIndex["description"]!!],
+                ecosystems = splitAndTrim(row[propertyToIndex["ecosystems"]!!], ';'),
+                emails = splitAndTrim(row[propertyToIndex["emails"]!!], ';'),
+                incubated = formatIncubated(row[propertyToIndex["incubated"]!!]),
+                logo = formatLogo(row[propertyToIndex["logo"]!!]),
+                name = row[propertyToIndex["name"]!!],
+                phones = formatPhones(row[propertyToIndex["phones"]!!]),
+                services = splitAndTrim(row[propertyToIndex["services"]!!], ';'),
+                technologies = splitAndTrim(row[propertyToIndex["technologies"]!!], ';'),
                 partners = partners,
-                url = formatUrl(row[17]),
-                year = row[4]
+                url = formatUrl(row[propertyToIndex["url"]!!]),
+                year = row[propertyToIndex["year"]!!]
             )
         }
     }

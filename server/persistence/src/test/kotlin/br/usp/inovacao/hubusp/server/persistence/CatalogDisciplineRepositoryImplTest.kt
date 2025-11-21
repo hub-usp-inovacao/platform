@@ -162,7 +162,7 @@ internal class CatalogDisciplineRepositoryImplTest {
             innovation = false,
             entrepreneurship = false,
             business = false,
-            intellectual_property = true
+            intellectualProperty = true
         ),
         description = "Analisar as contribuições da inovação para o desenvolvimento do setor de serviços, ...",
         keywords = setOf("foo", "baz"),
@@ -170,7 +170,7 @@ internal class CatalogDisciplineRepositoryImplTest {
         name = "ACH1575",
         nature = "Graduação",
         offeringPeriod = "N/D",
-        start_date = "",
+        startDate = "",
         unity = "Escola de Artes, Ciências e Humanidades - EACH",
         url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH2008&nomdis=",
         beingOffered = true
@@ -197,12 +197,12 @@ internal class CatalogDisciplineRepositoryImplTest {
                 innovation = false,
                 entrepreneurship = false,
                 business = false,
-                intellectual_property = true
+                intellectualProperty = true
             ),
             description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "1º sem. 2023",
-            start_date = "",
+            startDate = "",
             url = "",
             beingOffered = true
         ),
@@ -216,12 +216,12 @@ internal class CatalogDisciplineRepositoryImplTest {
                 innovation = false,
                 entrepreneurship = true,
                 business = false,
-                intellectual_property = true
+                intellectualProperty = true
             ),
             description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
-            start_date = "",
+            startDate = "",
             url = "",
             beingOffered = false
         ),
@@ -235,12 +235,12 @@ internal class CatalogDisciplineRepositoryImplTest {
                 innovation = false,
                 entrepreneurship = false,
                 business = false,
-                intellectual_property = true
+                intellectualProperty = true
             ),
             description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "N/D",
-            start_date = "",
+            startDate = "",
             url = "",
             beingOffered = true
         ),
@@ -254,12 +254,12 @@ internal class CatalogDisciplineRepositoryImplTest {
                 innovation = false,
                 entrepreneurship = false,
                 business = true,
-                intellectual_property = true
+                intellectualProperty = true
             ),
             description = "",
             keywords = setOf("foo", "baz"),
             offeringPeriod = "2º sem. 2022",
-            start_date = "",
+            startDate = "",
             url = "",
             beingOffered = false
         )

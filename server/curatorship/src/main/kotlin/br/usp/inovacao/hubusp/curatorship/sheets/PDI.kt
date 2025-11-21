@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
 import kotlinx.serialization.Serializable
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
@@ -24,29 +25,32 @@ data class PDI(
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
 
-        val propertyToColumn: Map<String, String> = mapOf(
-            "category" to indexToColumnLetter(0),
-            "name" to indexToColumnLetter(1),
-            "campus" to indexToColumnLetter(3),
-            "unity" to indexToColumnLetter(4),
-            "site" to indexToColumnLetter(6),
-            "email" to indexToColumnLetter(7),
-            "phone" to indexToColumnLetter(8),
-            "description" to indexToColumnLetter(11),
-            "keywords" to indexToColumnLetter(14)
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "category" to 0,
+            "name" to 1,
+            "campus" to 3,
+            "unity" to 4,
+            "coordinator" to 5,
+            "site" to 6,
+            "email" to 7,
+            "phone" to 8,
+            "description" to 11,
+            "keywords" to 14
         )
 
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
+
         fun fromRow(row: List<String?>) = PDI(
-            category = row[0],
-            name = row[1],
-            campus = row[3],
-            unity = row[4],
-            coordinator = row[5],
-            site = row[6],
-            email = row[7],
-            phone = row[8],
-            description = row[11],
-            keywords = row[14]?.split(";")?.toSet(),
+            category = row[propertyToIndex["category"]!!],
+            name = row[propertyToIndex["name"]!!],
+            campus = row[propertyToIndex["campus"]!!],
+            unity = row[propertyToIndex["unity"]!!],
+            coordinator = row[propertyToIndex["coordinator"]!!],
+            site = row[propertyToIndex["site"]!!],
+            email = row[propertyToIndex["email"]!!],
+            phone = row[propertyToIndex["phone"]!!],
+            description = row[propertyToIndex["description"]!!],
+            keywords = row[propertyToIndex["keywords"]!!]?.split(";")?.toSet(),
         )
     }
 

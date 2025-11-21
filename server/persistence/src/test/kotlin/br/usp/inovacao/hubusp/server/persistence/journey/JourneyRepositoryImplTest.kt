@@ -218,7 +218,7 @@ internal class JourneyRepositoryImplTest {
             name = "ABC0123 - Foo de baz bar",
             nature = "Graduação",
             offeringPeriod = "2022.2",
-            start_date = "N/D",
+            startDate = "N/D",
             unity = "IME",
             url = "https://uspdigital.usp.br/jupiterweb",
             beingOffered = true
@@ -232,7 +232,7 @@ internal class JourneyRepositoryImplTest {
             name = "BCD1234 - Foo de baz bar",
             nature = "Pós-graduação",
             offeringPeriod = "2022.2",
-            start_date = "N/D",
+            startDate = "N/D",
             unity = "IME",
             url = "https://uspdigital.usp.br/jupiterweb",
             beingOffered = false

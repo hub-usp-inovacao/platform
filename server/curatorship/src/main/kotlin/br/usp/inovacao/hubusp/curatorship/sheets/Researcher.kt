@@ -37,48 +37,55 @@ data class Researcher(
                         "Professor Contratado"
                 )
 
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "bond" to 1,
+            "name" to 2,
+            "email" to 3,
+            "unities" to 5,
+            "campus" to 6,
+            "skills" to 23,
+            "services" to 24,
+            "equipments" to 25,
+            "area.major" to 26,
+            "area.minors" to 27,
+            "keywords" to 28,
+            "lattes" to 29,
+            "photo" to 30,
+            "phone" to 31,
+            "limitDate" to 36
+        )
+
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
+
         fun createFrom(subrow: List<String?>): Researcher {
+
+            val majorRaw = subrow[propertyToIndex["area.major"]!!]
+            val minorsRaw = subrow[propertyToIndex["area.minors"]!!]
+
             val area = try {
-                KnowledgeAreas.createFrom(subrow)
+                KnowledgeAreas.createFrom(majorRaw, minorsRaw)
             } catch (e: ValidationException) {
                 val enrichedMessages = e.messages.map { "area.${it}" }
                 throw ValidationException(messages = enrichedMessages)
             }
 
             return Researcher(
-                name = subrow[2],
-                email = subrow[3],
-                unities = readSet(subrow[5]),
-                keywords = readSet(subrow[28]),
-                lattes = subrow[29],
-                photo = formatPhoto(subrow[30]),
-                skills = splitUnlessND(subrow[23]),
-                services = splitUnlessND(subrow[24]),
-                equipments = splitUnlessND(subrow[25]),
-                phone = read(subrow[31]),
-                limitDate = read(subrow[36]),
-                bond = subrow[1],
-                campus = subrow[6],
+                name = subrow[propertyToIndex["name"]!!],
+                email = subrow[propertyToIndex["email"]!!],
+                unities = readSet(subrow[propertyToIndex["unities"]!!]),
+                keywords = readSet(subrow[propertyToIndex["keywords"]!!]),
+                lattes = subrow[propertyToIndex["lattes"]!!],
+                photo = formatPhoto(subrow[propertyToIndex["photo"]!!]),
+                skills = splitUnlessND(subrow[propertyToIndex["skills"]!!]),
+                services = splitUnlessND(subrow[propertyToIndex["services"]!!]),
+                equipments = splitUnlessND(subrow[propertyToIndex["equipments"]!!]),
+                phone = read(subrow[propertyToIndex["phone"]!!]),
+                limitDate = read(subrow[propertyToIndex["limitDate"]!!]),
+                bond = subrow[propertyToIndex["bond"]!!],
+                campus = subrow[propertyToIndex["campus"]!!],
                 area = area
             )
         }
-
-        val propertyToColumn: Map<String, String> = mapOf(
-            "bond" to indexToColumnLetter(1),
-            "name" to indexToColumnLetter(2),
-            "email" to indexToColumnLetter(3),
-            "unities" to indexToColumnLetter(5),
-            "campus" to indexToColumnLetter(6),
-            "skills" to indexToColumnLetter(23),
-            "services" to indexToColumnLetter(24),
-            "equipments" to indexToColumnLetter(25),
-            "area.major" to indexToColumnLetter(26),
-            "area.minors" to indexToColumnLetter(27),
-            "keywords" to indexToColumnLetter(28),
-            "lattes" to indexToColumnLetter(29),
-            "phone" to indexToColumnLetter(31),
-            "limitDate" to indexToColumnLetter(36)
-        )
 
         fun formatPhoto(raw: String?): String? {
 
@@ -146,8 +153,8 @@ data class Researcher(
 @kotlinx.serialization.Serializable
 data class KnowledgeAreas(val major: Set<String>?, val minors: Set<String>?) {
     companion object {
-        fun createFrom(subrow: List<String?>) =
-                KnowledgeAreas(major = readSet(subrow[26]), minors = readSet(subrow[27]))
+        fun createFrom(majorRaw: String?, minorsRaw: String?) =
+                KnowledgeAreas(major = readSet(majorRaw), minors = readSet(minorsRaw))
 
         fun readSet(term: String?): Set<String>? {
             if (term == null) return null else return term?.split(";")?.map { it.trim() }?.toSet()
