@@ -16,6 +16,8 @@ import org.valiktor.validate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.splitUnlessND
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.handleND
 
 @kotlinx.serialization.Serializable
 data class Initiative(
@@ -62,23 +64,13 @@ data class Initiative(
                 name = subRow[propertyToIndex["name"]!!],
                 classification = subRow[propertyToIndex["classification"]!!],
                 localization = subRow[propertyToIndex["localization"]!!],
-                unity = possible_ND(subRow[propertyToIndex["unity"]!!]),
+                unity = handleND(subRow[propertyToIndex["unity"]!!]),
                 tags = splitUnlessND(subRow[propertyToIndex["tags"]!!]),
                 url = subRow[propertyToIndex["url"]!!],
                 description = subRow[propertyToIndex["description"]!!],
                 email = splitUnlessND(subRow[propertyToIndex["email"]!!]),
                 contact = contact
             )
-        }
-
-        fun possible_ND(term: String?) : String? {
-            if(term == null) return "N/D"
-            else return term
-        }
-
-        fun splitUnlessND(term: String?) : Set<String>? {
-            if(term == "N/D" || term == null ) return emptySet()
-            else return term?.split(";")?.map { it.trim() }?.toSet()
         }
 
     }
@@ -136,14 +128,9 @@ data class InitiativeContact(
 ) {
     companion object {
         fun fromRow(personRaw: String?, infoRaw: String?) = InitiativeContact(
-            person = possible_ND(personRaw),
+            person = handleND(personRaw),
             info = infoRaw
         )
-
-        fun possible_ND(term : String?) : String? {
-            if(term == null) return "N/D"
-            else return term
-        }
     }
 
     init {

@@ -7,6 +7,7 @@ import org.valiktor.functions.isWebsite
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
 import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.formatUrl
 
 @kotlinx.serialization.Serializable
 data class Area(
@@ -102,16 +103,6 @@ data class Patent(
             } else {
                 "https://drive.google.com/uc?export=view&id=$id"
             }
-        }
-
-        private fun formatUrl(raw: String?): String? {
-            if (raw.isNullOrBlank() || raw == "N/D") {
-                return null
-            }
-
-            if (raw.length > 3 && raw.substring(0..3) != "http") return "https://$raw"
-
-            return raw
         }
 
         private fun splitString(raw: String?): Set<String> {

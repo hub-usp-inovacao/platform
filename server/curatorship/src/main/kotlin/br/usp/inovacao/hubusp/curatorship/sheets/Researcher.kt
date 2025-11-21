@@ -1,10 +1,10 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.*
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
-import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
 
 @kotlinx.serialization.Serializable
 data class Researcher(
@@ -72,44 +72,21 @@ data class Researcher(
             return Researcher(
                 name = subrow[propertyToIndex["name"]!!],
                 email = subrow[propertyToIndex["email"]!!],
-                unities = readSet(subrow[propertyToIndex["unities"]!!]),
-                keywords = readSet(subrow[propertyToIndex["keywords"]!!]),
+                unities = splitAndTrim(subrow[propertyToIndex["unities"]!!], ';'),
+                keywords = splitAndTrim(subrow[propertyToIndex["keywords"]!!], ';'),
                 lattes = subrow[propertyToIndex["lattes"]!!],
                 photo = formatPhoto(subrow[propertyToIndex["photo"]!!]),
                 skills = splitUnlessND(subrow[propertyToIndex["skills"]!!]),
                 services = splitUnlessND(subrow[propertyToIndex["services"]!!]),
                 equipments = splitUnlessND(subrow[propertyToIndex["equipments"]!!]),
-                phone = read(subrow[propertyToIndex["phone"]!!]),
-                limitDate = read(subrow[propertyToIndex["limitDate"]!!]),
+                phone = handleND(subrow[propertyToIndex["phone"]!!]),
+                limitDate = handleND(subrow[propertyToIndex["limitDate"]!!]),
                 bond = subrow[propertyToIndex["bond"]!!],
                 campus = subrow[propertyToIndex["campus"]!!],
                 area = area
             )
         }
 
-        fun formatPhoto(raw: String?): String? {
-
-            if (raw == null || raw == "N/D") {
-                return null
-            }
-
-            if (raw.length > 3 && raw.substring(0..3) == "http") return raw
-
-            return "https://drive.google.com/thumbnail?id=$raw"
-        }
-
-        fun splitUnlessND(term: String?): Set<String>? {
-            if (term == "N/D" || term == null) return emptySet()
-            else return term?.split(";")?.map { it.trim() }?.toSet()
-        }
-
-        fun readSet(term: String?): Set<String>? {
-            if (term == null) return null else return term?.split(";")?.map { it.trim() }?.toSet()
-        }
-
-        fun read(term: String?): String? {
-            if (term == null) return "N/D" else return term
-        }
     }
 
     init {
@@ -154,11 +131,8 @@ data class Researcher(
 data class KnowledgeAreas(val major: Set<String>?, val minors: Set<String>?) {
     companion object {
         fun createFrom(majorRaw: String?, minorsRaw: String?) =
-                KnowledgeAreas(major = readSet(majorRaw), minors = readSet(minorsRaw))
+                KnowledgeAreas(major = splitAndTrim(majorRaw, ';'), minors = splitAndTrim(minorsRaw, ';'))
 
-        fun readSet(term: String?): Set<String>? {
-            if (term == null) return null else return term?.split(";")?.map { it.trim() }?.toSet()
-        }
     }
 
     init {
