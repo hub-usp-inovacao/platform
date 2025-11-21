@@ -7,6 +7,9 @@ import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
 import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.formatUrl
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.formatPhoto
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.splitAndTrim
 
 @kotlinx.serialization.Serializable
 data class Partner(
@@ -61,11 +64,11 @@ data class CompanyClassification(val major: String?, val minor: String?) {
                 return emptyClassification
             }
 
-            val major_minor = CompanyClassificationTranslator.translate(code)
+            val majorMinor = CompanyClassificationTranslator.translate(code)
 
             return CompanyClassification(
-                    major = major_minor.get("major"),
-                    minor = major_minor.get("minor")
+                    major = majorMinor.get("major"),
+                    minor = majorMinor.get("minor")
             )
         }
     }
@@ -240,16 +243,6 @@ data class Company(
             return if (matches != null) "Sim" else "Não"
         }
 
-        fun formatLogo(raw: String?): String? {
-            if (raw == null || raw == "N/D") {
-                return null
-            }
-
-            if (raw.length > 3 && raw.substring(0..3) == "http") return raw
-
-            return "https://drive.google.com/thumbnail?id=$raw"
-        }
-
         fun formatPhones(raw: String?): Set<String>? {
             if (raw == null || raw == "N/D") {
                 return null
@@ -286,20 +279,6 @@ data class Company(
             return formattedPhones
         }
 
-        fun formatUrl(raw: String?): String? {
-            if (raw == null || raw == "N/D") {
-                return null
-            }
-
-            if (raw.length > 3 && raw.substring(0..3) != "http") return "https://$raw"
-
-            return raw
-        }
-
-        fun splitAndTrim(raw: String?, separator: Char): Set<String>? {
-            return raw?.split(separator)?.map { it.trim() }?.toSet()
-        }
-
         fun fromRow(row: List<String?>): Company {
             val classification = CompanyClassification.classify(row[propertyToIndex["cnae"]!!])
 
@@ -327,7 +306,7 @@ data class Company(
                 ecosystems = splitAndTrim(row[propertyToIndex["ecosystems"]!!], ';'),
                 emails = splitAndTrim(row[propertyToIndex["emails"]!!], ';'),
                 incubated = formatIncubated(row[propertyToIndex["incubated"]!!]),
-                logo = formatLogo(row[propertyToIndex["logo"]!!]),
+                logo = formatPhoto(row[propertyToIndex["logo"]!!]),
                 name = row[propertyToIndex["name"]!!],
                 phones = formatPhones(row[propertyToIndex["phones"]!!]),
                 services = splitAndTrim(row[propertyToIndex["services"]!!], ';'),
