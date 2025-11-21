@@ -1,6 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
 import java.time.LocalDate
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
