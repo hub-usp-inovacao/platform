@@ -1,4 +1,4 @@
-package br.usp.inovacao.hubusp.curatorship.sheets
+package br.usp.inovacao.hubusp.curatorship.sheets.utils
 
 enum class ResearcherAreaValues(
     private val printableName: String? = null

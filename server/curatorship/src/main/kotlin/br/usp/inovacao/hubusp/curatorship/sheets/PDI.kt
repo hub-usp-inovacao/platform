@@ -5,6 +5,7 @@ import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.*
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
 
 @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
 @Serializable
@@ -22,16 +23,6 @@ data class PDI(
 ) {
     companion object {
         val categories = listOf("CEPID", "EMBRAPII", "INCT", "NAP", "Centro de Pesquisa em Engenharia")
-
-        private fun indexToColumnLetter(index: Int): String {
-            var i = index
-            var letter = ""
-            while (i >= 0) {
-                letter = ('A' + i % 26) + letter
-                i = i / 26 - 1
-            }
-            return letter
-        }
 
         val propertyToColumn: Map<String, String> = mapOf(
             "category" to indexToColumnLetter(0),

@@ -5,6 +5,7 @@ import org.valiktor.functions.isNotBlank
 import org.valiktor.functions.isWebsite
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
 
 @kotlinx.serialization.Serializable
 data class Area(
@@ -75,16 +76,6 @@ data class Patent(
     companion object {
 
         val validStatuses = listOf("Concedida", "Em análise", "Domínio Público")
-
-        private fun indexToColumnLetter(index: Int): String {
-            var i = index
-            var letter = ""
-            while (i >= 0) {
-                letter = ('A' + i % 26) + letter
-                i = i / 26 - 1
-            }
-            return letter
-        }
 
         val propertyToColumn: Map<String, String> = mapOf(
             "classification.primary.cip" to indexToColumnLetter(0),
