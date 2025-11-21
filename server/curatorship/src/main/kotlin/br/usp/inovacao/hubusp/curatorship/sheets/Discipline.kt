@@ -1,9 +1,5 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
-import it.skrape.core.*
-import it.skrape.fetcher.*
-import it.skrape.selects.html5.*
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.isNotBlank
 import org.valiktor.functions.isNotNull
