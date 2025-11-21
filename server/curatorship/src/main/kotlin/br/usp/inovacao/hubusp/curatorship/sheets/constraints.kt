@@ -132,12 +132,13 @@ fun Validator<Area>.Property<String?>.isValidSubarea() = this.validate(PatentAre
     it == null || it.matches(Regex("^[A-H][0-9]{2} - .+$"))
 }
 
-object PatentRegister : Constraint
+object PatentStatus : Constraint
+object PatentIPC : Constraint
 
-fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentRegister) {
+fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentStatus) {
     it == null || Patent.validStatuses.contains(it)
 }
 
-fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentRegister) {
+fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentIPC) {
     it == null || it.all { ipc -> ipc.matches(Regex("^[A-H][0-9]{2}[A-Z][0-9]{6,}$")) }
 }
