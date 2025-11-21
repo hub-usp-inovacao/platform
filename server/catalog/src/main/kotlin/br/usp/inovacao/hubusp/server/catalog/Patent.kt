@@ -3,7 +3,7 @@ package br.usp.inovacao.hubusp.server.catalog
 @kotlinx.serialization.Serializable
 data class Patent(
     val classification: DualClassification,
-    val countries_with_protection: Set<String>,
+    val countriesWithProtection: Set<String>,
     val inventors: Set<String>,
     val ipcs: Set<String>,
     val name: String,

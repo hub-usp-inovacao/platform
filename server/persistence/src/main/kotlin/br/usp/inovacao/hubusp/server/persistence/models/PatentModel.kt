@@ -3,7 +3,7 @@ package br.usp.inovacao.hubusp.server.persistence.models
 @kotlinx.serialization.Serializable
 data class PatentModel(
     val classification: PatentDualClassificationModel,
-    val countries_with_protection: Set<String>,
+    val countriesWithProtection: Set<String>,
     val inventors: Set<String>,
     val ipcs: Set<String>,
     val name: String,

@@ -43,7 +43,7 @@ class PatentRepositoryImpl(
         val patentModel =
             PatentModel(
                 classification = patentDualClassificationModel,
-                countries_with_protection = patent.countries_with_protection ?: emptySet(),
+                countriesWithProtection = patent.countriesWithProtection ?: emptySet(),
                 inventors = patent.inventors ?: emptySet(),
                 ipcs = patent.ipcs ?: emptySet(),
                 name = patent.name ?: "",

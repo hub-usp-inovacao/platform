@@ -157,7 +157,7 @@ internal class CatalogPatentRepositoryImplTest {
             status = "Concedida",
             url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
             inventors = setOf("Elza Teresinha Grael"," Ana Clara Guerrini Schenberg"," Elisabete Jose Vicente"),
-            countries_with_protection = setOf("Brasil"),
+            countriesWithProtection = setOf("Brasil"),
         ),
         Patent(
             name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra… 2",
@@ -173,7 +173,7 @@ internal class CatalogPatentRepositoryImplTest {
             status = "Concedida",
             url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
             inventors = setOf("Elza Teresinha Grael"," Ana Clara Guerrini Schenberg"," Elisabete Jose Vicente"),
-            countries_with_protection = setOf("Brasil"),
+            countriesWithProtection = setOf("Brasil"),
         ),
     )
 
@@ -206,7 +206,7 @@ internal class CatalogPatentRepositoryImplTest {
             status = "Concedida",
             url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
             inventors = setOf("Elza Teresinha Grael"," Ana Clara Guerrini Schenberg"," Elisabete Jose Vicente"),
-            countries_with_protection = setOf("Brasil"),
+            countriesWithProtection = setOf("Brasil"),
         ),
         Patent(
             name = "Cepa transgênica de Saccharomyces sp. e método de obtenção da cepa tra… 2",
@@ -222,7 +222,7 @@ internal class CatalogPatentRepositoryImplTest {
             status = "Em análise",
             url = "https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=…",
             inventors = setOf("Elza Teresinha Grael","Ana Clara Guerrini Schenberg","Elisabete Jose Vicente"),
-            countries_with_protection = setOf("Brasil"),
+            countriesWithProtection = setOf("Brasil"),
         )
     )
 }

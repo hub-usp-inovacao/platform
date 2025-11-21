@@ -62,7 +62,7 @@ data class DualClassification(
 @kotlinx.serialization.Serializable
 data class Patent(
     val classification: DualClassification,
-    val countries_with_protection: Set<String>,
+    val countriesWithProtection: Set<String>,
     val inventors: Set<String>,
     val ipcs: Set<String>,
     val name: String,
@@ -74,7 +74,7 @@ data class Patent(
 ) {
     companion object {
 
-        val valid_statuses = listOf("Concedida", "Em análise", "Domínio Público")
+        val validStatuses = listOf("Concedida", "Em análise", "Domínio Público")
 
         private fun indexToColumnLetter(index: Int): String {
             var i = index
@@ -96,7 +96,7 @@ data class Patent(
             "owners" to indexToColumnLetter(8),
             "inventors" to indexToColumnLetter(9),
             "summary" to indexToColumnLetter(10),
-            "countries_with_protection" to indexToColumnLetter(11),
+            "countriesWithProtection" to indexToColumnLetter(11),
             "status" to indexToColumnLetter(12),
             "url" to indexToColumnLetter(14),
             "photo" to indexToColumnLetter(15)
@@ -136,7 +136,7 @@ data class Patent(
                 owners = splitString(row[8]),
                 inventors = splitString(row[9]),
                 summary = row[10] ?: "",
-                countries_with_protection = splitString(row[11]),
+                countriesWithProtection = splitString(row[11]),
                 status = row[12] ?: "",
                 url = formatUrl(row[14]),
                 photo = createImageUrl(row.getOrNull(15))
