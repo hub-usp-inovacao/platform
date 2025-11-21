@@ -14,6 +14,7 @@ import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
 
 @kotlinx.serialization.Serializable
 data class Initiative(
@@ -47,16 +48,6 @@ data class Initiative(
                 email = splitUnlessND(subRow[8]),
                 contact = contact
             )
-        }
-
-        private fun indexToColumnLetter(index: Int): String {
-            var i = index
-            var letter = ""
-            while (i >= 0) {
-                letter = ('A' + i % 26) + letter
-                i = i / 26 - 1
-            }
-            return letter
         }
 
         val propertyToColumn: Map<String, String> = mapOf(

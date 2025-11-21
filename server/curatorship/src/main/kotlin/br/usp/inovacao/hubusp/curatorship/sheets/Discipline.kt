@@ -8,6 +8,7 @@ import org.valiktor.functions.isNotBlank
 import org.valiktor.functions.isNotNull
 import org.valiktor.i18n.mapToMessage
 import org.valiktor.validate
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.indexToColumnLetter
 
 @kotlinx.serialization.Serializable
 data class DisciplineCategory(
@@ -59,15 +60,6 @@ data class Discipline(
             return keywords.toSet()
         }
 
-        private fun indexToColumnLetter(index: Int): String {
-            var i = index
-            var letter = ""
-            while (i >= 0) {
-                letter = ('A' + i % 26) + letter
-                i = i / 26 - 1
-            }
-            return letter
-        }
 
         val propertyToColumn: Map<String, String> = mapOf(
             "nature" to indexToColumnLetter(0),

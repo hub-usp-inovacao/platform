@@ -1,5 +1,7 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.Campus
+import br.usp.inovacao.hubusp.curatorship.sheets.utils.ResearcherAreaValues
 import org.valiktor.Constraint
 import org.valiktor.Validator
 
