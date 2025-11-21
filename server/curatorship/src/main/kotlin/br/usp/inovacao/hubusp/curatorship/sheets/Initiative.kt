@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.Researcher.Companion.propertyToIndex
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
@@ -29,39 +30,46 @@ data class Initiative(
     var contact: InitiativeContact
 ) {
     companion object {
+
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "classification" to 0,
+            "name" to 1,
+            "localization" to 3,
+            "unity" to 4,
+            "tags" to 5,
+            "url" to 6,
+            "description" to 7,
+            "email" to 8,
+            "contact.person" to 11,
+            "contact.info" to 12
+        )
+
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
+
         fun fromRow(subRow: List<String?>): Initiative {
+
+            val personRaw = subRow[propertyToIndex["contact.person"]!!]
+            val infoRaw = subRow[propertyToIndex["contact.info"]!!]
+
             val contact = try {
-                InitiativeContact.fromRow(subRow)
+                InitiativeContact.fromRow(personRaw, infoRaw)
             } catch (e: ValidationException) {
                 val enrichedMessages = e.messages.map { "contact.${it}" }
                 throw ValidationException(messages = enrichedMessages)
             }
 
             return Initiative(
-                name = subRow[1],
-                classification = subRow[0],
-                localization = subRow[3],
-                unity = possible_ND(subRow[4]),
-                tags = splitUnlessND(subRow[5]),
-                url = subRow[6],
-                description = subRow[7],
-                email = splitUnlessND(subRow[8]),
+                name = subRow[propertyToIndex["name"]!!],
+                classification = subRow[propertyToIndex["classification"]!!],
+                localization = subRow[propertyToIndex["localization"]!!],
+                unity = possible_ND(subRow[propertyToIndex["unity"]!!]),
+                tags = splitUnlessND(subRow[propertyToIndex["tags"]!!]),
+                url = subRow[propertyToIndex["url"]!!],
+                description = subRow[propertyToIndex["description"]!!],
+                email = splitUnlessND(subRow[propertyToIndex["email"]!!]),
                 contact = contact
             )
         }
-
-        val propertyToColumn: Map<String, String> = mapOf(
-            "classification" to indexToColumnLetter(0),
-            "name" to indexToColumnLetter(1),
-            "localization" to indexToColumnLetter(3),
-            "unity" to indexToColumnLetter(4),
-            "tags" to indexToColumnLetter(5),
-            "url" to indexToColumnLetter(6),
-            "description" to indexToColumnLetter(7),
-            "email" to indexToColumnLetter(8),
-            "contact.person" to indexToColumnLetter(11),
-            "contact.info" to indexToColumnLetter(12)
-        )
 
         fun possible_ND(term: String?) : String? {
             if(term == null) return "N/D"
@@ -127,9 +135,9 @@ data class InitiativeContact(
     val info: String?
 ) {
     companion object {
-        fun fromRow(subRow: List<String?>) = InitiativeContact(
-            person = possible_ND(subRow[11]),
-            info = subRow[12]
+        fun fromRow(personRaw: String?, infoRaw: String?) = InitiativeContact(
+            person = possible_ND(personRaw),
+            info = infoRaw
         )
 
         fun possible_ND(term : String?) : String? {

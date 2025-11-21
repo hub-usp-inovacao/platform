@@ -25,7 +25,7 @@ class DisciplineRepositoryImpl(db: MongoDatabase) : DisciplineRepository {
                 innovation = discipline.category.innovation ?: false,
                 business = discipline.category.business ?: false,
                 entrepreneurship = discipline.category.entrepreneurship ?: false,
-                intellectual_property = discipline.category.intellectual_property ?: false,
+                intellectualProperty = discipline.category.intellectualProperty ?: false,
             )
 
         val disciplineOfferings =
@@ -50,7 +50,7 @@ class DisciplineRepositoryImpl(db: MongoDatabase) : DisciplineRepository {
                 name = discipline.name ?: "",
                 nature = discipline.nature ?: "",
                 offeringPeriod = discipline.offeringPeriod ?: "",
-                start_date = discipline.start_date ?: "",
+                startDate = discipline.startDate ?: "",
                 unity = discipline.unity ?: "",
                 url = discipline.url ?: "",
                 beingOffered = discipline.beingOffered,

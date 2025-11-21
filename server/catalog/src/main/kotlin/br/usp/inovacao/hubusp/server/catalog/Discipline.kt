@@ -5,7 +5,7 @@ data class Category(
     val innovation: Boolean,
     val business: Boolean,
     val entrepreneurship: Boolean,
-    val intellectual_property: Boolean
+    val intellectualProperty: Boolean
 )
 
 @kotlinx.serialization.Serializable

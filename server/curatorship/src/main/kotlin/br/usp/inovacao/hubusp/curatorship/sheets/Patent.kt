@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
 import org.valiktor.ConstraintViolationException
 import org.valiktor.functions.isNotBlank
 import org.valiktor.functions.isWebsite
@@ -77,21 +78,23 @@ data class Patent(
 
         val validStatuses = listOf("Concedida", "Em análise", "Domínio Público")
 
-        val propertyToColumn: Map<String, String> = mapOf(
-            "classification.primary.cip" to indexToColumnLetter(0),
-            "classification.primary.subarea" to indexToColumnLetter(1),
-            "classification.secondary.cip" to indexToColumnLetter(2),
-            "classification.secondary.subarea" to indexToColumnLetter(3),
-            "name" to indexToColumnLetter(5),
-            "ipcs" to indexToColumnLetter(6),
-            "owners" to indexToColumnLetter(8),
-            "inventors" to indexToColumnLetter(9),
-            "summary" to indexToColumnLetter(10),
-            "countriesWithProtection" to indexToColumnLetter(11),
-            "status" to indexToColumnLetter(12),
-            "url" to indexToColumnLetter(14),
-            "photo" to indexToColumnLetter(15)
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "classification.primary.cip" to 0,
+            "classification.primary.subarea" to 1,
+            "classification.secondary.cip" to 2,
+            "classification.secondary.subarea" to 3,
+            "name" to 5,
+            "ipcs" to 6,
+            "owners" to 8,
+            "inventors" to 9,
+            "summary" to 10,
+            "countriesWithProtection" to 11,
+            "status" to 12,
+            "url" to 14,
+            "photo" to 15
         )
+
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
 
         private fun createImageUrl(id: String?): String? {
             return if (id == "N/D" || id.isNullOrBlank()) {
@@ -120,17 +123,21 @@ data class Patent(
         }
 
         fun fromRow(row: List<String?>): Patent {
+
+            val classificationRow = row.subList(propertyToIndex["classification.primary.cip"]!!,
+                propertyToIndex["classification.secondary.subarea"]!! + 1)
+
             return Patent(
-                classification = DualClassification.fromRow(row.subList(0, 4)),
-                name = row[5] ?: "",
-                ipcs = splitString(row[6]),
-                owners = splitString(row[8]),
-                inventors = splitString(row[9]),
-                summary = row[10] ?: "",
-                countriesWithProtection = splitString(row[11]),
-                status = row[12] ?: "",
-                url = formatUrl(row[14]),
-                photo = createImageUrl(row.getOrNull(15))
+                classification = DualClassification.fromRow(classificationRow),
+                name = row[propertyToIndex["name"]!!] ?: "",
+                ipcs = splitString(row[propertyToIndex["ipcs"]!!]),
+                owners = splitString(row[propertyToIndex["owners"]!!]),
+                inventors = splitString(row[propertyToIndex["inventors"]!!]),
+                summary = row[propertyToIndex["summary"]!!] ?: "",
+                countriesWithProtection = splitString(row[propertyToIndex["countriesWithProtection"]!!]),
+                status = row[propertyToIndex["status"]!!] ?: "",
+                url = formatUrl(row[propertyToIndex["url"]!!]),
+                photo = createImageUrl(row.getOrNull(propertyToIndex["photo"]!!))
             )
         }
     }

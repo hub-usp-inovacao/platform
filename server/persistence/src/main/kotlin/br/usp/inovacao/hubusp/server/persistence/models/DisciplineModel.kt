@@ -7,7 +7,7 @@ data class DisciplineCategory(
     val innovation: Boolean,
     val business: Boolean,
     val entrepreneurship: Boolean,
-    val intellectual_property: Boolean
+    val intellectualProperty: Boolean
 )
 
 @Serializable
@@ -28,7 +28,7 @@ data class DisciplineModel(
     val name: String,
     val nature: String,
     val offeringPeriod: String,
-    val start_date: String,
+    val startDate: String,
     val unity: String,
     val url: String,
     val beingOffered: Boolean,

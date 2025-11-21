@@ -1,5 +1,6 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import br.usp.inovacao.hubusp.curatorship.sheets.Initiative.Companion.propertyToIndex
 import it.skrape.core.*
 import it.skrape.fetcher.*
 import it.skrape.selects.html5.*
@@ -15,14 +16,14 @@ data class DisciplineCategory(
     val business: Boolean?,
     val entrepreneurship: Boolean?,
     val innovation: Boolean?,
-    val intellectual_property: Boolean?
+    val intellectualProperty: Boolean?
 ){
     companion object{
         fun fromRow(subRow: List<String?>) = DisciplineCategory(
-            business = subRow[9]?.equals("x", ignoreCase = true) ?: false,
-            entrepreneurship = subRow[10]?.equals("x", ignoreCase = true) ?: false,
-            innovation = subRow[11]?.equals("x", ignoreCase = true) ?: false,
-            intellectual_property = subRow[12]?.equals("x", ignoreCase = true) ?: false
+            business = subRow[0]?.equals("x", ignoreCase = true) ?: false,
+            entrepreneurship = subRow[1]?.equals("x", ignoreCase = true) ?: false,
+            innovation = subRow[2]?.equals("x", ignoreCase = true) ?: false,
+            intellectualProperty = subRow[3]?.equals("x", ignoreCase = true) ?: false
         )
     }
 }
@@ -32,7 +33,7 @@ data class Discipline(
     val name: String?,
     val campus: String?,
     val unity: String?,
-    val start_date: String?,
+    val startDate: String?,
     val nature: String?,
     val level: String?,
     val url: String?,
@@ -48,29 +49,33 @@ data class Discipline(
         val natures = listOf("Graduação", "Pós-graduação")
         val levels = listOf("Preciso testar minha ideia!", "Quero aprender!", "Tenho uma ideia, e agora?", "Tópicos avançados em Empreendedorismo")
 
+        val propertyToIndex: Map<String, Int> = mapOf(
+            "nature" to 0,
+            "name" to 1,
+            "campus" to 2,
+            "unity" to 3,
+            "url" to 4,
+            "level" to 5,
+            "description" to 6,
+            "startDate" to 8,
+            "category" to 9,
+            "offeringPeriod" to 13,
+        )
+
+        val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
+
         fun createKeywords(subRow: List<String?>) : Set<String>? {
 
             var keywords = arrayListOf<String>()
 
-            if(subRow[9] == "x") keywords.add("Negócios")
-            if(subRow[10] == "x") keywords.add("Empreendedorismo")
-            if(subRow[11] == "x") keywords.add("Inovação")
-            if(subRow[12] == "x") keywords.add("Propriedade Intelectual")
+            if(subRow[0] == "x") keywords.add("Negócios")
+            if(subRow[1] == "x") keywords.add("Empreendedorismo")
+            if(subRow[2] == "x") keywords.add("Inovação")
+            if(subRow[3] == "x") keywords.add("Propriedade Intelectual")
 
             return keywords.toSet()
         }
 
-
-        val propertyToColumn: Map<String, String> = mapOf(
-            "nature" to indexToColumnLetter(0),
-            "name" to indexToColumnLetter(1),
-            "campus" to indexToColumnLetter(2),
-            "unity" to indexToColumnLetter(3),
-            "url" to indexToColumnLetter(4),
-            "level" to indexToColumnLetter(5),
-            "description" to indexToColumnLetter(6),
-            "category" to indexToColumnLetter(9)
-        )
 
         /**
          * Removes the query parameter 'verdis' from Jupiter URLs, otherwise it goes to an outdated
@@ -79,20 +84,21 @@ data class Discipline(
         fun fixJupiterUrl(url: String?) = url?.replace(Regex("&?verdis=[^&]+"), "")
 
         fun fromRow(subRow: List<String?>): Discipline {
-            val offerings = fetchOffering(subRow[1], subRow[0])
+            val offerings = fetchOffering(subRow[propertyToIndex["name"]!!], subRow[propertyToIndex["nature"]!!])
+            val categoryRow = subRow.subList(propertyToIndex["category"]!!, propertyToIndex["category"]!! + 4)
 
             return Discipline(
-                name = subRow[1],
-                campus = subRow[2],
-                unity = subRow[3],
-                start_date = subRow[8],
-                nature = subRow[0],
-                level = subRow[5],
-                url = fixJupiterUrl(subRow[4]),
-                description = subRow[6],
-                category = DisciplineCategory.fromRow(subRow),
-                keywords = createKeywords(subRow),
-                offeringPeriod = subRow[13],
+                name = subRow[propertyToIndex["name"]!!],
+                campus = subRow[propertyToIndex["campus"]!!],
+                unity = subRow[propertyToIndex["unity"]!!],
+                startDate = subRow[propertyToIndex["startDate"]!!],
+                nature = subRow[propertyToIndex["nature"]!!],
+                level = subRow[propertyToIndex["level"]!!],
+                url = fixJupiterUrl(subRow[propertyToIndex["url"]!!]),
+                description = subRow[propertyToIndex["description"]!!],
+                category = DisciplineCategory.fromRow(categoryRow),
+                keywords = createKeywords(categoryRow),
+                offeringPeriod = subRow[propertyToIndex["offeringPeriod"]!!],
                 beingOffered = offerings.isNotEmpty(),
                 offerings,
             )

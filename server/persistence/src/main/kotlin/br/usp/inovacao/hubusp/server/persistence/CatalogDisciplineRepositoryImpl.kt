@@ -17,7 +17,7 @@ fun DisciplineCategory.toCatalogCategory(): Category =
         innovation = this.innovation,
         business = this.business,
         entrepreneurship = this.entrepreneurship,
-        intellectual_property = this.intellectual_property)
+        intellectualProperty = this.intellectualProperty)
 
 fun DisciplineOffering.toCatalogOffering() =
     Offering(

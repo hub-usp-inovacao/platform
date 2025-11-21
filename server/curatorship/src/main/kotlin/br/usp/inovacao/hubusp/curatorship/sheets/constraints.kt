@@ -94,7 +94,7 @@ fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(Disci
 }
 
 fun Validator<Discipline>.Property<DisciplineCategory?>.isValidCategory() = this.validate(DisciplineRegister) {
-    it == null || it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectual_property == true
+    it == null || it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectualProperty == true
 }
 
 object InitiativeClassificator : Constraint

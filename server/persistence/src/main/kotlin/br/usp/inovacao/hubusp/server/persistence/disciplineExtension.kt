@@ -26,7 +26,7 @@ private fun handleCategories(categories: Set<String>): String {
 
     if (categories.contains("Empreendedorismo")) conditions.add("{\"category.entrepreneurship\":true}")
 
-    if (categories.contains("Propriedade Intelectual")) conditions.add("{\"category.intellectual_property\":true}")
+    if (categories.contains("Propriedade Intelectual")) conditions.add("{\"category.intellectualProperty\":true}")
 
     if (categories.contains("Inovação")) conditions.add("{\"category.innovation\":true}")
 
