@@ -50,24 +50,26 @@ fun Validator<CompanyClassification>.Property<String?>.isValidMinor(major: Strin
     it == null || CompanyClassificationValues.majorToMinor(major).contains(it)
 }
 
-object ResearcherRegister: Constraint
+object ResearcherBondRegister: Constraint
+object ResearcherUnityRegister: Constraint
 
-fun Validator<Researcher>.Property<String?>.isValidBond() = this.validate(ResearcherRegister) {
+fun Validator<Researcher>.Property<String?>.isValidBond() = this.validate(ResearcherBondRegister) {
     it == null || Researcher.bonds.contains(it)
 }
 
-fun Validator<Researcher>.Property<Iterable<String>?>.isValidUnities() = this.validate(ResearcherRegister) {
+fun Validator<Researcher>.Property<Iterable<String>?>.isValidUnities() = this.validate(ResearcherUnityRegister) {
     it == null || it.all { unity -> Campus.allUnities().contains(unity) }
 }
 
-object ResearcherKnowledgeAreasRegister : Constraint
+object ResearcherAreaRegister : Constraint
+object ResearcherSubAreaRegister : Constraint
 
-fun Validator<KnowledgeAreas>.Property<Iterable<String>?>.isValidArea() = this.validate(ResearcherKnowledgeAreasRegister) {
+fun Validator<KnowledgeAreas>.Property<Iterable<String>?>.isValidArea() = this.validate(ResearcherAreaRegister) {
     it == null || it.all { area -> ResearcherAreaValues.allAreas().contains(area) }
 }
 
 fun Validator<KnowledgeAreas>.Property<Iterable<String>?>.isValidSubArea(area: Set<String>?) =
-    this.validate(ResearcherKnowledgeAreasRegister) {
+    this.validate(ResearcherSubAreaRegister) {
         it == null || it.all { subArea ->
             area?.any { mainArea -> ResearcherAreaValues.areaToSubArea(mainArea).contains(subArea) } ?: true
         }
@@ -79,35 +81,40 @@ fun <E> Validator<E>.Property<String?>.isDate() = this.validate(Date()) {
     it == null || it.matches("""^\d{2}/\d{2}/\d{4}$""".toRegex()) || it.matches("""^N/D$""".toRegex())
 }
 
-object DisciplineRegister : Constraint
+object DisciplineNameRegister : Constraint
+object DisciplineNatureRegister : Constraint
+object DisciplineLevelRegister : Constraint
+object DisciplineCategoryRegister : Constraint
 
-fun Validator<Discipline>.Property<String?>.isValidName() = this.validate(DisciplineRegister) {
+fun Validator<Discipline>.Property<String?>.isValidName() = this.validate(DisciplineNameRegister) {
     it == null || it.matches(Regex("\\A(\\w|\\d){2,3}\\d{4} (-|–) .+\\z"))
 }
 
-fun Validator<Discipline>.Property<String?>.isValidNature() = this.validate(DisciplineRegister) {
+fun Validator<Discipline>.Property<String?>.isValidNature() = this.validate(DisciplineNatureRegister) {
     it == null || Discipline.natures.contains(it)
 }
 
-fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(DisciplineRegister) {
+fun Validator<Discipline>.Property<String?>.isValidLevel() = this.validate(DisciplineLevelRegister) {
     it == null || Discipline.levels.contains(it)
 }
 
-fun Validator<Discipline>.Property<DisciplineCategory?>.isValidCategory() = this.validate(DisciplineRegister) {
+fun Validator<Discipline>.Property<DisciplineCategory?>.isValidCategory() = this.validate(DisciplineCategoryRegister) {
     it == null || it.business == true || it.entrepreneurship == true || it.innovation == true || it.intellectualProperty == true
 }
 
-object InitiativeClassificator : Constraint
+object InitiativeClassificatorRegister : Constraint
+object InitiativeCampusRegister : Constraint
+object InitiativeUnityRegister : Constraint
 
-fun Validator<Initiative>.Property<String?>.isClassification() = this.validate(InitiativeClassificator) { classification ->
+fun Validator<Initiative>.Property<String?>.isClassification() = this.validate(InitiativeClassificatorRegister) { classification ->
     classification == null || InitiativeClassificationRegister.validClasses.contains(classification)
 }
 
-fun Validator<Initiative>.Property<String?>.isInitiativeCampus() = this.validate(InitiativeClassificator) { campus ->
+fun Validator<Initiative>.Property<String?>.isInitiativeCampus() = this.validate(InitiativeCampusRegister) { campus ->
     campus == null || Campus.campiNames().contains(campus)
 }
 
-fun Validator<Initiative>.Property<String?>.isInitiativeUnity() = this.validate(InitiativeClassificator) { unity ->
+fun Validator<Initiative>.Property<String?>.isInitiativeUnity() = this.validate(InitiativeUnityRegister) { unity ->
     unity == null || unity == "N/D" || Campus.allUnities().contains(unity)
 }
 
@@ -124,23 +131,24 @@ fun <E> Validator<E>.Property<String?>.isPhoneOrEmail() = this.validate(PhoneOrE
             Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matches(it)
 }
 
-object PatentAreaRegister : Constraint
+object PatentCipRegister : Constraint
+object PatentSubAreaRegister : Constraint
 
-fun Validator<Area>.Property<String?>.isValidCip() = this.validate(PatentAreaRegister) {
+fun Validator<Area>.Property<String?>.isValidCip() = this.validate(PatentCipRegister) {
     it == null || it.matches(Regex("^[A-H] - .+$"))
 }
 
-fun Validator<Area>.Property<String?>.isValidSubarea() = this.validate(PatentAreaRegister) {
+fun Validator<Area>.Property<String?>.isValidSubarea() = this.validate(PatentSubAreaRegister) {
     it == null || it.matches(Regex("^[A-H][0-9]{2} - .+$"))
 }
 
-object PatentStatus : Constraint
-object PatentIPC : Constraint
+object PatentStatusRegister : Constraint
+object PatentIPCRegister : Constraint
 
-fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentStatus) {
+fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentStatusRegister) {
     it == null || Patent.validStatuses.contains(it)
 }
 
-fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentIPC) {
+fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentIPCRegister) {
     it == null || it.all { ipc -> ipc.matches(Regex("^[A-H][0-9]{2}[A-Z][0-9]{6,}$")) }
 }
