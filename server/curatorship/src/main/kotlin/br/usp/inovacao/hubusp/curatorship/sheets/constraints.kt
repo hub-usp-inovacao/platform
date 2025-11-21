@@ -135,7 +135,7 @@ fun Validator<Area>.Property<String?>.isValidSubarea() = this.validate(PatentAre
 object PatentRegister : Constraint
 
 fun Validator<Patent>.Property<String?>.isValidStatus() = this.validate(PatentRegister) {
-    it == null || Patent.valid_statuses.contains(it)
+    it == null || Patent.validStatuses.contains(it)
 }
 
 fun Validator<Patent>.Property<Iterable<String>?>.isValidIpcs() = this.validate(PatentRegister) {

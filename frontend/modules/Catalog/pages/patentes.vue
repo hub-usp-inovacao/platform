@@ -31,7 +31,7 @@
 
         <HorizontalList
           title="Países com Proteção"
-          :items="item.countries_with_protection"
+          :items="item.countriesWithProtection"
         />
 
         <HorizontalList
