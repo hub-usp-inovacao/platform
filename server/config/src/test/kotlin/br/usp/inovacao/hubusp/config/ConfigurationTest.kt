@@ -37,6 +37,9 @@ class ConfigurationTest {
 
         assertEquals("company register form id", Configuration.sheets.companyRegisterForm.id)
         assertEquals("company register form tab", Configuration.sheets.companyRegisterForm.tab)
+
+        assertEquals("company update form id", Configuration.sheets.companyUpdateForm.id)
+        assertEquals("company update form tab", Configuration.sheets.companyUpdateForm.tab)
     }
 
     @Test

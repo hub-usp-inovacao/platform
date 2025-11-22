@@ -9,7 +9,7 @@ import kotlin.test.assertFailsWith
 class ImageTest {
     @Test
     fun `it fails when file is NOT an image`() {
-        assertFailsWith<ImageValidationException> { Image(createTempFile().toFile()) }
+        assertFailsWith<Image.ValidationException> { Image(createTempFile().toFile()) }
     }
 
     @Test
