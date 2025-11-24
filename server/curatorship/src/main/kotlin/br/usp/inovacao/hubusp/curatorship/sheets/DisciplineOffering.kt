@@ -1,13 +1,14 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.timeout
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import it.skrape.core.htmlDocument
-import it.skrape.fetcher.BlockingFetcher
-import it.skrape.fetcher.HttpFetcher
-import it.skrape.fetcher.Request
-import it.skrape.fetcher.extractIt
-import it.skrape.fetcher.response
-import it.skrape.fetcher.skrape
 import it.skrape.selects.DocElement
+import kotlinx.coroutines.runBlocking
 
 @kotlinx.serialization.Serializable
 data class DisciplineOffering(
@@ -49,17 +50,24 @@ data class DisciplineOffering(
         fun trySetFromJupiter(
             sgldis: String,
             timeoutMs: Int = 20000,
-            fetcher: BlockingFetcher<Request> = HttpFetcher,
+            httpEngine: HttpClientEngine = CIO.create(),
         ): Set<DisciplineOffering> {
+            val client = HttpClient(httpEngine)
             val offerings: MutableSet<DisciplineOffering> = mutableSetOf()
 
             try {
-                skrape(fetcher) {
-                        request {
-                            url = "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${sgldis}"
-                            timeout = timeoutMs
-                        }
-                        response { htmlDocument { findAll("td > div:has(table:nth-of-type(3))") } }
+
+                htmlDocument(
+                        runBlocking {
+                            client
+                                .get(
+                                    "https://uspdigital.usp.br/jupiterweb/obterTurma?sgldis=${sgldis}") {
+                                        timeout { requestTimeoutMillis = timeoutMs.toLong() }
+                                    }
+                                .bodyAsText()
+                        },
+                    ) {
+                        findAll("td > div:has(table:nth-of-type(3))")
                     }
                     .forEach {
                         val generalTable = it.children.getOrNull(0)
@@ -95,48 +103,50 @@ data class DisciplineOffering(
         fun trySetFromJanus(
             sgldis: String,
             timeoutMs: Int = 20000,
-            fetcher: BlockingFetcher<Request> = HttpFetcher,
+            httpEngine: HttpClientEngine = CIO.create(),
         ): Set<DisciplineOffering> {
+            val client = HttpClient(httpEngine)
+
             try {
                 val classCode =
-                    skrape(fetcher) {
-                        request {
-                            url =
-                                "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${sgldis}"
-                            timeout = timeoutMs
-                        }
-                        response {
-                            htmlDocument {
-                                // example: publico/turma/SCC5832/2 <- offering number (classCode)
-                                "td > a" { findSecond { attribute("href").split('/').last() } }
-                            }
-                        }
+                    htmlDocument(
+                        runBlocking {
+                            client
+                                .get(
+                                    "https://uspdigital.usp.br/janus/DisciplinaAux?tipo=T&sgldis=${sgldis}") {
+                                        timeout { requestTimeoutMillis = timeoutMs.toLong() }
+                                    }
+                                .bodyAsText()
+                        },
+                    ) {
+                        // example: publico/turma/SCC5832/2 <- offering number (classCode)
+                        "td > a" { findSecond { attribute("href").split('/').last() } }
                     }
 
-                return setOf(
-                    skrape(fetcher) {
-                        request {
-                            url =
-                                "https://uspdigital.usp.br/janus/TurmaDet?sgldis=${sgldis}&ofe=${classCode}"
-                            timeout = timeoutMs
-                        }
-                        extractIt<DisciplineOffering> {
-                            it.classCode = classCode
-                            htmlDocument {
-                                it.startDate =
-                                    findFirst("tr:nth-of-type(12) font:nth-of-type(2)") { text }
-                                it.endDate =
-                                    findFirst("tr:nth-of-type(12) font:nth-of-type(4)") { text }
-                                it.professors =
-                                    findAll(
-                                        "tr:nth-of-type(16) tr:not(:first-child)",
-                                    ) {
-                                        map { it.text }.toSet()
-                                    }
-                            }
-                        }
+                val offering = DisciplineOffering(classCode = classCode)
+
+                htmlDocument(
+                    runBlocking {
+                        client
+                            .get(
+                                "https://uspdigital.usp.br/janus/TurmaDet?sgldis=${sgldis}&ofe=${classCode}") {
+                                    timeout { requestTimeoutMillis = timeoutMs.toLong() }
+                                }
+                            .bodyAsText()
                     },
-                )
+                ) {
+                    offering.startDate =
+                        findFirst("tr:nth-of-type(12) font:nth-of-type(2)") { text }
+                    offering.endDate = findFirst("tr:nth-of-type(12) font:nth-of-type(4)") { text }
+                    offering.professors =
+                        findAll(
+                            "tr:nth-of-type(16) tr:not(:first-child)",
+                        ) {
+                            map { it.text }.toSet()
+                        }
+                }
+
+                return setOf(offering)
             } catch (e: Exception) {
                 // If there's no offering or if the selection fails for whatever reason
                 return emptySet()

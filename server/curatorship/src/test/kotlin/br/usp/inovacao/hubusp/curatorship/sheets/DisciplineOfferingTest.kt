@@ -1,45 +1,79 @@
 package br.usp.inovacao.hubusp.curatorship.sheets
 
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import it.skrape.fetcher.BlockingFetcher
-import it.skrape.fetcher.Request
-import it.skrape.fetcher.Result
-import kotlin.test.BeforeTest
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.request.get
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.fullPath
+import io.ktor.http.headersOf
+import io.ktor.utils.io.ByteReadChannel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class DisciplineOfferingTest {
-    @MockK private lateinit var mockFetcher: BlockingFetcher<Request>
+    companion object {
+        fun getResource(path: String) =
+            this::class.java.getResourceAsStream(path)?.bufferedReader()?.readText()!!
 
-    @BeforeTest
-    fun setup() {
-        MockKAnnotations.init(this)
-        every { mockFetcher.requestBuilder } returns Request()
+        fun jupiterUrl(sgldis: String) = "/jupiterweb/obterTurma?sgldis=${sgldis}"
+
+        fun janusDiscipline(sgldis: String) = "/janus/DisciplinaAux?tipo=T&sgldis=${sgldis}"
+
+        fun janusOffering(sgldis: String, classCode: String = "2") =
+            "/janus/TurmaDet?sgldis=${sgldis}&ofe=${classCode}"
     }
 
-    companion object {
-        fun createMockResultFromResource(resource: String) =
-            Result(
-                responseBody =
-                    this::class.java.getResourceAsStream(resource)?.bufferedReader()?.readText()!!,
-                responseStatus = Result.Status(200, "OK"),
-                contentType = "text/html",
-                headers = emptyMap(),
-                baseUri = "",
-                cookies = emptyList(),
+    private val mockEngine: HttpClientEngine by lazy {
+        MockEngine { request ->
+            respond(
+                content =
+                    when (request.url.fullPath) {
+                        jupiterUrl("1") ->
+                            ByteReadChannel(
+                                getResource(
+                                    "/sheets/DisciplineOffering/jupiter/multipleOfferings.html",
+                                ),
+                            )
+                        jupiterUrl("2") ->
+                            ByteReadChannel(
+                                getResource(
+                                    "/sheets/DisciplineOffering/jupiter/singleOffering.html",
+                                ),
+                            )
+                        jupiterUrl("3") ->
+                            ByteReadChannel(
+                                getResource(
+                                    "/sheets/DisciplineOffering/jupiter/alternativeLayout.html",
+                                ),
+                            )
+                        janusDiscipline("") ->
+                            ByteReadChannel(
+                                getResource(
+                                    "/sheets/DisciplineOffering/janus/Discipline.html",
+                                ),
+                            )
+                        janusOffering("") ->
+                            ByteReadChannel(
+                                getResource(
+                                    "/sheets/DisciplineOffering/janus/Offering.html",
+                                ),
+                            )
+                        else -> {
+                            println("unhandled url: ${request.url.fullPath}")
+                            ByteReadChannel("")
+                        }
+                    },
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "text/plain"),
             )
+        }
     }
 
     @Test
     fun `it can parse multiple offerings from Jupiter`() {
-        every { mockFetcher.fetch(any()) } returns
-            createMockResultFromResource(
-                "/sheets/DisciplineOffering/jupiter/multipleOfferings.html",
-            )
-
-        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
+        val offerings = DisciplineOffering.trySetFromJupiter("1", 10000, mockEngine)
 
         assertEquals(
             setOf(
@@ -62,12 +96,7 @@ internal class DisciplineOfferingTest {
 
     @Test
     fun `it can parse a single offering from Jupiter`() {
-        every { mockFetcher.fetch(any()) } returns
-            createMockResultFromResource(
-                "/sheets/DisciplineOffering/jupiter/singleOffering.html",
-            )
-
-        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
+        val offerings = DisciplineOffering.trySetFromJupiter("2", 10000, mockEngine)
 
         assertEquals(
             setOf(
@@ -89,12 +118,7 @@ internal class DisciplineOfferingTest {
 
     @Test
     fun `it can parse an alternative layout from Jupiter`() {
-        every { mockFetcher.fetch(any()) } returns
-            createMockResultFromResource(
-                "/sheets/DisciplineOffering/jupiter/alternativeLayout.html",
-            )
-
-        val offerings = DisciplineOffering.trySetFromJupiter("", 10000, mockFetcher)
+        val offerings = DisciplineOffering.trySetFromJupiter("3", 10000, mockEngine)
 
         assertEquals(
             setOf(
@@ -111,17 +135,7 @@ internal class DisciplineOfferingTest {
 
     @Test
     fun `it can parse a single offering from Janus`() {
-        every { mockFetcher.fetch(any()) } returnsMany
-            listOf(
-                createMockResultFromResource(
-                    "/sheets/DisciplineOffering/janus/Discipline.html",
-                ),
-                createMockResultFromResource(
-                    "/sheets/DisciplineOffering/janus/Offering.html",
-                ),
-            )
-
-        val offerings = DisciplineOffering.trySetFromJanus("", 10000, mockFetcher)
+        val offerings = DisciplineOffering.trySetFromJanus("", 10000, mockEngine)
 
         assertEquals(
             setOf(
