@@ -18,9 +18,11 @@ dependencies {
     implementation(libs.valiktor.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.skrapeit)
+    implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.google.sheets)
     implementation(libs.logback)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.bundles.ktor.client.test)
 }
