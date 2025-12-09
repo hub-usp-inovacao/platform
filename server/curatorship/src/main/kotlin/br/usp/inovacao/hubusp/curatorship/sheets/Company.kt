@@ -124,6 +124,52 @@ data class CompanyAddress(
 }
 
 @kotlinx.serialization.Serializable
+data class DnaUspStamp (
+    val wantsStamp: Boolean?,
+    val name: String?,
+    val email: String?,
+    val truthfulInformations: Boolean?,
+) {
+    companion object {
+        fun fromRow(row: List<String?>) =
+            DnaUspStamp(
+              email = row[Company.propertyToIndex["dnaUspStamp.email"]!!],
+              wantsStamp = row[Company.propertyToIndex["dnaUspStamp.wantsStamp"]!!]?.matches(Regex("Sim.+")) ?: false,
+              name = row[Company.propertyToIndex["dnaUspStamp.name"]!!],
+              truthfulInformations = row[Company.propertyToIndex["dnaUspStamp.truthfulInformations"]!!]?.matches(Regex("Sim.+")) ?: false,
+            )
+    }
+}
+
+@kotlinx.serialization.Serializable
+data class Staff (
+    val numberOfCltEmployees: String?,
+    val numberOfPjColaborators: String?,
+    val numberOfInterns: String?,
+) {
+  companion object {
+        fun fromRow(row: List<String?>) =
+            DnaUspStamp(
+              email = row[Company.propertyToIndex["dnaUspStamp.email"]!!],
+              wantsStamp = row[Company.propertyToIndex["dnaUspStamp.wantsStamp"]!!]?.matches(Regex("Sim.+")) ?: false,
+              name = row[Company.propertyToIndex["dnaUspStamp.name"]!!],
+              truthfulInformations = row[Company.propertyToIndex["dnaUspStamp.truthfulInformations"]!!]?.matches(Regex("Sim.+")) ?: false,
+            )
+  }
+}
+
+data class Investment(
+    val received: Boolean?,
+    val investmentsReceived: Set<String> = emptySet(),
+    val own: String?,
+    val angel: String?,
+    val venture: String?,
+    val equity: String?,
+    val pipe: String?,
+    val others: String?
+)
+
+@kotlinx.serialization.Serializable
 data class Company(
         val active: Boolean?,
         val address: CompanyAddress,
@@ -144,7 +190,10 @@ data class Company(
         val technologies: Set<String>?,
         val partners: List<Partner>?,
         val url: String?,
-        val year: String?
+        val year: String?,
+        val ods: String?,
+        val socialMedias: Set<String> = emptySet(),
+        val staff: Staff,
 ) {
     companion object {
 
@@ -165,6 +214,24 @@ data class Company(
             "ecosystems" to 19,
             "unicorn" to 20,
             "employees" to 21,
+            "ods" to 22,
+
+            "linkedin" to 23,
+            "instagram" to 24,
+            "youtube" to 25,
+            "facebook" to 26,
+
+            "dnaUspStamp.name" to 23,
+            "instagram" to 24,
+            "youtube" to 25,
+            "facebook" to 26,
+
+            "dnaUspStamp.wantsStamp" to 27,
+            "dnaUspStamp.email" to 28,
+            "dnaUspStamp.name" to 29,
+            "dnaUspStamp.truthfulInformations" to 31,
+
+            "permissions" to 32,
 
             "address.venue" to 8,
             "address.neighborhood" to 9,
@@ -177,6 +244,13 @@ data class Company(
             "partners[2].name" to 48,
             "partners[3].name" to 53,
             "partners[4].name" to 58,
+
+            "staff.numberOfCltEmployees" to 62,
+            "staff.numberOfPjColaborators" to 63,
+            "staff.numberOfInterns" to 64,
+
+            "investment.received" to 65,
+            "investment." to 65,
         )
 
         val propertyToColumn = propertyToIndex.mapValues { indexToColumnLetter(it.value) }
