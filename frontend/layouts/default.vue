@@ -127,6 +127,10 @@ export default {
           title: "Contato",
           to: "/contato",
         },
+        {
+          title: "Admin",
+          to: "/admin",
+        },
       ];
 
       if (this.FLAG_CONEXAO_RELEASED)
