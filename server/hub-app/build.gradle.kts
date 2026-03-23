@@ -38,6 +38,10 @@ dependencies {
 
     implementation(libs.kmongo.serialization)
 
+    // renata: projeto precisa do OAuth2 Client para implementar autenticacao USP
+    implementation("io.ktor:ktor-server-auth-jvm") // Para o servidor entender OAuth
+    implementation("io.ktor:ktor-client-apache-jvm") // Para o HttpClient(Apache) funcionar
+
     implementation(libs.bundles.ktor.server)
     testImplementation(libs.bundles.ktor.client)
     testImplementation(libs.bundles.ktor.server.test)

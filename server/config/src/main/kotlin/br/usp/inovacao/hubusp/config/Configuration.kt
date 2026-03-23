@@ -9,6 +9,7 @@ data class RootConfig(
     val ktor: KtorConfig,
     val jwt: JwtConfig,
     val database: DatabaseConfig,
+    val usp: UspConfig,
 )
 
 val Configuration =
