@@ -1,8 +1,5 @@
 version: '3.9'
 
-
-
-
 ###################################################################
 #                                                                 #
 #  This docker-compose.yaml file comprehends 5 profiles           #
@@ -20,17 +17,11 @@ version: '3.9'
 #                                                                 #
 ###################################################################
 
-
-
-
 volumes:
   railsdevdeps:
   railsdeps:
   nuxtdevdeps:
   data:
-
-
-
 
 services:
   frontend:
@@ -59,9 +50,6 @@ services:
     profiles:
       - local
       - catalog
-
-
-
 
   backend:
     build:
@@ -99,8 +87,21 @@ services:
     profiles:
       - local
 
-
-
+  payload:
+    build:
+      context: ./payload
+      dockerfile: Dockerfile
+    ports:
+      - 3002:3000
+    volumes:
+      - ./payload:/app
+      - /app/node_modules
+    env_file:
+      - ./payload/.env
+    depends_on:
+      - mongo
+    profiles:
+      - local
 
   mongo:
     image: mongo:4.4.1-bionic
@@ -116,9 +117,6 @@ services:
       - stiback
       - catalog
       - cli
-
-
-  
 
   catalogapp:
     build:
@@ -145,9 +143,6 @@ services:
       - ./server/.env
     profiles:
       - cli
-
-
-
 
   caddydev:
     build:
@@ -176,4 +171,3 @@ services:
       - 443:443
     profiles:
       - if
-
