@@ -1,0 +1,22 @@
+# API Key to access Google Spreadsheets API as incognito user
+sheetsAPIKey=AIzaSyABcaLhqsLsESTuTHXDUr-ZYjpg-GIAzm0
+
+#Address of the entrypoint of the backend
+BACKEND_URL=http://localhost:5000/api
+
+#The ID for the Google Analytics plugin
+GOOGLE_ANALYTICS_ID=
+
+#[Feature Flag] Indicates the adoption of the new catalog backend ('true' or 'false')
+NEW_CATALOG=true
+
+#[Feature Flag] Indicates the adoption of the new journey backend ('true' or 'false')
+NEW_JOURNEY=true
+
+#[Feature Flag] Indicates whether Conexao forms is open ('true' or 'false')
+OPEN_CONEXAO_FORMS=false
+
+#[Feature Flag] Indicates whether the current deployment is a beta version ('true' or 'false')
+BETA_VERSION=false
+
+PDI_DATA_SOURCE_URL="https://sheets.googleapis.com/v4/spreadsheets/1TZWMGvvn6TUmwo8DdWvtkLcbDVqVuif9HKMRPVcb2eo/values/'PDI'?key=AIzaSyABcaLhqsLsESTuTHXDUr-ZYjpg-GIAzm0"
