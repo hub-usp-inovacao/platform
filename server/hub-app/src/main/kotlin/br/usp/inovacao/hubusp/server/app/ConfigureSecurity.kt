@@ -55,10 +55,12 @@ fun Application.configureSecurity() {
             urlProvider = { "http://localhost:8080/callback" }
             
             providerLookup = {
-                OAuthServerSettings.OAuth2ServerSettings(
+                OAuthServerSettings.OAuth1ServerSettings(
                     name = "usp",
-                    authorizeUrl = "https://uspdigital.usp.br/wsusuario/oauth/authorize",
-                    accessTokenUrl = "https://uspdigital.usp.br/wsusuario/oauth/token",
+                    //authorizeUrl = "https://uspdigital.usp.br/wsusuario/oauth/authorize",
+                    //accessTokenUrl = "https://uspdigital.usp.br/wsusuario/oauth/token",
+                    authorizeUrl = "http://localhost:5259/wsusuario/oauth/authorize",
+                    accessTokenUrl = "http://localhost:5259/wsusuario/oauth/request_token",
                     requestMethod = HttpMethod.Post,
                     clientId = uspClientId,
                     clientSecret = uspClientSecret,

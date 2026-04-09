@@ -10,12 +10,12 @@ fun Application.configureAuthRouting() {
         // o usuário clica e vai pra USP
         authenticate("usp-oauth") {
             get("/login") {
-                // redireciona automaticamente pra usp
+                
             }
 
             // a usp devolve o usuário com o token
             get("/callback") {
-                val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth2>()
+                val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth1>()
 
                 if (principal != null) {
                     // por enquanto, só avisando que deu certo
