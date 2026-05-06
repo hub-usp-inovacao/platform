@@ -96,6 +96,10 @@ export default {
     navItems() {
       const base = [
         {
+          title: "Blog",
+          to: "/blog",
+        },
+        {
           title: "Iniciativas",
           to: "/iniciativas",
         },
