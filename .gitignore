@@ -5,3 +5,4 @@
 # Code editors
 .idea
 .vscode
+*.swp
