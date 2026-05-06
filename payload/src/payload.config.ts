@@ -30,4 +30,5 @@ export default buildConfig({
   }),
   sharp,
   plugins: [],
+  cors: '*',
 })
