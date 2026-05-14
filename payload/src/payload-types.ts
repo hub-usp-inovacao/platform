@@ -154,7 +154,7 @@ export interface Post {
   thumbnail: string | Media;
   author: string;
   summary: string;
-  content: {
+  content?: {
     root: {
       type: string;
       children: {
@@ -168,7 +168,8 @@ export interface Post {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
+  content_html?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -327,6 +328,7 @@ export interface PostsSelect<T extends boolean = true> {
   author?: T;
   summary?: T;
   content?: T;
+  content_html?: T;
   updatedAt?: T;
   createdAt?: T;
 }
