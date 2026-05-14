@@ -7,19 +7,19 @@
     nuxt
     :to="`/blog/${post.id}`"
   >
-    <img
+    <v-img
       v-if="thumbnailURL"
       :src="thumbnailURL"
-      width="100%"
+      height="200px"
       class="white--text align-end"
     >
-    </img>
-    <img
+    </v-img>
+    <v-img
       v-else
       :src="require('@/static/base_company_picture.png')"
       height="200px"
     >
-    </img>
+    </v-img>
 
     <v-card-subtitle class="pb-0 secondary--text font-weight-bold">
       {{ formattedDate }}
@@ -57,11 +57,26 @@ export default {
       required: true,
     },
   },
+  data: () => ({
+    thumbnailURL: null,
+  }),
+  async created() {
+    if (this.post.thumbnail) {
+      if (typeof this.post.thumbnail === "string") {
+        this.thumbnailURL = await this.$BlogAdapter.getMediaThumbnailURL(
+          this.post.thumbnail
+        );
+      } else if (
+        this.post.thumbnail.sizes &&
+        this.post.thumbnail.sizes.thumbnail
+      ) {
+        const baseURL = process.env.CMS_URL || "";
+        this.thumbnailURL = `${baseURL}${this.post.thumbnail.sizes.thumbnail.url}`;
+	console.log("thumbnailURL", this.thumbnailURL);
+      }
+    }
+  },
   computed: {
-    thumbnailURL() {
-      if(!this.post.thumbnail) return null;
-      return `http://localhost:3002${this.post.thumbnail.sizes.thumbnail.url}`;
-    },
     formattedDate() {
       if (!this.post.createdAt) return "";
       const date = new Date(this.post.createdAt);
