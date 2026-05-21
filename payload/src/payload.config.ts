@@ -9,6 +9,8 @@ import { Users } from './collections/Users'
 import { Posts } from './collections/Posts'
 import { Media } from './collections/Media'
 
+import { HomeSettings } from './globals/HomeSettings'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -20,6 +22,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Posts, Media],
+  globals: [HomeSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
