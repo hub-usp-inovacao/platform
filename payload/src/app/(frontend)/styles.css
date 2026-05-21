@@ -10,7 +10,7 @@ html {
   font-size: 18px;
   line-height: 32px;
 
-  background: rgb(0, 0, 0);
+  background: #f4f7f9;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -21,12 +21,12 @@ body,
 }
 
 body {
-  font-family: system-ui;
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
   font-size: 18px;
   line-height: 32px;
 
   margin: 0;
-  color: rgb(1000, 1000, 1000);
+  color: #333;
 
   @media (max-width: 1024px) {
     font-size: 15px;
@@ -41,58 +41,23 @@ img {
 }
 
 h1 {
-  margin: 40px 0;
-  font-size: 64px;
-  line-height: 70px;
-  font-weight: bold;
+  margin: 30px 0;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 500;
+  color: #0C71B7;
 
   @media (max-width: 1024px) {
-    margin: 24px 0;
-    font-size: 42px;
-    line-height: 42px;
+    margin: 20px 0;
+    font-size: 28px;
+    line-height: 34px;
   }
-
-  @media (max-width: 768px) {
-    font-size: 38px;
-    line-height: 38px;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 32px;
-    line-height: 32px;
-  }
-}
-
-p {
-  margin: 24px 0;
-
-  @media (max-width: 1024px) {
-    margin: calc(var(--base) * 0.75) 0;
-  }
-}
-
-a {
-  color: currentColor;
-
-  &:focus {
-    opacity: 0.8;
-    outline: none;
-  }
-
-  &:active {
-    opacity: 0.7;
-    outline: none;
-  }
-}
-
-svg {
-  vertical-align: middle;
 }
 
 .home {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 100vh;
   padding: 45px;
@@ -109,7 +74,10 @@ svg {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-grow: 1;
+    background: white;
+    padding: 60px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
     h1 {
       text-align: center;
@@ -119,46 +87,28 @@ svg {
   .links {
     display: flex;
     align-items: center;
-    gap: 12px;
+    margin-top: 20px;
 
     a {
       text-decoration: none;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
+      padding: 12px 40px;
+      border-radius: 30px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
     }
 
     .admin {
-      color: rgb(0, 0, 0);
-      background: rgb(1000, 1000, 1000);
-      border: 1px solid rgb(0, 0, 0);
-    }
+      color: white;
+      background: #0C71B7;
+      border: none;
 
-    .docs {
-      color: rgb(1000, 1000, 1000);
-      background: rgb(0, 0, 0);
-      border: 1px solid rgb(1000, 1000, 1000);
-    }
-  }
-
-  .footer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    @media (max-width: 1024px) {
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    .codeLink {
-      text-decoration: none;
-      padding: 0 0.5rem;
-      background: rgb(60, 60, 60);
-      border-radius: 4px;
+      &:hover {
+        background: #095a92;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(12, 113, 183, 0.3);
+      }
     }
   }
 }
