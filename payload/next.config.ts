@@ -7,10 +7,11 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  basePath: '/cms',
   images: {
     localPatterns: [
       {
-        pathname: '/api/media/file/**',
+        pathname: '/cms/api/media/file/**',
       },
     ],
   },
