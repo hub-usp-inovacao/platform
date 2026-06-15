@@ -1,5 +1,13 @@
 :5000
 
+handle /cms/* {
+  reverse_proxy payload:3000
+}
+
+handle /__nextjs_font/* {
+  reverse_proxy payload:3000
+}
+
 handle /api/catalog/* {
   uri strip_prefix /api/catalog
   reverse_proxy catalogapp:8080
