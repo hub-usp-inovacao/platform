@@ -1,170 +1,39 @@
 <template>
-  <v-app style="max-height: 100vh">
-    <v-carousel
-      cycle
-      interval="3000"
-      height="100%"
-      hide-delimiters
-      :show-arrows="false"
-    >
-      <v-carousel-item v-for="(photo, i) in photos" :key="i">
-        <img style="min-width: 100%; min-height: 100%" :src="photo" />
-      </v-carousel-item>
-    </v-carousel>
+  <v-container class="fill-height" style="min-height: 60vh;">
+    <v-row class="w-100 align-center justify-center text-center pt-16">
+      <v-col cols="11" md="10" lg="8" class="d-flex flex-column align-center">
+        <h1 class="text-h4 text-md-h3 font-weight-bold mb-4">
+          Tudo sobre empreendedorismo e inovação na USP, em um só lugar
+        </h1>
+        <p class="text-subtitle-1 text-md-h5 font-weight-light mb-8">
+          Navegue pelas páginas específicas ou faça uma busca geral
+        </p>
 
-    <div
-      style="
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        overflow: auto;
-      "
-    >
-      <v-row class="fill-height fit-page ma-0">
-        <v-col
-          style="background-color: rgba(255, 255, 255, 0.9)"
-          cols="12"
-          sm="10"
-          md="7"
+        <v-text-field
+          v-model="search"
+          solo
+          flat
+          rounded
+          background-color="#ffcb96"
+          append-outer-icon="search"
+          :dense="$vuetify.breakpoint.smAndDown"
+          class="search-bar"
+          @keydown.enter="submitSearch"
         >
-          <v-container class="fill-height">
-            <v-row class="mt-5" justify="center">
-              <v-col cols="11" sm="10">
-                <v-row>
-                  <v-col cols="8" offset="1">
-                    <v-img
-                      contain
-                      eager
-                      aspect-ratio="1"
-                      width="15rem"
-                      class="mb-4"
-                      :src="require('@/vectors/hub_logo.svg')"
-                      alt="Hub USPInovação"
-                    ></v-img>
-                    <p
-                      class="font-weight-medium ma-0"
-                      :class="$breakpoint.smAndDown ? 'body-1' : 'title'"
-                    >
-                      Aqui você encontra as mais diversas informações sobre
-                      empreendedorismo e inovação na Universidade de São Paulo
-                    </p>
-                  </v-col>
-                </v-row>
-
-                <v-row class="mt-4">
-                  <v-col cols="10" offset="1">
-                    <p
-                      class="font-weight-light"
-                      :class="$breakpoint.smAndDown ? 'body-2' : 'body-1'"
-                    >
-                      Você pode navegar usando as páginas específicas ou fazer
-                      uma busca geral utilizando palavras-chave.
-                    </p>
-
-                    <v-text-field
-                      v-model="search"
-                      solo
-                      flat
-                      rounded
-                      background-color="#ffcb96"
-                      append-outer-icon="search"
-                      :dense="$breakpoint.smAndDown"
-                      :style="setSearchBarWidth"
-                      @keydown.enter="submitSearch"
-                    >
-                      <template v-slot:label>
-                        <p class="white--text font-weight-medium">Buscar</p>
-                      </template>
-                    </v-text-field>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="11" sm="10" offset="1">
-                <v-row>
-                  <v-col cols="4" offset="1" md="2">
-                    <a :href="links.auspin" target="_blank">
-                      <v-img
-                        :src="require('@/vectors/logo_auspin.svg')"
-                        href
-                      ></v-img>
-                    </a>
-                  </v-col>
-                  <v-col cols="4" offset="1" md="2">
-                    <a :href="links.usp" target="_blank">
-                      <v-img :src="require('@/vectors/logo_usp.svg')"></v-img>
-                    </a>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-col>
-      </v-row>
-    </div>
-  </v-app>
+          <template v-slot:label>
+            <p class="white--text font-weight-medium">Buscar</p>
+          </template>
+        </v-text-field>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
   data: () => ({
     search: "",
-    photos: [
-      require("@/assets/images/img01.jpg"),
-      require("@/assets/images/img02.jpg"),
-      require("@/assets/images/img03.jpg"),
-      require("@/assets/images/img04.jpg"),
-      require("@/assets/images/img05.jpg"),
-      require("@/assets/images/img06.jpg"),
-      require("@/assets/images/img07.jpg"),
-      require("@/assets/images/img09.jpg"),
-      require("@/assets/images/img10.jpg"),
-      require("@/assets/images/img11.jpg"),
-      require("@/assets/images/img12.jpg"),
-      require("@/assets/images/img13.jpg"),
-      require("@/assets/images/img14.jpg"),
-      require("@/assets/images/img15.jpg"),
-      require("@/assets/images/img16.jpg"),
-      require("@/assets/images/img17.jpg"),
-      require("@/assets/images/img18.jpg"),
-      require("@/assets/images/img19.jpg"),
-      require("@/assets/images/img20.jpg"),
-      require("@/assets/images/img21.jpg"),
-      require("@/assets/images/img22.jpg"),
-      require("@/assets/images/img23.jpg"),
-      require("@/assets/images/img24.jpg"),
-      require("@/assets/images/img25.jpg"),
-      require("@/assets/images/img26.jpg"),
-      require("@/assets/images/img27.jpg"),
-      require("@/assets/images/img28.jpg"),
-      require("@/assets/images/img29.jpg"),
-      require("@/assets/images/img30.jpg"),
-      require("@/assets/images/img31.jpg"),
-      require("@/assets/images/img33.jpg"),
-      require("@/assets/images/img34.jpg"),
-      require("@/assets/images/img35.jpg"),
-      require("@/assets/images/img36.jpg"),
-    ],
-    links: {
-      auspin: "http://www.inovacao.usp.br/",
-      usp: "https://www5.usp.br/",
-    },
   }),
-  computed: {
-    setSearchBarWidth() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return { width: "100%" };
-        case "sm":
-          return { width: "80%" };
-        default:
-          return { width: "60%" };
-      }
-    },
-  },
   methods: {
     submitSearch() {
       this.$emit("search", this.search);
@@ -174,8 +43,19 @@ export default {
 </script>
 
 <style scoped>
-.fit-page {
-  max-width: 100%;
-  max-height: 100%;
+.search-bar {
+  width: 90%;
+}
+
+@media (min-width: 600px) {
+  .search-bar {
+    width: 80%;
+  }
+}
+
+@media (min-width: 960px) {
+  .search-bar {
+    width: 60%;
+  }
 }
 </style>

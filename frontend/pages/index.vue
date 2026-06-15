@@ -3,10 +3,10 @@
     <!-- Land -->
     <Banner @search="submitSearch" />
 
+    <BlogPreview />
+
     <!-- Um lugar só com... -->
     <InfoHubBulletList />
-
-    <BlogPreview />
 
     <!-- USP: Um lugar para empreender... -->
     <InfoUSP />
