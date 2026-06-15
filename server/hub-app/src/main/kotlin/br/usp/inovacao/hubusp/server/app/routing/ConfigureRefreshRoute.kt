@@ -26,6 +26,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.log
+import io.ktor.server.request.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -34,6 +35,8 @@ import kotlinx.coroutines.launch
 
 fun Application.configureRefreshRoute(db: MongoDatabase) {
     val app = this
+    // Segredo compartilhado: só o servidor do Payload o conhece; sem ele a rota é rejeitada.
+    val refreshSecret = System.getenv("HUB_REFRESH_SECRET").orEmpty()
     val mailer by lazy {
         Mailer(Configuration.email.username, Configuration.email.password)
     }
@@ -41,6 +44,13 @@ fun Application.configureRefreshRoute(db: MongoDatabase) {
 
     routing {
         post("/refresh") {
+            val provided = call.request.header("X-Refresh-Secret")
+            if (refreshSecret.isEmpty() || provided != refreshSecret) {
+                app.log.warn("Refresh: rejected request with missing or invalid secret")
+                call.respond(HttpStatusCode.Unauthorized, mapOf("message" to "Unauthorized"))
+                return@post
+            }
+
             app.launch(Dispatchers.IO) {
                 app.log.info("Refresh: starting all entities")
 

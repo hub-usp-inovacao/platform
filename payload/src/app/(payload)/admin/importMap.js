@@ -21,6 +21,8 @@ import { BlockquoteFeatureClient as BlockquoteFeatureClient_e70f5e05f09f93e00b99
 import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { RefreshNavLink as RefreshNavLink_574907c0ee4df48eef3a3206fe7c34de } from '../../../components/refresh/RefreshNavLink'
+import { RefreshDataView as RefreshDataView_c682549512cd4c66373b39f6a2af41f5 } from '../../../components/refresh/RefreshDataView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
@@ -47,5 +49,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/components/refresh/RefreshNavLink#RefreshNavLink": RefreshNavLink_574907c0ee4df48eef3a3206fe7c34de,
+  "/components/refresh/RefreshDataView#RefreshDataView": RefreshDataView_c682549512cd4c66373b39f6a2af41f5,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
