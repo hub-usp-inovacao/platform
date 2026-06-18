@@ -154,6 +154,7 @@ export interface User {
  */
 export interface Post {
   id: string;
+  slug?: string | null;
   title: string;
   thumbnail: string | Media;
   author: string;
@@ -327,6 +328,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  slug?: T;
   title?: T;
   thumbnail?: T;
   author?: T;

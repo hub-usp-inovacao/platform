@@ -5,6 +5,12 @@ import {
   HTMLConverterFeature // Import this
 } from '@payloadcms/richtext-lexical'
 
+const formatSlug = (val: string): string =>
+  val
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+    .toLowerCase();
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
   access: {
@@ -14,6 +20,25 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
   },
   fields: [
+    {
+      name: 'slug',
+      type: 'text',
+      index: true,
+      unique: true,
+      admin: {
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, data }) => {
+            if (value) return value;
+            if (data?.title) {
+              return formatSlug(data.title);
+            }
+          }
+        ]
+      }
+    },
     {
       name: 'title',
       type: 'text',
@@ -51,3 +76,6 @@ export const Posts: CollectionConfig = {
     }),
   ],
 }
+// test hot reload
+// test hot reload 2
+// test 3

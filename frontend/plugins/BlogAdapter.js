@@ -2,13 +2,13 @@ function BlogAdapter(axios, fetchCmsUrl, publicCmsUrl) {
   const apiUrl = `${fetchCmsUrl}/api`;
 
   return {
-    async requestPosts() {
+    async requestPosts(page = 1, limit = 5) {
       try {
-        const query = "select[content]=false&select[content_html]=false";
-        const { docs } = await axios.$get(`${apiUrl}/posts?${query}`);
-        return docs || [];
+        const query = `select[content]=false&select[content_html]=false&page=${page}&limit=${limit}`;
+        const response = await axios.$get(`${apiUrl}/posts?${query}`);
+        return response;
       } catch (error) {
-        return [];
+        return { docs: [], totalPages: 0, page: 1 };
       }
     },
     async requestPostById(id) {
@@ -18,18 +18,39 @@ function BlogAdapter(axios, fetchCmsUrl, publicCmsUrl) {
         return null;
       }
     },
+    async requestPostBySlug(slug) {
+      try {
+        const query = `where[slug][equals]=${slug}`;
+        const response = await axios.$get(`${apiUrl}/posts?${query}`);
+        if (response.docs && response.docs.length > 0) {
+          return response.docs[0];
+        }
+        return null;
+      } catch (error) {
+        return null;
+      }
+    },
+    getAbsoluteImageUrl(path) {
+      if (!path) return "";
+      if (path.startsWith('http')) return path;
+      try {
+        const urlObj = new URL(publicCmsUrl);
+        if (urlObj.pathname !== '/' && path.startsWith(urlObj.pathname)) {
+          return `${urlObj.origin}${path}`;
+        }
+      } catch (e) {}
+      return `${publicCmsUrl}${path}`;
+    },
     async getMediaThumbnailURL(mediaID) {
       try {
         const result = await axios.$get(`${apiUrl}/media/${mediaID}`);
-        return `${publicCmsUrl}${result.sizes.thumbnail.url}` || "";
+        return this.getAbsoluteImageUrl(result.sizes?.thumbnail?.url || result.url);
       } catch (error) {
         return "";
       }
     },
     async requestSelectedPosts() {
       try {
-        // We use depth=2 to reach the thumbnail object inside featuredPosts
-        // Multi-level select ensures we only get the fields required for the cards
         const fields = [
           "select[featuredPosts]=true",
           "populate[posts][title]=true",
@@ -37,6 +58,7 @@ function BlogAdapter(axios, fetchCmsUrl, publicCmsUrl) {
           "populate[posts][summary]=true",
           "populate[posts][createdAt]=true",
           "populate[posts][thumbnail][sizes][thumbnail][url]=true",
+          "populate[posts][slug]=true",
           "depth=2"
         ].join("&");
         
@@ -55,11 +77,8 @@ export default (context, inject) => {
   let fetchCmsUrl = publicCmsUrl;
   
   if (process.server) {
-    // For SSR inside docker, the CMS might be on a different internal URL.
     fetchCmsUrl = process.env.INTERNAL_CMS_URL || "http:payload:3000//";
   }
-  
-  // TODO: Create a method for getting the selected posts. They are within a payloadCMS global named HomeConfig. The file example_selected_posts.json has an example of the returned json from the url http://localhost:3002/api/globals/home-settings?depth=2&draft=false&locale=undefined&trash=false. Select only the needed information from this endpoint using url queries
 
   const adapter = new BlogAdapter(context.$axios, fetchCmsUrl, publicCmsUrl);
   inject("BlogAdapter", adapter); 

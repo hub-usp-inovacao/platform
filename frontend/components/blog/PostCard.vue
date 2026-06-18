@@ -5,7 +5,7 @@
     min-height="400"
     hover
     nuxt
-    :to="`/blog/${post.id}`"
+    :to="`/blog/${post.slug || post.id}`"
   >
     <v-img
       v-if="thumbnailURL"
@@ -70,9 +70,7 @@ export default {
         this.post.thumbnail.sizes &&
         this.post.thumbnail.sizes.thumbnail
       ) {
-        const baseURL = process.env.CMS_URL || "";
-        this.thumbnailURL = `${baseURL}${this.post.thumbnail.sizes.thumbnail.url}`;
-	console.log("thumbnailURL", this.thumbnailURL);
+        this.thumbnailURL = this.$BlogAdapter.getAbsoluteImageUrl(this.post.thumbnail.sizes.thumbnail.url);
       }
     }
   },
