@@ -29,6 +29,15 @@
         <v-icon size="64" color="grey lighten-1">mdi-post-outline</v-icon>
         <p class="text-h6 mt-4 grey--text">Nenhum post encontrado no momento.</p>
       </div>
+
+      <div class="w-100 d-flex justify-center mt-6 mb-6" v-if="totalPages > 1" style="width: 100%;">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          @input="fetchPosts"
+          color="secondary"
+        ></v-pagination>
+      </div>
     </v-container>
   </div>
 </template>
@@ -48,6 +57,8 @@ export default {
     search: "",
     posts: [],
     loading: true,
+    page: 1,
+    totalPages: 0,
   }),
   computed: {
     filteredPosts() {
@@ -68,10 +79,14 @@ export default {
     async fetchPosts() {
       this.loading = true;
       try {
-        this.posts = await this.$BlogAdapter.requestPosts();
+        const response = await this.$BlogAdapter.requestPosts(this.page, 5);
+        this.posts = response.docs || [];
+        this.totalPages = response.totalPages || 0;
+        this.page = response.page || 1;
       } catch (error) {
         console.error("Erro ao buscar posts:", error);
         this.posts = [];
+        this.totalPages = 0;
       } finally {
         this.loading = false;
       }

@@ -32,7 +32,7 @@
               <span>{{ formattedDate }}</span>
             </div>
 
-            <div class="blog-content" v-html="treatedHtml"></div>
+            <div class="blog-content" v-html="post.content_html"></div>
 
             <v-divider class="my-8"></v-divider>
 
@@ -66,7 +66,7 @@ export default {
   },
   async asyncData({ params, $BlogAdapter }) {
     try {
-      const post = await $BlogAdapter.requestPostById(params.id);
+      const post = await $BlogAdapter.requestPostBySlug(params.slug);
       return { post, loading: false };
     } catch (error) {
       console.error("Erro ao carregar o post:", error);
@@ -90,14 +90,6 @@ export default {
         year: "numeric",
       }).format(date);
     },
-    treatedHtml() {
-      if (!this.post || !this.post.content_html) return "";
-      // Prepend cmsBaseUrl to relative paths in src attributes
-      return this.post.content_html.replace(
-        /="(\/api\/media\/[^"]+)"/g,
-        `="${this.cmsBaseUrl}$1"`
-      );
-    },
   },
   async created() {
     if (this.post && this.post.thumbnail) {
@@ -109,9 +101,9 @@ export default {
         this.post.thumbnail.sizes &&
         this.post.thumbnail.sizes.full
       ) {
-        this.thumbnailURL = `${this.cmsBaseUrl}${this.post.thumbnail.sizes.full.url}`;
+        this.thumbnailURL = this.$BlogAdapter.getAbsoluteImageUrl(this.post.thumbnail.sizes.full.url);
       } else if (this.post.thumbnail.url) {
-        this.thumbnailURL = `${this.cmsBaseUrl}${this.post.thumbnail.url}`;
+        this.thumbnailURL = this.$BlogAdapter.getAbsoluteImageUrl(this.post.thumbnail.url);
       }
     }
   },
