@@ -96,6 +96,7 @@ services:
     volumes:
       - ./payload:/app
       - /app/node_modules
+      - /app/.next
     env_file:
       - ./payload/.env
     depends_on:

@@ -77,6 +77,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+RUN mkdir -p .next && chown node:node .next
+
 COPY . .
 
 EXPOSE 3002
