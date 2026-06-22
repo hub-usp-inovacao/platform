@@ -1,39 +1,6 @@
 <template>
   <v-app>
-    <header>
-      <UniversalAuspinBar />
-    </header>
-    <div class="nav">
-      <v-toolbar
-        class="custom-hidden-sm-and-down bar"
-        color="transparent"
-        width="100%"
-        absolute
-        flat
-      >
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
-          <v-chip-group>
-            <v-chip
-              v-for="(item, i) in navItems"
-              :key="i"
-              :to="item.to"
-              nuxt
-              class="white--text mx-1 py-auto secondary px-4 subtitle-1"
-            >
-              {{ item.title }}
-              <v-icon v-if="item.new" right>mdi-star</v-icon>
-            </v-chip>
-          </v-chip-group>
-        </v-toolbar-items>
-      </v-toolbar>
-      <HubNavButton
-        v-if="path != '/'"
-        class="custom-hidden-sm-and-down"
-        :margin="path == '/contato' ? false : true"
-        :background="path == '/contato' ? false : true"
-      />
-   </div>
+    <StackedNavbar :navItems="navItems" />
 
     <v-app-bar class="custom-hidden-md-and-up" color="white" dense flat fixed>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -52,7 +19,7 @@
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
-        <HubNavButton :margin="false" :background="false" />
+        <HubNavButton />
       </v-list>
     </v-navigation-drawer>
 
@@ -68,14 +35,14 @@
 import HubNavButton from "@/components/first_level/HubNavButton.vue";
 import Footer from "@/components/layout/Footer.vue";
 import BetaVersionModal from "@/components/layout/BetaVersionModal.vue";
-import UniversalAuspinBar from "@/components/UniversalAuspinBar.vue"
+import StackedNavbar from "@/components/layout/StackedNavbar.vue";
 
 export default {
   components: {
     HubNavButton,
     Footer,
     BetaVersionModal,
-    UniversalAuspinBar
+    StackedNavbar
   },
   data: () => ({
     activeItem: 0,
@@ -157,9 +124,6 @@ export default {
 </script>
 
 <style scoped>
-.nav {
-  position: relative;
-}
 #app .v-bottom-navigation .v-btn {
   height: inherit !important;
 }

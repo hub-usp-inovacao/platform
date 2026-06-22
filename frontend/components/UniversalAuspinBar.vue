@@ -3,7 +3,6 @@
     <v-app-bar
       color="#000428"
       dark
-      fixed
       flat
       :height="barHeight + 'px'"
       class="custom-hidden-md-and-down bar"
@@ -63,7 +62,6 @@
         </div>
       </div>
     </v-app-bar>
-    <div class="bar filler" :style="{ height: (barHeight + 1) + 'px' }"></div>
   </div>
 </template>
 
