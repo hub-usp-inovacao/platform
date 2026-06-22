@@ -76,6 +76,3 @@ export const Posts: CollectionConfig = {
     }),
   ],
 }
-// test hot reload
-// test hot reload 2
-// test 3
