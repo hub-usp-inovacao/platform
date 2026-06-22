@@ -143,6 +143,7 @@ export default {
     "@nuxtjs/axios",
     "~/modules/Catalog/index.js",
     "~/modules/Discovery/index.js",
+    "~/modules/blogSsrCache.js",
   ],
   /*
    ** vuetify module configuration
