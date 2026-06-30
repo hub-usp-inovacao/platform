@@ -2,6 +2,10 @@
 .env.prod
 .env.dev
 
+# Arquivos de ambiente com segredos — nunca commitar (use *.sample / *.example).
+# Pega arquivos chamados "env" (sem ponto) em qualquer pasta, ex.: frontend/env.
+env
+
 # Code editors
 .idea
 .vscode
