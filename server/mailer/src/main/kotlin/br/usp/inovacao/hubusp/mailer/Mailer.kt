@@ -76,13 +76,19 @@ class Mailer(private val user: String, private val password: String) {
     // If the mail fails to send for whatever reason this throws an error.
     // We should catch it and return some Status object.
     fun send(mail: Mail) {
-        val session = Session.getInstance(config, auth)
-        val message = buildMessage(session, mail)
-        val transport = session.getTransport(protocol)
-        with(transport) {
-            connect(host, user, password)
-            sendMessage(message, message.allRecipients)
-            close()
+        try {
+            val session = Session.getInstance(config, auth)
+            val message = buildMessage(session, mail)
+            val transport = session.getTransport(protocol)
+
+            with(transport) {
+                connect(host, user, password)
+                sendMessage(message, message.allRecipients)
+                close()
+            }
+        } catch (e: Exception) {
+            println("Failed to send email: ${e.message}")
+            e.printStackTrace()
         }
     }
 }
