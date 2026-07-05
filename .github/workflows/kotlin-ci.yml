@@ -22,12 +22,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
       - name: gradle build
-        run: |
-          cd server && ./gradlew build
+        run: cd server && ./gradlew build
 
+      - name: Generate coverage report
+        run: cd server && ./gradlew koverXmlReport koverHtmlReport
+
+      - name: Verify coverage threshold
+        run: cd server && ./gradlew koverVerify
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: server/build/reports/kover/html
