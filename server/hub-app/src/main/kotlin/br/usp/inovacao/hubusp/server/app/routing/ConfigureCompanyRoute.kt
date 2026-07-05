@@ -8,6 +8,7 @@ import br.usp.inovacao.hubusp.curatorship.companyform.step.Step
 import br.usp.inovacao.hubusp.mailer.Mail
 import br.usp.inovacao.hubusp.mailer.Mailer
 import br.usp.inovacao.hubusp.sheets.SpreadsheetWriter
+import com.mongodb.client.MongoDatabase
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
@@ -30,12 +31,14 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.bson.Document
 
 @OptIn(ExperimentalSerializationApi::class) // explicitNulls
 fun Application.configureCompanyRoute(
     mailer: Mailer,
     recipientList: Set<String>,
-    spreadsheetWriter: SpreadsheetWriter
+    spreadsheetWriter: SpreadsheetWriter,
+    db: MongoDatabase? = null,
 ) {
     routing {
         post("/company") {
@@ -72,9 +75,13 @@ fun Application.configureCompanyRoute(
                     part.dispose()
                 }
 
-                val row = companyForm!!.toCsvRow()
+                val form = companyForm!!
+                val row = form.toCsvRow()
 
-                mailer.send(
+                db?.saveCompanyRegistration(companyFormJson ?: "", row, form)
+
+                try {
+                    mailer.send(
                     Mail(
                         to = recipientList,
                         cc = Configuration.email.cc,
@@ -113,8 +120,15 @@ fun Application.configureCompanyRoute(
                                     )
                                 } else emptyList(),
                     ))
+                } catch (mailException: Exception) {
+                    log.warn("Company registration saved, but email delivery failed: ${mailException.stackTraceToString()}")
+                }
 
-                spreadsheetWriter.append(listOf(row))
+                try {
+                    spreadsheetWriter.append(listOf(row))
+                } catch (spreadsheetException: Exception) {
+                    log.warn("Company registration saved, but spreadsheet append failed: ${spreadsheetException.stackTraceToString()}")
+                }
 
                 call.respond(HttpStatusCode.Created)
             } catch (e: CompanyFormValidationException) {
@@ -139,15 +153,45 @@ fun Application.configureCompanyRoute(
                     "Internal Server Error (${call.request.uri}): ${e.stackTraceToString()}",
                 )
 
-                mailer.send(
-                    Mail(
-                        to = Configuration.email.devs,
-                        subject = "[INTERNAL SERVER ERROR] POST /company",
-                        body = "Internal server error: ${e.stackTraceToString()}",
-                    ))
+                try {
+                    mailer.send(
+                        Mail(
+                            to = Configuration.email.devs,
+                            subject = "[INTERNAL SERVER ERROR] POST /company",
+                            body = "Internal server error: ${e.stackTraceToString()}",
+                        ))
+                } catch (mailException: Exception) {
+                    log.warn(
+                        "Failed to notify developers after POST /company error: ${mailException.stackTraceToString()}",
+                    )
+                }
             }
         }
     }
+}
+
+private fun MongoDatabase.saveCompanyRegistration(
+    companyFormJson: String,
+    row: List<String>,
+    companyForm: CompanyForm,
+) {
+    getCollection("company_registration_requests", Document::class.java)
+        .insertOne(
+            Document("received_at", Time.timestamp())
+                .append("company_json", companyFormJson)
+                .append("csv_headers", CSV_HEADERS)
+                .append("csv_row", row)
+                .append(
+                    "dna_usp_stamp",
+                    Document("wants", companyForm.dnaUspStamp.wantsStamp)
+                        .append("email", companyForm.dnaUspStamp.email)
+                        .append("name", companyForm.dnaUspStamp.name)
+                        .append("truthful_informations", companyForm.dnaUspStamp.truthfulInformations)
+                        .append("permissions", companyForm.dnaUspStamp.permissions.toList()),
+                )
+                .append("company_name", companyForm.data.publicName)
+                .append("company_cnpj", companyForm.data.cnpj),
+        )
 }
 
 fun CompanyForm.toCsvRow(): List<String> {

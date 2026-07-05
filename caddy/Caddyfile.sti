@@ -9,6 +9,11 @@ handle_path /v2/* {
   reverse_proxy catalogapp:8080
 }
 
+handle /company {
+  rewrite * /company-data
+  reverse_proxy catalogapp:8080
+}
+
 handle_path /* {
-  reverse_proxy backend:3000
+  reverse_proxy catalogapp:8080
 }
