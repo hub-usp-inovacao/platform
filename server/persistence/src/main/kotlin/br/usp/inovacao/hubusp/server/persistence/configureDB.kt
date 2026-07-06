@@ -69,8 +69,24 @@ fun configureDB(protocol: String, host: String, port: String, dbName: String): M
     return db
 }
 
-private fun createIndexOrNothing(database: MongoDatabase, collectionName: String, indexQuery: String) = try {
-    database
-        .getCollection(collectionName)
-        .createIndex(indexQuery)
-} catch (_: MongoCommandException) {}
+/**
+ * Cria o text index da coleção. Se já existe um text index incompatível (ex.: bancos antigos
+ * criados com default_language "english"), o Mongo rejeita o create — nesse caso, dropa o
+ * text index existente e recria, migrando o banco para o índice em português.
+ */
+private fun createIndexOrNothing(database: MongoDatabase, collectionName: String, indexQuery: String) {
+    val collection = database.getCollection(collectionName)
+    val options = IndexOptions().defaultLanguage("portuguese")
+
+    try {
+        collection.createIndex(indexQuery, options)
+    } catch (_: MongoCommandException) {
+        collection.listIndexes()
+            .filter { it.get("key", org.bson.Document::class.java)?.containsKey("_fts") == true }
+            .forEach { collection.dropIndex(it.getString("name")) }
+
+        try {
+            collection.createIndex(indexQuery, options)
+        } catch (_: MongoCommandException) {}
+    }
+}
