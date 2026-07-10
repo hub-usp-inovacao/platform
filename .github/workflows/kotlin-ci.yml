@@ -8,18 +8,18 @@ on:
     paths:
       - 'server/**'
 
+permissions:
+  contents: read
+
 jobs:
-
   build:
-    name: Kotlin build 
+    name: Kotlin build
     runs-on: ubuntu-latest
-
     services:
       mongo:
         image: mongo
         ports:
           - 27017:27017
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,11 +37,11 @@ jobs:
       - name: gradle build
         run: cd server && ./gradlew build
 
-      - name: Generate coverage report
-        run: cd server && ./gradlew koverXmlReport koverHtmlReport
+      - name: Run tests
+        run: cd server && ./gradlew test
 
-      - name: Verify coverage threshold
-        run: cd server && ./gradlew koverVerify
+      - name: Generate coverage report
+        run: cd server && ./gradlew test koverHtmlReport
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4

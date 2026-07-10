@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.serialization)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.kover)
 }
 
 repositories {
@@ -23,15 +22,4 @@ dependencies {
     kover(project(":persistence"))
     kover(project(":sheets"))
     kover(project(":techtransfer"))
-}
-
-
-kover {
-    reports {
-        verify {
-            rule {
-                minBound(0)
-            }
-        }
-    }
 }
