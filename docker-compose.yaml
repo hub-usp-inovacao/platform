@@ -103,6 +103,7 @@ services:
       - mongo
     profiles:
       - local
+      - stiback
 
   mongo:
     image: mongo:4.4.1-bionic
