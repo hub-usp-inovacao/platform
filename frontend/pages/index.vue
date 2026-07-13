@@ -3,6 +3,8 @@
     <!-- Land -->
     <Banner @search="submitSearch" />
 
+    <BlogPreview />
+
     <!-- Um lugar só com... -->
     <InfoHubBulletList />
 
@@ -23,6 +25,7 @@
 <script>
 import Banner from "@/components/first_level/home/Banner.vue";
 import InfoHubBulletList from "@/components/first_level/home/InfoHubBulletList.vue";
+import BlogPreview from "@/components/first_level/home/BlogPreview.vue";
 import InfoUSP from "@/components/first_level/home/InfoUSP.vue";
 import InfoHubGif from "@/components/first_level/home/InfoHubGif.vue";
 import InfoDNAUSP from "@/components/first_level/home/InfoDNAUSP.vue";
@@ -32,6 +35,7 @@ export default {
   components: {
     Banner,
     InfoHubBulletList,
+    BlogPreview,
     InfoUSP,
     InfoHubGif,
     InfoDNAUSP,

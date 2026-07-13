@@ -15,15 +15,9 @@
 #                                                                 #
 ###################################################################
 
-
-
-
 volumes:
   nuxtdevdeps:
   data:
-
-
-
 
 services:
   frontend:
@@ -68,9 +62,6 @@ services:
       - stiback
       - cli
 
-
-  
-
   catalogapp:
     build:
       context: ./server
@@ -100,9 +91,6 @@ services:
       - ./frontend/credentials.json:/credentials.json:ro
     profiles:
       - cli
-
-
-
 
   caddydev:
     build:

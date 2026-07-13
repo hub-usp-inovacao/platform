@@ -1,55 +1,23 @@
 <template>
-  <div :class="backgroundClass">
-    <v-container :class="containerClass">
-      <v-card
-        style="background-color: transparent"
-        width="7rem"
-        flat
-        tile
-        nuxt
-        to="/"
-      >
-        <v-img
-          contain
-          eager
-          max-width="6rem"
-          class="mx-auto"
-          :src="require('@/vectors/hub_logo.svg')"
-          alt="Hub USPInovação"
-        ></v-img>
-      </v-card>
-
-    </v-container>
-  </div>
+  <nuxt-link to="/" class="d-flex align-center hub-nav-logo text-h6 font-weight-bold" style="color: #0c71b7;">
+    HUB USP INOVAÇÃO
+  </nuxt-link>
 </template>
+
 <script>
 export default {
+  name: "HubNavButton",
   props: {
-    margin: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    background: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
-  computed: {
-    containerClass() {
-      const deviceSize = this.$vuetify.breakpoint.name;
-
-      if (deviceSize == "md") return "pt-16 pb-0";
-      else if ((deviceSize != "lg" && deviceSize != "xl") || !this.margin)
-        return "ml-0";
-
-      return "";
-    },
-    backgroundClass() {
-      if (this.background) return "background";
-      return "";
-    },
+    margin: { type: Boolean, default: true },
+    background: { type: Boolean, default: true },
   },
 };
 </script>
+
+<style scoped>
+.hub-nav-logo {
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px;
+}
+</style>
