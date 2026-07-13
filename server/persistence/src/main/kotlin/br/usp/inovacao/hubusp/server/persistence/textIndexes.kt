@@ -1,7 +1,6 @@
 package br.usp.inovacao.hubusp.server.persistence
 
 import br.usp.inovacao.hubusp.server.catalog.Company
-import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.IndexOptions
 import org.bson.Document
@@ -75,7 +74,7 @@ data class TextIndexMigrationResult(
 internal fun ensureTextIndexes(database: MongoDatabase) {
     TEXT_INDEX_SPECS.forEach { spec ->
         val collection = database.getCollection(spec.collectionName)
-        val current = collection.currentTextIndex()
+        val current = database.currentTextIndex(spec.collectionName)
 
         when {
             current == null -> collection.createIndex(spec.keys(), spec.options())
@@ -96,7 +95,7 @@ private fun migrateTextIndex(
     spec: TextIndexSpec,
 ): TextIndexMigrationResult {
     val collection = database.getCollection(spec.collectionName)
-    val current = collection.currentTextIndex()
+    val current = database.currentTextIndex(spec.collectionName)
 
     val status = when {
         current == null -> TextIndexMigrationStatus.CREATED
@@ -109,7 +108,7 @@ private fun migrateTextIndex(
 
     if (status != TextIndexMigrationStatus.UNCHANGED) {
         collection.createIndex(spec.keys(), spec.options())
-        check(collection.currentTextIndex()?.matches(spec) == true) {
+        check(database.currentTextIndex(spec.collectionName)?.matches(spec) == true) {
             "Text index migration could not be verified for '${spec.collectionName}'"
         }
     }
@@ -117,8 +116,10 @@ private fun migrateTextIndex(
     return TextIndexMigrationResult(spec.collectionName, status)
 }
 
-private fun MongoCollection<Document>.currentTextIndex(): Document? =
-    listIndexes().firstOrNull { it["weights"] is Document }
+private fun MongoDatabase.currentTextIndex(collectionName: String): Document? {
+    if (listCollectionNames().none { it == collectionName }) return null
+    return getCollection(collectionName).listIndexes().firstOrNull { it["weights"] is Document }
+}
 
 private fun Document.matches(spec: TextIndexSpec): Boolean {
     val weights = get("weights", Document::class.java) ?: return false
