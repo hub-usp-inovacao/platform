@@ -9,4 +9,8 @@ credentials.json
 # Code editors
 .idea
 .vscode
+
+frontend/credentials.json
+credentials.json
+*.credentials.json
 *.swp

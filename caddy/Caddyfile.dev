@@ -25,9 +25,14 @@ handle_path /api/v2/* {
   reverse_proxy catalogapp:8080
 }
 
+handle /api/company {
+  rewrite * /company-data
+  reverse_proxy catalogapp:8080
+}
+
 handle_path /api/* {
   uri strip_prefix /api
-  reverse_proxy backdev:3000
+  reverse_proxy catalogapp:8080
 }
 
 reverse_proxy /* frontdev:3000

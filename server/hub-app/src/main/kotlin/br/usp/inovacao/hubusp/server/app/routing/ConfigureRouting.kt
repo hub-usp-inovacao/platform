@@ -12,22 +12,27 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 
 fun Application.configureRouting(db: MongoDatabase) {
+    val mailer =
+        Mailer(
+            Configuration.email.username,
+            Configuration.email.password,
+        )
+
     // TODO: Prepend /catalog to avoid conflicts
     // (this would require updating Caddy to not strip /catalog)
     configureCatalogRoute(db)
     configureJourneyRoute(db)
     configureRefreshRoute(db)
     configureCompanyRoute(
-        Mailer(
-            Configuration.email.username,
-            Configuration.email.password,
-        ),
+        mailer,
         Configuration.email.devs,
         SpreadsheetWriter(
             Configuration.sheets.companyRegisterForm.id,
             Configuration.sheets.companyRegisterForm.tab,
         ),
+        db,
     )
+    configureCompatibilityRoute(db, mailer)
 
     routing {
         get("/") { call.respond("app root ok") }
