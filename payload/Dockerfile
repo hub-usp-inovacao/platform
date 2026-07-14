@@ -69,18 +69,3 @@ ENV PORT 3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD HOSTNAME="0.0.0.0" node server.js
-
-FROM node:20-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-RUN mkdir -p .next && chown node:node .next
-
-COPY . .
-
-EXPOSE 3002
-
-CMD ["npm", "run", "dev"]
