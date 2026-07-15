@@ -116,6 +116,10 @@ services:
       - mongo
     profiles:
       - local
+    networks:
+      default:
+        aliases:
+          - payload
 
   mongo:
     image: mongo:4.4.1-bionic
