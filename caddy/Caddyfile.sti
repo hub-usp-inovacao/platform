@@ -3,7 +3,7 @@
 redir /cms /cms/admin
 redir /cms/ /cms/admin
 
-handle /cms/* {
+handle_path /cms/* {
   reverse_proxy payload:3000
 }
 
