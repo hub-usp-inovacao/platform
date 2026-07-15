@@ -93,6 +93,19 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3002:3000
+    env_file:
+      - ./payload/.env
+    depends_on:
+      - mongo
+    profiles:
+      - stiback
+
+  payloaddev:
+    image: node:22.17.0-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install && pnpm dev"
+    ports:
+      - 3002:3000
     volumes:
       - ./payload:/app
       - /app/node_modules
@@ -103,7 +116,6 @@ services:
       - mongo
     profiles:
       - local
-      - stiback
 
   mongo:
     image: mongo:4.4.1-bionic
