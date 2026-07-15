@@ -66,11 +66,12 @@ export default {
         this.thumbnailURL = await this.$BlogAdapter.getMediaThumbnailURL(
           this.post.thumbnail
         );
-      } else if (
-        this.post.thumbnail.sizes &&
-        this.post.thumbnail.sizes.thumbnail
-      ) {
-        this.thumbnailURL = this.$BlogAdapter.getAbsoluteImageUrl(this.post.thumbnail.sizes.thumbnail.url);
+      } else {
+        const thumbnailPath =
+          this.post.thumbnail.sizes?.thumbnail?.url ||
+          this.post.thumbnail.url;
+        this.thumbnailURL =
+          this.$BlogAdapter.getAbsoluteImageUrl(thumbnailPath);
       }
     }
   },
