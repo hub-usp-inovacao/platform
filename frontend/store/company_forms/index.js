@@ -80,8 +80,34 @@ export const actions = {
     }
   },
 
+  getCompanyDataV2: async function ({ commit, getters }, jwt) {
+    const response = await this.$api.company.get(jwt);
+
+    if (!response.success) {
+      commit("setErrors", response.errors);
+    } else {
+      commit("setErrors", {});
+
+      console.log(response)
+
+      Object.keys(response.payload).forEach((key) => {
+        const k = snakeToCamelCase(key);
+
+        // eslint-disable-next-line no-prototype-builtins
+        if (getters.hasOwnProperty(k)) {
+          console.log(k)
+          commit("setFormField", { key: k, value: response.payload[key] });
+        }
+      });
+    }
+  },
+
   registerCompanyForm: async function ({ commit, getters }) {
-    return sendCompanyData({commit, getters}, this.$apiPostCompany)
+    return sendCompanyData({commit, getters}, this.$api.company.post)
+  },
+
+  updateCompanyFormV2: async function ({ commit, getters }, jwt) {
+    return sendCompanyData({commit, getters}, this.$api.company.patch.bind(null, jwt))
   },
 
   updateCompanyForm: async function ({ commit, getters }) {
