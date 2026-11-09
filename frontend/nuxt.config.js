@@ -14,7 +14,8 @@ export default {
     OPEN_CONEXAO_FORMS: process.env.OPEN_CONEXAO_FORMS,
     BETA_VERSION: process.env.BETA_VERSION,
     NEW_JOURNEY: process.env.NEW_JOURNEY,
-    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID
+    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
+    CMS_URL: process.env.CMS_URL || 'https://hubusp.inovacao.usp.br/cms',
   },
   ssr: true,
   target: "server",

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!--Carousel-->
+    <NewsCarousel />
+
     <!-- Land -->
     <Banner @search="submitSearch" />
 
@@ -30,7 +33,7 @@ import InfoUSP from "@/components/first_level/home/InfoUSP.vue";
 import InfoHubGif from "@/components/first_level/home/InfoHubGif.vue";
 import InfoDNAUSP from "@/components/first_level/home/InfoDNAUSP.vue";
 import InfoAuspin from "@/components/first_level/home/InfoAuspin.vue";
-
+import NewsCarousel from "../components/first_level/home/NewsCarousel.vue";
 export default {
   components: {
     Banner,
@@ -40,6 +43,7 @@ export default {
     InfoHubGif,
     InfoDNAUSP,
     InfoAuspin,
+    NewsCarousel,
   },
   methods: {
     newGlobalSearch(searchTerm) {
