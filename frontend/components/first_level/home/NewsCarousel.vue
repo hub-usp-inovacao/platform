@@ -101,73 +101,87 @@ export default {
 };
 </script>
 <style scoped>
+/* ---------- Base (celular primeiro) ---------- */
 .carousel {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
 }
+
 .slide {
   display: block;
   position: relative;
-  color: inherit;
+  color: #fff;
   text-decoration: none;
+  min-height: clamp(280px, 45vw, 520px); /* altura cresce com a tela */
 }
+
 .slide img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  aspect-ratio: 16 / 7;
+  height: 100%;
   object-fit: cover;
   display: block;
 }
+
 .caption {
   position: absolute;
-  inset: auto 0 0 0;
-  padding: 1rem 1.5rem;
-  color: #fff;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 3.5rem; /* espaço lateral para as setas */
 }
 
 .caption h3 {
-  font-size: 3.5rem;
+  font-size: clamp(1.5rem, 5vw, 4rem); /* mín 24px, máx 64px */
   font-weight: 800;
   line-height: 1.1;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 16px rgba(0, 0, 0, 0.8);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .caption p {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   line-height: 1.4;
   margin: 0;
   max-width: 900px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 2;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border: 0;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  font-size: 1.2rem;
   cursor: pointer;
 }
-.prev {
-  left: 12px;
-}
-.next {
-  right: 12px;
-}
+.prev { left: 8px; }
+.next { right: 8px; }
+
 .dots {
   position: absolute;
   bottom: 8px;
-  right: 16px;
+  right: 12px;
+  z-index: 2;
   display: flex;
   gap: 6px;
 }
@@ -176,10 +190,37 @@ export default {
   height: 10px;
   border-radius: 50%;
   border: 0;
-  background: #fff8;
+  background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
 }
-.dots button.active {
-  background: #fff;
+.dots button.active { background: #fff; }
+
+/* ---------- Tablet (≥ 600px) ---------- */
+@media (min-width: 600px) {
+  .caption { padding: 1.5rem 4.5rem; }
+  .caption p { -webkit-line-clamp: 3; }
+  .nav { width: 44px; height: 44px; font-size: 1.5rem; }
+  .prev { left: 12px; }
+  .next { right: 12px; }
+  .dots button { width: 12px; height: 12px; }
+}
+
+/* ---------- Desktop (≥ 960px) ---------- */
+@media (min-width: 960px) {
+  .caption { padding: 2rem 5rem; }
+  .dots { bottom: 14px; right: 20px; }
+}
+
+/* ---------- Telas grandes (≥ 1264px) ---------- */
+@media (min-width: 1264px) {
+  .caption { padding: 2.5rem 6rem; }
+  .nav { width: 52px; height: 52px; font-size: 1.8rem; }
+}
+
+/* ---------- Celular na horizontal (pouca altura) ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .slide { min-height: 260px; }
+  .caption h3 { -webkit-line-clamp: 2; }
+  .caption p { display: none; }
 }
 </style>
